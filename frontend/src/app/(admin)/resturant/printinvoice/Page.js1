@@ -1,0 +1,31 @@
+"use client";
+
+import axios from "axios";
+import InvoiceClient from "./InvoiceClient";
+import { useParams } from "next/navigation";
+
+// export async function generateStaticParams() {
+//   try {
+//     const response = await axios.get(" http://127.0.0.1:8000/api/invoice-ids");
+//     const ids = response.data;
+
+//     return ids.map((id) => ({ id: id.toString() }));
+//     console.log(
+//       "Generated static params:",
+//       ids.map((id) => ({ id: id.toString() }))
+//     );
+//   } catch (error) {
+//     console.error("Error in generateStaticParams:", error.message);
+//     return [{ id: "1" }, { id: "2" }];
+//   }
+// }
+
+export default async function Page({ searchParams }) {
+    const id = (await searchParams).id
+  return (
+    <div>
+      {/* Pass the `id` to the client component */}
+      <InvoiceClient id={id} />
+    </div>
+  );
+}
