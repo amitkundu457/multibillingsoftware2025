@@ -8,30 +8,73 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\SmsSetting;
 class SmsSettingController extends Controller
 {
-  public function store(Request $request)
-    {
-        $user = JWTAuth::parseToken()->authenticate();
 
-        $data = SmsSetting::create([
-            'description' => $request->description,
-            'status' => $request->status ?? 'upcoming_birthday', // default status/type
+ public function store(Request $request)
+{
+    $user = JWTAuth::parseToken()->authenticate();
+
+    $validated = $request->validate([
+        'description' => 'nullable|string',
+        'status' => 'required|string',
+        'sms_credential_id' => 'required|exists:sms_credentials,id',
+        'template_id' => 'required|string',
+    ]);
+
+    // Find existing setting for this vendor + status
+    $sms = SmsSetting::where('status', $validated['status'])
+        ->where('sms_credential_id', $validated['sms_credential_id'])
+        ->first();
+
+    if (empty($validated['description'])) {
+        if ($sms) {
+            $sms->delete();
+        }
+        return response()->json([
+            'message' => 'Message deleted (empty description)',
+        ], 200);
+    }
+
+    if ($sms) {
+        $sms->update([
+            'description' => $validated['description'],
+            'template_id' => $validated['template_id'],
             'created_by' => $user->id,
         ]);
-
-        return response()->json(['message' => 'Message setting created', 'data' => $data], 201);
+    } else {
+        $sms = SmsSetting::create([
+            'description' => $validated['description'],
+            'status' => $validated['status'],
+            'sms_credential_id' => $validated['sms_credential_id'],
+            'template_id' => $validated['template_id'],
+            'created_by' => $user->id,
+        ]);
     }
+
+    return response()->json([
+        'message' => 'Message saved',
+        'data' => $sms,
+    ], 200);
+}
+
+
+
 
     // READ (optional: list by type/status)
-    public function index(Request $request)
-    {
-        $query = SmsSetting::query();
+   public function index(Request $request)
+{
+    $query = SmsSetting::query();
 
-        if ($request->has('status')) {
-            $query->where('status', $request->status);
-        }
-
-        return response()->json($query->latest()->get());
+    if ($request->has('status')) {
+        $query->where('status', $request->status);
     }
+
+    if ($request->has('sms_credential_id')) {
+        $query->where('sms_credential_id', $request->sms_credential_id);
+    }
+
+    return response()->json($query->latest()->get());
+}
+
 
     // EDIT / UPDATE
     public function update(Request $request, $id)

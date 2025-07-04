@@ -44,5 +44,9 @@ class ProductService extends Model
     public function salesReturn(){
         return $this->hasMany(salesreturn::class, 'product_service_id');
     }
+    public function kot()
+    {
+     return $this->hasOne(KotOrderItem::class,'product_id');
+    }
 
 }

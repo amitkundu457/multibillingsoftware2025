@@ -16,7 +16,6 @@ class Customer extends Model
     'created_by',
     'customerEnquiry',
     'remarke',
-    'visit_count'
 
     ];
 
@@ -28,8 +27,8 @@ class Customer extends Model
         return $this->hasMany(ConiPurchase::class);
     }
 
-    public function orders()
-{
-    return $this->hasMany(Order::class, 'customer_id');
-}
+     public function parcelOrders()
+    {
+        return $this->hasMany(ParcelOrder::class);
+    }
 }

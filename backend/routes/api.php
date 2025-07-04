@@ -23,6 +23,17 @@ use App\Http\Controllers\Api\OrderPackageServiceController;
 use App\Http\Controllers\Api\ReminderAndFollowUpController;
 use App\Http\Controllers\Api\BISNumberController;
 use App\Http\Controllers\Api\BillCountController;
+use App\Http\Controllers\Api\KotTableController;
+use App\Http\Controllers\Api\familyBookingController;
+use App\Http\Controllers\Api\ParcelOrderController;
+use App\Http\Controllers\Api\ParcelTypeController;
+
+use App\Http\Controllers\Api\SmsCredentialController;
+
+
+
+
+
 
 use App\Http\Controllers\Api\SaloonStockController;
 
@@ -62,6 +73,7 @@ use App\Http\Controllers\Api\MasterSettingController;
 use App\Http\Controllers\Api\ProductLoyaltyController;
 use App\Http\Controllers\Api\PurchaseReturnController;
 use App\Http\Controllers\Api\SalesReturnController;
+use App\Http\Controllers\Api\KotOrderController;
 
 use App\Http\Controllers\Api\selectedProductController;
 use App\Http\Controllers\Api\redeemPointSetupController;
@@ -200,6 +212,14 @@ Route::post('/sale-products/{id}', [SaleProductController::class, 'update']);
 Route::delete('/sale-products/{id}', [SaleProductController::class, 'destroy']);
 
 
+
+Route::prefix('sms-credentials')->group(function () {
+    Route::post('/', [SmsCredentialController::class, 'store']);      // Create
+    Route::get('/', [SmsCredentialController::class, 'index']);       // List
+    Route::put('/{id}', [SmsCredentialController::class, 'update']);  // UpdateAdd commentMore actions
+    Route::delete('/{id}', [SmsCredentialController::class, 'destroy']); // Delete
+});
+
 Route::get('/distrubuters', [DistrubuterController::class, 'index']);
 Route::get('/distrubuters/count', [DistrubuterController::class, 'count']);
 Route::post('/distrubuters', [DistrubuterController::class, 'store']);
@@ -208,12 +228,13 @@ Route::post('/distrubuters/{id}', [DistrubuterController::class, 'update']);
 Route::delete('/distrubuters/{id}', [DistrubuterController::class, 'destroy']);
 
 
-Route::get('/customers', [CustomerController::class, 'index']); // Fetch all customers
+Route::get('/customers', action: [CustomerController::class, 'index']); // Fetch all customers
 Route::post('/customers', [CustomerController::class, 'store']); // Create a customer
 Route::post('/customers/{id}', [CustomerController::class, 'update']); // Update a customer
 Route::delete('/customers/{id}', [CustomerController::class, 'destroy']); // Delete a customer
 Route::get('/customer-visit-sources', [CustomerController::class, 'getVisitSourceCounts']);
-
+// Route::get('/customers/get', action: [familyBookingController::class, 'show']); // Fetch all customers
+Route::post('/send-customer-sms', [CustomerController::class, 'sendCustomerSms']);
 
 
 Route::get('/customerstype', [CustomerController::class, 'typeindex']); // Fetch all customers
@@ -294,7 +315,7 @@ Route::delete('type/{type}', [PRoductserviceTypeController::class, 'destroy']);
 
 Route::get('coin', [CoinController::class, 'index']);
 Route::post('coin', [CoinController::class, 'store']);
-Route::get('coinid/', [CoinController::class, 'show']);
+Route::get('coinid', [CoinController::class, 'show']);
 Route::post('coin/{coin}', [CoinController::class, 'update']);
 Route::delete('coin/{coin}', [CoinController::class, 'destroy']);
 
@@ -315,7 +336,7 @@ Route::get('/bis-number-get', [BISNumberController::class, 'index']);
 
 Route::get('/order', [OrderController::class, 'index']);
 Route::post('/order', [OrderController::class, 'storeCheckout']);
-//restro-api 
+//restro-api
 Route::post('/resto-order', [OrderController::class, 'storeCheckoutResto']);
 //Route::get('order/{order}', [OrderController::class, 'show']);
 Route::get('/orders/today', [OrderController::class, 'getTodayOrders']);
@@ -327,7 +348,7 @@ Route::get('/orders/search', [OrderController::class, 'Ordersearch']);
 //total oderinvoice
 Route::get('/orderinvoice', [OrderController::class, 'orderInvoice']);
 
-//order and bill count 
+//order and bill count
 Route::get('billCount', [OrderController::class, 'BillCount']);
 Route::get('orderCount', [OrderController::class, 'OrderCount']);
 
@@ -356,6 +377,7 @@ Route::post('/partial-order', [OrderController::class, 'storePartialOrderData'])
 
 
 
+Route::get('/customers/searchres', [CustomerController::class, 'searchByPhoneResto']);
 
 
 Route::get('/customers/search', [CustomerController::class, 'searchByPhone']);
@@ -366,6 +388,8 @@ Route::get('/printbill/{id}', [OrderController::class, 'printdata']);
 Route::get('/saloon-printbill/{id}', [SaloonOrderController::class, 'printdata']);
 
 Route::post('/coinpurchase', [CoinController::class, 'coinpurchase']);
+//admin side recharge
+Route::post('/coinpurchase-admin', [CoinController::class, 'coinpurchaseadmin']);
 
 
 
@@ -468,7 +492,16 @@ Route::post('master-update', [MasterSettingController::class, 'update']);
 Route::post('masterlogobill', [MastersBillController::class, 'store']);
 
 Route::put('/masterlogobill/update/{id}', [MastersBillController::class, 'update']);
+//cover image 
+Route::post('/cover/upload', [MastersBillController::class,'storeCover']);
+Route::get('/cover/upload', [MastersBillController::class,'getCover']);
 
+//qr dode image
+Route::post('/qr/upload', [MastersBillController::class,'storeQr']);
+Route::get('/qr/upload', [MastersBillController::class,'getqr']);
+
+//seperate
+Route::get('/clinet', [MastersBillController::class,'clientRoleWiseDetails']);
 
 Route::get('/masterlogobill', [MastersBillController::class, 'show']); // Get Logo
 
@@ -542,14 +575,16 @@ Route::post('/stock-returns', [StockReturnController::class, 'store']);
 
  Route::get('/stock-returns/{id}/edit', [StockReturnController::class, 'edit']);
 Route::delete('/stock-returns/{id}', [StockReturnController::class, 'destroy']);
-// Route::get('stock_return_payments', [StockReturnPaymentController::class, 'index']);
+Route::get('/paymenetreport', [ReportController::class, 'getPaymentTotalByMethod']);
+//saloon daily cash
+Route::get('/cash-saloon', [ReportController::class, 'dailycaseSaloon']);
 
 
 Route::get('celebrate', [CustomerController::class, 'celebrate']);
 Route::post('bulksendmessage', [CustomerController::class, 'Marriageanniversary']);
 Route::post('bulksendmessagebidthday', [CustomerController::class, 'BirthdayWish']);
 Route::post('enquerymessage', [EnquiryController::class, 'sendSmsEnquery']);
-//customer queries 
+//customer queries
 
 Route::get('/customerequires-count', [CustomerController::class, 'customerequires']);
 
@@ -841,6 +876,53 @@ Route::get('partyreport',[ReportController::class,'partywisePurchaseReport']);
 //gsdt for demo
 Route::get('gstReportDemo', [ReportController::class, 'gstReportDemo']);
 Route::get('agentReport', [ReportController::class, 'agentReport']);
+
+Route::post('/kot-orders', [KotOrderController::class, 'store']);
+Route::get('/kot/{id}/bill', [KotOrderController::class, 'showBill']);
+Route::post('/kot-orders/bill', [KotOrderController::class, 'getBillByTableNumber']);
+
+
+
+
+ Route::post('/book-family-tables', [familyBookingController::class, 'bookFamilyTableWithItems']);
+  Route::put('/update-family-tables', [familyBookingController::class, 'updateFamilyTableWithItems']);
+
+Route::get('/check-family-bookings', [familyBookingController::class, 'getBookings']);
+Route::post('/create-family-kot', [familyBookingController::class, 'createFamilyKot']);
+Route::get('/get-family-kot/{bookingId}', [familyBookingController::class, 'getFamilyBookingKot']);
+Route::post('/family-booking/{id}/generate-bill', [familyBookingController::class, 'generateFamilyBookingBill']);
+Route::get('/customers/get/{id}', action: [CustomerController::class, 'show']); // Fetch all customers
+//report for kot
+Route::get('/kot-billing',[familyBookingController::class,'getAllFamilyBookingKotReports']);
+
+Route::get('/famliy-billings',[familyBookingController::class,'generateFamilyBookingBillreport']);
+
+
+
+Route::get('/kot-tables', [KotTableController::class, 'index']);
+Route::post('/kot-tables', [KotTableController::class, 'store']);
+Route::delete('/kot-tables/{id}', [KotTableController::class, 'destroy']);
+
+
+
+
+Route::post('/parcel-order', [ParcelOrderController::class, 'storeParcelOrder']);
+Route::post('/parcel-order/{id}/generate-bill', [ParcelOrderController::class, 'generateBill']);
+Route::get('/parcel-kot/{parcel_order_id}', [ParcelOrderController::class, 'getParcelKOT']);
+
+//parcel report 
+Route::get('/parcel-kot-report',[ParcelOrderController::class,'ParcelKOTReport']);
+Route::get('/parcel-bills',[ParcelOrderController::class,'generateBillReport']);
+Route::get('/parcel-billReport',[ParcelOrderController::class,'ParcelBillreportPrint']);
+Route::get('/parcel-billReport/{id}',[ParcelOrderController::class,'ParcelBillreportPrintId']);
+
+
+
+Route::get('/parcel-types', [ParcelTypeController::class, 'index']);
+Route::post('/parcel-types', [ParcelTypeController::class, 'store']);
+Route::get('/parcel-types/{id}', [ParcelTypeController::class, 'show']);
+Route::put('/parcel-types/{id}', [ParcelTypeController::class, 'update']);
+Route::delete('/parcel-types/{id}', [ParcelTypeController::class, 'destroy']);
 
 
 

@@ -15,7 +15,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\BarcodePrintHistory;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-
+use Carbon\Carbon;
+use App\Models\SaloonPayment;
 
 class ReportController extends Controller
 {
@@ -584,64 +585,128 @@ public function partyWisePurchaseReport(){
 
 }
 
-// public function agentsalesReport()
+
+
+
+public function getPaymentTotalByMethod(Request $request)
+{
+    
+    
+    $user = JWTAuth::parseToken()->authenticate();
+
+    $from = $request->query('from_date');
+    $to = $request->query('to_date');
+
+    if ($from && $to) {
+        // Validate date format
+        $request->validate([
+            'from_date' => 'date',
+            'to_date' => 'date',
+        ]);
+
+        $payments = Payment::where('created_by', $user->id)
+            ->whereBetween('payment_date', [$from, $to])
+            ->get();
+    } else {
+        // Default to today's date
+        $today = Carbon::today()->toDateString();
+        $payments = Payment::where('created_by', $user->id)
+            ->whereDate('payment_date', $today)
+            ->get();
+    }
+
+    $summary = $payments->groupBy('payment_method')->map(function ($group) {
+        return $group->sum('price');
+    });
+
+    return response()->json([
+        'message' => 'Payment summary fetched successfully.',
+        'summary' => $summary,
+    ]);
+}
+
+//saloon daily case 
+// public function dailycaseSaloon(Request $request)
 // {
-//     $rawResults = DB::table('payments')
-//         ->join('orders', 'orders.id', '=', 'payments.order_id')
-//         ->join('order_details', 'order_details.order_id', '=', 'orders.id')
-//         ->join('product_services', 'order_details.product_id', '=', 'product_services.id')
-//         ->join('users as customers', 'orders.customer_id', '=', 'customers.id')
-//         ->join('users as agents', 'orders.salesman_id', '=', 'agents.id')
-//         ->join('employees', 'employees.user_id', '=', 'agents.id')
-//         ->select(
-//             'orders.id as order_id',
-//             'orders.billno',
+    
+    
+//     $user = JWTAuth::parseToken()->authenticate();
 
-//             'customers.name as customer_name',
-//             'agents.name as employee_name',
-//             DB::raw("GROUP_CONCAT(
-//                 JSON_OBJECT(
-//                     'product_name', product_services.name,
-//                     'qty', order_details.qty,
-//                     'rate', order_details.rate,
-//                     'payment_date', payments.payment_date,
-//                     'payment_method', payments.payment_method,
-//                     'price', payments.price
-//                 )
-//             ) as products_json")
-//         )
-//         ->groupBy(
-//             'orders.id',
-//             'orders.billno',
-//             'customers.name',
-//             'agents.name'
-//         )
-//         ->get();
+//     $from = $request->query('from_date');
+//     $to = $request->query('to_date');
 
-//     // Process JSON into usable array
-//     $results = $rawResults->map(function ($row) {
-//         return [
-//             'order_id' => $row->order_id,
-//             'billno' => $row->billno,
-//             'customer_name' => $row->customer_name,
-//             'employee_name' => $row->employee_name,
-//             'products' => collect(json_decode("[" . $row->products_json . "]"))->map(function ($product) {
-//                 return [
-//                     'product_name' => $product->product_name,
-//                     'qty' => $product->qty,
-//                     'rate' => $product->rate,
-//                     'payment_date' => $product->payment_date,
-//                     'payment_method' => $product->payment_method,
-//                     'price' => $product->price,
-//                 ];
-//             }),
-//         ];
+//     if ($from && $to) {
+//         // Validate date format
+//         $request->validate([
+//             'from_date' => 'date',
+//             'to_date' => 'date',
+//         ]);
+
+//         $payments = SaloonPayment::where('created_by', $user->id)
+//             ->whereBetween('payment_date', [$from, $to])
+//             ->get();
+//     } else {
+//         // Default to today's date
+//         $today = Carbon::today()->toDateString();
+//         $payments = SaloonPayment::where('created_by', $user->id)
+//             ->whereDate('payment_date', $today)
+//             ->get();
+//     }
+
+//     $summary = $payments->groupBy('payment_method')->map(function ($group) {
+//         return $group->sum('price');
 //     });
 
-//     return response()->json($results);
+//     return response()->json([
+//         'message' => 'Payment summary fetched successfully.',
+//         'summary' => $summary,
+//     ]);
 // }
+public function dailycaseSaloon(Request $request)
+{
+    $user = JWTAuth::parseToken()->authenticate();
 
+    $from = $request->query('from_date');
+    $to = $request->query('to_date');
 
+    if ($from && $to) {
+        // Validate date format
+        $request->validate([
+            'from_date' => 'date',
+            'to_date' => 'date',
+        ]);
+
+        $payments = SaloonPayment::where('created_by', $user->id)
+            ->whereBetween('payment_date', [$from, $to])
+            ->get();
+    } else {
+        // Default to today's date
+        $today = Carbon::today()->toDateString();
+        $payments = SaloonPayment::where('created_by', $user->id)
+            ->whereDate('payment_date', $today)
+            ->get();
+    }
+
+    // Default summary
+    $defaultSummary = [
+        'cash' => 0,
+        'card' => 0,
+        'upi'  => 0,
+    ];
+
+    // Group and sum payments
+    $actualSummary = $payments->groupBy('payment_method')->map(function ($group) {
+        return $group->sum('price');
+    })->toArray();
+
+    // Merge actual into default
+    $summary = array_merge($defaultSummary, $actualSummary);
+
+    return response()->json([
+        'message' => 'Payment summary fetched successfully.',
+        'summary' => $summary,
+    ]);
+}
 
 
 

@@ -64,8 +64,11 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
-
     public function customers()
+    {
+        return $this->hasMany(Customer::class, 'user_id');
+    }
+    public function customer()
     {
         return $this->hasMany(Customer::class, 'user_id');
     }
@@ -94,5 +97,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Employee::class, 'user_id');
     }
-   
+
+     public function parcelOrders()
+    {
+        return $this->hasMany(ParcelOrder::class);
+    }
+
 }

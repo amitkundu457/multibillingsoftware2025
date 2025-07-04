@@ -392,39 +392,39 @@ public function storeCheckout(Request $request)
         ]);
 
         // // Check coins
-        // $totalCoins = DB::table('coni_purchases')
-        //     ->where('created_by', $customer->id)
-        //     ->sum('coins');
+        $totalCoins = DB::table('coni_purchases')
+            ->where('created_by', $customer->id)
+            ->sum('coins');
 
-        // if ($totalCoins <= 0) {
-        //     return response()->json([
-        //         'message' => 'Insufficient coins to deduct',
-        //         'available_coins' => $totalCoins,
-        //     ], 400);
-        // }
+        if ($totalCoins <= 0) {
+            return response()->json([
+                'message' => 'Insufficient coins to deduct',
+                'available_coins' => $totalCoins,
+            ], 400);
+        }
 
-        // // Deduct coins
-        // $setting = OrderCoinSetting::latest()->first();
-        // $coinToDeduct = $setting->coins_per_order;
-        // $coinsToDeduct = $coinToDeduct;
-        // $coinRecords = DB::table('coni_purchases')
-        //     ->where('created_by', $customer->id)
-        //     ->orderBy('id', 'asc')
-        //     ->get();
+        // Deduct coins
+        $setting = OrderCoinSetting::latest()->first();
+        $coinToDeduct = $setting->coins_per_order;
+        $coinsToDeduct = $coinToDeduct;
+        $coinRecords = DB::table('coni_purchases')
+            ->where('created_by', $customer->id)
+            ->orderBy('id', 'asc')
+            ->get();
 
-        // foreach ($coinRecords as $record) {
-        //     if ($coinsToDeduct <= 0) break;
+        foreach ($coinRecords as $record) {
+            if ($coinsToDeduct <= 0) break;
 
-        //     if ($record->coins > $coinsToDeduct) {
-        //         DB::table('coni_purchases')->where('id', $record->id)->update([
-        //             'coins' => $record->coins - $coinsToDeduct
-        //         ]);
-        //         $coinsToDeduct = 0;
-        //     } else {
-        //         DB::table('coni_purchases')->where('id', $record->id)->update(['coins' => 0]);
-        //         $coinsToDeduct -= $record->coins;
-        //     }
-        // }
+            if ($record->coins > $coinsToDeduct) {
+                DB::table('coni_purchases')->where('id', $record->id)->update([
+                    'coins' => $record->coins - $coinsToDeduct
+                ]);
+                $coinsToDeduct = 0;
+            } else {
+                DB::table('coni_purchases')->where('id', $record->id)->update(['coins' => 0]);
+                $coinsToDeduct -= $record->coins;
+            }
+        }
 
         // ✅ Fetch bill count
         $billCount = DB::table('bill_counts')->where('created_by', $customer->id)->first();
@@ -518,6 +518,7 @@ public function storeCheckout(Request $request)
                 'payment_date' => now(),
                 'payment_method' => $paymentData['payment_method'],
                 'price' => $paymentData['price'],
+                'created_by'=>$customer->id,
             ]);
         }
 
@@ -546,6 +547,7 @@ public function storeCheckout(Request $request)
         ], 500);
     }
 }
+
 
 
 

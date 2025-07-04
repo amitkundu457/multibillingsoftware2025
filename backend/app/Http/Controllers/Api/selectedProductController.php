@@ -26,11 +26,14 @@ public function store(Request $request)
     $user = JWTAuth::parseToken()->authenticate();
 
     // Validate incoming data
-    $validated = $request->validate([
-        'products' => 'required|array',
-        'products.*.productName' => 'required|string|max:255',
-        'products.*.productPrice' => 'required|numeric|min:0',
-        'products.*.quantity' => 'required|integer|min:0',
+
+
+     $data = $request->validate([
+        'items' => 'required|array',
+        'items.*.id' => 'required',
+        'items.*.quantity' => 'required|integer|min:1',
+        'items.*.productPrice' => 'required|numeric',
+         'items.*.productName' => 'required|string|max:255',
     ]);
 
     // Loop through the products and create each one, adding the created_by field

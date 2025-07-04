@@ -31,7 +31,7 @@ class Order extends Model
         'minAdAmt',
         'billcountnumber',
         'depositeMaterial'
-
+        
     ];
 
     public function details()
@@ -48,9 +48,6 @@ public function payments(){
 }
 
 
-public function customer()
-{
-    return $this->belongsTo(Customer::class, 'customer_id');
-}
+
 
 }

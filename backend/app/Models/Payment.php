@@ -12,7 +12,8 @@ class Payment extends Model
         'payment_date',
         'payment_method',
         'price',
-        'payment_method'
+        'payment_method',
+        'created_by'
     ];
 
     public function order()

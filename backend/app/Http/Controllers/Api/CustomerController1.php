@@ -7,9 +7,6 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\CustomersubType;
 use App\Models\CustomerType;
-
-use App\Models\SmsSetting;
-use App\Models\SmsCredential;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,172 +20,76 @@ class CustomerController extends Controller
 {
     // Fetch all customers
    // Fetch all customers
-// public function index()
-// {
-
-//     $customer = JWTAuth::parseToken()->authenticate();
-
-//     $customers = Customer::join('users', 'users.id', '=', 'customers.user_id')
-//     ->leftjoin('orders','orders.customer_id','=','customers.user_id')
-//             ->select(
-//                 'users.name',
-//                 'users.id',
-//                 'customers.dob',
-//                 'customers.phone',
-//                'customers.customer_type',
-//                'customers.customer_sub_type',
-//                 'users.email',
-//                 'customers.anniversary',
-//                 'customers.gender',
-//                 'customers.pincode',
-//                 'customers.state',
-//                 'customers.country',
-//                 'customers.address',
-//                 'customers.remarke',
-//                 'customers.visit_source',
-//                 'customers.created_at'
-//             )
-//             ->where('customers.created_by', $customer->id)
-//             ->get();
-
-//         return response()->json($customers, 200);
-
-
-
-
-// }
-
-
-
-// public function index()
-// {
-//     $customer = JWTAuth::parseToken()->authenticate();
-
-//     $customers = Customer::join('users', 'users.id', '=', 'customers.user_id')
-//         ->leftJoin('orders', 'orders.customer_id', '=', 'customers.user_id')
-//         ->where('customers.created_by', $customer->id)
-//          ->where('orders.order_slip', 0)
-//         ->where('orders.bill_inv', 0)
-//         ->groupBy(
-//             'users.name',
-//             'users.id',
-//             'customers.dob',
-//             'customers.phone',
-//             'customers.customer_type',
-//             'customers.customer_sub_type',
-//             'users.email',
-//             'customers.anniversary',
-//             'customers.gender',
-//             'customers.pincode',
-//             'customers.state',
-//             'customers.country',
-//             'customers.address',
-//             'customers.remarke',
-//             'customers.visit_source',
-//             'customers.created_at'
-//         )
-//         ->select(
-//             'users.name as customer_name',
-//             'users.id as user_id',
-//             'customers.dob',
-//             'customers.phone',
-//             'customers.customer_type',
-//             'customers.customer_sub_type',
-//             'users.email',
-//             'customers.anniversary',
-//             'customers.gender',
-//             'customers.pincode',
-//             'customers.state',
-//             'customers.country',
-//             'customers.address',
-//             'customers.remarke',
-//             'customers.visit_source',
-//             'customers.created_at',
-//             DB::raw('COUNT(orders.id) as total_orders'),
-//             DB::raw('GROUP_CONCAT(orders.id) as order_ids'),
-//             DB::raw('GROUP_CONCAT(orders.billno) as order_billnos'),
-//             DB::raw('GROUP_CONCAT(orders.total_price) as order_totals')
-//         )
-//         ->get();
-
-//     return response()->json($customers, 200);
-// }
-
-
-
 public function index()
 {
+
     $customer = JWTAuth::parseToken()->authenticate();
 
     $customers = Customer::join('users', 'users.id', '=', 'customers.user_id')
-        ->leftJoin('orders', function ($join) {
-            $join->on('orders.customer_id', '=', 'customers.user_id')
-                 ->where('orders.order_slip', 0)
-                 ->where('orders.bill_inv', 0);
-        })
-        ->where('customers.created_by', $customer->id)
-        ->groupBy(
-            'users.name',
-            'users.id',
-            'customers.dob',
-            'customers.phone',
-            'customers.customer_type',
-            'customers.customer_sub_type',
-            'users.email',
-            'customers.anniversary',
-            'customers.gender',
-            'customers.pincode',
-            'customers.state',
-            'customers.country',
-            'customers.address',
-            'customers.remarke',
-            'customers.visit_source',
-            'customers.created_at'
-        )
-        ->select(
-            'users.name as customer_name',
-            // 'users.id as user_id',
-            'users.id',
-            'users.name',
-            'customers.dob',
-            'customers.phone',
-            'customers.customer_type',
-            'customers.customer_sub_type',
-            'users.email',
-            'customers.anniversary',
-            'customers.gender',
-            'customers.pincode',
-            'customers.state',
-            'customers.country',
-            'customers.address',
-            'customers.remarke',
-            'customers.visit_source',
-            'customers.created_at',
-            DB::raw('COUNT(orders.id) as total_orders'),
-            DB::raw('GROUP_CONCAT(orders.id) as order_ids'),
-            DB::raw('GROUP_CONCAT(orders.billno) as order_billnos'),
-            DB::raw('GROUP_CONCAT(orders.total_price) as order_totals')
-        )
-        ->get();
+            ->select(
+                'users.name',
+                'users.id',
+                'customers.dob',
+                'customers.phone',
+               'customers.customer_type',
+               'customers.customer_sub_type',
+                'users.email',
+                'customers.anniversary',
+                'customers.gender',
+                'customers.pincode',
+                'customers.state',
+                'customers.country',
+                'customers.address',
+                'customers.remarke',
+                'customers.visit_source'
+            )
+            ->where('customers.created_by', $customer->id)
+            ->get();
 
-    return response()->json($customers, 200);
+        return response()->json($customers, 200);
+
+
+
+
 }
 
+//fetach cutomer by id with both table
+// public function show($id)
+// {
+//     // Fetch customer with related user data
+//     $customer = Customer::with('userc')->find($id);
 
+//     if (!$customer) {
+//         return response()->json([
+//             'success' => false,
+//             'message' => 'Customer not found',
+//         ], 404);
+//     }
 
+//     return response()->json([
+//         'success' => true,
+//         'data' => $customer
+//     ]);
+// }
 
+public function show($id)
+{
+    // Eager load both userc and userc.information
+    $customer = Customer::with('userc.information')->find($id);
 
+    if (!$customer) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Customer not found',
+        ], 404);
+    }
 
-
-
-
-
-
-
-
-
-
-
+    return response()->json([
+        'success' => true,
+        'data' => $customer
+    ]);
+    }
+//count enuries by customer
 
 
 public function customerequires()
@@ -210,280 +111,73 @@ public function customerequires()
 
 
 
-    // Create a new customer old this
-//     public function store(Request $request)
-//     {
+    // Create a new customer
+    public function store(Request $request)
+    {
 
-//         $admin = JWTAuth::parseToken()->authenticate();
-//         $validatedData = $request->validate([
-//             'name' => 'nullable|string|max:255',
-//             'email' => 'nullable|email|unique:users,email',
-//             'password' => 'nullable',
-//             'phone' => 'nullable|string|max:15',
-//            'customerSubTypeData' => 'nullable',
-//             'customerTypeData' => 'nullable',
-//             'dob' => 'nullable|date',
-//             'anniversary' => 'nullable|date',
-//             'gender' => 'nullable|string',
-//             'address' => 'nullable|string',
-//             'pincode' => 'nullable|string|max:10',
-//             'state' => 'nullable|string|max:255',
-//             'country' => 'nullable|string|max:255',
-//             'visit_source' => 'nullable|string|max:255',
+        $admin = JWTAuth::parseToken()->authenticate();
+        $validatedData = $request->validate([
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|unique:users,email',
+            'password' => 'nullable',
+            'phone' => 'nullable|string|max:15',
+           'customerSubTypeData' => 'nullable',
+            'customerTypeData' => 'nullable',
+            'dob' => 'nullable|date',
+            'anniversary' => 'nullable|date',
+            'gender' => 'nullable|string',
+            'address' => 'nullable|string',
+            'pincode' => 'nullable|string|max:10',
+            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'visit_source' => 'nullable|string|max:255',
 
-//         ]);
-// // ✅ Check if phone exists for this admin
-// if (!empty($validatedData['phone'])) {
-//     $existing = Customer::where('phone', $validatedData['phone'])
-//         ->where('created_by', $admin->id)
-//         ->first();
-
-//     if ($existing) {
-//         return response()->json([
-//             'success' => false,
-//             'message' => 'This number already exists.'
-//         ], 409);
-//     }
-// }
-//         // Store user data
-//         $user = User::create([
-//             'name' => $validatedData['name'],
-//             'email' => $validatedData['email'],
-//             'password' => bcrypt('12345678'),
-//         ]);
-
-//         // Store customer data
-//         $customer = Customer::create([
-//             'user_id' => $user->id,
-//             'phone' => $validatedData['phone'],
-//            'customer_type' => $validatedData['customerTypeData'] ,
-//            'customer_sub_type' => $validatedData['customerSubTypeData'] ,
-//             'dob' => $validatedData['dob'] ?? null,
-//             'anniversary' => $validatedData['anniversary'] ?? null,
-//             'gender' => $validatedData['gender'] ?? null,
-//             'address' => $validatedData['address'],
-//             'pincode' => $validatedData['pincode'],
-//             'state' => $validatedData['state'],
-//             'visit_source' => $validatedData['visit_source'],
-
-
-
-//             'country' => $validatedData['country'],
-//             'created_by' =>  $admin->id,
-//             'customerEnquiry'=>$request->customerEnquiry,
-//             'remarke'=>$request->remarke,
-
-//         ]);
-
-//         return response()->json([ $user, $customer ,'message' => 'Customer created successfully!'], 201);
-//     }
-
-
-public function searchByPhone(Request $request)
-{
-    $phone = $request->query('phone');
-
-    if (!$phone) {
-        return response()->json(['message' => 'Phone number is required'], 400);
-    }
-
-    $customer = Customer::join('users', 'users.id', '=', 'customers.user_id')
-        ->where('customers.phone', $phone)
-        ->select(
-            'customers.id as customer_id',
-            'users.name',
-            'users.id',
-            'users.email',
-            'customers.phone',
-            'customers.address',
-            'customers.customer_type',
-            'customers.customer_sub_type',
-            'customers.dob',
-            'customers.anniversary',
-            'customers.gender',
-            'customers.pincode',
-            'customers.state',
-            'customers.country',
-            'customers.visit_source',
-            'customers.customerEnquiry',
-
-            'customers.remarke'
-        )
+        ]);
+// ✅ Check if phone exists for this admin
+if (!empty($validatedData['phone'])) {
+    $existing = Customer::where('phone', $validatedData['phone'])
+        ->where('created_by', $admin->id)
         ->first();
 
-    if (!$customer) {
-        return response()->json(['message' => 'Customer not found'], 404);
-    }
-
-    return response()->json($customer, 200);
-}
-
-public function store(Request $request)
-{
-    $admin = JWTAuth::parseToken()->authenticate();
-
-    if ($request->has('customer_id')) {
-        $customer = Customer::find($request->customer_id);
-
-        if (!$customer) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Customer not found.'
-            ], 404);
-        }
-
-        $user = User::findOrFail($customer->user_id);
-
-        DB::beginTransaction();
-
-         if ($request->filled('email') && $request->input('email') !== $user->email) {
-    $emailExists = User::where('email', $request->input('email'))
-        ->where('id', '!=', $user->id)
-        ->exists();
-
-    if ($emailExists) {
+    if ($existing) {
         return response()->json([
             'success' => false,
-            'message' => 'Email already exists.',
-        ], 422);
+            'message' => 'This number already exists.'
+        ], 409);
     }
 }
+        // Store user data
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt('12345678'),
+        ]);
 
-        // Update user fields
-        foreach (['name', 'email', 'password'] as $field) {
-            if ($request->filled($field)) {
-                $user->$field = $field === 'password'
-                    ? bcrypt($request->input($field))
-                    : $request->input($field);
-            }
-        }
-        $user->save();
+        // Store customer data
+        $customer = Customer::create([
+            'user_id' => $user->id,
+            'phone' => $validatedData['phone'],
+           'customer_type' => $validatedData['customerTypeData'] ,
+           'customer_sub_type' => $validatedData['customerSubTypeData'] ,
+            'dob' => $validatedData['dob'] ?? null,
+            'anniversary' => $validatedData['anniversary'] ?? null,
+            'gender' => $validatedData['gender'] ?? null,
+            'address' => $validatedData['address'],
+            'pincode' => $validatedData['pincode'],
+            'state' => $validatedData['state'],
+            'visit_source' => $validatedData['visit_source'],
 
-        // Handle phone change with duplicate check
-        if ($request->has('phone') && !is_null($request->input('phone'))) {
-            $newPhone = $request->input('phone');
 
-            if ($newPhone !== $customer->phone) {
-                $duplicatePhone = Customer::where('phone', $newPhone)
-                    ->where('created_by', $customer->created_by)
-                    ->where('id', '!=', $customer->id)
-                    ->exists();
 
-                if ($duplicatePhone) {
-                    DB::rollBack();
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Phone number already exists under this creator.'
-                    ], 422);
-                }
+            'country' => $validatedData['country'],
+            'created_by' =>  $admin->id,
+            'customerEnquiry'=>$request->customerEnquiry,
+            'remarke'=>$request->remarke,
 
-                $customer->phone = $newPhone;
-            }
-        }
+        ]);
 
-        // Other customer fields
-        $fields = [
-            'dob', 'anniversary', 'gender', 'address',
-            'pincode', 'state', 'country', 'visit_source',
-            'customerEnquiry', 'remarke'
-        ];
-
-        foreach ($fields as $field) {
-            if ($request->filled($field)) {
-                $customer->$field = $request->input($field);
-            }
-        }
-
-        // Map subtype/type fields
-        if ($request->filled('customerTypeData')) {
-            $customer->customer_type = $request->input('customerTypeData');
-        }
-        if ($request->filled('customerSubTypeData')) {
-            $customer->customer_sub_type = $request->input('customerSubTypeData');
-        }
-
-        // Increment visit_count
-        $customer->visit_count = ($customer->visit_count ?? 0) + 1;
-
-        $customer->save();
-        DB::commit();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Customer updated and visit count incremented!',
-            'user' => $user,
-            'customer' => $customer
-        ], 200);
+        return response()->json([ $user, $customer ,'message' => 'Customer created successfully!'], 201);
     }
-
-    // ✅ New customer creation
-    $validatedData = $request->validate([
-        'name' => 'nullable|string|max:255',
-        'email' => 'nullable|email|unique:users,email',
-        'password' => 'nullable',
-        'phone' => 'nullable|string|max:15',
-        'customerSubTypeData' => 'nullable',
-        'customerTypeData' => 'nullable',
-        'dob' => 'nullable|date',
-        'anniversary' => 'nullable|date',
-        'gender' => 'nullable|string',
-        'address' => 'nullable|string',
-        'pincode' => 'nullable|string|max:10',
-        'state' => 'nullable|string|max:255',
-        'country' => 'nullable|string|max:255',
-        'visit_source' => 'nullable|string|max:255',
-    ]);
-
-    // Prevent duplicate phone
-    if (!empty($validatedData['phone'])) {
-        $exists = Customer::where('phone', $validatedData['phone'])
-            ->where('created_by', $admin->id)
-            ->exists();
-
-        if ($exists) {
-            return response()->json([
-                'success' => false,
-                'message' => 'This number already exists.',
-            ], 409);
-        }
-    }
-
-
-
-
-    // Create new user and customer
-    $user = User::create([
-        'name' => $validatedData['name'],
-        'email' => $validatedData['email'],
-        'password' => bcrypt('12345678'),
-    ]);
-
-    $customer = Customer::create([
-        'user_id' => $user->id,
-        'phone' => $validatedData['phone'],
-        'customer_type' => $validatedData['customerTypeData'],
-        'customer_sub_type' => $validatedData['customerSubTypeData'],
-        'dob' => $validatedData['dob'] ?? null,
-        'anniversary' => $validatedData['anniversary'] ?? null,
-        'gender' => $validatedData['gender'] ?? null,
-        'address' => $validatedData['address'],
-        'pincode' => $validatedData['pincode'],
-        'state' => $validatedData['state'],
-        'country' => $validatedData['country'],
-        'visit_source' => $validatedData['visit_source'],
-        'visit_count' => 1,
-        'created_by' => $admin->id,
-        'customerEnquiry' => $request->customerEnquiry,
-        'remarke' => $request->remarke,
-    ]);
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Customer created successfully!',
-        'user' => $user,
-        'customer' => $customer
-    ], 201);
-}
 
     // Update an existing customer
 //     public function update(Request $request, $id)
@@ -679,104 +373,6 @@ public function getVisitSourceCounts()
 
     return response()->json($counts);
 }
-
-// public function sendCustomerSms(Request $request)
-// {
-//     // ✅ Validate phone number input
-//     $request->validate([
-//         'phone' => 'required',
-//         'status' => 'required',
-//     ]);
-
-
-
-//     //  Try to find customer by phone
-//     $customer = Customer::where('phone', $request->phone)->first();
-
-//     if (!$customer) {
-//         return response()->json(['message' => 'Customer not found with this phone number'], 404);
-//     }
-
-//     //  Prepare message
-//           $message = SmsSetting::where('status', $request->status)->value('description');
-
-//     //$message = "Wish you a very happy birthday. May each of your wishes come true. Many many happy returns of the day From Soltech Solution";
-
-//     //  Send SMS using BluWaves
-//     $response = Http::get("https://sms.bluwaves.in/sendsms/bulk.php", [
-//         'username' => "ILCsoltechsolut",
-//         'password' => "12345678",
-//         'type' => 'TEXT',
-//         'sender' => "STECHM",
-//         'mobile' => $request->phone,
-//         'message' => $message,
-//         'entityId' => "1701167282210491092",
-//         'templateId' => "1707170314120141399"
-//     ]);
-
-//     return response()->json([
-//         'message' => 'SMS sent',
-//         'sms_response' => $response->body()
-//     ]);
-// }
-
-public function sendCustomerSms(Request $request)
-{
-    $request->validate([
-        'phone' => 'required',
-        'status' => 'required',
-        'sms_credential_id' => 'required|exists:sms_credentials,id',
-    ]);
-
-    // 🔍 Find customer by phone
-    $customer = Customer::where('phone', $request->phone)->first();
-    if (!$customer) {
-        return response()->json(['message' => 'Customer not found with this phone number'], 404);
-    }
-
-    // 🔍 Get message from sms_settings table
-    // $message = SmsSetting::where('status', $request->status)
-    //     ->where('sms_credential_id', $request->sms_credential_id)
-    //     ->value('description');
-    $message = SmsSetting::where('status', $request->status)
-    ->where('sms_credential_id', $request->sms_credential_id)
-    ->value('description');
-
-// 🧼 Clean non-breaking spaces (e.g., \u00a0)
-$message = str_replace("\xC2\xA0", ' ', $message);
-
-    if (!$message) {
-        return response()->json(['message' => 'Message not found for this status'], 404);
-    }
-
-    // 🔍 Get SMS credential details
-    $credential = SmsCredential::find($request->sms_credential_id);
-
-    if (!$credential) {
-        return response()->json(['message' => 'Credential not found'], 404);
-    }
-    // ✅ Send SMS
-    $response = Http::get("https://sms.bluwaves.in/sendsms/bulk.php", [
-        'username'    => $credential->sms_username,
-        'password'    => $credential->sms_password,
-        'type'        => 'TEXT',
-        'sender'      => $credential->sms_sender,
-        'mobile'      => $request->phone,
-        'message'     => $message,
-        'entityId'    => $credential->sms_entity_id,
-        'templateId'  => SmsSetting::where('status', $request->status)
-                          ->where('sms_credential_id', $request->sms_credential_id)
-                          ->value('template_id')
-    ]);
-
-    return response()->json([
-        'message' => 'SMS sent',
-        'sms_response' => $response->body(),
-    ]);
-}
-
-
-
 
 
 
@@ -1024,25 +620,47 @@ $message = str_replace("\xC2\xA0", ' ', $message);
     }
 
     // Search customer by phone number
-    // public function searchByPhone(Request $request)
-    // {
-    //     $phone = $request->query('phone');
+    public function searchByPhone(Request $request)
+    {
+        $phone = $request->query('phone');
 
-    //     if (!$phone) {
-    //         return response()->json(['message' => 'Phone number is required'], 400);
-    //     }
+        if (!$phone) {
+            return response()->json(['message' => 'Phone number is required'], 400);
+        }
 
-    //     $customer = Customer::join('users', 'users.id', '=', 'customers.user_id')
-    //         ->select('users.name', 'users.id', 'customers.address', 'customers.phone')
-    //         ->where('customers.phone', $phone)
-    //         ->first();
+        $customer = Customer::join('users', 'users.id', '=', 'customers.user_id')
+        ->select('users.name', 'users.id', 'customers.address', 'customers.phone')
+            // ->select('users.name', 'users.id','customers.id', 'customers.address', 'customers.phone')
+            ->where('customers.phone', $phone)
+            ->first();
 
-    //     if (!$customer) {
-    //         return response()->json(['message' => 'Customer not found'], 404);
-    //     }
+        if (!$customer) {
+            return response()->json(['message' => 'Customer not found'], 404);
+        }
 
-    //     return response()->json($customer, 200);
-    // }
+        return response()->json($customer, 200);
+    }
+
+    //this for restutant customer 
+    public function searchByPhoneResto(Request $request)
+    {
+        $phone = $request->query('phone');
+
+        if (!$phone) {
+            return response()->json(['message' => 'Phone number is required'], 400);
+        }
+
+        $customer = Customer::join('users', 'users.id', '=', 'customers.user_id')
+            ->select('users.name', 'users.id','customers.id', 'customers.address', 'customers.phone')
+            ->where('customers.phone', $phone)
+            ->first();
+
+        if (!$customer) {
+            return response()->json(['message' => 'Customer not found'], 404);
+        }
+
+        return response()->json($customer, 200);
+    }
 
 
 
@@ -1089,9 +707,7 @@ $message = str_replace("\xC2\xA0", ' ', $message);
     $templateId = "1707170488002410372";
 
     // Message template (example)
-    //$message = "Wishing you both a very Happy Marriage Anniversary!! May all your days be filled Love ,Joy and Happiness From Soltech Solution";
-          $message = SmsSetting::where('status', 'Anniversary')->value('description');
-
+    $message = "Wishing you both a very Happy Marriage Anniversary!! May all your days be filled Love ,Joy and Happiness From Soltech Solution";
 
     // Collect all customer phone numbers in a comma-separated string
     $phoneNumbers = $customers->pluck('phone')->implode(',');
@@ -1116,13 +732,11 @@ $message = str_replace("\xC2\xA0", ' ', $message);
 
 public function BirthdayWish(Request $request)
 {
-
-     // Fetch customers
+    // Fetch customers
     $customers = User::join('customers', 'customers.user_id', '=', 'users.id')
         ->select('users.name', 'users.email', 'customers.phone', 'customers.dob', 'customers.anniversary')
         ->whereIn('users.id', $request->customer_ids)
         ->get();
-
 
     // SMS API Credentials
     $apiUrl = "https://sms.bluwaves.in/sendsms/bulk.php";
@@ -1133,9 +747,7 @@ public function BirthdayWish(Request $request)
     $templateId = "1707169078649581280";
 
     // Message template (example)
-    //$message = "Wish you a very happy birthday. May each of your wishes come true. Many many happy returns of the day From Soltech Solution";
-      $message = SmsSetting::where('status', 'Today Birthday')->value('description');
-
+    $message = "Wish you a very happy birthday. May each of your wishes come true. Many many happy returns of the day From Soltech Solution";
 
     // Collect all customer phone numbers in a comma-separated string
     $phoneNumbers = $customers->pluck('phone')->implode(',');

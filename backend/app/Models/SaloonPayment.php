@@ -13,6 +13,7 @@ class SaloonPayment extends Model
         'payment_date',
         'payment_method',
         'price',
+        'created_by'
     ];
 
     public function saloonOrder()

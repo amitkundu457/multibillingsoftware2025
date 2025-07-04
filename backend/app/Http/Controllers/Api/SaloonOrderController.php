@@ -147,7 +147,7 @@ class SaloonOrderController extends Controller
 
                     'tax_rate' => $product['tax_rate'],
                     'pro_total' => number_format((float) $product['pro_total'], 2, '.', ''), // Fixing decimal issue
-                    'hsn' => $product['hsn'],
+                    'hsn' => $product['hsn'] ?? null,
                     'product_id'=>$product['product_id']
 
 
@@ -163,11 +163,12 @@ class SaloonOrderController extends Controller
          'payment_date' => now(),
          'payment_method' => $paymentData['payment_method'],  // payment method (cash, card, upi)
          'price' => $paymentData['price'],  // payment amount
+         'created_by'=> $customer->id, // Assuming you want to store the creator's ID
           ]);
          }
 
 
-
+// 'created_by', $customer->id
 //          if (!empty($request->payments) && is_array($request->payments)) {
 //     foreach ($request->payments as $paymentData) {
 //         // Store each payment method (cash, card, upi, etc.)

@@ -127,6 +127,46 @@ class CoinController extends Controller
     }
 
 
+    //admin side rechage
+    public function coinpurchaseadmin(Request $request)
+    {
+        
+       
+
+        // Log::info($customer);
+        $validated = $request->validate([
+            // 'coins' => 'required|integer',
+            'id' => 'required|integer',
+            'amount' => 'required|numeric',
+            // 'payment_method' => 'required|string|in:cash,online',
+        ]);
+
+        $recharge = ConiPurchase::create([
+            'coins' => $validated['amount'],
+            'amount' => $validated['amount'],
+            'payment_method' => "admin",
+            'created_by' =>$validated['id'],
+        ]);
+
+        $dstb = AssignClient::where('client_id', $request->id)->first()->distributor_id;
+        $commission_rate = \intval(Distrubutrer::where('user_id', $dstb)->first()->commission);
+        $commission = $validated['amount'] * ($commission_rate / 100);
+        SoftwareCommission::create([
+            'user_id' => $dstb,
+            'user_information_id' => $request->id,
+            'commission' => $commission,
+            'total_amount' => $validated['amount'],
+            // 'software_type'=>  $request->software_type, //specify software type e.g. jwellery, resturant, saloon, crm
+        ]);
+
+
+
+        return response()->json([
+            'message' => 'Recharge successful!',
+            'data' => $recharge,
+        ]);
+    }
+
 
     public function setCoinsPerOrder(Request $request)
     {
