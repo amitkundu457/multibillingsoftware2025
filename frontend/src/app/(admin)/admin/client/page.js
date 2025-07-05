@@ -30,7 +30,7 @@ const ClientManagement = () => {
 
   const fetchRoles = async () => {
     try {
-      const response = await axios.get(' http://127.0.0.1:8000/api/roles');
+      const response = await axios.get(' https://api.equi.co.in/api/roles');
       console.log('API Response:', response); // Check the full response
       setRoles(response.data); 
     } catch (error) {
@@ -40,7 +40,7 @@ const ClientManagement = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/user-infos");
+      const response = await axios.get(" https://api.equi.co.in/api/user-infos");
       setClients(response.data.data);
     } catch (error) {
       console.error("Error fetching clients:", error);
@@ -60,7 +60,7 @@ const ClientManagement = () => {
   useEffect(() => {
     const fetchDistributors = async () => {
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/distributors/search");
+        const response = await axios.get(" https://api.equi.co.in/api/distributors/search");
         setDistributors(response.data.data);
       } catch (error) {
         console.error("Error fetching distributors:", error);
@@ -109,7 +109,7 @@ const ClientManagement = () => {
     // alert('test')
     try {
       const response = await axios.post(
-        ` http://127.0.0.1:8000/api/user-infos/${data.user_id}`,
+        ` https://api.equi.co.in/api/user-infos/${data.user_id}`,
         data,
         {
           headers: { "Content-Type": "application/json" },
@@ -121,7 +121,7 @@ const ClientManagement = () => {
         setEditModalOpen(false);
         reset();
         // Refresh the client list
-        const updatedClients = await axios.get(" http://127.0.0.1:8000/api/user-infos");
+        const updatedClients = await axios.get(" https://api.equi.co.in/api/user-infos");
         setClients(updatedClients.data.data);
       } else {
         alert(`Error: ${response.data.message}`);
@@ -139,7 +139,7 @@ const ClientManagement = () => {
   
     try {
       const response = await axios.post(
-        ` http://127.0.0.1:8000/api/assign-distributor`,
+        ` https://api.equi.co.in/api/assign-distributor`,
         data,
         {
           headers: { "Content-Type": "application/json" },
@@ -165,7 +165,7 @@ const ClientManagement = () => {
 
   const handleDelete = (id) => {
     axios
-      .post(` http://127.0.0.1:8000/api/user-infosdel/${id}`)
+      .post(` https://api.equi.co.in/api/user-infosdel/${id}`)
       .then((response) => {
         console.log(response);
         fetchClients();
@@ -190,7 +190,7 @@ const ClientManagement = () => {
   const handleCustomerSubmit = async (e) => {
     e.preventDefault();
 
-    const url = ' http://127.0.0.1:8000/api/user-infos/27'; // API endpoint
+    const url = ' https://api.equi.co.in/api/user-infos/27'; // API endpoint
     const method = 'post'; // Use PUT or PATCH depending on your API
 
     try {

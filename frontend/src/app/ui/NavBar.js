@@ -90,9 +90,11 @@ const Navbar = ({ open }) => {
       <div className="flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
+          <Link href="/" className="flex items-center">
           {logoUrl && (
             <img src={logoUrl} alt="Logo" width={80} height={100} />
           )}
+          </Link>
         </div>
 
         {/* Desktop Menu */}

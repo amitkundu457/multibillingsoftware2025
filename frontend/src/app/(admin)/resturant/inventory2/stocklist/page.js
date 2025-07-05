@@ -7,7 +7,7 @@ const StockListTable = () => {
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        fetch(' http://127.0.0.1:8000/api/stock-returns/')
+        fetch(' https://api.equi.co.in/api/stock-returns/')
             .then(response => response.json())
             .then(data => setData(data))
             .catch(error => console.error('Error fetching data:', error));

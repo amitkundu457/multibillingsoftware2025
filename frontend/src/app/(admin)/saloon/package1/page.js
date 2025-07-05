@@ -67,7 +67,7 @@ export default function Packages() {
 
   const fetchPackages = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/packages", {
+      const response = await axios.get("https://api.equi.co.in/api/packages", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -86,14 +86,14 @@ export default function Packages() {
   const fetchDropdownData = async () => {
     try {
       const [namePack, typeRes, categoryRes, subtypeRes, taxRes, taxTypeRes, groupRes, serviceRes] = await Promise.all([
-        axios.get("http://127.0.0.1:8000/api/packagename"),
-        axios.get("http://127.0.0.1:8000/api/package-type"),
-        axios.get("http://127.0.0.1:8000/api/package-category"),
-        axios.get("http://127.0.0.1:8000/api/packagesubtypes"),
-        axios.get("http://127.0.0.1:8000/api/taxf"),
-        axios.get("http://127.0.0.1:8000/api/tax-type"),
-        axios.get("http://127.0.0.1:8000/api/membership-groups"),
-        axios.get("http://127.0.0.1:8000/api/packageservice-type"),
+        axios.get("https://api.equi.co.in/api/packagename"),
+        axios.get("https://api.equi.co.in/api/package-type"),
+        axios.get("https://api.equi.co.in/api/package-category"),
+        axios.get("https://api.equi.co.in/api/packagesubtypes"),
+        axios.get("https://api.equi.co.in/api/taxf"),
+        axios.get("https://api.equi.co.in/api/tax-type"),
+        axios.get("https://api.equi.co.in/api/membership-groups"),
+        axios.get("https://api.equi.co.in/api/packageservice-type"),
       ]);
 
       setnamePack(namePack.data);
@@ -110,7 +110,7 @@ export default function Packages() {
   };
 
   const axiosInstance = axios.create({
-    baseURL: "http://127.0.0.1:8000/api",
+    baseURL: "https://api.equi.co.in/api",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -149,7 +149,7 @@ export default function Packages() {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this package?")) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/packages/${id}`);
+      await axios.delete(`https://api.equi.co.in/api/packages/${id}`);
       toast.success("Package deleted successfully");
       fetchPackages();
     } catch (error) {
@@ -204,7 +204,7 @@ export default function Packages() {
     };
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/package-services-name", serviceData);
+      const response = await axios.post("https://api.equi.co.in/api/package-services-name", serviceData);
       if (response.status === 201) {
         toast.success("Services added successfully!");
       } else {

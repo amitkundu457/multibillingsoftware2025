@@ -34,7 +34,7 @@
 
 //   const fetchItems = async () => {
 //     try {
-//       const response = await axios.get("http://127.0.0.1:8000/api/billcount", {
+//       const response = await axios.get("https://api.equi.co.in/api/billcount", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setItems(response.data?.bill_count || []);
@@ -49,7 +49,7 @@
 //     try {
 //       if (editingItem) {
 //         const response = await axios.put(
-//           `http://127.0.0.1:8000/api/billcount/${editingItem.id}`,
+//           `https://api.equi.co.in/api/billcount/${editingItem.id}`,
 //           data,
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
@@ -60,7 +60,7 @@
 //         setEditingItem(null);
 //       } else {
 //         const response = await axios.post(
-//           "http://127.0.0.1:8000/api/billcount",
+//           "https://api.equi.co.in/api/billcount",
 //           data,
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
@@ -170,7 +170,7 @@ export default function Home() {
   const fetchBillCount = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/billcountnumber",
+        "https://api.equi.co.in/api/billcountnumber",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -186,7 +186,7 @@ export default function Home() {
     if (!token) return;
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/billcount", data, {
+      await axios.post("https://api.equi.co.in/api/billcount", data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchBillCount();

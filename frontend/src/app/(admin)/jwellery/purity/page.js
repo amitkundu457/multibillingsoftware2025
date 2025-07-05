@@ -38,7 +38,7 @@ const Page = () => {
       return;
     }
 
-    const response = await axios.get(" http://127.0.0.1:8000/api/purity",
+    const response = await axios.get(" https://api.equi.co.in/api/purity",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -63,7 +63,7 @@ const Page = () => {
     }
 
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/purity",
+      "https://api.equi.co.in/api/purity",
       { name },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -84,7 +84,7 @@ const Page = () => {
 
 
   const handleDeletePurity = async  (id)=>{
-    const response = await axios.delete(` http://127.0.0.1:8000/api/purity/${id}`);
+    const response = await axios.delete(` https://api.equi.co.in/api/purity/${id}`);
     console.log(response);
     if(response.status===200){
         alert(response.data.message);
@@ -109,7 +109,7 @@ const Page = () => {
     if (!editId) return; // Prevent updating if no ID is set
   
     try {
-      const response = await axios.post(` http://127.0.0.1:8000/api/purity/${editId}`, {
+      const response = await axios.post(` https://api.equi.co.in/api/purity/${editId}`, {
         name,
       });
   

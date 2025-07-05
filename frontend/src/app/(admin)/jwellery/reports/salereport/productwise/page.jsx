@@ -40,7 +40,7 @@ const Productwise = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/productReportSales",
+          "https://api.equi.co.in/api/productReportSales",
           {
             headers: { authorization: `Bearer ${token}` },
           }

@@ -38,7 +38,7 @@ export default function MessageSettingsPage() {
 
     const fetchCredentials = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/sms-credentials");
+        const res = await axios.get("https://api.equi.co.in/api/sms-credentials");
         setCredentials(res.data);
         if (!sms_Credential_id && res.data.length > 0) {
           setShopId(res.data[0].id); // default select first shop
@@ -50,7 +50,7 @@ export default function MessageSettingsPage() {
 
     const fetchMessages = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/api/sms-settings", {
+        const res = await axios.get("https://api.equi.co.in/api/sms-settings", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -122,7 +122,7 @@ export default function MessageSettingsPage() {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/sms-settings",
+        "https://api.equi.co.in/api/sms-settings",
         payload,
         {
           headers: {

@@ -12,16 +12,16 @@ export default function Subtypes() {
   }, []);
 
   const fetchSubtypes = async () => {
-    const response = await axios.get(" http://127.0.0.1:8000/api/packagesubtypes");
+    const response = await axios.get(" https://api.equi.co.in/api/packagesubtypes");
     setSubtypes(response.data);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (editingId) {
-      await axios.put(` http://127.0.0.1:8000/api/packagesubtypes/${editingId}`, { name });
+      await axios.put(` https://api.equi.co.in/api/packagesubtypes/${editingId}`, { name });
     } else {
-      await axios.post(" http://127.0.0.1:8000/api/packagesubtypes", { name });
+      await axios.post(" https://api.equi.co.in/api/packagesubtypes", { name });
     }
     setName("");
     setEditingId(null);
@@ -35,7 +35,7 @@ export default function Subtypes() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this subtype?")) {
-      await axios.delete(` http://127.0.0.1:8000/api/packagesubtypes/${id}`);
+      await axios.delete(` https://api.equi.co.in/api/packagesubtypes/${id}`);
       fetchSubtypes();
     }
   };

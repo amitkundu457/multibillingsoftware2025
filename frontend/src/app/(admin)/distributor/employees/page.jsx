@@ -52,7 +52,7 @@ export default function Employees() {
       return;
     }
 
-    const res = await axios.get(" http://127.0.0.1:8000/api/employees",
+    const res = await axios.get(" https://api.equi.co.in/api/employees",
       
 {
   headers: { Authorization: `Bearer ${token}` },
@@ -72,12 +72,12 @@ export default function Employees() {
     if (currentEmployee) {
       // Update existing employee
       await axios.post(
-        ` http://127.0.0.1:8000/api/employees/${currentEmployee.id}`,
+        ` https://api.equi.co.in/api/employees/${currentEmployee.id}`,
         data
       );
     } else {
       // Create new employee
-      await axios.post(" http://127.0.0.1:8000/api/employees", data,
+      await axios.post(" https://api.equi.co.in/api/employees", data,
         
 {
   headers: { Authorization: `Bearer ${token}` },
@@ -109,7 +109,7 @@ export default function Employees() {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(` http://127.0.0.1:8000/api/employees/delete/${id}`);
+    await axios.delete(` https://api.equi.co.in/api/employees/delete/${id}`);
     fetchEmployees();
   };
 

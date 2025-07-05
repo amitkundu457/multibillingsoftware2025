@@ -32,7 +32,7 @@ export default function CategorySale() {
     }
 
     axios
-      .get('http://127.0.0.1:8000/api/categoryrate', {
+      .get('https://api.equi.co.in/api/categoryrate', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {

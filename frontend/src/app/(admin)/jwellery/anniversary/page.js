@@ -31,7 +31,7 @@ const CustomersCelebrate = () => {
       const token = getCookie("access_token"); // Retrieve token
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const { data } = await axios.get(" http://127.0.0.1:8000/api/customerTodayAnniversery", config);
+      const { data } = await axios.get(" https://api.equi.co.in/api/customerTodayAnniversery", config);
       setCustomers(data);
     } catch (error) {
       notyf.error("Error fetching customers!");
@@ -59,7 +59,7 @@ const CustomersCelebrate = () => {
       const token = getCookie("access_token"); // Retrieve token
       const config = { headers: { Authorization: `Bearer ${token}` } };
   
-      await axios.post(" http://127.0.0.1:8000/api/bulksendmessage", { customer_ids: selectedCustomers }, config);
+      await axios.post(" https://api.equi.co.in/api/bulksendmessage", { customer_ids: selectedCustomers }, config);
       notyf.success("Messages sent successfully!");
       setSelectedCustomers([]); // Clear selection after sending
     } catch (error) {

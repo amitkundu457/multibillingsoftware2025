@@ -58,7 +58,7 @@ export default function MembershipPlans() {
   // Handle Delete
   const handleDelete = async (id) => {
     try {
-      await axios.delete(` http://127.0.0.1:8000/api/membership-plans/${id}`);
+      await axios.delete(` https://api.equi.co.in/api/membership-plans/${id}`);
       fetchPlans();
     } catch (error) {
       console.error("Error deleting plan", error);

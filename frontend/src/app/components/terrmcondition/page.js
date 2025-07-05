@@ -7,7 +7,7 @@ import axios from 'axios';
 const Page = () => {
     const[terms ,setTerms] = useState([]);
     useEffect(()=>{
-        axios.get('http://127.0.0.1:8000/api/terms-condition').then((response)=>{
+        axios.get('https://api.equi.co.in/api/terms-condition').then((response)=>{
             console.log(response.data);
             
             setTerms(response.data);
@@ -24,7 +24,7 @@ const Page = () => {
         <div className="space-y-6">
           {terms.map((term) => (
             <div key={term.id} className="p-4 border rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-2">{term.name}</h2>
+              {/* <h2 className="text-xl font-semibold mb-2">{term.name}</h2> */}
               <div
                 className="text-gray-700"
                 dangerouslySetInnerHTML={{ __html: term.description }} // Render HTML safely

@@ -52,7 +52,7 @@ const ParcelBill = () => {
 
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/api/parcel-order/${parcel_order_id}/generate-bill`,
+          `https://api.equi.co.in/api/parcel-order/${parcel_order_id}/generate-bill`,
           {
             method: "POST",
             headers: {

@@ -148,6 +148,76 @@ function AdminLayout({ children }) {
           href: `/${productUrl}/sliders`,
           icon: TfiLayoutSliderAlt,
         },
+        {
+          label: "crm",
+          href: `/${productUrl}/crm-page`,
+          icon: TfiLayoutSliderAlt,
+        },
+         {
+          label: "Sales",
+          href: `/${productUrl}/sales`,
+          icon: TfiLayoutSliderAlt,
+        },
+          {
+          label: "Marketing Automation",
+          href: `/${productUrl}/marketing`,
+          icon: TfiLayoutSliderAlt,
+        },
+        {
+          label: "Generate Leads",
+          href: `/${productUrl}/generate-leads`,
+          icon: TfiLayoutSliderAlt,
+        },
+        {
+          label: "Generate Sales",
+          href: `/${productUrl}/generate-sales`,
+          icon: TfiLayoutSliderAlt,
+        },
+        {
+          label: "Control Costs",
+          href: `/${productUrl}/control-costs`,
+          icon: TfiLayoutSliderAlt,
+        },
+        {
+          label: "Ring-Fencing",
+          href: `/${productUrl}/ring-fencing`,
+          icon: TfiLayoutSliderAlt,
+        }, 
+        {
+          label: "Help Centre",
+          href: `/${productUrl}/help-center`,
+          icon: TfiLayoutSliderAlt,
+        },
+        {
+          label: "Contact Support",
+          href: `/${productUrl}/contact-support`,
+          icon: TfiLayoutSliderAlt,
+        },
+        {
+          label: "About BrizIndia",
+          href: `/${productUrl}/about-brizIndia`,
+          icon: TfiLayoutSliderAlt,
+        },
+         {
+          label: "Privacy Policy",
+          href: `/${productUrl}/privacy-policy`,
+          icon: TfiLayoutSliderAlt,
+        },
+          {
+          label: "Cancellation and Refund Policy",
+          href: `/${productUrl}/cancelation-policy`,
+          icon: TfiLayoutSliderAlt,
+        }, 
+        {
+          label: "Shipping and Delivery Policy ",
+          href: `/${productUrl}/shipping-policy`,
+          icon: TfiLayoutSliderAlt,
+        },
+        {
+          label: "Careers",
+          href: `/${productUrl}/careers`,
+          icon: TfiLayoutSliderAlt,
+        },
       ],
     },
     {

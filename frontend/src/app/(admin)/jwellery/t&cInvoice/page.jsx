@@ -39,7 +39,7 @@ const TermsEditor = () => {
     }
 
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/terms-condition-invoice", {
+      const res = await axios.get("https://api.equi.co.in/api/terms-condition-invoice", {
         headers: { Authorization: `Bearer ${token}` },
       });
 console.log("ternm and condtion",res)
@@ -69,7 +69,7 @@ console.log("ternm and condtion",res)
 
       if (termId) {
         await axios.put(
-          `http://127.0.0.1:8000/api/terms-condition-invoice/${termId}`,
+          `https://api.equi.co.in/api/terms-condition-invoice/${termId}`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -77,7 +77,7 @@ console.log("ternm and condtion",res)
         setMessage("✅ Updated successfully");
       } else {
         const res = await axios.post(
-          `http://127.0.0.1:8000/api/terms-condition-invoice`,
+          `https://api.equi.co.in/api/terms-condition-invoice`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );

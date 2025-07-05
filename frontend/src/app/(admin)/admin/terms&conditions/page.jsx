@@ -14,7 +14,7 @@ const TermsConditionPage = () => {
   // Fetch all terms conditions from API
   const fetchTermsConditions = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/terms-condition");
+      const response = await axios.get(" https://api.equi.co.in/api/terms-condition");
       setTermsConditions(response.data); // Assuming the data is under the 'data' key
     } catch (error) {
       console.error("Error fetching terms conditions:", error);
@@ -38,7 +38,7 @@ const TermsConditionPage = () => {
     if (isEditMode && termsConditions.length==1 ) {
       // Update existing term
       try {
-        await axios.put(` http://127.0.0.1:8000/api/terms-condition/${modalData.id}`, modalData);
+        await axios.put(` https://api.equi.co.in/api/terms-condition/${modalData.id}`, modalData);
         fetchTermsConditions();
         setIsModalOpen(false);
       } catch (error) {
@@ -47,7 +47,7 @@ const TermsConditionPage = () => {
     } else  if(termsConditions.length==0){
       // Create new term
       try {
-        await axios.post(" http://127.0.0.1:8000/api/terms-condition", modalData);
+        await axios.post(" https://api.equi.co.in/api/terms-condition", modalData);
         fetchTermsConditions();
         setIsModalOpen(false);
       } catch (error) {
@@ -62,7 +62,7 @@ const TermsConditionPage = () => {
   // Delete term
   const handleDeleteTerm = async (id) => {
     try {
-      await axios.delete(` http://127.0.0.1:8000/api/terms-condition/${id}`);
+      await axios.delete(` https://api.equi.co.in/api/terms-condition/${id}`);
       fetchTermsConditions();
     } catch (error) {
       console.error("Error deleting term:", error);

@@ -20,7 +20,7 @@ export default function Birthday_and_Aniversary({ label }) {
       const token = getCookie("access_token");
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const { data } = await axios.get("http://127.0.0.1:8000/api/customers", config);
+      const { data } = await axios.get("https://api.equi.co.in/api/customers", config);
       
       console.log("Fetched Customers:", data); // Debugging log
       setCustomers(data);

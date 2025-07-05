@@ -55,7 +55,7 @@
   
 //       try {
 //         const response = await axios.get(
-//           "http://127.0.0.1:8000/api/account-masters",
+//           "https://api.equi.co.in/api/account-masters",
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -80,7 +80,7 @@
 
 //   const handleDeleteData = (id) => {
 //     axios
-//       .delete(`http://127.0.0.1:8000/api/account-masters/${id}`)
+//       .delete(`https://api.equi.co.in/api/account-masters/${id}`)
 //       .then(() => {
 //         fetchData();
 //         alert("data deleted  Succesfully");
@@ -212,7 +212,7 @@ const Page = () => {
     }
 
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/account-masters", {
+      const response = await axios.get("https://api.equi.co.in/api/account-masters", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setData(response.data);
@@ -237,7 +237,7 @@ const Page = () => {
 
   const handleDeleteData = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/account-masters/${id}`);
+      await axios.delete(`https://api.equi.co.in/api/account-masters/${id}`);
       alert("Data deleted successfully");
       setData((prev) => prev.filter((item) => item.id !== id));
     } catch (error) {

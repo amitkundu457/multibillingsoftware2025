@@ -38,7 +38,7 @@ export default function Employees() {
 
   const fetchEmployees = async () => {
     const token = getCookie("access_token");
-    const res = await axios.get("http://127.0.0.1:8000/api/employees",
+    const res = await axios.get("https://api.equi.co.in/api/employees",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -75,13 +75,13 @@ export default function Employees() {
       if (currentEmployee) {
         console.log("currentEmployeec",currentEmployee)
         await axios.post(
-          `http://127.0.0.1:8000/api/employees/${currentEmployee.id}`,
+          `https://api.equi.co.in/api/employees/${currentEmployee.id}`,
           data,
           config
         );
         toast.success("Data updated successfully!");
       } else {
-        await axios.post("http://127.0.0.1:8000/api/employees", formattedData, config);
+        await axios.post("https://api.equi.co.in/api/employees", formattedData, config);
         toast.success("Data created successfully!");
       }
 
@@ -115,7 +115,7 @@ export default function Employees() {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://127.0.0.1:8000/api/employees/${id}`);
+    await axios.delete(`https://api.equi.co.in/api/employees/${id}`);
     toast.success("Data deleted successfully!");
     fetchEmployees();
   };

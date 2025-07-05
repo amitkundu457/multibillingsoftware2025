@@ -47,7 +47,7 @@
 
        try {
          const response = await fetch(
-           " http://127.0.0.1:8000/api/sale-returns",
+           " https://api.equi.co.in/api/sale-returns",
            {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -78,8 +78,8 @@
            },
          };
      
-        //  const { data } = await axios.get("http://127.0.0.1:8000/api/suppliers", config);
-        const res  = await axios.get("http://127.0.0.1:8000/api/suppliers", config);
+        //  const { data } = await axios.get("https://api.equi.co.in/api/suppliers", config);
+        const res  = await axios.get("https://api.equi.co.in/api/suppliers", config);
         console.log("suplierName",res);
 
          setCustomerData(res?.data?.suppliers);
@@ -98,7 +98,7 @@
     const token = getCookie("access_token"); 
     try {
       const response = await fetch(
-        " http://127.0.0.1:8000/api/sale-returns",
+        " https://api.equi.co.in/api/sale-returns",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -138,7 +138,7 @@
      const token = getCookie("access_token"); 
  
      try {
-       const response = await fetch(" http://127.0.0.1:8000/api/sale-returns", {
+       const response = await fetch(" https://api.equi.co.in/api/sale-returns", {
          method: "POST",
          headers: { "Content-Type": "application/json" ,
           Authorization: `Bearer ${token}` 

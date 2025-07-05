@@ -41,7 +41,7 @@
 //     const fetchData = async () => {
 //       try {
 //         const response = await axios.get(
-//           "http://127.0.0.1:8000/api/parcel-kot-report",
+//           "https://api.equi.co.in/api/parcel-kot-report",
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -323,7 +323,7 @@ const BillWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/parcel-kot-report",
+          "https://api.equi.co.in/api/parcel-kot-report",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

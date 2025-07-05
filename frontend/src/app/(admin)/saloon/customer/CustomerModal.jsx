@@ -112,7 +112,7 @@ const CustomerModal = ({
     }
 
     axios
-      .get("http://127.0.0.1:8000/api/customerstype", {
+      .get("https://api.equi.co.in/api/customerstype", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -123,7 +123,7 @@ const CustomerModal = ({
       });
 
     axios
-      .get("http://127.0.0.1:8000/api/customersubtypes", {
+      .get("https://api.equi.co.in/api/customersubtypes", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -154,7 +154,7 @@ const CustomerModal = ({
 
   // //CustomersubType Handler
   // const handlerCustomberSubType = async () => {
-  //   const response = await axios.get(" http://127.0.0.1:8000/api/customersubtypes");
+  //   const response = await axios.get(" https://api.equi.co.in/api/customersubtypes");
   //   setCustomerSubTypeData(response.data);
 
   //   console.log("customerSubType", data);
@@ -162,7 +162,7 @@ const CustomerModal = ({
 
   // //CustomerType Handler
   // const handlerCustomberType = async () => {
-  //   const response = await axios.get(" http://127.0.0.1:8000/api/customerstype");
+  //   const response = await axios.get(" https://api.equi.co.in/api/customerstype");
   //   setCustomerTypeData(response?.data?.data)
   //   console.log("customerType", data);
   // };
@@ -199,14 +199,14 @@ const CustomerModal = ({
 
       if (modalType === "create") {
         await axios.post(
-          " http://127.0.0.1:8000/api/customers",
+          " https://api.equi.co.in/api/customers",
           payload,
           config
         );
         notyf.success("Customer created successfully!");
       } else if (modalType === "edit") {
         await axios.post(
-          ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          ` https://api.equi.co.in/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
@@ -564,14 +564,14 @@ export default CustomerModal;
 //     }
 
 //     axios
-//       .get("http://127.0.0.1:8000/api/customerstype", {
+//       .get("https://api.equi.co.in/api/customerstype", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((res) => setCustomerTypeData(res.data.data))
 //       .catch(() => alert("Failed to fetch customer types"));
 
 //     axios
-//       .get("http://127.0.0.1:8000/api/customersubtypes", {
+//       .get("https://api.equi.co.in/api/customersubtypes", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((res) => setCustomerSubTypeData(res.data))
@@ -605,11 +605,11 @@ export default CustomerModal;
 //       };
 
 //       if (modalType === "create") {
-//         await axios.post("http://127.0.0.1:8000/api/customers", payload, config);
+//         await axios.post("https://api.equi.co.in/api/customers", payload, config);
 //         notyf.success("Customer created successfully!");
 //       } else if (modalType === "edit") {
 //         await axios.put(
-//           `http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+//           `https://api.equi.co.in/api/customers/${currentCustomer.id}`,
 //           payload,
 //           config
 //         );

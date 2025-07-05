@@ -27,7 +27,7 @@ export default function BookingModal({customer_id}) {
   const token = getCookie("access_token");
 
   const fetchNumber = () => {
-    axios.get(" http://127.0.0.1:8000/api/packagesnext-numbers")
+    axios.get(" https://api.equi.co.in/api/packagesnext-numbers")
       .then(res => {
         setNextNumber(res.data);
         setValue("packageNo", res.data.package_no || "");
@@ -38,7 +38,7 @@ export default function BookingModal({customer_id}) {
 
   const fetchPackages = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/packagename", {
+      const response = await axios.get(" https://api.equi.co.in/api/packagename", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -60,7 +60,7 @@ export default function BookingModal({customer_id}) {
     
     setLoading(true);
     try {
-      const response = await axios.get(` http://127.0.0.1:8000/api/packagesassn/${packageNo}`, {
+      const response = await axios.get(` https://api.equi.co.in/api/packagesassn/${packageNo}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -116,8 +116,8 @@ export default function BookingModal({customer_id}) {
   // Handle form submission
   const onSubmit = (data) => {
     const apiUrl = mode === "new" 
-      ? " http://127.0.0.1:8000/api/packagesassign" 
-      : ` http://127.0.0.1:8000/api/packageupdate/${data.packageNo}`;
+      ? " https://api.equi.co.in/api/packagesassign" 
+      : ` https://api.equi.co.in/api/packageupdate/${data.packageNo}`;
 alert(data.packageNo)
     const method = mode === "new" ? axios.post : axios.post;
 

@@ -5,7 +5,6 @@ import Link from "next/link";
 const Menu = ({ show, title, icon: Icon, submenuItems }) => {
   const [showSubmenu, setShowSubmenu] = useState(false);
   const [submenusState, setSubmenusState] = useState({});
-  
   const menuRef = useRef(null); // Reference for the menu container
 
   // Handle clicks outside the menu to close the submenu
@@ -17,7 +16,6 @@ const Menu = ({ show, title, icon: Icon, submenuItems }) => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -55,7 +53,7 @@ const Menu = ({ show, title, icon: Icon, submenuItems }) => {
         <ul
           className={`mt-2 p-3 space-y-2 transition-all duration-300 fixed z-[9] top-1/2 -translate-y-1/2 shadow-lg border left-24 ml-5 w-64 bg-white rounded ${
             showSubmenu ? "block" : "hidden"
-          }`}
+          } max-h-96 overflow-y-auto`}
         >
           {submenuItems.map((item, index) => (
             <li key={index}>
@@ -83,6 +81,7 @@ const Menu = ({ show, title, icon: Icon, submenuItems }) => {
                       {item.subItemLabel || "More Options"}
                     </span>
                   </button>
+
                   <ul
                     className={`ml-5 mt-2 transition-all duration-300 ${
                       submenusState[index] ? "block" : "hidden"

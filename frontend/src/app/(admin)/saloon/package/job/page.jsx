@@ -102,7 +102,7 @@ if (!token) {
       paid_amount: totalGrossAmount
     };
     const orderResponse = await axios.post(
-      "http://127.0.0.1:8000/api/order-packages",
+      "https://api.equi.co.in/api/order-packages",
       payload,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -110,7 +110,7 @@ if (!token) {
     );
 
     const paymentResponse = await axios.post(
-      "http://127.0.0.1:8000/api/update-payment",
+      "https://api.equi.co.in/api/update-payment",
       paymentPayload,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -256,7 +256,7 @@ if (!token) {
   return;
 }
 
-    const response = await axios.get("http://127.0.0.1:8000/api/stylists",
+    const response = await axios.get("https://api.equi.co.in/api/stylists",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -283,7 +283,7 @@ if (!token) {
 
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/packagesassign/${customerDetails.id}?enabled=${checked}`,
+        `https://api.equi.co.in/api/packagesassign/${customerDetails.id}?enabled=${checked}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

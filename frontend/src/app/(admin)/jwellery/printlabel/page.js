@@ -89,7 +89,7 @@
 
 //   const fetchAllBarCode = async () => {
 //     const token = getCookie("access_token");
-//     const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+//     const response = await axios.get("https://api.equi.co.in/api/barcodes", {
 //       headers: {
 //         Authorization: `Bearer ${token}`,
 //       },
@@ -106,7 +106,7 @@
 //     const fetchProducts = async () => {
 //       try {
 //         const response = await axios.get(
-//           `http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+//           `https://api.equi.co.in/api/barcode-search?search=${search}`,
 //           {
 //             headers: {
 //               Authorization: `Bearer ${token}`,
@@ -267,7 +267,7 @@
 
 //   const fetchAllBarCode = async () => {
 //     const token = getCookie("access_token");
-//     const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+//     const response = await axios.get("https://api.equi.co.in/api/barcodes", {
 //       headers: {
 //         Authorization: `Bearer ${token}`,
 //       },
@@ -279,7 +279,7 @@
 //     const token = getCookie("access_token");
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+//         `https://api.equi.co.in/api/barcode-search?search=${search}`,
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
@@ -523,7 +523,7 @@
 
 //   const fetchAllBarCode = async () => {
 //     const token = getCookie("access_token");
-//     const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+//     const response = await axios.get("https://api.equi.co.in/api/barcodes", {
 //       headers: {
 //         Authorization: `Bearer ${token}`,
 //       },
@@ -535,7 +535,7 @@
 //     const token = getCookie("access_token");
 //     try {
 //       const response = await axios.get(
-//         `http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+//         `https://api.equi.co.in/api/barcode-search?search=${search}`,
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
@@ -775,7 +775,7 @@ const ProductSearch = () => {
 
   const fetchAllBarCode = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+    const response = await axios.get("https://api.equi.co.in/api/barcodes", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -787,7 +787,7 @@ const ProductSearch = () => {
     const token = getCookie("access_token");
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+        `https://api.equi.co.in/api/barcode-search?search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

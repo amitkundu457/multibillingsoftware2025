@@ -2,6 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { getBrands, baseImageURL } from "../../components/config";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import "swiper/css";
+
 export default function Index() {
   const [brands, setBrands] = useState([]);
 
@@ -27,28 +31,39 @@ export default function Index() {
         </h1>
       </div>
 
-      {/* Brand Grid */}
+      {/* Swiper Carousel */}
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-10 items-center">
-          {brands.length > 0 ? (
-            brands.map((brand) => (
-              <div
-                key={brand.id}
-                className="flex items-center justify-center  bg-white rounded-md shadow-sm"
-              >
-                <img
-                  src={`${baseImageURL}${brand?.image}`}
-                  alt={brand.name}
-                  className=" object-contain "
-                />
-              </div>
-            ))
-          ) : (
-            <p className="col-span-full text-center text-gray-500">
-              Loading brands...
-            </p>
-          )}
-        </div>
+        {brands.length > 0 ? (
+          <Swiper
+            spaceBetween={10}
+            loop={true}
+            autoplay={{
+              delay: 2000,
+              disableOnInteraction: true,
+            }}
+            breakpoints={{
+              320: { slidesPerView: 2 },
+              640: { slidesPerView: 3 },
+              768: { slidesPerView: 4 },
+              1024: { slidesPerView: 5 },
+            }}
+            modules={[Autoplay]}
+          >
+            {brands.map((brand) => (
+              <SwiperSlide key={brand.id}>
+                <div className="flex items-center w-[70%] border border-r overflow-hidden justify-center  bg-white rounded-md   transition duration-300 ease-in-out">
+                  <img
+                    src={`${baseImageURL}${brand?.image}`}
+                    alt={brand.name}
+                    className=" w-auto object-contain"
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <p className="text-center text-gray-500">Loading brands...</p>
+        )}
       </div>
     </div>
   );

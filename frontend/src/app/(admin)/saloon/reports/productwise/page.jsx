@@ -35,7 +35,7 @@ const ProductWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/Saloon-products",
+          "https://api.equi.co.in/api/Saloon-products",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -54,7 +54,7 @@ const ProductWise = () => {
 
   const handleDownloadPDF = async (type) => {
     try {
-      const url = `http://127.0.0.1:8000/api/product-services-pdf?format=${type}&start_date=${startDate}&end_date=${endDate}`;
+      const url = `https://api.equi.co.in/api/product-services-pdf?format=${type}&start_date=${startDate}&end_date=${endDate}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {

@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 
-const API_URL = "http://127.0.0.1:8000/api/company";
+const API_URL = "https://api.equi.co.in/api/company";
 
 export default function Home() {
   const { register, handleSubmit, reset, setValue } = useForm();

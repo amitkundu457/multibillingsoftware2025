@@ -60,7 +60,7 @@
 // }
 //     try {
 //       const response = await fetch(
-//         "http://127.0.0.1:8000/api/purchase-returns",
+//         "https://api.equi.co.in/api/purchase-returns",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -87,7 +87,7 @@
 //       return;
 //     }
 //     axios
-//       .get("http://127.0.0.1:8000/api/suppliers",
+//       .get("https://api.equi.co.in/api/suppliers",
         
 // {
 //   headers: { Authorization: `Bearer ${token}` },
@@ -112,7 +112,7 @@
 //     }
 //     try {
 //       const response = await fetch(
-//         "http://127.0.0.1:8000/api/purchase-returns",
+//         "https://api.equi.co.in/api/purchase-returns",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -154,7 +154,7 @@
 //     }
 
 //     try {
-//       const response = await fetch(" http://127.0.0.1:8000/api/purchase-returns", {
+//       const response = await fetch(" https://api.equi.co.in/api/purchase-returns", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json",
 //            Authorization: `Bearer ${token}`
@@ -414,7 +414,7 @@
 //   const fetchStockReturns = async () => {
 //     try {
 //       const response = await fetch(
-//         "http://127.0.0.1:8000/api/purchase-returns"
+//         "https://api.equi.co.in/api/purchase-returns"
 //       );
 //       const data = await response.json();
 //       setStockReturns(data);
@@ -437,7 +437,7 @@
 //       return;
 //     }
 //     axios
-//       .get("http://127.0.0.1:8000/api/suppliers",
+//       .get("https://api.equi.co.in/api/suppliers",
         
 // {
 //   headers: { Authorization: `Bearer ${token}` },
@@ -457,7 +457,7 @@
 //   const fetchPayments = async () => {
 //     try {
 //       const response = await fetch(
-//         "http://127.0.0.1:8000/api/purchase-returns"
+//         "https://api.equi.co.in/api/purchase-returns"
 //       );
 //       const data = await response.json();
 //       console.log("payment info", response);
@@ -491,7 +491,7 @@
 //     console.log(formData);
 
 //     try {
-//       const response = await fetch(" http://127.0.0.1:8000/api/purchase-returns", {
+//       const response = await fetch(" https://api.equi.co.in/api/purchase-returns", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify(formData),
@@ -752,7 +752,7 @@ export default function PurchaseReturn() {
     //   return;
     // }
     axios
-      .get("http://127.0.0.1:8000/api/suppliers",
+      .get("https://api.equi.co.in/api/suppliers",
         
 {
   headers: { Authorization: `Bearer ${token}` },
@@ -771,7 +771,7 @@ export default function PurchaseReturn() {
   useEffect(() => {
     const fetchSalesReturn = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/saloon-purchase-returns", {
+        const response = await axios.get("https://api.equi.co.in/api/saloon-purchase-returns", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStockReturns(response.data);
@@ -786,7 +786,7 @@ export default function PurchaseReturn() {
 
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/customers", {
+      const res = await axios.get("https://api.equi.co.in/api/customers", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCustomerData(res.data);
@@ -798,7 +798,7 @@ export default function PurchaseReturn() {
   const featchProductsList = async () => {
     try {
       // const res = await axios.get(
-      //   "http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+      //   "https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Product",
       //   {
       //     headers: { Authorization: `Bearer ${token}` },
       //   }
@@ -817,7 +817,7 @@ export default function PurchaseReturn() {
 
   const fetchPayments = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/saloon-purchase-returns", {
+      const response = await axios.get("https://api.equi.co.in/api/saloon-purchase-returns", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const sortedPayments = response.data.sort(
@@ -850,7 +850,7 @@ export default function PurchaseReturn() {
     };
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/saloon-purchase-return", formData, {
+      await axios.post("https://api.equi.co.in/api/saloon-purchase-return", formData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

@@ -27,7 +27,7 @@ const Page = () => {
   useEffect(() => {
     const fetchDistributors = async () => {
       const response = await fetch(
-        " http://127.0.0.1:8000/api/distributors/search"
+        " https://api.equi.co.in/api/distributors/search"
       );
       const data = await response.json();
       setDistributors(data.data);
@@ -38,7 +38,7 @@ const Page = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/assign-client",
+        " https://api.equi.co.in/api/assign-client",
         data,
         {
           headers: {

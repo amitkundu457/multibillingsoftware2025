@@ -57,7 +57,7 @@
 //       }
 
 //       const response = await axios.get(
-//         " http://127.0.0.1:8000/api/partial-order",
+//         " https://api.equi.co.in/api/partial-order",
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`, // Include the token in the headers
@@ -79,7 +79,7 @@
 //   };
 //   // Fetch user ID
 //   useEffect(() => {
-//     axios.get(" http://127.0.0.1:8000/api/order").then((response) => {
+//     axios.get(" https://api.equi.co.in/api/order").then((response) => {
 //       setUserId(response.data.id);
 //     });
 //   }, []);
@@ -105,7 +105,7 @@
 //       };
 
 //       const response = await axios.post(
-//         " http://127.0.0.1:8000/api/partial-order",
+//         " https://api.equi.co.in/api/partial-order",
 //         dataPost
 //       );
 
@@ -398,7 +398,7 @@
 //       }
 
 //       const response = await axios.get(
-//         "http://127.0.0.1:8000/api/partial-order",
+//         "https://api.equi.co.in/api/partial-order",
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
@@ -431,7 +431,7 @@
 //       };
 
 //       const response = await axios.post(
-//         "http://127.0.0.1:8000/api/partial-order",
+//         "https://api.equi.co.in/api/partial-order",
 //         dataPost
 //       );
 
@@ -831,7 +831,7 @@ const PartialOrder = () => {
 
     try {
       if (!token) throw new Error("No token found.");
-      const response = await axios.get("http://127.0.0.1:8000/api/partial-order", {
+      const response = await axios.get("https://api.equi.co.in/api/partial-order", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -877,7 +877,7 @@ const PartialOrder = () => {
       };
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/partial-order",
+        "https://api.equi.co.in/api/partial-order",
         dataPost
       );
 

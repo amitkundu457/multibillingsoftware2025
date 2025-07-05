@@ -12,7 +12,7 @@ const ParcelKOT = () => {
   useEffect(() => {
     const fetchKOT = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/parcel-kot/${parcel_order_id}`);
+        const response = await fetch(`https://api.equi.co.in/api/parcel-kot/${parcel_order_id}`);
         const data = await response.json();
 
         if (response.ok) {

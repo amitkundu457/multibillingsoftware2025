@@ -39,7 +39,7 @@ const BillWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/kot-billing",
+          "https://api.equi.co.in/api/kot-billing",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

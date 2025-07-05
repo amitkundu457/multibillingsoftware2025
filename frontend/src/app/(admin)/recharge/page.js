@@ -69,7 +69,7 @@
 
 //       // Add the token to the request headers
 //       const response = await axios.post(
-//         " http://127.0.0.1:8000/api/coinpurchase", // Laravel API endpoint
+//         " https://api.equi.co.in/api/coinpurchase", // Laravel API endpoint
 //         payload,
 //         {
 //           headers: {
@@ -243,7 +243,7 @@
 
 //       // Add the token to the request headers
 //       const response = await axios.post(
-//         "http://127.0.0.1:8000/api/coinpurchase", // Laravel API endpoint
+//         "https://api.equi.co.in/api/coinpurchase", // Laravel API endpoint
 //         payload,
 //         {
 //           headers: {
@@ -358,7 +358,7 @@ const QrImagePreview = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/qr/upload')
+    axios.get('https://api.equi.co.in/api/qr/upload')
       .then(res => {
         if (res.data && res.data.data?.cover) {
           setImageUrl(res.data.data.cover);

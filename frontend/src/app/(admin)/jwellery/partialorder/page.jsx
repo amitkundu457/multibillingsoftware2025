@@ -57,7 +57,7 @@
 //       }
 
 //       const response = await axios.get(
-//         " http://127.0.0.1:8000/api/partial-order",
+//         " https://api.equi.co.in/api/partial-order",
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`, // Include the token in the headers
@@ -79,7 +79,7 @@
 //   };
 //   // Fetch user ID
 //   useEffect(() => {
-//     axios.get(" http://127.0.0.1:8000/api/order").then((response) => {
+//     axios.get(" https://api.equi.co.in/api/order").then((response) => {
 //       setUserId(response.data.id);
 //     });
 //   }, []);
@@ -105,7 +105,7 @@
 //       };
 
 //       const response = await axios.post(
-//         " http://127.0.0.1:8000/api/partial-order",
+//         " https://api.equi.co.in/api/partial-order",
 //         dataPost
 //       );
 
@@ -337,7 +337,7 @@ const BillWise = () => {
   const [endDate, setEndDate] = useState("");
   const [token, setToken] = useState(null);
 
-  //url of billing:http://127.0.0.1:8000/jwellery/printinvoice/?id=151
+  //url of billing:https://api.equi.co.in/jwellery/printinvoice/?id=151
 
   // Get token from cookie
   useEffect(() => {
@@ -361,7 +361,7 @@ const BillWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/billingPurchase",
+          "https://api.equi.co.in/api/billingPurchase",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

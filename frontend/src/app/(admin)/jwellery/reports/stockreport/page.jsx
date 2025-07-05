@@ -29,7 +29,7 @@
 //     const fetchProductsList = async () => {
 //         setLoading(true);
 //         try {
-//             const response = await axios.get("http://127.0.0.1:8000/api/stockDetails", {
+//             const response = await axios.get("https://api.equi.co.in/api/stockDetails", {
 //                 headers: { Authorization: `Bearer ${token}` },
 //             });
 //             setProductList(response.data);
@@ -136,7 +136,7 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/stockDetails",
+        "https://api.equi.co.in/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

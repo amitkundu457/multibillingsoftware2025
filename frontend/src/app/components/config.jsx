@@ -3,12 +3,12 @@ import apiClient from "../lib/axios"
 import axios from "axios";
 
 // const apiClient = axios.create({
-//   baseURL: " http://127.0.0.1:8000/api/",
+//   baseURL: " https://api.equi.co.in/api/",
 // });
 
 // console.log(apiClient.get('https://google.com'))
 // createNewStock, destroyStock
-export const baseImageURL = " http://127.0.0.1:8000/";
+export const baseImageURL = " https://api.equi.co.in/";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -445,7 +445,7 @@ export const createNewPurchase = async(data) =>{
     Authorization: `Bearer ${token}`, // Include the token in the Authorization header
   };
  return apiClient.post("purchase", data,{headers});
-// return await axios.post("http://127.0.0.1:8000/api/purchase", data, {headers})
+// return await axios.post("https://api.equi.co.in/api/purchase", data, {headers})
 }
 
 
@@ -495,7 +495,7 @@ export const updateExistingKarigari = async (id, updatedData) => {
 
 
     
-    const response = await fetch(` http://127.0.0.1:8000/api/karigariupdate/${id}`, {
+    const response = await fetch(` https://api.equi.co.in/api/karigariupdate/${id}`, {
       method: "POST", 
       headers: {
         "Content-Type": "application/json",

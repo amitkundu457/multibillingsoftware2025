@@ -11,7 +11,7 @@ const Page = () => {
   const bookingId = searchParams.get("id");
  
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/get-family-kot/${bookingId}`)
+    fetch(`https://api.equi.co.in/api/get-family-kot/${bookingId}`)
       .then((res) => res.json())
       .then((data) => setKotData(data));
   }, [bookingId]);

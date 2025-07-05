@@ -48,19 +48,19 @@ export default function FooterSection({ scrollToTop }) {
           </h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/crm" className="text-white text-[16px] hover:underline">
                 CRM
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/marketing" className="text-white text-[16px] hover:underline">
                 Marketing Automation
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/sales" className="text-white text-[16px] hover:underline">
                 Sales
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -71,24 +71,24 @@ export default function FooterSection({ scrollToTop }) {
           </h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/generate-leads" className="text-white text-[16px] hover:underline">
                 Generate Leads
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/generate-sales" className="text-white text-[16px] hover:underline">
                 Generate Sales
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/control-cost" className="text-white text-[16px] hover:underline">
                 Control Costs
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/ring-fencing" className="text-white text-[16px] hover:underline">
                 Ring-Fencing
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -97,24 +97,24 @@ export default function FooterSection({ scrollToTop }) {
           <h3 className="font-semibold text-[22px] text-white mb-4">SUPPORT</h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/help-centre" className="text-white text-[16px] hover:underline">
                 Help Centre
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/contactsupport" className="text-white text-[16px] hover:underline">
                 Contact Support
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/about-brizIndia" className="text-white text-[16px] hover:underline">
                 About BrizIndia
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-white text-[16px] hover:underline">
+              <Link href="/careers" className="text-white text-[16px] hover:underline">
                 Careers
-              </a>
+              </Link>
             </li>
             <li>
         <Link href="/components/terrmcondition/">

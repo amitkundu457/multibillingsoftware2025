@@ -78,12 +78,12 @@ export default function JobForm() {
       paid_amount: totalGrossAmount
     };
     const orderResponse = await axios.post(
-      " http://127.0.0.1:8000/api/order-packages",
+      " https://api.equi.co.in/api/order-packages",
       payload
     );
 
     const paymentResponse = await axios.post(
-      " http://127.0.0.1:8000/api/update-payment",
+      " https://api.equi.co.in/api/update-payment",
       paymentPayload
     );
 
@@ -219,7 +219,7 @@ export default function JobForm() {
 
   //fetch stylist
   const fetchStylists = async () => {
-    const response = await axios.get(" http://127.0.0.1:8000/api/stylists");
+    const response = await axios.get(" https://api.equi.co.in/api/stylists");
     setStylists(response.data);
   };
 
@@ -234,7 +234,7 @@ export default function JobForm() {
 
     try {
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/packagesassign/${customerDetails.id}?enabled=${checked}`
+        ` https://api.equi.co.in/api/packagesassign/${customerDetails.id}?enabled=${checked}`
       );
       setPackageData(response.data.data);
       setServices(response.data.data[0].services);
