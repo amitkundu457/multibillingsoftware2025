@@ -9,7 +9,7 @@ const SetCoinsPerOrder = () => {
 
   // Fetch current setting
   useEffect(() => {
-    axios.get('https://api.equi.co.in/api/get-coins-per-order')
+    axios.get('http://127.0.0.1:8000/api/get-coins-per-order')
       .then(res => {
         if (res.data && res.data.coins_per_order !== undefined) {
           setCurrentCoins(res.data.coins_per_order);
@@ -23,7 +23,7 @@ const SetCoinsPerOrder = () => {
     setMessage('');
 
     try {
-      const res = await axios.post('https://api.equi.co.in/api/set-coins-per-order', {
+      const res = await axios.post('http://127.0.0.1:8000/api/set-coins-per-order', {
         coins_per_order: parseInt(coins),
       }, {
         headers: { 'Content-Type': 'application/json' }

@@ -7,7 +7,7 @@
      const [search, setSearch] = useState('');
  
      useEffect(() => {
-         fetch(' https://api.equi.co.in/api/purchase-returns/')
+         fetch(' http://127.0.0.1:8000/api/purchase-returns/')
              .then(response => response.json())
              .then(data => setPurchaseReturn(data))
              .catch(error => console.error('Error fetching data:', error));

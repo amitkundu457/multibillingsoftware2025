@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\PackageServiceName;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Http;
 class PackageController extends Controller
 {
     public function index() {
@@ -887,17 +887,96 @@ public function getCustomerPackages()
     }
 }
 
+// $apiKey = 'AIzaSyDUkrUcRP95h80YihCAkjFhrv_yqtOD1Tc';
 
+//tnaslate
+// public function translate(Request $request)
+//     {
+//         $text = $request->input('text');
+//         $target = $request->input('target'); // e.g. 'hi' or 'en'
 
+//         if (!$text || !$target) {
+//             return response()->json(['error' => 'Text and target language required.'], 400);
+//         }
 
+//         $apiKey = 'AIzaSyDUkrUcRP95h80YihCAkjFhrv_yqtOD1Tc';
 
+//         $response = Http::get('https://translation.googleapis.com/language/translate/v2', [
+//             'q' => $text,
+//             'target' => $target,
+//             'format' => 'text',
+//             'key' => $apiKey,
+//         ]);
 
+//         return response()->json($response->json());
+//     }
 
+// public function translate(Request $request)
+// {
+//     $texts = $request->input('text'); // expect array
+//     $target = $request->input('target');
 
+//     if (!$texts || !$target) {
+//         return response()->json([
+//             'error' => 'Text and target language required.'
+//         ], 400);
+//     }
 
+//     $translations = [];
 
+//     foreach ($texts as $text) {
+//         $response = Http::get('https://translation.googleapis.com/language/translate/v2', [
+//             'q' => $text,
+//             'target' => $target,
+//             'format' => 'text',
+//             'key' => 'AIzaSyDUkrUcRP95h80YihCAkjFhrv_yqtOD1Tc',
+//         ]);
 
+//         $translatedText = $response['data']['translations'][0]['translatedText'];
+//         $translations[] = $translatedText;
+//     }
 
+//     return response()->json(['data' => $translations]);
+// }
+
+public function translate(Request $request)
+{
+    $texts = $request->input('text'); // should be array
+    $target = $request->input('target');
+
+    if (!$texts || !$target) {
+        return response()->json([
+            'error' => 'Text and target language required.'
+        ], 400);
+    }
+
+    // 💡 If $texts is a string, try decoding it
+    if (is_string($texts)) {
+        $decoded = json_decode($texts, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            $texts = $decoded;
+        } else {
+            // Fallback: make it an array of one string
+            $texts = [$texts];
+        }
+    }
+
+    $translations = [];
+
+    foreach ($texts as $text) {
+        $response = Http::get('https://translation.googleapis.com/language/translate/v2', [
+            'q' => $text,
+            'target' => $target,
+            'format' => 'text',
+            'key' => 'AIzaSyDUkrUcRP95h80YihCAkjFhrv_yqtOD1Tc',
+        ]);
+
+        $translatedText = $response['data']['translations'][0]['translatedText'] ?? '';
+        $translations[] = $translatedText;
+    }
+
+    return response()->json(['data' => $translations]);
+}
 
 }
 

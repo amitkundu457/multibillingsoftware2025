@@ -43,7 +43,7 @@ const Page = () => {
 
     try {
       const response = await axios.get(
-        "https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Product",
+        "http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

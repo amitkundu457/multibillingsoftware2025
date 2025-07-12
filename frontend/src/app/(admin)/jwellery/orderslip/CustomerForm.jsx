@@ -49,12 +49,12 @@
 
 //       try {
 //         const [typesRes, subTypesRes, countriesRes] = await Promise.all([
-//           axios.get("https://api.equi.co.in/api/customerstype",
+//           axios.get("http://127.0.0.1:8000/api/customerstype",
 //             {
 //               headers: { Authorization: `Bearer ${token}` },
 //             }
 //           ),
-//           axios.get("https://api.equi.co.in/api/customersubtypes",
+//           axios.get("http://127.0.0.1:8000/api/customersubtypes",
 //             {
 //               headers: { Authorization: `Bearer ${token}` },
 //             }
@@ -109,7 +109,7 @@
 //       //   customer_sub_type: data.customerSubType,
 //       // };
       
-//       await axios.post("https://api.equi.co.in/api/customers", payload, {
+//       await axios.post("http://127.0.0.1:8000/api/customers", payload, {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //           "Content-Type": "application/json",
@@ -270,10 +270,10 @@ const CustomerForm = ({ onClose }) => {
       }
       try {
         const [typesRes, subTypesRes] = await Promise.all([
-          axios.get("https://api.equi.co.in/api/customerstype", {
+          axios.get("http://127.0.0.1:8000/api/customerstype", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("https://api.equi.co.in/api/customersubtypes", {
+          axios.get("http://127.0.0.1:8000/api/customersubtypes", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -324,7 +324,7 @@ const CustomerForm = ({ onClose }) => {
         customerSubTypeData: data.customerSubType,
       };
 
-      await axios.post("https://api.equi.co.in/api/customers", payload, {
+      await axios.post("http://127.0.0.1:8000/api/customers", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

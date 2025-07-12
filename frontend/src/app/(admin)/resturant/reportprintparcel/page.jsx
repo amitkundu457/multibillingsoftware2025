@@ -51,8 +51,8 @@ const ParcelBill = () => {
       const token = getCookie("access_token");
 
       try {
-        const res = await fetch(`https://api.equi.co.in/api/parcel-billReport/${parcel_order_id}`,
-        //   `https://api.equi.co.in/api/parcel-order/${parcel_order_id}/generate-bill`,
+        const res = await fetch(`http://127.0.0.1:8000/api/parcel-billReport/${parcel_order_id}`,
+        //   `http://127.0.0.1:8000/api/parcel-order/${parcel_order_id}/generate-bill`,
         
           {
             method: "POST",

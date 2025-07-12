@@ -28,7 +28,7 @@
 //     setItems([]);
 
 //     axios
-//       .get(`https://api.equi.co.in/api/package-getall/${trimmedId}`)
+//       .get(`http://127.0.0.1:8000/api/package-getall/${trimmedId}`)
 //       .then((res) => {
 //         if (res.data.length === 0) {
 //           setNotFound(true);
@@ -55,7 +55,7 @@
 //     if (!searchedId) return;
 //     setLoading(true);
 //     try {
-//       await axios.put(`https://api.equi.co.in/api/updateUsage/${searchedId}`, {
+//       await axios.put(`http://127.0.0.1:8000/api/updateUsage/${searchedId}`, {
 //         items: items.map(({ id, todayuse }) => ({ id, todayuse })),
 //       });
 //       alert("Today's usage updated!");
@@ -170,7 +170,7 @@
 //     setItems([]);
 
 //     axios
-//       .get(`https://api.equi.co.in/api/package-getall/${trimmedId}`)
+//       .get(`http://127.0.0.1:8000/api/package-getall/${trimmedId}`)
 //       .then((res) => {
 //         if (res.data.length === 0) {
 //           setNotFound(true);
@@ -197,7 +197,7 @@
 //     if (!searchedId) return;
 //     setLoading(true);
 //     try {
-//       await axios.put(`https://api.equi.co.in/api/updateUsage/${searchedId}`, {
+//       await axios.put(`http://127.0.0.1:8000/api/updateUsage/${searchedId}`, {
 //         items: items.map(({ id, todayuse }) => ({ id, todayuse })),
 //       });
 //       alert("Today's usage updated!");
@@ -350,6 +350,7 @@ export default function PackageUsageForm() {
 
   const handleSearch = () => {
     const trimmedId = packageId.trim();
+    console.log("check pakcage id", trimmedId);
     if (!trimmedId) return;
 
     setLoading(true);
@@ -357,7 +358,7 @@ export default function PackageUsageForm() {
     setItems([]);
 
     axios
-      .get(`https://api.equi.co.in/api/package-getall/${trimmedId}`)
+      .get(`http://127.0.0.1:8000/api/package-getall/${trimmedId}`)
       .then((res) => {
         if (res.data.length === 0) {
           setNotFound(true);
@@ -384,7 +385,7 @@ export default function PackageUsageForm() {
     if (!searchedId) return;
     setLoading(true);
     try {
-      await axios.put(`https://api.equi.co.in/api/updateUsage/${searchedId}`, {
+      await axios.put(`http://127.0.0.1:8000/api/updateUsage/${searchedId}`, {
         items: items.map(({ id, todayuse }) => ({ id, todayuse })),
       });
       alert("Today's usage updated!");

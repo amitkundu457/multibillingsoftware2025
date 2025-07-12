@@ -182,7 +182,7 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
 
     try {
       const res = await axios.get(
-        "https://api.equi.co.in/api/terms-condition-invoice",
+        "http://127.0.0.1:8000/api/terms-condition-invoice",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -205,15 +205,7 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
 
   return (
     <div className=" w-full justify-between border text-xs border-gray-300">
-      {/* Total Amount in Words */}
-      {/* <div className="border-b border-gray-300 p-3 ">
-        <span className="font-bold text-[14px]">Total Amount (in words)</span>:{" "}
-        <span className="font-normal text-[13px]">
-          {totalPriceInWords.charAt(0).toUpperCase() +
-            totalPriceInWords.slice(1)}{" "}
-          Only
-        </span>
-      </div> */}
+      
 
       {/* Payment Details Section */}
       <div className="flex border-b border-gray-300">
@@ -234,25 +226,10 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
           </ul>
         </div>
 
-        <div className="col-span-6  border-r border-gray-300 p-3">
+        <div className="col-span-4 w-[600px] border-r border-gray-300 p-1">
           <p className="text-sm text-[#333]">#Terms and Conditions</p>
-          {/* <ul className="mt-2 list-disc list-inside text-xs">
-            <li>The Price is inclusive of all other charges.</li>
-            <li>All jewellery items are breakable, please handle with care.</li>
-            <li>
-              No gold deduction is made in case of exchange of our 22/22 K or
-              18/18 K ornament with a new ornament.
-            </li>
-            <li>Weight checked & material received in good condition.</li>
-            <li>
-              Certified that the particulars given above are true and correct.
-            </li>
-            <li>
-             <b>O</b>:Other Charge , <b>H</b>:Hallmark charge , <b>W</b>:Wastage charge
-            </li>
-          </ul> */}
-
-          <ul className="list-disc ml-6 space-y-1 text-sm text-gray-700">
+          
+          <ul className="list-disc ml-4 space-y-1 text-xs text-gray-700">
             {content
               .split("\n")
               .filter((line) => line.trim() !== "")
@@ -261,9 +238,12 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
               ))}
           </ul>
         </div>
+        <div className="col-span-3 w-[400px] border-r border-gray-300  flex mx-auto justify-center  p-3 text-center">
+          <div className=" mt-32 ">Customer Signature</div>
+        </div>
 
-        <div className="col-span-2  flex mx-auto justify-center  p-3 text-center">
-          <div className=" flex justify-center ">Authorised Signature</div>
+        <div className="col-span-3 w-[400px] flex mx-auto justify-evenly  p-3 text-center">
+          <div className=" flex justify-center mt-32 ">Authorised Signature</div>
           {/* <div className="absolute bottom-5 flex  mx-auto justify-center items-center">
             <p className=" text-[#333] text-xs">
             Authorised Signature

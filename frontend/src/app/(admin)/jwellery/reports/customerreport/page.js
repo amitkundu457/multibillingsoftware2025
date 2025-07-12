@@ -40,7 +40,7 @@ export default function CustomerReportPage() {
   const fetchCustomerData = async () => {
     const token = getCookie("access_token"); // Retrieve token
 
-    const response = await axios.get("https://api.equi.co.in/api/customers", {
+    const response = await axios.get("http://127.0.0.1:8000/api/customers", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -56,7 +56,7 @@ export default function CustomerReportPage() {
 
     try {
       const response = await axios.get(
-        "https://api.equi.co.in/api/customerstype",
+        "http://127.0.0.1:8000/api/customerstype",
         {
           headers: {
             Authorization: `Bearer ${token}`, // ✅ space after 'Bearer'
@@ -75,7 +75,7 @@ export default function CustomerReportPage() {
 
     try {
       const response = await axios.get(
-        "https://api.equi.co.in/api/customersubtypes",
+        "http://127.0.0.1:8000/api/customersubtypes",
         {
           headers: {
             Authorization: `Bearer ${token}`, // ✅ space after 'Bearer'
@@ -126,7 +126,8 @@ export default function CustomerReportPage() {
       "Email",
       "DOB",
       "Anniversary",
-      "Visit Source",
+      // "Visit Source",
+      "Visit counts",
       "Address",
       "Total Orders",
       "Total Amount"
@@ -138,7 +139,7 @@ export default function CustomerReportPage() {
       c.email || "NA",
       c.dob || "NA",
       c.anniversary || "NA",
-      c.visit_source || "NA",
+      c.visit_count || "NA",
       `${c.address || "NA"}, ${c.state || "NA"}, ${c.pincode || "NA"}`,
       c.total_orders ?? 0,
       c.order_totals
@@ -298,10 +299,11 @@ export default function CustomerReportPage() {
               <th className="border p-2 text-left">Email</th>
               <th className="border p-2 text-left">DOB</th>
               <th className="border p-2 text-left">Anniversary</th>
-              <th className="border p-2 text-left">Visit Source</th>
+             
               <th className="border p-2 text-left">Address</th>
+              <th className="border p-2 text-left">Visit Count</th>
 
-              <th className="border p-2 text-left">No .of Orders</th>
+              {/* <th className="border p-2 text-left">No .of Orders</th> */}
               {/* <th className="border p-2 text-left">order Id</th> */}
               {/* <th className="border p-2 text-left">Total order Price</th> */}
             </tr>
@@ -316,13 +318,14 @@ export default function CustomerReportPage() {
       <td className="border p-2">{data.email || "NA"}</td>
       <td className="border p-2">{data.dob || "NA"}</td>
       <td className="border p-2">{data.anniversary || "NA"}</td>
-      <td className="border p-2">{data.visit_source || "NA"}</td>
+    
 
       <td className="border p-2">
-        {data.address || "NA"}, {data.state || "NA"}, {data.pincode || "NA"}
+        {data.address || "NA"}, {data.pincode || "NA"}, {data.state || "NA"}
       </td>
+      <td className="border p-2">{data.visit_count || "0"}</td>
 
-      <td className="border p-2">{data.total_orders ?? 0}</td>
+      {/* <td className="border p-2">{data.total_orders ?? 0}</td> */}
 
       {/* <td className="border p-2 text-sm font-semibold">
         ₹{" "}

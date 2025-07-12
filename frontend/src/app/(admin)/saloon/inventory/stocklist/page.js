@@ -29,7 +29,7 @@ export default function StockListTable() {
       return;
     }
     try {
-      const { data } = await axios.get("https://api.equi.co.in/api/stocks", {
+      const { data } = await axios.get("http://127.0.0.1:8000/api/stocks", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStocks(data?.stock || []);
@@ -45,7 +45,7 @@ export default function StockListTable() {
       return;
     }
     try {
-      const { data } = await axios.get("https://api.equi.co.in/api/purchase", {
+      const { data } = await axios.get("http://127.0.0.1:8000/api/purchase", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPurchase(data?.purchase || []);

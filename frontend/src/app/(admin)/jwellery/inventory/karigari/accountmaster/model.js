@@ -189,7 +189,7 @@
 //       return;
 //     }
 //     axios
-//       .get("https://api.equi.co.in/api/customers",
+//       .get("http://127.0.0.1:8000/api/customers",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -218,7 +218,7 @@
 //     if (selectedItem) {
 //       axios
 //         .put(
-//           `https://api.equi.co.in/api/account-masters/${selectedItem.id}`,
+//           `http://127.0.0.1:8000/api/account-masters/${selectedItem.id}`,
 //           accountmasterdata
 //         )
 //         .then(() => {
@@ -231,7 +231,7 @@
 //         });
 //     } else {
 //       axios
-//         .post("https://api.equi.co.in/api/account-masters", accountmasterdata,
+//         .post("http://127.0.0.1:8000/api/account-masters", accountmasterdata,
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -587,7 +587,7 @@
 //   const data = { name: newAccountType };
 
 //   try {
-//     const response = await fetch("https://api.equi.co.in/api/account-types", {
+//     const response = await fetch("http://127.0.0.1:8000/api/account-types", {
 //       method: "POST",
 //       headers: {
 //         "Content-Type": "application/json",
@@ -624,7 +624,7 @@
 //   if (selectedCity) data.city = selectedCity.value;
 
 //   try {
-//     const response = await axios.post("https://api.equi.co.in/api/account-masters", data, {
+//     const response = await axios.post("http://127.0.0.1:8000/api/account-masters", data, {
 //       headers: {
 //         "Content-Type": "application/json",
 //         Authorization: "Bearer YOUR_ACCESS_TOKEN"
@@ -965,14 +965,14 @@ const AccountForm = ({ closeModel, selectedItem, fetchData }) => {
     try {
       if (selectedItem) {
         await axios.put(
-          `https://api.equi.co.in/api/account-masters/${selectedItem.id}`,
+          `http://127.0.0.1:8000/api/account-masters/${selectedItem.id}`,
           accountData
         );
         alert("Data updated successfully");
         fetchData();
         closeModel();
       } else {
-        await axios.post("https://api.equi.co.in/api/account-masters", accountData, {
+        await axios.post("http://127.0.0.1:8000/api/account-masters", accountData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         alert("Data submitted successfully");

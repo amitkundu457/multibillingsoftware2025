@@ -72,7 +72,7 @@ const Page = () => {
     const fetchKarigarList = async () => {
       try {
         const response = await axios.get(
-          "https://api.equi.co.in/api/karigar-list",
+          "http://127.0.0.1:8000/api/karigar-list",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

@@ -121,7 +121,7 @@
 //     }
 
 //     axios
-//       .get("https://api.equi.co.in/api/customerstype", {
+//       .get("http://127.0.0.1:8000/api/customerstype", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((res) => {
@@ -132,7 +132,7 @@
 //       });
 
 //     axios
-//       .get("https://api.equi.co.in/api/customersubtypes", {
+//       .get("http://127.0.0.1:8000/api/customersubtypes", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((res) => {
@@ -163,7 +163,7 @@
 
 //   // //CustomersubType Handler
 //   // const handlerCustomberSubType = async () => {
-//   //   const response = await axios.get(" https://api.equi.co.in/api/customersubtypes");
+//   //   const response = await axios.get(" http://127.0.0.1:8000/api/customersubtypes");
 //   //   setCustomerSubTypeData(response.data);
 
 //   //   console.log("customerSubType", data);
@@ -171,7 +171,7 @@
 
 //   // //CustomerType Handler
 //   // const handlerCustomberType = async () => {
-//   //   const response = await axios.get(" https://api.equi.co.in/api/customerstype");
+//   //   const response = await axios.get(" http://127.0.0.1:8000/api/customerstype");
 //   //   setCustomerTypeData(response?.data?.data)
 //   //   console.log("customerType", data);
 //   // };
@@ -214,7 +214,7 @@
 // if (modalType === "create") {
 //   try {
 //     const res = await axios.post(
-//       "https://api.equi.co.in/api/customers",
+//       "http://127.0.0.1:8000/api/customers",
 //       dataToSend,
 //       config
 //     );
@@ -232,7 +232,7 @@
 // }
 //  else if (modalType === "edit") {
 //         await axios.post(
-//           ` https://api.equi.co.in/api/customers/${currentCustomer.id}`,
+//           ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
 //           payload,
 //           config
 //         );
@@ -256,7 +256,7 @@
 
 //   const handleSendSms = async () => {
 //     try {
-//       await axios.post("https://api.equi.co.in/api/send-customer-sms", {
+//       await axios.post("http://127.0.0.1:8000/api/send-customer-sms", {
 //         phone: newCustomer,
 //         status: "Registered Customer",
 //         sms_credential_id: 1,
@@ -771,7 +771,7 @@ const CustomerModal = ({
     }
 
     axios
-      .get("https://api.equi.co.in/api/customerstype", {
+      .get("http://127.0.0.1:8000/api/customerstype", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -782,7 +782,7 @@ const CustomerModal = ({
       });
 
     axios
-      .get("https://api.equi.co.in/api/customersubtypes", {
+      .get("http://127.0.0.1:8000/api/customersubtypes", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -863,7 +863,7 @@ const CustomerModal = ({
 if (modalType === "create") {
   try {
     const res = await axios.post(
-      "https://api.equi.co.in/api/customers",
+      "http://127.0.0.1:8000/api/customers",
       dataToSend,
       config
     );
@@ -881,7 +881,7 @@ if (modalType === "create") {
 }
  else if (modalType === "edit") {
         await axios.post(
-          ` https://api.equi.co.in/api/customers/${currentCustomer.id}`,
+          ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
@@ -905,7 +905,7 @@ if (modalType === "create") {
 
   const handleSendSms = async () => {
     try {
-      await axios.post("https://api.equi.co.in/api/send-customer-sms", {
+      await axios.post("http://127.0.0.1:8000/api/send-customer-sms", {
         phone: newCustomer,
         status: "Registered Customer",
         sms_credential_id: 1,

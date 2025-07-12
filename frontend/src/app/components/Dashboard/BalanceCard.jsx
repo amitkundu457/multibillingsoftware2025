@@ -90,7 +90,7 @@ export default function BalanceCard({ label }) {
   };
 
   // const fetchOrderCount = async () =>{
-  //  const response = await axios.get('https://api.equi.co.in/api/order');
+  //  const response = await axios.get('http://127.0.0.1:8000/api/order');
   //  setTotalOrder(response.data.total_orders);
   //  setThisMonthOrder(response.data.this_month_orders);
 
@@ -103,7 +103,7 @@ export default function BalanceCard({ label }) {
       notifyTokenMissing();
       return;
     }
-    const response = await axios.get('https://api.equi.co.in/api/orderinvoice',
+    const response = await axios.get('http://127.0.0.1:8000/api/orderinvoice',
       {
         headers: { Authorization: `Bearer ${token}` },
       }

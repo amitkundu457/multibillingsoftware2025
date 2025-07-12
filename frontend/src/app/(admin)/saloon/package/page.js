@@ -123,7 +123,7 @@
 
 //   const fetchPackages = async () => {
 //     try {
-//       const response = await axios.get("https://api.equi.co.in/api/packages", {
+//       const response = await axios.get("http://127.0.0.1:8000/api/packages", {
 //         headers: {
 //           Authorization: `Bearer ${token}`, // Attach token
 //           "Content-Type": "application/json",
@@ -144,7 +144,7 @@
 //     }
 //     try {
 
-//       const response = await axios.get(`https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Product`,
+//       const response = await axios.get(`http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product`,
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -171,7 +171,7 @@
 //     }
 //     try {
 
-//       const response = await axios.get(`https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Service`,
+//       const response = await axios.get(`http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Service`,
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -205,56 +205,56 @@
 //         serviceRes,
 //       ] = await Promise.all([
 //         axios.get(
-//           "https://api.equi.co.in/api/packagename",
+//           "http://127.0.0.1:8000/api/packagename",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           "https://api.equi.co.in/api/package-type",
+//           "http://127.0.0.1:8000/api/package-type",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           "https://api.equi.co.in/api/package-category",
+//           "http://127.0.0.1:8000/api/package-category",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           "https://api.equi.co.in/api/packagesubtypes",
+//           "http://127.0.0.1:8000/api/packagesubtypes",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           "https://api.equi.co.in/api/taxf",
+//           "http://127.0.0.1:8000/api/taxf",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           "https://api.equi.co.in/api/tax-type",
+//           "http://127.0.0.1:8000/api/tax-type",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           "https://api.equi.co.in/api/membership-groups",
+//           "http://127.0.0.1:8000/api/membership-groups",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           "https://api.equi.co.in/api/packageservice-type",
+//           "http://127.0.0.1:8000/api/packageservice-type",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
@@ -294,7 +294,7 @@
 //   // const token = getCookie("access_token");
 
 //   const axiosInstance = axios.create({
-//     baseURL: "https://api.equi.co.in/api",
+//     baseURL: "http://127.0.0.1:8000/api",
 //     headers: {
 //       Authorization: `Bearer ${token}`, // Attach token
 //       "Content-Type": "application/json",
@@ -329,7 +329,7 @@
 //     if (!window.confirm("Are you sure you want to delete this package?"))
 //       return;
 //     try {
-//       await axios.delete(`https://api.equi.co.in/api/packages/${id}`);
+//       await axios.delete(`http://127.0.0.1:8000/api/packages/${id}`);
 //       toast.success("Package deleted successfully");
 //       fetchPackages();
 //     } catch (error) {
@@ -879,7 +879,7 @@ export default function Packages() {
 
   const fetchPackages = async () => {
     try {
-      const response = await axios.get("https://api.equi.co.in/api/packages", {
+      const response = await axios.get("http://127.0.0.1:8000/api/packages", {
         headers: {
           Authorization: `Bearer ${token}`, // Attach token
           "Content-Type": "application/json",
@@ -900,7 +900,7 @@ export default function Packages() {
     }
     try {
       const response = await axios.get(
-        `https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Product`,
+        `http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -926,7 +926,7 @@ export default function Packages() {
     }
     try {
       const response = await axios.get(
-        `https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Service`,
+        `http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Service`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -959,56 +959,56 @@ export default function Packages() {
         serviceRes,
       ] = await Promise.all([
         axios.get(
-          "https://api.equi.co.in/api/packagename",
+          "http://127.0.0.1:8000/api/packagename",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          "https://api.equi.co.in/api/package-type",
+          "http://127.0.0.1:8000/api/package-type",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          "https://api.equi.co.in/api/package-category",
+          "http://127.0.0.1:8000/api/package-category",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          "https://api.equi.co.in/api/packagesubtypes",
+          "http://127.0.0.1:8000/api/packagesubtypes",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          "https://api.equi.co.in/api/taxf",
+          "http://127.0.0.1:8000/api/taxf",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          "https://api.equi.co.in/api/tax-type",
+          "http://127.0.0.1:8000/api/tax-type",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          "https://api.equi.co.in/api/membership-groups",
+          "http://127.0.0.1:8000/api/membership-groups",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          "https://api.equi.co.in/api/packageservice-type",
+          "http://127.0.0.1:8000/api/packageservice-type",
 
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -1048,7 +1048,7 @@ export default function Packages() {
   // const token = getCookie("access_token");
 
   const axiosInstance = axios.create({
-    baseURL: "https://api.equi.co.in/api",
+    baseURL: "http://127.0.0.1:8000/api",
     headers: {
       Authorization: `Bearer ${token}`, // Attach token
       "Content-Type": "application/json",
@@ -1104,7 +1104,7 @@ export default function Packages() {
     if (!window.confirm("Are you sure you want to delete this package?"))
       return;
     try {
-      await axios.delete(`https://api.equi.co.in/api/packages/${id}`);
+      await axios.delete(`http://127.0.0.1:8000/api/packages/${id}`);
       toast.success("Package deleted successfully");
       fetchPackages();
     } catch (error) {

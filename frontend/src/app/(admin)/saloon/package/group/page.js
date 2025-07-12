@@ -12,16 +12,16 @@ export default function Group() {
   }, []);
 
   const fetchSubtypes = async () => {
-    const response = await axios.get("https://api.equi.co.in/api/membership-groups");
+    const response = await axios.get("http://127.0.0.1:8000/api/membership-groups");
     setSubtypes(response.data);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (editingId) {
-      await axios.put(`https://api.equi.co.in/api/membership-groups/${editingId}`, { name });
+      await axios.put(`http://127.0.0.1:8000/api/membership-groups/${editingId}`, { name });
     } else {
-      await axios.post("https://api.equi.co.in/api/membership-groups", { name });
+      await axios.post("http://127.0.0.1:8000/api/membership-groups", { name });
     }
     setName("");
     setEditingId(null);
@@ -35,7 +35,7 @@ export default function Group() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this subtype?")) {
-      await axios.delete(`https://api.equi.co.in/api/membership-groups/${id}`);
+      await axios.delete(`http://127.0.0.1:8000/api/membership-groups/${id}`);
       fetchSubtypes();
     }
   };

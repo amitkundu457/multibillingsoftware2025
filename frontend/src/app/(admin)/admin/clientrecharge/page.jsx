@@ -17,7 +17,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get('https://api.equi.co.in/api/clinet')
+//       .get('http://127.0.0.1:8000/api/clinet')
 //       .then((res) => {
 //         setData(res.data);
 //         if (res.data.length > 0) {
@@ -48,7 +48,7 @@
 
 //     try {
 //       const res = await axios.post(
-//         'https://api.equi.co.in/api/coinpurchase-admin',
+//         'http://127.0.0.1:8000/api/coinpurchase-admin',
 //         {
 //           id: parseInt(form.id),
 //           amount: parseFloat(form.amount),
@@ -191,7 +191,7 @@ const ClientRoleAndCoinPurchase = () => {
   // Fetch data on load
   useEffect(() => {
     axios
-      .get('https://api.equi.co.in/api/clinet')
+      .get('http://127.0.0.1:8000/api/clinet')
       .then((res) => {
         setData(res.data);
         if (res.data.length > 0) {
@@ -218,7 +218,7 @@ const ClientRoleAndCoinPurchase = () => {
 
     try {
       const res = await axios.post(
-        'https://api.equi.co.in/api/coinpurchase-admin',
+        'http://127.0.0.1:8000/api/coinpurchase-admin',
         {
           id: parseInt(form.id),
           amount: parseFloat(form.amount),

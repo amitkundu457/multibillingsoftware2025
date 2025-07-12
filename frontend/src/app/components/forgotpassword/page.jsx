@@ -24,7 +24,7 @@ const ResetPassword = () => {
     setIsLoading(true); // Show loader during API call
 
     try {
-       const response = await axios.post("https://api.equi.co.in/api/forgot-password", {
+       const response = await axios.post("http://127.0.0.1:8000/api/forgot-password", {
         email,
         new_password: newPassword,
         confirm_password:confirmPassword

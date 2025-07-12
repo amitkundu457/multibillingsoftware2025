@@ -68,7 +68,7 @@ const Page = () => {
     }
 
     try {
-      const response = await axios.get(" https://api.equi.co.in/api/tax",
+      const response = await axios.get(" http://127.0.0.1:8000/api/tax",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -111,8 +111,8 @@ const Page = () => {
       const fetchInvoiceData = async () => {
         setLoading(true);
         try {
-          // not it; https://api.equi.co.in/api/saloon-printbill/${id}
-          const response = await axios.get(`https://api.equi.co.in/api/kot/${id}/bill`);
+          // not it; http://127.0.0.1:8000/api/saloon-printbill/${id}
+          const response = await axios.get(`http://127.0.0.1:8000/api/kot/${id}/bill`);
           setInvoiceData(response.data);
         } catch (error) {
           console.error("Error fetching invoice data:", error);

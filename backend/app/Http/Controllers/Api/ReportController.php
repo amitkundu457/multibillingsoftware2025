@@ -662,6 +662,9 @@ public function getPaymentTotalByMethod(Request $request)
 //         'summary' => $summary,
 //     ]);
 // }
+
+
+// this api  for app
 public function dailycaseSaloon(Request $request)
 {
     $user = JWTAuth::parseToken()->authenticate();

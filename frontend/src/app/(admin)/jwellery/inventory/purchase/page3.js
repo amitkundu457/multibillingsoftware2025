@@ -56,7 +56,7 @@ function Page() {
 
   const handleDeleteAllPurchase = async () => {
     const response = await axios.delete(
-      "https://api.equi.co.in/api/delete-all-purchase"
+      "http://127.0.0.1:8000/api/delete-all-purchase"
     );
     if (response.status === 200) {
       alert(response.data.message); // Show success message
@@ -73,7 +73,7 @@ function Page() {
       notifyTokenMissing();
       return;
     }
-    const response = await axios.get("https://api.equi.co.in/api/suppliers",
+    const response = await axios.get("http://127.0.0.1:8000/api/suppliers",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -87,7 +87,7 @@ function Page() {
   }, []);
 
   const handleDownloadSample = () => {
-    window.location.href = "https://api.equi.co.in/api/download-sample-purchase";
+    window.location.href = "http://127.0.0.1:8000/api/download-sample-purchase";
   };
 
   const handleFileChange = (e) => {
@@ -112,7 +112,7 @@ function Page() {
       // Log FormData
 
       const response = await axios.post(
-        "https://api.equi.co.in/api/upload/purchase",
+        "http://127.0.0.1:8000/api/upload/purchase",
         fileFormData
       );
       alert(response.data.message);

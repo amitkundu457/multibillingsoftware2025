@@ -15,7 +15,7 @@ export default function Home({ type = "Control Costs" }) {
 
   useEffect(() => {
     axios
-      .get(`https://api.equi.co.in/api/frontend-settings/${type}`)
+      .get(`http://127.0.0.1:8000/api/frontend-settings/${type}`)
       .then((res) => {
         setContent(res.data.description);
         setLoading(false);
@@ -40,9 +40,12 @@ export default function Home({ type = "Control Costs" }) {
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight">
             {capitalizedType}
           </h2>
-          <p className="text-base md:text-lg font-medium text-white/80 mt-2">
+          {/* <p className="text-base md:text-lg font-medium text-white/80 mt-2">
             Home / {type}
-          </p>
+          </p> */}
+          {/* <p className="text-base md:text-lg font-medium text-white/80 mt-2">
+  {`Home / ${type}`}
+</p> */}
         </div>
       </div>
 

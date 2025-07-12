@@ -130,7 +130,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
     }
     try {
       const response = await axios.get(
-        "https://api.equi.co.in/api/masterlogobill",
+        "http://127.0.0.1:8000/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
           

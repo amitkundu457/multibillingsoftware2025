@@ -87,19 +87,19 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       const token = getCookie("access_token");
 
     if (isOpen) {
-      fetch("https://api.equi.co.in/api/kot-tables",{ headers: {
+      fetch("http://127.0.0.1:8000/api/kot-tables",{ headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },})
         .then((res) => res.json())
         .then((data) => setTableOptions(data.tables));
     }
-  }, [isOpen]);
+  }, [isOpen,selectedTables]);
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get("https://api.equi.co.in/api/product-and-service", {
+      .get("http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -132,8 +132,8 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
   const handleBooking = async () => {
         const token = getCookie("access_token");
-    if (!customerDetails.name || selectedTables.length === 0) {
-      alert("Please enter customer name and select at least one table.");
+    if (  selectedProduct.length==0 || selectedTables.length === 0) {
+      alert("Please select at least one product and one table.");
       return;
     }
 
@@ -141,7 +141,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await fetch(
-        "https://api.equi.co.in/api/book-family-tables",
+        "http://127.0.0.1:8000/api/book-family-tables",
         {
           method: "POST",
           headers: { "Content-Type": "application/json",
@@ -153,7 +153,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
             customer_id: customerDetails?.id || null,       
             members_count: membersCount,
             table_ids: selectedTables,
-            items: selectedProduct.map((item) => ({
+            items: selectedProduct?.map((item) => ({
               product_id: item.id,
               product_price: item.rate,
               quantity: item.quantity,
@@ -167,11 +167,15 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
       if (response.ok) {
         const printConfirmation = window.confirm(
-          "Do you want to print the bill?"
+          "Do you want to print the kot ?"
         );
         if (printConfirmation) {
+         
           Printbill(result.booking_id);
+          
+          
         }
+         
         onClose();
       } else {
         alert(result.message || "Booking failed.");
@@ -180,6 +184,8 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       console.error(error);
       alert("Something went wrong.");
     } finally {
+      setSelectedProduct([]);
+          setSelectedTables([]);
       setLoading(false);
     }
   };
@@ -238,7 +244,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await axios.post(
-        "https://api.equi.co.in/api/book-family-tables",
+        "http://127.0.0.1:8000/api/book-family-tables",
         payload,
         {
           headers: {
@@ -281,7 +287,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   };
   const updatePayload = {
    family_booking_id:familyBookingId,
-     items: selectedProduct.map((item) => ({
+     items: selectedProduct?.map((item) => ({
               product_id: item.id,
               product_price: item.rate,
               quantity: item.quantity,
@@ -296,7 +302,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     return;
   }
   try {
-   const response =  await axios.put('https://api.equi.co.in/api/update-family-tables',updatePayload);
+   const response =  await axios.put('http://127.0.0.1:8000/api/update-family-tables',updatePayload);
  
 
     setSelectedProduct([]);
@@ -423,7 +429,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
                         type="checkbox"
                         value={table.id}
                         disabled={isBooked}
-                        checked={selectedTables.includes(table.id)}
+                        checked={selectedTables?.includes(table.id)}
                         onChange={(e) => {
                           const id = parseInt(e.target.value);
                           setSelectedTables((prev) =>
@@ -470,7 +476,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={`https://api.equi.co.in/${item.image}`}
+                  src={`http://127.0.0.1:8000/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />
@@ -489,7 +495,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
               Selected Products
             </h2>
             <div className="space-y-4 max-h-[400px] overflow-y-auto">
-              {selectedProduct.map((product, index) => (
+              {selectedProduct?.map((product, index) => (
                 <ShowProduct
                   key={index}
                   name={product.name}

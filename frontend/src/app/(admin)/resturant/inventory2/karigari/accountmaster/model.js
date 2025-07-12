@@ -62,7 +62,7 @@ const AccountForm = ({ closeModel, selectedItem }) => {
 
   useEffect(() => {
     axios
-      .get(" https://api.equi.co.in/api/customers")
+      .get(" http://127.0.0.1:8000/api/customers")
       .then((response) => {
         setCustomer(response.data);
       })
@@ -82,7 +82,7 @@ const AccountForm = ({ closeModel, selectedItem }) => {
     if (selectedItem) {
       axios
         .put(
-          ` https://api.equi.co.in/api/account-masters/${selectedItem.id}`,
+          ` http://127.0.0.1:8000/api/account-masters/${selectedItem.id}`,
           accountmasterdata
         )
         .then(() => {
@@ -94,7 +94,7 @@ const AccountForm = ({ closeModel, selectedItem }) => {
         });
     } else {
       axios
-        .post(" https://api.equi.co.in/api/account-masters", accountmasterdata)
+        .post(" http://127.0.0.1:8000/api/account-masters", accountmasterdata)
         .then(() => {
           alert("Data submitted successfully!");
           setaccountmasterdata({

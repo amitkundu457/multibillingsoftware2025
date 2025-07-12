@@ -17,7 +17,7 @@ const LoyaltyPointsSetup = () => {
   };
 
   try {
-   const response = await axios.post(' https://api.equi.co.in/api/loyalty/',data);
+   const response = await axios.post(' http://127.0.0.1:8000/api/loyalty/',data);
 
     
 

@@ -16,7 +16,7 @@ const RoleModal = ({ isOpen, closeModal, editingRole }) => {
     const fetchPermissions = async () => {
       try {
         const response = await axios.get(
-          " https://api.equi.co.in/api/permission"
+          " http://127.0.0.1:8000/api/permission"
         );
         const permissionsData = response.data;
 
@@ -76,7 +76,7 @@ const RoleModal = ({ isOpen, closeModal, editingRole }) => {
       if (editingRole) {
         // Update existing role
         await axios.post(
-          ` https://api.equi.co.in/api/roles/${editingRole.id}`,
+          ` http://127.0.0.1:8000/api/roles/${editingRole.id}`,
           roleData,
           {
             headers: {
@@ -87,7 +87,7 @@ const RoleModal = ({ isOpen, closeModal, editingRole }) => {
         alert("Role updated successfully!");
       } else {
         // Create new role
-        await axios.post(" https://api.equi.co.in/api/roles", roleData, {
+        await axios.post(" http://127.0.0.1:8000/api/roles", roleData, {
           headers: {
             "Content-Type": "application/json",
           },

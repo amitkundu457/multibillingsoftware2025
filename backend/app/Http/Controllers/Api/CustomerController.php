@@ -143,7 +143,8 @@ public function index()
             'customers.address',
             'customers.remarke',
             'customers.visit_source',
-            'customers.created_at'
+            'customers.created_at',
+            'customers.visit_count',
         )
         ->select(
             'users.name as customer_name',
@@ -152,6 +153,7 @@ public function index()
             'users.name',
             'customers.dob',
             'customers.phone',
+            'customers.visit_count',
             'customers.customer_type',
             'customers.customer_sub_type',
             'users.email',
@@ -278,6 +280,25 @@ public function customerequires()
 //         return response()->json([ $user, $customer ,'message' => 'Customer created successfully!'], 201);
 //     }
 
+public function searchByPhoneResto(Request $request)
+    {
+        $phone = $request->query('phone');
+
+        if (!$phone) {
+            return response()->json(['message' => 'Phone number is required'], 400);
+        }
+
+        $customer = Customer::join('users', 'users.id', '=', 'customers.user_id')
+            ->select('users.name', 'users.id','customers.id', 'customers.address', 'customers.phone')
+            ->where('customers.phone', $phone)
+            ->first();
+
+        if (!$customer) {
+            return response()->json(['message' => 'Customer not found'], 404);
+        }
+
+        return response()->json($customer, 200);
+    }
 
 public function searchByPhone(Request $request)
 {

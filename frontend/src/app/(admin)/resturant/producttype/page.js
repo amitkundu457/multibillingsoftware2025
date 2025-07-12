@@ -14,7 +14,7 @@
 //   }, []);
 //   const fetchItems = async () => {
 //     try {
-//       const response = await axios.get(" https://api.equi.co.in/api/type");
+//       const response = await axios.get(" http://127.0.0.1:8000/api/type");
 //       setItems(response.data);
 //     } catch (error) {
 //       console.error("Error fetching items:", error);
@@ -27,7 +27,7 @@
 //       // Update item
 //       try {
 //         const response = await axios.put(
-//           ` https://api.equi.co.in/api/type/${editingItem.id}`,
+//           ` http://127.0.0.1:8000/api/type/${editingItem.id}`,
 //           data
 //         );
 //         const updatedItem = response.data;
@@ -46,7 +46,7 @@
 //       // Create new item
 //       try {
 //         const response = await axios.post(
-//           " https://api.equi.co.in/api/type",
+//           " http://127.0.0.1:8000/api/type",
 //           data
 //         );
 //         setItems((prevItems) => [...prevItems, response.data]);
@@ -69,7 +69,7 @@
 //   const handleDelete = async (id) => {
 //     try {
 //       const response = await axios.delete(
-//         ` https://api.equi.co.in/api/type/${id}`
+//         ` http://127.0.0.1:8000/api/type/${id}`
 //       );
 //       if (response.status === 200) {
 //         setItems((prevItems) => prevItems.filter((item) => item.id !== id));
@@ -193,7 +193,7 @@ export default function Home() {
 
     const fetchItems = async () => {
       try {
-        const response = await axios.get("https://api.equi.co.in/api/type", {
+        const response = await axios.get("http://127.0.0.1:8000/api/type", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setItems(response.data);
@@ -207,7 +207,7 @@ export default function Home() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("https://api.equi.co.in/api/type", {
+      const response = await axios.get("http://127.0.0.1:8000/api/type", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setItems(response.data);
@@ -222,7 +222,7 @@ export default function Home() {
     if (editingItem) {
       try {
         const response = await axios.put(
-          `https://api.equi.co.in/api/type/${editingItem.id}`,
+          `http://127.0.0.1:8000/api/type/${editingItem.id}`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -243,7 +243,7 @@ export default function Home() {
     } else {
       try {
         const response = await axios.post(
-          "https://api.equi.co.in/api/type",
+          "http://127.0.0.1:8000/api/type",
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -267,7 +267,7 @@ export default function Home() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `https://api.equi.co.in/api/type/${id}`,
+        `http://127.0.0.1:8000/api/type/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

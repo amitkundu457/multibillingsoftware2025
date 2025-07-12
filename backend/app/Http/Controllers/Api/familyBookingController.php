@@ -50,9 +50,9 @@ class familyBookingController extends Controller
 
     Log::info($request->all());
     $request->validate([
-        'customer_name'    => 'required|string',
+        'customer_name'    => 'nullable|string',
         'customer_id'    => 'nullable|integer',
-        'members_count'    => 'required|integer|min:1',
+        'members_count'    => 'nullable|integer|min:1',
         'table_ids'        => 'required|array|min:1',
         'table_ids.*'      => 'exists:kot_tables,id',
         'items'            => 'required|array|min:1',
@@ -130,109 +130,156 @@ public function updateFamilyTableWithItems(Request $request)
 }
 
 
+public function getFamilyBookingGrandTotal($familyBookingId)
+{
+    $booking = FamilyBooking::with(['tables'])->findOrFail($familyBookingId);
+
+    $items = KotOrderItem::where('family_booking_id', $familyBookingId)->get();
+
+    $subtotal = 0;
+    $totalGst = 0;
+
+    foreach ($items as $item) {
+        $total = $item->quantity * $item->product_price;
+        $gst = ($total * $item->tax_rate) / 100;
+
+        $subtotal += $total;
+        $totalGst += $gst;
+    }
+
+    $grandTotal = $subtotal + $totalGst;
+
+    return response()->json([
+        'family_booking_id' => $familyBookingId,
+        'subtotal' => round($subtotal, 2),
+        'gst' => round($totalGst, 2),
+        'grand_total' => round($grandTotal, 2),
+    ]);
+}
+
+
 
 public function generateFamilyBookingBill($familyBookingId)
 {
-        $user = JWTAuth::parseToken()->authenticate();
+    $user = JWTAuth::parseToken()->authenticate();
 
-    $booking = FamilyBooking::with(['tables','user.customer','createdBy'])->findOrFail($familyBookingId);
+    $booking = FamilyBooking::with(['tables', 'user.customer', 'createdBy', 'payments'])->findOrFail($familyBookingId);
 
-    // Log::info($booking);
     $items = KotOrderItem::where('family_booking_id', $familyBookingId)->get();
-// Log::info($items);
-     // Check if bill already exists
-    // $existingBill = KotBill::where('family_booking_id', $familyBookingId)->first();
-    //  if ($existingBill) {
-    //     return response()->json([
-    //         'message' => 'Bill has already been generated for this booking ID.',
-    //         'bill_already_generated' => true,
-    //         'kot_bill_id' => $existingBill->id,
-    //     ], 409); // 409 Conflict
-    // }
 
+    // ✅ Check if bill already exists
+    $existingBill = KotBill::where('family_booking_id', $familyBookingId)->first();
+    if ($existingBill) {
+        return response()->json([
+            'message' => 'Bill already exists.',
+            'kot_bill_id' => $existingBill->id,
+            'family_booking_id' => $booking->id,
+            'customer_id' => $booking->customer_id,
+            'customer_name' => $booking->customer_name,
+            'customer_user' => optional($booking->user)->only(['id', 'name', 'email']),
+            'user_info' => $booking->user && $booking->user->customer ? $booking->user->customer->toArray() : null,
+            'created_by' => $booking->createdBy ? [
+                'id' => $booking->createdBy->id,
+                'name' => $booking->createdBy->name,
+                'email' => $booking->createdBy->email,
+                'status' => $booking->createdBy->status,
+                'last_login_at' => $booking->createdBy->last_login_at,
+                'last_order_at' => $booking->createdBy->last_order_at,
+            ] : null,
+            'tables' => $booking->tables->pluck('table_no'),
+            'items' => $items->map(function ($item) {
+                return [
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'product_name' => $item->product?->name,
+                    'product_price' => $item->product_price,
+                    'total' => $item->quantity * $item->product_price,
+                    'gst' => round(($item->quantity * $item->product_price * $item->tax_rate) / 100, 2),
+                    'tax_rate' => $item->tax_rate,
+                ];
+            }),
+            'subtotal' => $existingBill->subtotal,
+            'gst' => $existingBill->gst,
+            'grand_total' => $existingBill->grand_total,
+            'payments' => $booking->payments->map(function ($payment) {
+                return [
+                    'payment_method' => $payment->payment_method,
+                    'amount' => $payment->amount,
+                    'payment_date' => $payment->payment_date,
+                ];
+            }),
+        ]);
+    }
 
-
-
-    // foreach ($items as $item) {
-    //     $total = $item->quantity * $item->product_price;
-    //     $billItems[] = [
-    //         'product_id'    => $item->product_id,
-    //         'quantity'      => $item->quantity,
-    //          'product_name'  => $item->product ? $item->product->name : null, // add this
-    //         'product_price' => $item->product_price,
-    //         'total'         => $total,
-    //     ];
-    //     $subtotal += $total;
-    // }
-
+    // ✅ If not found, create new bill
     $subtotal = 0;
-$totalGst = 0;
-$billItems = [];
+    $totalGst = 0;
+    $billItems = [];
 
-foreach ($items as $item) {
-    $total = $item->quantity * $item->product_price;
-    $gst = ($total * $item->tax_rate) / 100; // Calculate GST for the item
+    foreach ($items as $item) {
+        $total = $item->quantity * $item->product_price;
+        $gst = ($total * $item->tax_rate) / 100;
 
-    $billItems[] = [
-        'product_id'    => $item->product_id,
-        'quantity'      => $item->quantity,
-        'product_name'  => $item->product ? $item->product->name : null,
-        'product_price' => $item->product_price,
-        'total'         => $total,
-        'gst'           => round($gst, 2), // Store individual item GST
-        'tax_rate'      => $item->tax_rate, // Optional, include for reference
-    ];
+        $billItems[] = [
+            'product_id' => $item->product_id,
+            'quantity' => $item->quantity,
+            'product_name' => $item->product?->name,
+            'product_price' => $item->product_price,
+            'total' => $total,
+            'gst' => round($gst, 2),
+            'tax_rate' => $item->tax_rate,
+        ];
 
-    $subtotal += $total;
-    $totalGst += $gst;
-}
+        $subtotal += $total;
+        $totalGst += $gst;
+    }
 
-    $gst =$totalGst;
-    $grandTotal = $subtotal + $gst;
+    $grandTotal = $subtotal + $totalGst;
 
-
-    // Save the bill
-    $kotBill = \App\Models\KotBill::create([
+    $kotBill = KotBill::create([
         'family_booking_id' => $booking->id,
-        'customer_name'     => $booking->customer_name,
-        'customer_id'=>$booking->customer_id,
-        'tables'            => json_encode($booking->tables->pluck('table_no')->toArray()),
-        'subtotal'          => $subtotal,
-        'gst'               => $gst,
-        'grand_total'       => $grandTotal,
-        'created_by'   => $user->id,
-
+        'customer_name' => $booking->customer_name,
+        'customer_id' => $booking->customer_id,
+        'tables' => json_encode($booking->tables->pluck('table_no')->toArray()),
+        'subtotal' => $subtotal,
+        'gst' => $totalGst,
+        'grand_total' => $grandTotal,
+        'created_by' => $user->id,
     ]);
-
-    // After saving bill → mark tables as available again
 
     KotTable::whereIn('id', $booking->tables->pluck('id'))->update(['status' => 'available']);
 
     return response()->json([
+        'message' => 'Bill generated successfully.',
         'kot_bill_id' => $kotBill->id,
         'family_booking_id' => $booking->id,
-        'customer_id'=>$booking->customer_id,
-        'customer_name'     => $booking->customer_name,
-        'customer_user'      => optional($booking->user)->only(['id', 'name', 'email']),
-        'user_info'         => $booking->user && $booking->user->customer ? $booking->user->customer->toArray() : null,
-         'created_by' => $booking->createdBy ? [
-    'id' => $booking->createdBy->id,
-    'name' => $booking->createdBy->name,
-    'email' => $booking->createdBy->email,
-    'status' => $booking->createdBy->status,
-    'last_login_at' => $booking->createdBy->last_login_at,
-    'last_order_at' => $booking->createdBy->last_order_at,
-] : null,
-
-
-
-        'tables'            => $booking->tables->pluck('table_no'),
-        'items'             => $billItems,
-        'subtotal'          => $subtotal,
-        'gst'               => $gst,
-        'grand_total'       => $grandTotal,
+        'customer_id' => $booking->customer_id,
+        'customer_name' => $booking->customer_name,
+        'customer_user' => optional($booking->user)->only(['id', 'name', 'email']),
+        'user_info' => $booking->user && $booking->user->customer ? $booking->user->customer->toArray() : null,
+        'created_by' => $booking->createdBy ? [
+            'id' => $booking->createdBy->id,
+            'name' => $booking->createdBy->name,
+            'email' => $booking->createdBy->email,
+            'status' => $booking->createdBy->status,
+            'last_login_at' => $booking->createdBy->last_login_at,
+            'last_order_at' => $booking->createdBy->last_order_at,
+        ] : null,
+        'tables' => $booking->tables->pluck('table_no'),
+        'items' => $billItems,
+        'subtotal' => $subtotal,
+        'gst' => $totalGst,
+        'grand_total' => $grandTotal,
+        'payments' => $booking->payments->map(function ($payment) {
+            return [
+                'payment_method' => $payment->payment_method,
+                'amount' => $payment->amount,
+                'payment_date' => $payment->payment_date,
+            ];
+        }),
     ]);
 }
+
 
 
 
@@ -277,6 +324,8 @@ foreach ($items as $item) {
 public function getFamilyBookingKot($bookingId)
 {
 
+        $user = JWTAuth::parseToken()->authenticate();
+
      $booking = FamilyBooking::findOrFail($bookingId);
 
 
@@ -307,6 +356,7 @@ public function getFamilyBookingKot($bookingId)
         'members_count' => $booking->members_count,
         'tables'        => $tables,
         'items'         => $items,
+        'user'    =>$user
     ]);
 
 }
@@ -316,7 +366,7 @@ public function getAllFamilyBookingKotReports()
 {
     $bookings = FamilyBooking::all();
 
-    
+
 
     $result = $bookings->map(function ($booking) {
         $tables = DB::table('family_booking_kots')

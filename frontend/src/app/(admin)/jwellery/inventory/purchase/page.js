@@ -58,7 +58,7 @@
 
 //   const supplierList = async () => {
 //     const token = getCookie("access_token");
-//     const response = await axios.get("https://api.equi.co.in/api/suppliers",
+//     const response = await axios.get("http://127.0.0.1:8000/api/suppliers",
 //       {
 //         headers: { Authorization: `Bearer ${token}` },
 //       }
@@ -134,7 +134,7 @@
 
 //   const fetchSupplierList = async () => {
 //     const token = getCookie("access_token");
-//     const response = await axios.get("https://api.equi.co.in/api/suppliers",
+//     const response = await axios.get("http://127.0.0.1:8000/api/suppliers",
 //       {
 //         headers: { Authorization: `Bearer ${token}` },
 //       }
@@ -145,7 +145,7 @@
 
 //   const handleDeleteAllPurchase = async () => {
 //     const response = await axios.delete(
-//       "https://api.equi.co.in/api/delete-all-purchase"
+//       "http://127.0.0.1:8000/api/delete-all-purchase"
 //       ,{
 //         headers:{authorization:`Bearer ${token}`}
 //       }
@@ -160,7 +160,7 @@
 //   };
 
 //   const handleDownloadSample = () => {
-//     window.location.href = "https://api.equi.co.in/api/download-sample-purchase";
+//     window.location.href = "http://127.0.0.1:8000/api/download-sample-purchase";
 //   };
 
 //   const handleFileChange = (e) => {
@@ -199,7 +199,7 @@
 //       }, 200); // Every 200ms, increase progress by 10% (Total 2s)
 
 //       const response = await axios.post(
-//         "https://api.equi.co.in/api/purchase/bulk-upload-csv",
+//         "http://127.0.0.1:8000/api/purchase/bulk-upload-csv",
 //         fileFormData,
 //         {
 //           headers: {
@@ -1061,7 +1061,7 @@ function Page() {
 
   const supplierList = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get("https://api.equi.co.in/api/suppliers", {
+    const response = await axios.get("http://127.0.0.1:8000/api/suppliers", {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log("response", response?.data?.suppliers);
@@ -1073,7 +1073,7 @@ function Page() {
   const fetchpurchaseList = async () => {
     try {
       const response = await axios.get(
-        "https://api.equi.co.in/api/saloon-purchase-returnss",
+        "http://127.0.0.1:8000/api/saloon-purchase-returnss",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -1153,7 +1153,7 @@ function Page() {
 
   const fetchSupplierList = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get("https://api.equi.co.in/api/suppliers", {
+    const response = await axios.get("http://127.0.0.1:8000/api/suppliers", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setSupplierlist(response?.data?.suppliers || []);
@@ -1161,7 +1161,7 @@ function Page() {
 
   const handleDeleteAllPurchase = async () => {
     const response = await axios.delete(
-      "https://api.equi.co.in/api/delete-all-purchase",
+      "http://127.0.0.1:8000/api/delete-all-purchase",
       {
         headers: { authorization: `Bearer ${token}` },
       }
@@ -1198,7 +1198,7 @@ function Page() {
   };
 
   const handleDownloadSample = () => {
-    window.location.href = "https://api.equi.co.in/api/download-sample-purchase";
+    window.location.href = "http://127.0.0.1:8000/api/download-sample-purchase";
   };
 
   const handleFileChange = (e) => {
@@ -1237,7 +1237,7 @@ function Page() {
       }, 200); // Every 200ms, increase progress by 10% (Total 2s)
 
       const response = await axios.post(
-        "https://api.equi.co.in/api/purchase/bulk-upload-csv",
+        "http://127.0.0.1:8000/api/purchase/bulk-upload-csv",
         fileFormData,
         {
           headers: {
@@ -1328,7 +1328,7 @@ function Page() {
   const featchProductsList = async () => {
     try {
       // const res = await axios.get(
-      //   "https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Product",
+      //   "http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
       //   {
       //     headers: { Authorization: `Bearer ${token}` },
       //   }
@@ -1437,7 +1437,7 @@ function Page() {
       console.log("formData", formData);
 
       const response = await axios.post(
-        "https://api.equi.co.in/api/saloon-purchase",
+        "http://127.0.0.1:8000/api/saloon-purchase",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

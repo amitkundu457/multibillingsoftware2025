@@ -8,7 +8,7 @@ import React from "react";
 import { IoLogoWhatsapp } from "react-icons/io";
 const WhatsAppButton = () => {
   const handleWhatsAppClick = () => {
-    const phoneNumber = "1234567890"; // Replace with your phone number
+    const phoneNumber = "8826124790"; // Replace with your phone number
     const message = encodeURIComponent("Hello, I need some help!"); // Predefined message
     const url = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(url, "_blank"); // Open WhatsApp in a new tab

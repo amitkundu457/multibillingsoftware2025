@@ -18,7 +18,7 @@ const Loyalty = () => {
   // Fetch all loyalty from API
   const fetchloyalty = async () => {
     try {
-      const response = await axios.get(" https://api.equi.co.in/api/loyalty/");
+      const response = await axios.get(" http://127.0.0.1:8000/api/loyalty/");
       setLoyalty(response.data); // Assuming the data is under the 'data' key
     } catch (error) {
       console.error("Error fetching loyalty:", error);
@@ -41,7 +41,7 @@ const Loyalty = () => {
     if (isEditMode) {
       // Update existing tax
       try {
-        await axios.post(` https://api.equi.co.in/api/loyalty/${modalData.id}`, modalData);
+        await axios.post(` http://127.0.0.1:8000/api/loyalty/${modalData.id}`, modalData);
         fetchloyalty();
         setIsModalOpen(false);
       } catch (error) {
@@ -50,7 +50,7 @@ const Loyalty = () => {
     } else {
       // Create new tax
       try {
-        await axios.post(" https://api.equi.co.in/api/loyalty/", modalData);
+        await axios.post(" http://127.0.0.1:8000/api/loyalty/", modalData);
         fetchloyalty();
         setIsModalOpen(false);
       } catch (error) {
@@ -62,7 +62,7 @@ const Loyalty = () => {
   // Delete tax
   const handleDeleteTax = async (id) => {
     try {
-      await axios.delete(` https://api.equi.co.in/api/loyalty/${id}`);
+      await axios.delete(` http://127.0.0.1:8000/api/loyalty/${id}`);
       fetchloyalty();
     } catch (error) {
       console.error("Error deleting tax:", error);

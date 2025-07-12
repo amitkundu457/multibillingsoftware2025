@@ -12,7 +12,7 @@ export default function FrontendEditor({ type = 'Generate Sales' }) {
   // Load content from API
   useEffect(() => {
   axios
-    .get(`https://api.equi.co.in/api/frontend-settings/${type}`)
+    .get(`http://127.0.0.1:8000/api/frontend-settings/${type}`)
     .then((res) => {
       setDescription(res.data.description || '');
       setLoading(false);
@@ -27,7 +27,7 @@ export default function FrontendEditor({ type = 'Generate Sales' }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`https://api.equi.co.in/api/frontend-settings`, {
+      await axios.post(`http://127.0.0.1:8000/api/frontend-settings`, {
         type,
         description,
       });

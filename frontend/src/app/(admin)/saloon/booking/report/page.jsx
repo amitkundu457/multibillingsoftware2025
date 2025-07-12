@@ -39,7 +39,7 @@ const BookingPage = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await axios.get(" https://api.equi.co.in/api/bookings");
+      const response = await axios.get(" http://127.0.0.1:8000/api/bookings");
       setBookings(response.data);
       console.log("booking get api",response)
       setFilteredBookings(response.data);
@@ -74,9 +74,9 @@ const BookingPage = () => {
     e.preventDefault();
     try {
       if (formData.id) {
-        await axios.put(` https://api.equi.co.in/api/bookings/${formData.id}`, formData);
+        await axios.put(` http://127.0.0.1:8000/api/bookings/${formData.id}`, formData);
       } else {
-        const response = await axios.post(" https://api.equi.co.in/api/bookings", formData);
+        const response = await axios.post(" http://127.0.0.1:8000/api/bookings", formData);
         setBookings([...bookings, response.data]);
         setFilteredBookings([...filteredBookings, response.data]);
       }
@@ -89,7 +89,7 @@ const BookingPage = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(` https://api.equi.co.in/api/bookings/${id}`);
+      await axios.delete(` http://127.0.0.1:8000/api/bookings/${id}`);
       fetchBookings();
     } catch (error) {
       console.error("Error deleting booking:", error);

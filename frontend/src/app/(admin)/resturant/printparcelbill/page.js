@@ -52,7 +52,7 @@ const ParcelBill = () => {
 
       try {
         const res = await fetch(
-          `https://api.equi.co.in/api/parcel-order/${parcel_order_id}/generate-bill`,
+          `http://127.0.0.1:8000/api/parcel-order/${parcel_order_id}/generate-bill`,
           {
             method: "POST",
             headers: {
@@ -266,7 +266,7 @@ const ParcelBill = () => {
             {billData?.created_by?.name || "Unknown Creator"}
           </div>
 
-          <div className="bill-type">PARCEL BILL</div>
+          <div className="bill-type"> BILL</div>
           <div className="divider"></div>
         </div>
 
@@ -331,7 +331,7 @@ const ParcelBill = () => {
         <div className="totals">
           <div className="flex justify-between">
             <span>Subtotal:</span>
-            <span>₹{bill.subtotal.toFixed(2)}</span>
+            <span>₹{bill.subtotal}</span>
           </div>
           <div className="flex justify-between">
             {/* <span>GST:</span>
@@ -350,9 +350,37 @@ const ParcelBill = () => {
           </div>
           <div className="flex justify-between total-row">
             <span>TOTAL:</span>
-            <span>₹{bill.grand_total.toFixed(2)}</span>
+            <span>₹{bill.grand_total}</span>
           </div>
         </div>
+
+        {/* Payment Summary */}
+{billData?.payments?.length > 0 && (
+  <div className="mt-2 text-xs">
+    <div className="font-semibold text-center mb-1">Payment</div>
+    <table className="w-full">
+      <tbody>
+        {billData.payments.map((p, i) => (
+          <tr key={i}>
+            <td className="text-left">{p.payment_method}</td>
+            <td className="text-right">₹{parseFloat(p.amount).toFixed(2)}</td>
+          </tr>
+        ))}
+        <tr className="font-bold border-t border-dashed border-gray-400">
+          <td>Total</td>
+          <td className="text-right">
+            ₹
+            {billData.payments
+              .reduce((sum, p) => sum + parseFloat(p.amount), 0)
+              .toFixed(2)}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+)}
+
+
 
         {/* Footer */}
         <div className="footer">

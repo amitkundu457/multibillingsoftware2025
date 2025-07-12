@@ -18,7 +18,7 @@ const BillingReport = () => {
     setError(null);
     try {
       const response = await axios.get(
-        "https://api.equi.co.in/api/billingreport",
+        "http://127.0.0.1:8000/api/billingreport",
         {
           params: { start_date: startDate, end_date: endDate },
         }

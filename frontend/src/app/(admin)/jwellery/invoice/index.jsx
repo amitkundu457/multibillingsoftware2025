@@ -8,8 +8,8 @@ import Image from "next/image";
 import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import { LuRefreshCcw } from "react-icons/lu";
-import { BsFillAwardFill } from "react-icons/bs";
 
+import { MdDelete } from "react-icons/md";
 import { FaHome } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -102,6 +102,29 @@ export default function InvoicePage() {
     description: "",
     ad_wgt: "",
   });
+
+
+  const emptyProductDetails = {
+    grossWeight: "",
+    netWeight: "",
+    pcs: "",
+    makingInRs: "",
+    making: "",
+    hallmark: "",
+    hallmarkCharge: "",
+    wastageCharge: "",
+    otherCharge: "",
+    stoneValue: "",
+    stoneDetails: "",
+    diamondValue: "",
+    diamondDetails: "",
+    making_dsc: "",
+    making_gst_percentage: "",
+    huid: "",
+    qty: "",
+    description: "",
+    ad_wgt: "",
+  };
 
   const [isEditable, setIsEditable] = useState(true);
 
@@ -415,7 +438,7 @@ export default function InvoicePage() {
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get("https://api.equi.co.in/api/barcodes", {
+      const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -431,7 +454,7 @@ export default function InvoicePage() {
     try {
       const token = getCookie("access_token");
       const response = await axios.get(
-        "https://api.equi.co.in/api/billcountnumber",
+        "http://127.0.0.1:8000/api/billcountnumber",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -468,7 +491,7 @@ export default function InvoicePage() {
       console.log("token", token);
 
       const response = await axios.get(
-        "https://api.equi.co.in/api/stockDetails",
+        "http://127.0.0.1:8000/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -491,7 +514,7 @@ export default function InvoicePage() {
 
   useEffect(() => {
     axios
-      .get(" https://api.equi.co.in/api/redeem-setup")
+      .get(" http://127.0.0.1:8000/api/redeem-setup")
       .then((response) => {
         if (response.data.length > 0) {
           setLoyaltyData(response.data[0]); // Assuming you only need the first item
@@ -524,7 +547,7 @@ export default function InvoicePage() {
   const handleSearchOrder = async () => {
     try {
       const res = await axios.get(
-        `https://api.equi.co.in/api/orders/search?billno=${orderSearchId}`
+        `http://127.0.0.1:8000/api/orders/search?billno=${orderSearchId}`
       );
       console.log("orderDetails", res);
       const orderDetailsData = res.data?.data[0];
@@ -551,7 +574,7 @@ export default function InvoicePage() {
     if (customerDetails.id) {
       axios
         .get(
-          ` https://api.equi.co.in/api/customer-redeem-point/${customerDetails.id}`
+          ` http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -615,7 +638,7 @@ export default function InvoicePage() {
 
   const fetchEmployees = async () => {
     const token = getCookie("access_token");
-    const res = await axios.get(" https://api.equi.co.in/api/employees", {
+    const res = await axios.get(" http://127.0.0.1:8000/api/employees", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setSalesperson(res.data.employees);
@@ -655,6 +678,7 @@ export default function InvoicePage() {
       toast.error("Please create the stock this Product...");
     } else if (matchingProduct?.available_quantity > 0) {
       setSelectedItem(item);
+      setProductDetails(emptyProductDetails);
       setIsOpen(true);
       console.log(matchingProduct);
     } else {
@@ -1086,9 +1110,23 @@ export default function InvoicePage() {
         100;
 
       const productTotal = rateTotal + stoneTotal + diamondTotal;
+      console.log("grosstotal", productTotal);
+      const overallgst = (productTotal * product.tax_rate) / 100;
+      console.log("allgst", overallgst);
+      console.log(
+        "product.making_gst_percentage",
+        product.making_gst_percentage
+      );
 
-     
-      newGstCount += gstOnGold + gstOnMaking;
+      if (product.making_gst_percentage == "") {
+        console.log("not gst on making charge given");
+        newGstCount += overallgst;
+      } else {
+        console.log("gst on making charge given");
+        newGstCount += gstOnGold + gstOnMaking;
+      }
+
+      // newGstCount += gstOnGold + gstOnMaking;
       console.log("gstongold", gstOnGold);
       console.log("gstOnMaking", gstOnMaking);
       console.log("gstOnMakingDeposit", gstOnMakingDeposit);
@@ -1263,7 +1301,7 @@ export default function InvoicePage() {
     console.log("payload", payload);
     try {
       const response = await axios.post(
-        " https://api.equi.co.in/api/order",
+        " http://127.0.0.1:8000/api/order",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -1335,7 +1373,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.put(
-        ` https://api.equi.co.in/api/customer-redeem-point/${customerId}`,
+        ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -1359,7 +1397,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.post(
-        ` https://api.equi.co.in/api/customer-redeem-point/${customerId}`,
+        ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -1723,99 +1761,106 @@ export default function InvoicePage() {
         <aside className="w-1/4 bg-gray-100 p-4 relative h-full">
           <div className="mb-16 overflow-y-auto h-[20rem]">
             {addedProducts.map((product, index) => (
-              <div key={index} className="border p-2 rounded mb-2">
-                {product.name && <p className="font-bold">{product.name}</p>}
+              <div key={index} className=" border flex justify-between items-center p-2 rounded mb-2">
+                <div className=" p-2 rounded mb-2 ">
+                  {product.name && <p className="font-bold">{product.name}</p>}
 
-                {product.description && (
-                  <p className="text-[15px] font-semibold">
-                    Description: {product.description}
-                  </p>
-                )}
-                {product.netWeight > 0 && (
-                  <p className="text-[12px]">Net Wgt: {product.netWeight}</p>
-                )}
-                {product.ad_wgt > 0 && (
-                  <p className="text-[12px]">
-                    Adjustment Wgt: {product.ad_wgt}
-                  </p>
-                )}
-                {product.grossWeight > 0 && (
-                  <p className="text-[12px]">G Wgt: {product.grossWeight}</p>
-                )}
-                {product.qty > 0 && (
-                  <p className="text-[12px]">Qty: {product.qty}</p>
-                )}
-                {product.rate > 0 && (
-                  <p className="text-[12px]">Rate: {product.rate}</p>
-                )}
-                {product.makingInRs > 0 && (
-                  <p className="text-[12px]">
-                    makingInRs: {product.makingInRs}
-                  </p>
-                )}
-                {product.making > 0 && (
-                  <p className="text-[12px]">Making%: {product.making}</p>
-                )}
-                {product.diamondValue > 0 && (
-                  <p className="text-[12px]">
-                    DiamondValue: {product.diamondValue}
-                  </p>
-                )}
-                {product.diamondWeight > 0 && (
-                  <p className="text-[12px]">
-                    Diamond(Carats): {product.diamondWeight}
-                  </p>
-                )}
-                {product.making_gst_percentage > 0 && (
-                  <p className="text-[12px]">
-                    Gst% On Making: {product.making_gst_percentage}
-                  </p>
-                )}
-                {product.stoneValue > 0 && (
-                  <p className="text-[12px]">
-                    stone Value: {product.stoneValue}
-                  </p>
-                )}
+                  {product.description && (
+                    <p className="text-[15px] font-semibold">
+                      Description: {product.description}
+                    </p>
+                  )}
+                  {product.netWeight > 0 && (
+                    <p className="text-[12px]">Net Wgt: {product.netWeight}</p>
+                  )}
+                  {product.ad_wgt > 0 && (
+                    <p className="text-[12px]">
+                      Adjustment Wgt: {product.ad_wgt}
+                    </p>
+                  )}
+                  {product.grossWeight > 0 && (
+                    <p className="text-[12px]">G Wgt: {product.grossWeight}</p>
+                  )}
+                  {product.qty > 0 && (
+                    <p className="text-[12px]">Qty: {product.qty}</p>
+                  )}
+                  {product.rate > 0 && (
+                    <p className="text-[12px]">Rate: {product.rate}</p>
+                  )}
+                  {product.makingInRs > 0 && (
+                    <p className="text-[12px]">
+                      makingInRs: {product.makingInRs}
+                    </p>
+                  )}
+                  {product.making > 0 && (
+                    <p className="text-[12px]">Making%: {product.making}</p>
+                  )}
+                  {product.diamondValue > 0 && (
+                    <p className="text-[12px]">
+                      DiamondValue: {product.diamondValue}
+                    </p>
+                  )}
+                  {product.diamondWeight > 0 && (
+                    <p className="text-[12px]">
+                      Diamond(Carats): {product.diamondWeight}
+                    </p>
+                  )}
+                  {product.making_gst_percentage > 0 && (
+                    <p className="text-[12px]">
+                      Gst% On Making: {product.making_gst_percentage}
+                    </p>
+                  )}
+                  {product.stoneValue > 0 && (
+                    <p className="text-[12px]">
+                      stone Value: {product.stoneValue}
+                    </p>
+                  )}
 
-                {product.stoneWeight > 0 && (
-                  <p className="text-[12px]">
-                    Stone Wgt: {product.stoneWeight}
-                  </p>
-                )}
-                {product.huid > 0 && (
-                  <p className="text-[12px]">Huid: {product.huid}</p>
-                )}
+                  {product.stoneWeight > 0 && (
+                    <p className="text-[12px]">
+                      Stone Wgt: {product.stoneWeight}
+                    </p>
+                  )}
+                  {product.huid > 0 && (
+                    <p className="text-[12px]">Huid: {product.huid}</p>
+                  )}
 
-                {product.hallmark > 0 && (
-                  <p className="text-[12px]">Hallmark: {product.hallmark}</p>
-                )}
-                {product.hallmarkCharge > 0 && (
-                  <p className="text-[12px]">
-                    HallmarkCharge: {product.hallmarkCharge}
-                  </p>
-                )}
-                {product.wastageCharge > 0 && (
-                  <p className="text-[12px]">
-                    WastageCharge: {product.wastageCharge}
-                  </p>
-                )}
+                  {product.hallmark > 0 && (
+                    <p className="text-[12px]">Hallmark: {product.hallmark}</p>
+                  )}
+                  {product.hallmarkCharge > 0 && (
+                    <p className="text-[12px]">
+                      HallmarkCharge: {product.hallmarkCharge}
+                    </p>
+                  )}
+                  {product.wastageCharge > 0 && (
+                    <p className="text-[12px]">
+                      WastageCharge: {product.wastageCharge}
+                    </p>
+                  )}
 
-                {product.otherCharge > 0 && (
+                  {product.otherCharge > 0 && (
+                    <p className="text-[12px]">
+                      OtherCharge: {product.otherCharge}
+                    </p>
+                  )}
+
                   <p className="text-[12px]">
-                    OtherCharge: {product.otherCharge}
+                    <strong>Total: ₹{productWiseTotals[index]?.total}</strong>
                   </p>
-                )}
-
-                <p className="text-[12px]">
-                  <strong>Total: ₹{productWiseTotals[index]?.total}</strong>
-                </p>
-
-                <button
-                  className="mt-1 text-red-600 underline"
-                  onClick={() => handleRemoveProduct(index)}
-                >
-                  Remove
-                </button>
+                </div>
+                <div>
+                  <button
+                    className="mt-1 text-red-600 underline"
+                    onClick={() => handleRemoveProduct(index)}
+                  >
+                    <MdDelete
+                      className="text-red-700 text-[25px]  cursor-pointer
+      transition-transform duration-200     /* smooth animation */
+      hover:scale-125  "
+                    />
+                  </button>
+                </div>
               </div>
             ))}
             <div className="h-[16rem]"></div>
@@ -1851,9 +1896,7 @@ export default function InvoicePage() {
               <p>Discount:</p>
               <p>₹{discountTotal}</p>
             </div>
-            <div>
-              <p>Total GST: ₹{totalGstCount}</p>
-            </div>
+          
             {addition > 0 && (
               <div className="flex justify-between">
                 <p>AddtionRs:</p>

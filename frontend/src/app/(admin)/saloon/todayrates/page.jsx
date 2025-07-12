@@ -41,7 +41,7 @@ const RateChart = () => {
       notifyTokenMissing();
       return;
     }
-    axios.get(' https://api.equi.co.in/api/ratemasterget',
+    axios.get(' http://127.0.0.1:8000/api/ratemasterget',
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -67,7 +67,7 @@ const RateChart = () => {
 
   const deleteRateMaster = (id) => {
     if (window.confirm("Are you sure you want to delete this rate?")) {
-      axios.delete(` https://api.equi.co.in/api/ratemaster/${id}`)
+      axios.delete(` http://127.0.0.1:8000/api/ratemaster/${id}`)
         .then(() => {
           setRateDatas(rateDatas.filter((data) => data.id !== id));
           alert("Rate deleted successfully");

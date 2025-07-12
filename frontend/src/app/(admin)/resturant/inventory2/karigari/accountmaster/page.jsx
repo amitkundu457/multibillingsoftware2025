@@ -14,7 +14,7 @@ const Page = () => {
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    axios.get(" https://api.equi.co.in/api/account-masters").then((response) => {
+    axios.get(" http://127.0.0.1:8000/api/account-masters").then((response) => {
       setData(response.data);
     });
   }, []);
@@ -30,7 +30,7 @@ const Page = () => {
 
   const handleDeleteData = (id) => {
     axios
-      .delete(` https://api.equi.co.in/api/account-masters/${id}`)
+      .delete(` http://127.0.0.1:8000/api/account-masters/${id}`)
       .then(() => {
         alert("data deleted  Succesfully");
         setData(data.filter((item) => item.id !== id));

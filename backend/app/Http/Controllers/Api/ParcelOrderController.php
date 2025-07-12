@@ -59,6 +59,8 @@ class ParcelOrderController extends Controller
 
 public function getParcelKOT($parcel_order_id)
 {
+        $clientuser = JWTAuth::parseToken()->authenticate();
+
     $order = ParcelOrder::with(['items.product', 'customer'])->find($parcel_order_id);
 
     if (!$order) {
@@ -77,101 +79,146 @@ public function getParcelKOT($parcel_order_id)
         'user' => $user ?? 'Guest',
 
     'date' => $order->created_at->format('Y-m-d H:i'),
+
     'items' => $order->items->map(function ($item) {
-        return [
-            'product_name' => $item->product->name,
-            'quantity' => $item->quantity,
-            'tax_rate'=>$item->tax_rate
-        ];
-    }),
+    return [
+        'product_name' => $item->product->name,
+        'quantity' => $item->quantity,
+        'tax_rate' => $item->tax_rate,
+    ];
+}),
+        'clientuser' => $clientuser, // full user object
+
+
 ]);
 
 
 }
 
-
-public function generateBill($orderId)
+public function getGrandTotal($orderId)
 {
-          $customer = JWTAuth::parseToken()->authenticate();
+    $order = ParcelOrder::with('items')->findOrFail($orderId);
 
-    $order = ParcelOrder::with('items.product', 'customer','createdBy')->findOrFail($orderId);
-    Log::info($order);
-    // if ($order->bill) {
-    //     return response()->json(['message' => 'Bill already generated for this order.'], 409);
-    // }
+    // Calculate subtotal and GST
+    $subtotal = 0;
+    $totalGst = 0;
 
-    // $subtotal = $order->items->sum(function ($item) {
-    //     return $item->quantity * $item->product_price;
-    // });
+    foreach ($order->items as $item) {
+        $total = $item->quantity * $item->product_price;
+        $gst = ($total * $item->tax_rate) / 100;
 
-    $billItems = [];
-$subtotal = 0;
-$totalGst = 0;
+        $subtotal += $total;
+        $totalGst += $gst;
+    }
 
-foreach ($order->items as $item) {
-    $total = $item->quantity * $item->product_price;
-    $gst = ($total * $item->tax_rate) / 100;
+    $grandTotal = $subtotal + $totalGst;
 
-    $billItems[] = [
-        'product_id'    => $item->product_id,
-        'product_name'  => $item->product?->name,
-        'product_price' => $item->product_price,
-        'quantity'      => $item->quantity,
-        'total'         => round($total, 2),
-        'tax_rate'      => $item->tax_rate,
-        'gst'           => round($gst, 2),
-    ];
-
-    $subtotal += $total;
-    $totalGst += $gst;
+    return response()->json([
+        'grand_total' => round($grandTotal, 2),
+        'subtotal' => round($subtotal, 2),
+        'gst' => round($totalGst, 2),
+    ]);
 }
 
 
-     $user = null;
-    if ($order->customer && $order->customer->user_id) {
-        $user = \App\Models\User::find($order->customer->user_id);
+public function generateBill($orderId)
+{
+    $customer = JWTAuth::parseToken()->authenticate();
+
+    $order = ParcelOrder::with('items.product', 'customer', 'createdBy', 'payment', 'bill')->findOrFail($orderId);
+
+    // ✅ Return if bill already generated
+    if ($order->bill) {
+        return response()->json([
+            'message' => 'Bill already generated.',
+            'bill' => $order->bill,
+            'customer' => $order->customer,
+            'user' => optional($order->customer->user)->only(['id', 'name', 'email']) ?? 'Guest',
+            'created_by' => $order->createdBy ? [
+                'id' => $order->createdBy->id,
+                'name' => $order->createdBy->name,
+                'email' => $order->createdBy->email,
+                'status' => $order->createdBy->status,
+                'last_login_at' => $order->createdBy->last_login_at,
+                'last_order_at' => $order->createdBy->last_order_at,
+            ] : null,
+            'items' => $order->items->map(function ($item) {
+                return [
+                    'product_name' => $item->product->name,
+                    'quantity' => $item->quantity,
+                    'tax_rate' => $item->tax_rate,
+                    'total' => round($item->quantity * $item->product_price, 2),
+                ];
+            }),
+            'payments' => $order->payment->map(function ($payment) {
+                return [
+                    'payment_method' => $payment->payment_method,
+                    'amount' => $payment->amount,
+                    'payment_date' => $payment->payment_date,
+                ];
+            }),
+        ]);
     }
 
-    $gst =$totalGst;
-    $grandTotal = $subtotal + $totalGst;
+    // ✅ Generate bill if not exists
+    $billItems = [];
+    $subtotal = 0;
+    $totalGst = 0;
 
+    foreach ($order->items as $item) {
+        $total = $item->quantity * $item->product_price;
+        $gst = ($total * $item->tax_rate) / 100;
+
+        $billItems[] = [
+            'product_id' => $item->product_id,
+            'product_name' => $item->product?->name,
+            'product_price' => $item->product_price,
+            'quantity' => $item->quantity,
+            'total' => round($total, 2),
+            'tax_rate' => $item->tax_rate,
+            'gst' => round($gst, 2),
+        ];
+
+        $subtotal += $total;
+        $totalGst += $gst;
+    }
+
+    $grandTotal = $subtotal + $totalGst;
 
     $bill = ParcelBill::create([
         'parcel_order_id' => $order->id,
         'subtotal' => $subtotal,
-        'gst' => $gst,
-       'created_by' => $customer->id,
-
+        'gst' => $totalGst,
         'grand_total' => $grandTotal,
+        'created_by' => $customer->id,
     ]);
 
     return response()->json([
         'message' => 'Bill generated',
         'bill' => $bill,
         'customer' => $order->customer,
-          'user' => $user ?? 'Guest',
-          'created_by' => $order->createdBy ? [
-    'id' => $order->createdBy->id,
-    'name' => $order->createdBy->name,
-    'email' => $order->createdBy->email,
-    'status' => $order->createdBy->status,
-    'last_login_at' => $order->createdBy->last_login_at,
-    'last_order_at' => $order->createdBy->last_order_at,
-] : null,
-
-
-        'items' => $order->items->map(function ($item) {
+        'user' => optional($order->customer->user)->only(['id', 'name', 'email']) ?? 'Guest',
+        'created_by' => $order->createdBy ? [
+            'id' => $order->createdBy->id,
+            'name' => $order->createdBy->name,
+            'email' => $order->createdBy->email,
+            'status' => $order->createdBy->status,
+            'last_login_at' => $order->createdBy->last_login_at,
+            'last_order_at' => $order->createdBy->last_order_at,
+        ] : null,
+        'items' => $billItems,
+        'payments' => $order->payment->map(function ($payment) {
             return [
-                'product_name' => $item->product->name,
-                'quantity' => $item->quantity,
-                'tax_rate'=>$item->tax_rate,
-                'total' => $item->quantity * $item->product_price,
+                'payment_method' => $payment->payment_method,
+                'amount' => $payment->amount,
+                'payment_date' => $payment->payment_date,
             ];
         }),
     ]);
 }
 
-//parcel repost 
+
+//parcel repost
 
 public function ParcelKOTReport()
 {
@@ -215,7 +262,7 @@ public function ParcelKOTReport()
 }
 
 
-//generate parcel bill 
+//generate parcel bill
 public function generateBillReport()
 {
     $customer = JWTAuth::parseToken()->authenticate();
@@ -277,7 +324,7 @@ public function generateBillReport()
 
     return response()->json($result);
 }
-//billing 
+//billing
 public function ParcelBillreportPrint()
 {
     $user = JWTAuth::parseToken()->authenticate();

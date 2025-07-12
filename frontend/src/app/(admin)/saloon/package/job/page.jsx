@@ -8,7 +8,7 @@ import "react-responsive-modal/styles.css"; // Import default styles
 import BookingModal from "./package";
 import { Notyf } from "notyf";
 import Printbill from "../../../jwellery/invoice/printbill";
-
+import toast from "react-hot-toast";
 import "notyf/notyf.min.css"; // Import Notyf CSS
 export default function JobForm() {
   const notyf = new Notyf();
@@ -102,7 +102,7 @@ if (!token) {
       paid_amount: totalGrossAmount
     };
     const orderResponse = await axios.post(
-      "https://api.equi.co.in/api/order-packages",
+      "http://127.0.0.1:8000/api/order-packages",
       payload,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -110,7 +110,7 @@ if (!token) {
     );
 
     const paymentResponse = await axios.post(
-      "https://api.equi.co.in/api/update-payment",
+      "http://127.0.0.1:8000/api/update-payment",
       paymentPayload,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -183,11 +183,13 @@ if (!token) {
         setValue("custCode", customer.phone || "");
         setValue("mobile", customer.phone || "");
       } else {
-        alert("Customer not found");
+        // alert("Customer not found");
+        toast.error("Customer not found");
       }
     } catch (error) {
       console.error("Error fetching customer details:", error);
-      alert("Customer not found");
+      // alert("Customer not found");
+      toast.error("Customer not found");
     }
   };
 
@@ -256,7 +258,7 @@ if (!token) {
   return;
 }
 
-    const response = await axios.get("https://api.equi.co.in/api/stylists",
+    const response = await axios.get("http://127.0.0.1:8000/api/stylists",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -283,7 +285,7 @@ if (!token) {
 
     try {
       const response = await axios.get(
-        `https://api.equi.co.in/api/packagesassign/${customerDetails.id}?enabled=${checked}`,
+        `http://127.0.0.1:8000/api/packagesassign/${customerDetails.id}?enabled=${checked}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -296,13 +298,15 @@ if (!token) {
         console.log(response);
       }
 
-      alert(response.data.message);
+      // alert(response.data.message);
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error:", error);
 
       console.log(customerDetails.id);
 
-      alert("Failed to fetch special package details.");
+      toast.error("Failed to fetch special package details");
+      // alert("Failed to fetch special package details.");
     }
   };
 
@@ -398,6 +402,7 @@ if (!token) {
           <div>
             <label className="block text-sm font-medium">Name</label>
             <input
+            readOnly
               type="text"
               {...register("name", { required: "Name is required" })}
               className="w-full p-2 border rounded-md"
@@ -408,7 +413,7 @@ if (!token) {
           </div>
 
           {/* Email */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium">Email</label>
             <input
               type="email"
@@ -418,13 +423,14 @@ if (!token) {
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email.message}</p>
             )}
-          </div>
+          </div> */}
 
           {/* Mobile */}
           <div>
             <label className="block text-sm font-medium">Mobile No</label>
             <input
               type="text"
+              readOnly
               {...register("mobile", { required: "Mobile No is required" })}
               className="w-full p-2 border rounded-md"
             />

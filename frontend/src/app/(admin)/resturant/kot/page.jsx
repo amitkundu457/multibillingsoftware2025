@@ -71,6 +71,20 @@ const Page = () => {
   const [tables, setTables] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTableNo, setNewTableNo] = useState("");
+  const [grandTotalOfFamily, setGrandTotalOfFamily] = useState(0);
+  const [paymentInputsOfFamily, setPaymentInputsOfFamily] = useState([]);
+  const paymentOptionsOfFamily = ["Cash", "UPI", "Card", "Others"];
+
+  const [parcelOrderDetails, setParcelOrderDetails] = useState(null);
+
+  const [paymentInputs, setPaymentInputs] = useState([]);
+  const paymentOptions = ["Cash", "UPI", "Card", "Others"];
+
+  const updatePaymentInput = (index, field, value) => {
+    const updated = [...paymentInputs];
+    updated[index][field] = value;
+    setPaymentInputs(updated);
+  };
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -81,13 +95,201 @@ const Page = () => {
     return null;
   };
 
+  const handleParcelSearchOrder = async () => {
+    const token = getCookie("access_token");
+
+    if (!parcelOrderId) {
+      alert("Please enter the parcel order ID");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/parcel-order/${parcelOrderId}/grand-total`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch bill.");
+      }
+
+      setParcelOrderDetails(data); // Save API response in state
+    } catch (error) {
+      console.error("Error fetching parcel order bill:", error);
+      alert("Failed to fetch parcel order bill. Please check the Order ID.");
+    }
+  };
+
+  const submitParcelPayment = async () => {
+    const token = getCookie("access_token");
+
+    if (!parcelOrderId) {
+      alert("Parcel Order ID is missing.");
+      return;
+    }
+
+    if (
+      !paymentInputs.length ||
+      paymentInputs.some((p) => !p.mode || !p.amount)
+    ) {
+      alert("Please fill in all payment fields correctly.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/parcel-payments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            order_id: parcelOrderId,
+            payments: paymentInputs.map((payment) => ({
+              payment_mode: payment.mode,
+              amount: parseFloat(payment.amount),
+            })),
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        GenerateParcelBillFunction();
+        alert("✅ Payment submitted successfully!");
+        setIsParcelBillModalOpen(false);
+        // Optionally reset state
+      } else if (response.status === 409) {
+        alert("⚠️ Payment is already completed for this order.");
+      } else if (response.status === 422) {
+        alert(
+          result.error ||
+            "⚠️ Payment validation failed. Please check amounts and methods."
+        );
+      } else {
+        alert(result.message || "❌ Payment submission failed.");
+      }
+    } catch (error) {
+      console.error("Payment submission error:", error);
+      alert("❌ An error occurred while submitting the payment.");
+    }
+  };
+
+  // Calculate total paid
+  const totalPaid = paymentInputs.reduce((sum, input) => {
+    const amt = parseFloat(input.amount);
+    return sum + (isNaN(amt) ? 0 : amt);
+  }, 0);
+
+  // Get grand total from parcelOrderDetails
+  const grandTotal = parseFloat(parcelOrderDetails?.grand_total || 0);
+
+  // Remaining amount
+  const remainingAmount = grandTotal - totalPaid;
+
+  // from here start family bokoking
+
+  useEffect(() => {
+    if (familyBookingId) {
+      fetch(
+        `http://127.0.0.1:8000/api/family-booking-grand-total/${familyBookingId}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.grand_total) {
+            setGrandTotalOfFamily(data.grand_total);
+          } else {
+            setGrandTotalOfFamily(0);
+          }
+        })
+        .catch(() => setGrandTotalOfFamily(0));
+    }
+  }, [familyBookingId]);
+
+  const updatePaymentInputOfFamily = (index, field, value) => {
+    const updated = [...paymentInputsOfFamily];
+    updated[index][field] = value;
+    setPaymentInputsOfFamily(updated);
+  };
+
+  const totalPaidOfFamily = paymentInputsOfFamily.reduce(
+    (sum, input) => sum + parseFloat(input.amount || 0),
+    0
+  );
+  const remainingOfFamily = Math.max(grandTotalOfFamily - totalPaidOfFamily, 0);
+
+  const submitFamilyBookingPayment = async () => {
+    const token = getCookie("access_token");
+
+    try {
+      const payload = {
+        family_booking_id: familyBookingId,
+        payments: paymentInputsOfFamily.map((input) => ({
+          payment_method: input.mode, // Map mode to match backend validation
+          amount: parseFloat(input.amount),
+        })),
+      };
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/family-booking-payments", // Replace with your real API route
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // If using JWT
+          },
+        }
+      );
+
+      console.log("Payment stored:", response.data);
+       alert("Payment saved successfully!");
+      setfamilyBookingId(0);
+      GenerateBillFunction();
+      setIsBillModalOpen(false); // close modal
+      setPaymentInputsOfFamily([]); // reset
+    } catch (error) {
+      console.error(
+        "Error saving payment:",
+        error.response?.data || error.message
+      );
+
+      // 🔴 Check if payment is already completed
+      if (
+        error.response &&
+        error.response.status === 409 &&
+        error.response.data?.message === "Payment already completed."
+      ) {
+        alert("✅ Payment has already been completed.");
+      } else if (
+        error.response &&
+        error.response.data?.error === "Payment exceeds the bill amount."
+      ) {
+        alert("❌ Payment exceeds the bill amount.");
+      } else {
+        alert("❌ Failed to save payment.");
+      }
+    }
+  };
+
+  //
+
   const handleAddTable = async () => {
     const token = getCookie("access_token");
 
     if (!newTableNo.trim()) return;
 
     try {
-      const res = await fetch("https://api.equi.co.in/api/kot-tables", {
+      const res = await fetch("http://127.0.0.1:8000/api/kot-tables", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,13 +315,13 @@ const Page = () => {
     }
   };
 
-  // Fetch data from API https://api.equi.co.in/api/product-and-service
+  // Fetch data from API http://127.0.0.1:8000/api/product-and-service
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      // .get(" https://api.equi.co.in/api/product-services",{headers: {
-      .get(" https://api.equi.co.in/api/product-and-service", {
+      // .get(" http://127.0.0.1:8000/api/product-services",{headers: {
+      .get(" http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -141,7 +343,7 @@ const Page = () => {
     const token = getCookie("access_token");
 
     try {
-      const res = await axios.get("https://api.equi.co.in/api/kot-tables", {
+      const res = await axios.get("http://127.0.0.1:8000/api/kot-tables", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -224,7 +426,7 @@ const Page = () => {
 
   //   try {
 
-  //     const response =  await axios.post('https://api.equi.co.in/api/kot-orders',payload,{
+  //     const response =  await axios.post('http://127.0.0.1:8000/api/kot-orders',payload,{
   //       headers:{
   //         "Content-Type":"application/json",
   //         Authorization: `Bearer ${token}`,
@@ -242,22 +444,21 @@ const Page = () => {
 
   const orderProducts = async () => {
     const token = getCookie("access_token");
-    console.log("product_id",selectedProduct)
+    console.log("product_id", selectedProduct);
     const payload = {
       table_no: selectedTable,
-     
+
       items: selectedProduct.map((item) => ({
         product_id: item.id,
         product_price: item.rate,
         quantity: item.quantity,
-        tax_rate:item.tax_rate
-
+        tax_rate: item.tax_rate,
       })),
     };
 
     try {
       const response = await axios.post(
-        "https://api.equi.co.in/api/kot-orders",
+        "http://127.0.0.1:8000/api/kot-orders",
         payload,
         {
           headers: {
@@ -374,6 +575,11 @@ const Page = () => {
 
     // Open the URL in a new tab
     window.open(printUrl, "_blank");
+  };
+
+  const closeParcelModal = () => {
+    setIsParcelBillModalOpen(false);
+    setParcelOrderId("");
   };
 
   return (
@@ -586,7 +792,7 @@ const Page = () => {
               >
                 <p className="text-center font-semibold mb-2">{item.name}</p>
                 <img
-                  src={`https://api.equi.co.in/${item.image}`}
+                  src={`http://127.0.0.1:8000/${item.image}`}
                   alt={item.name}
                   className="w-full h-32 object-cover rounded-lg mb-2"
                 />
@@ -598,7 +804,7 @@ const Page = () => {
           </div>
 
           {/* Selected Products */}
-          <div className="w-1/4 p-4 bg-gray-100 border-l border-gray-300 rounded-lg shadow-md">
+          {/* <div className="w-1/4 p-4 bg-gray-100 border-l border-gray-300 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">
               Selected Products
             </h2>
@@ -621,7 +827,7 @@ const Page = () => {
             >
               Order
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -662,25 +868,106 @@ const Page = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
           <div className="bg-white p-6 rounded-lg w-[90%] max-w-sm shadow-lg">
             <h2 className="text-lg font-semibold mb-4">
-              Enter family Booking no.
+              Enter Family Booking No.
             </h2>
+
             <input
               type="text"
-              placeholder="kot number"
+              placeholder="Booking number"
               value={familyBookingId}
               onChange={(e) => setfamilyBookingId(e.target.value)}
               className="w-full border border-gray-300 rounded-lg p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <div className="flex justify-end gap-2">
+
+            {grandTotalOfFamily > 0 && (
+              <>
+                <div className="text-center mb-2 font-medium">
+                  Bill Amount: ₹{grandTotalOfFamily.toFixed(2)}
+                </div>
+
+                <div className="text-center mb-4 text-sm text-gray-700">
+                  Remaining: ₹{remainingOfFamily.toFixed(2)}
+                </div>
+
+                {/* Payment Method Buttons */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {paymentOptionsOfFamily.map(
+                    (method) =>
+                      !paymentInputsOfFamily.some(
+                        (input) => input.mode === method
+                      ) && (
+                        <button
+                          key={method}
+                          onClick={() =>
+                            setPaymentInputsOfFamily((prev) => [
+                              ...prev,
+                              { mode: method, amount: "" },
+                            ])
+                          }
+                          className="bg-gray-200 hover:bg-blue-500 hover:text-white text-sm py-1 px-3 rounded"
+                        >
+                          {method}
+                        </button>
+                      )
+                  )}
+                </div>
+
+                {/* Payment Input Fields */}
+               {paymentInputsOfFamily.map((input, index) => {
+  const totalEntered = paymentInputsOfFamily.reduce(
+    (sum, item, i) => sum + (i === index ? 0 : parseFloat(item.amount || 0)),
+    0
+  );
+
+  const grandTotal = parseFloat(grandTotalOfFamily || 0);
+  const maxAllowed = Math.max(grandTotal - totalEntered, 0);
+
+  return (
+    <div key={index} className="flex items-center gap-2 mb-2">
+      <span className="w-1/2 font-medium">{input.mode}</span>
+      <input
+        type="number"
+        placeholder="Amount"
+        min={0}
+        max={maxAllowed}
+        value={input.amount}
+        onChange={(e) => {
+          const value = parseFloat(e.target.value) || 0;
+          if (value <= maxAllowed) {
+            updatePaymentInputOfFamily(index, "amount", value);
+          }
+        }}
+        className="w-1/2 border border-gray-300 rounded p-2 text-sm"
+      />
+    </div>
+  );
+})}
+
+              </>
+            )}
+
+            <div className="flex justify-end gap-2 mt-4">
               <button
-                onClick={() => setIsBillModalOpen(false)}
+                onClick={() => {
+                  setIsBillModalOpen(false);
+                  setfamilyBookingId(""); // reset booking id
+                  setGrandTotalOfFamily(0); // reset grand total
+                  setRemainingOfFamily(0); // reset remaining
+                  setPaymentInputsOfFamily([]); // reset payment inputs
+                }}
                 className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
               >
                 Cancel
               </button>
+
               <button
-                onClick={GenerateBillFunction}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                onClick={submitFamilyBookingPayment}
+                disabled={remainingOfFamily > 0}
+                className={`px-4 py-2 rounded text-white ${
+                  remainingOfFamily > 0
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700"
+                }`}
               >
                 Submit
               </button>
@@ -691,30 +978,121 @@ const Page = () => {
 
       {isaparcelBillModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-          <div className="bg-white p-6 rounded-lg w-[90%] max-w-sm shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">
-              Enter parcel order no.
+          <div className="bg-white p-6 rounded-xl w-[90%] max-w-md shadow-xl space-y-5">
+            <h2 className="text-xl font-bold text-gray-800">
+              Enter Parcel Order No.
             </h2>
+
             <input
               type="text"
-              placeholder="parcel order"
+              placeholder="Parcel Order ID"
               value={parcelOrderId}
               onChange={(e) => setParcelOrderId(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <div className="flex justify-end gap-2">
+
+            <button
+              onClick={handleParcelSearchOrder}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-md transition"
+            >
+              Search
+            </button>
+
+            {parcelOrderDetails && (
+              <div className="text-center text-green-700 font-semibold text-lg">
+                Bill Amount: ₹{parcelOrderDetails.grand_total}
+              </div>
+            )}
+
+            <div>
+              <h3 className="font-semibold text-gray-700 mb-2">
+                Select Payment Methods
+              </h3>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {paymentOptions.map(
+                  (method) =>
+                    !paymentInputs.some((input) => input.mode === method) && (
+                      <button
+                        key={method}
+                        onClick={() =>
+                          setPaymentInputs((prev) => [
+                            ...prev,
+                            { mode: method, amount: "" },
+                          ])
+                        }
+                        className="bg-gray-200 hover:bg-orange-500 hover:text-white text-sm font-medium py-1.5 px-3 rounded-md"
+                      >
+                        {method}
+                      </button>
+                    )
+                )}
+              </div>
+
+              {paymentInputs.map((input, index) => {
+                const totalEnteredAmount = paymentInputs.reduce(
+                  (sum, p, i) =>
+                    sum + (i === index ? 0 : parseFloat(p.amount || 0)),
+                  0
+                );
+
+                const grandTotal = parseFloat(
+                  parcelOrderDetails?.grand_total || 0
+                );
+                const maxAllowed = Math.max(grandTotal - totalEnteredAmount, 0);
+
+                return (
+                  <div key={index} className="flex items-center gap-2 mb-2">
+                    <span className="w-1/2 font-medium">{input.mode}</span>
+                    <input
+                      type="number"
+                      placeholder="Amount"
+                      min={0}
+                      max={maxAllowed}
+                      value={input.amount}
+                      onChange={(e) => {
+                        const value = parseFloat(e.target.value) || 0;
+                        if (value <= maxAllowed) {
+                          updatePaymentInput(index, "amount", value);
+                        }
+                      }}
+                      className="w-1/2 border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Remaining Amount Display */}
+            <div className="text-right font-semibold mt-3 text-sm text-blue-600">
+              Remaining: ₹{remainingAmount.toFixed(2)}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2">
               <button
-                onClick={() => setIsParcelBillModalOpen(false)}
-                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+                onClick={() => closeParcelModal()}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
               >
                 Cancel
               </button>
               <button
+                onClick={submitParcelPayment}
+                disabled={remainingAmount >0}
+                className={`px-5 py-2 rounded-md text-white ${
+                  remainingAmount >0
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700"
+                }`}
+              >
+                Submit
+              </button>
+
+              {/* <button
                 onClick={GenerateParcelBillFunction}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
               >
                 Submit
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

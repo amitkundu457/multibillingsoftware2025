@@ -97,7 +97,7 @@ const[ serviceList,setService]=useState([]);
     console.log("Submitting Data:", JSON.stringify(sanitizedData, null, 2));
 console.log("booking payload",sanitizedData)
     try {
-      const response = await fetch(" https://api.equi.co.in/api/bookings", {
+      const response = await fetch(" http://127.0.0.1:8000/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -152,7 +152,7 @@ console.log("booking payload",sanitizedData)
       }
   
       const response = await axios.get(
-        " https://api.equi.co.in/api/Saloon-service",
+        " http://127.0.0.1:8000/api/Saloon-service",
   
         {
           headers: { Authorization: `Bearer ${token}` },

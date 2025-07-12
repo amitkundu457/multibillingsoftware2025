@@ -9,10 +9,27 @@ const ParcelKOT = () => {
   const searchParams = useSearchParams();
   const parcel_order_id = searchParams.get("id");
 
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return decodeURIComponent(parts.pop().split(";").shift());
+    }
+    return null;
+  };
   useEffect(() => {
+        const token = getCookie("access_token");
+
     const fetchKOT = async () => {
       try {
-        const response = await fetch(`https://api.equi.co.in/api/parcel-kot/${parcel_order_id}`);
+        const response = await fetch(`http://127.0.0.1:8000/api/parcel-kot/${parcel_order_id}`,
+          {
+             headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+             }
+          }
+        );
         const data = await response.json();
 
         if (response.ok) {
@@ -150,61 +167,63 @@ const ParcelKOT = () => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-6 min-h-screen bg-gray-100 p-4">
-      {/* KOT Content - EXACTLY matches your original design */}
-      <div
-        ref={kotRef}
-        className="w-[260px] font-mono text-sm text-black bg-white p-3 shadow-md border border-gray-300"
-      >
-        {/* Header */}
-        <div className="text-center mb-2">
-          <div className="text-[14px] font-bold uppercase">My Restaurant</div>
-          <div className="w-8 h-8 rounded-full bg-green-600 text-white font-bold flex items-center justify-center mx-auto mt-1 mb-1">
-            {kotData.token}
-          </div>
-          <div className="text-[12px] font-bold">Kitchen Order Ticket</div>
-        </div>
-
-        {/* Order Info */}
-        <div className="text-[12px] leading-tight space-y-1">
-          <p><span className="font-semibold">Order ID:</span> {kotData.order_id}</p>
-          <p><span className="font-semibold">Customer:</span> {kotData.user.name}</p>
-          <p><span className="font-semibold">Date:</span> {kotData.date}</p>
-        </div>
-
-        {/* Items */}
-        <div className="border-t border-dashed border-black mt-2 pt-2">
-          <table className="w-full text-[12px]">
-            <thead>
-              <tr className="border-b border-black">
-                <th className="text-left pb-1">Item</th>
-                <th className="text-right pb-1">Qty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {kotData.items.map((item, idx) => (
-                <tr key={idx} className="border-b border-dashed border-black">
-                  <td className="py-1">{item.product_name}</td>
-                  <td className="py-1 text-right">{item.quantity}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Footer */}
-        <p className="text-center text-[11px] mt-3">Thank you! Please prepare promptly.</p>
+  {/* KOT Content */}
+  <div
+    ref={kotRef}
+    className="w-[260px] font-mono text-sm text-black bg-white p-3 shadow-md border border-gray-300 font-bold"
+  >
+    {/* Header */}
+    <div className="text-center mb-2">
+      <div className="text-[14px] uppercase">{kotData.clientuser.name}</div>
+      <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center mx-auto mt-1 mb-1">
+        {kotData.token}
       </div>
-
-      {/* Print Button */}
-      <div className="print:hidden">
-        <button
-          onClick={handlePrint}
-          className="bg-black text-white text-sm px-4 py-2 rounded hover:bg-gray-800"
-        >
-          Print KOT
-        </button>
-      </div>
+      <div className="text-[12px]">Kitchen Order Ticket</div>
     </div>
+
+    {/* Order Info */}
+    <div className="text-[12px] leading-tight space-y-1">
+            <p>Date: {kotData.date}</p>
+
+      <p>Order ID: {kotData.order_id}</p>
+      <p>Customer: {kotData.user.name}</p>
+    </div>
+
+    {/* Items */}
+    <div className="border-t border-dashed border-black mt-2 pt-2">
+      <table className="w-full text-[12px]">
+        <thead>
+          <tr className="border-b border-black">
+            <th className="text-left pb-1">Item</th>
+            <th className="text-right pb-1">Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+          {kotData.items.map((item, idx) => (
+            <tr key={idx} className="border-b border-dashed border-black">
+              <td className="py-1">{item.product_name}</td>
+              <td className="py-1 text-right">{item.quantity}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    {/* Footer */}
+    <p className="text-center text-[11px] mt-3">Thank you! Please Visit again.</p>
+  </div>
+
+  {/* Print Button */}
+  <div className="print:hidden">
+    <button
+      onClick={handlePrint}
+      className="bg-black text-white text-sm px-4 py-2 rounded hover:bg-gray-800 font-bold"
+    >
+      Print KOT
+    </button>
+  </div>
+</div>
+
   );
 };
 

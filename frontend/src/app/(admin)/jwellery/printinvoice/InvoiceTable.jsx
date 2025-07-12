@@ -198,7 +198,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
     }
     try {
       const response = await axios.get(
-        " https://api.equi.co.in/api/masterlogobill",
+        " http://127.0.0.1:8000/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -298,12 +298,15 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             {/* <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
               HSN
             </th> */}
-            <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
-              Net.Wt(g)
-            </th>
-            <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
+             <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
               G.Wt(g)
             </th>
+            <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
+              N.Wt(g)
+            </th>
+            {/* <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
+              G.Wt(g)
+            </th> */}
             <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
               Qty
             </th>
@@ -374,14 +377,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                 {invoice.hsn}
               </td> */}
 
-              {/* {" "} */}
-              <td className=" border-r text-xs border-gray-800 text-center ">
-                {invoice.net_weight}{" "}
-              </td>
-              {/* <td className=" border-r  text-xs border-gray-800 text-center ">
-                {invoice.gross_weight}
-              </td> */}
-              {Number(invoice.ad_wgt) > 0 ? (
+{Number(invoice.ad_wgt) > 0 ? (
                 <td className="border-r text-xs border-gray-800 text-center">
                   {Number(invoice.gross_weight)}
                   <span className=" text-[9px]">
@@ -394,6 +390,26 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                   {invoice.gross_weight}
                 </td>
               )}
+
+              <td className=" border-r text-xs border-gray-800 text-center ">
+                {invoice.net_weight}
+              </td>
+              {/* <td className=" border-r  text-xs border-gray-800 text-center ">
+                {invoice.gross_weight}
+              </td> */}
+              {/* {Number(invoice.ad_wgt) > 0 ? (
+                <td className="border-r text-xs border-gray-800 text-center">
+                  {Number(invoice.gross_weight)}
+                  <span className=" text-[9px]">
+                    {" "}
+                    (-Dep.Mat: {Number(invoice.ad_wgt)})
+                  </span>
+                </td>
+              ) : (
+                <td className="border-r text-xs border-gray-800 text-center">
+                  {invoice.gross_weight}
+                </td>
+              )} */}
               <td className=" border-r  text-xs border-gray-800 text-center ">
                 {invoice.qty}
               </td>
@@ -557,9 +573,11 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             <td className=" border-r border-gray-800 text-center p-2"></td>
           </tr>
           <tr>
+          <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
@@ -633,6 +651,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
+            {/* <td className=" border-r border-gray-800 text-center p-2"></td> */}
           </tr>
           <tr>
             <td className=" border-r border-gray-800 text-center p-2"></td>
@@ -649,6 +668,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
+            {/* <td className=" border-r border-gray-800 text-center p-2"></td> */}
           </tr>
 
           {/* huid */}
@@ -855,8 +875,8 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
               <td className=" border-r border-gray-800 text-center"></td>
               <td className=" border-r border-gray-800 text-center"></td>
               <td className=" border-r border-gray-800 text-center"></td>
-              <td className=" border-r border-gray-800 text-center"></td>
-              <td className=" border-r border-gray-800 text-center"></td>
+              <td className=" border-r border-gray-800 text-center"></td> */}
+              {/* <td className=" border-r border-gray-800 text-center"></td>
               <td className=" border-r border-gray-800 text-center"></td> */}
               <td
                 className="border-t border-b border-r text-xs border-gray-800  font-semibold"
@@ -864,6 +884,8 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
               >
                 {data?.additionDetail}
               </td>
+              <td className=" border-r border-gray-800 text-center"></td>
+              <td className=" border-r border-gray-800 text-center"></td>
               <td className="border-r border-gray-800 text-xs text-center font-semibold">
                 + ₹{data?.additionRS}
               </td>
@@ -1529,7 +1551,7 @@ export default InvoiceTable;
 //     }
 //     try {
 //       const response = await axios.get(
-//         " https://api.equi.co.in/api/masterlogobill",
+//         " http://127.0.0.1:8000/api/masterlogobill",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }

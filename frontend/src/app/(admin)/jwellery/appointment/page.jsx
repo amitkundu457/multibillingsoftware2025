@@ -37,7 +37,7 @@ const AppointmentPage = () => {
   // Fetch appointments from the API
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get(' https://api.equi.co.in/api/appointments');
+      const response = await axios.get(' http://127.0.0.1:8000/api/appointments');
       setAppointments(response.data.appointments);
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -47,7 +47,7 @@ const AppointmentPage = () => {
   // Create new appointment
   const handleCreateAppointment = async () => {
     try {
-      await axios.post(' https://api.equi.co.in/api/appointments', formData);
+      await axios.post(' http://127.0.0.1:8000/api/appointments', formData);
       fetchAppointments();
       closeModal();
     } catch (error) {
@@ -72,7 +72,7 @@ const AppointmentPage = () => {
   // Update an existing appointment
   const handleUpdateAppointment = async () => {
     try {
-      await axios.post(` https://api.equi.co.in/api/appointments/${editingAppointmentId}`, formData);
+      await axios.post(` http://127.0.0.1:8000/api/appointments/${editingAppointmentId}`, formData);
       fetchAppointments();
       closeModal();
     } catch (error) {
@@ -83,7 +83,7 @@ const AppointmentPage = () => {
   // Delete an appointment
   const handleDeleteAppointment = async (id) => {
     try {
-      await axios.delete(` https://api.equi.co.in/api/appointments/${id}`);
+      await axios.delete(` http://127.0.0.1:8000/api/appointments/${id}`);
       fetchAppointments();
     } catch (error) {
       console.error('Error deleting appointment:', error);

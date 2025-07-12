@@ -48,7 +48,7 @@ const Page = () => {
 
     try {
       const res = await axios.get(
-        "https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Product",
+        "http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -68,7 +68,7 @@ const Page = () => {
     }
 
     try {
-      const res = await axios.get("https://api.equi.co.in/api/stock-List", {
+      const res = await axios.get("http://127.0.0.1:8000/api/stock-List", {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Fetched stocks:", res);
@@ -92,7 +92,7 @@ const Page = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("https://api.equi.co.in/api/stock/add", manualForm, {
+      await axios.post("http://127.0.0.1:8000/api/stock/add", manualForm, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchStocks();
@@ -139,7 +139,7 @@ const Page = () => {
     setLoading(true);
   
     try {
-      const res = await axios.post("https://api.equi.co.in/api/bulk-upload-stock", formData, {
+      const res = await axios.post("http://127.0.0.1:8000/api/bulk-upload-stock", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -184,7 +184,7 @@ const Page = () => {
 
     if (!confirm("Are you sure to delete this stock record?")) return;
     try {
-      await axios.delete(`https://api.equi.co.in/api/delete-stock/${id}`, {
+      await axios.delete(`http://127.0.0.1:8000/api/delete-stock/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         },

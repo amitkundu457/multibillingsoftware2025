@@ -29,9 +29,11 @@ use App\Http\Controllers\Api\ParcelOrderController;
 use App\Http\Controllers\Api\ParcelTypeController;
 
 use App\Http\Controllers\Api\SmsCredentialController;
+use App\Http\Controllers\Api\FrontendContnetController;
 
 
-
+use App\Http\Controllers\Api\ParcelPaymentController;
+use App\Http\Controllers\Api\FamilyBookingPaymentController;
 
 
 
@@ -151,7 +153,7 @@ Route::post('/brands', [BrandController::class, 'store']); // Upload
 Route::post('/brands/update/{id}', [BrandController::class, 'update']); // Edit
 Route::delete('/brands/{id}', [BrandController::class, 'destroy']); // Delete
 
-
+Route::post('/family-booking-payments', [FamilyBookingPaymentController::class, 'store']);
 
 Route::get('/ecosystems', [EcosystemController::class, 'index']); // Display records
 Route::post('/ecosystems', [EcosystemController::class, 'store']); // Create a record
@@ -172,7 +174,7 @@ Route::resource('services', ServiceController::class);
 Route::post('/services/update/{id}', [ServiceController::class, 'update']);
 Route::resource('sliders', SliderController::class);
 Route::post('sliders/update/{id}', [SliderController::class, 'update']);
-
+Route::post('/frontend-settings', [FrontendContnetController::class, 'storeOrUpdate']);
 //user_information
 
 Route::get('/user-infos', [UserInfoController::class, 'index']);
@@ -838,6 +840,9 @@ Route::post('/packageupdate/{packageNo}', [PackageAssignController::class, 'upda
 Route::post('/newPakageStore', [PackageController::class, 'newPakageStore']);
 Route::get('/newPakageindex', [PackageController::class, 'newPakageindex']);
 Route::delete('/newpackagenamedestroy/{id}', [PackageController::class, 'newpackagenamedestroy']);
+
+//trabsle 
+Route::post('/translate', [PackageController::class, 'translate']);
 
 
 //pakage fetch all

@@ -52,10 +52,10 @@ const LogoUploadModal = ({ open, onClose, masterId, currentLogo }) => {
 
       if (masterId) {
         // Update the existing logo
-        response = await axios.put(` https://api.equi.co.in/api/masterlogobill/${masterId}`, formData, config);
+        response = await axios.put(` http://127.0.0.1:8000/api/masterlogobill/${masterId}`, formData, config);
       } else {
         // Create a new record with the logo
-        response = await axios.post(" https://api.equi.co.in/api/masterlogobill", formData, config);
+        response = await axios.post(" http://127.0.0.1:8000/api/masterlogobill", formData, config);
       }
 
       alert(response.data.message);
@@ -83,7 +83,7 @@ const LogoUploadModal = ({ open, onClose, masterId, currentLogo }) => {
       {error && <div style={{ color: "red" }}>{error}</div>}
       <div>
         {currentLogo && !logo && (
-          <img src={` https://api.equi.co.in/${currentLogo}`} alt="Current Logo" style={{ maxWidth: "100px" }} />
+          <img src={` http://127.0.0.1:8000/${currentLogo}`} alt="Current Logo" style={{ maxWidth: "100px" }} />
         )}
         <input type="file" onChange={handleFileChange} accept="image/*" />
       </div>

@@ -74,7 +74,7 @@ const Customers = () => {
         },
       };
   
-      const { data } = await axios.get(" https://api.equi.co.in/api/customers", config);
+      const { data } = await axios.get(" http://127.0.0.1:8000/api/customers", config);
       setCustomers(data);
     } catch (error) {
       notyf.error("Error fetching customers!");
@@ -102,11 +102,11 @@ const Customers = () => {
       };
   
       if (modalType === "create") {
-        await axios.post(" https://api.equi.co.in/api/customers", payload, config);
+        await axios.post(" http://127.0.0.1:8000/api/customers", payload, config);
         notyf.success("Customer created successfully!");
       } else if (modalType === "edit") {
         await axios.post(
-          ` https://api.equi.co.in/api/customers/${currentCustomer.id}`,
+          ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
@@ -126,7 +126,7 @@ const Customers = () => {
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this customer?")) {
       try {
-        await axios.delete(` https://api.equi.co.in/api/customers/${id}`);
+        await axios.delete(` http://127.0.0.1:8000/api/customers/${id}`);
         notyf.success("Customer deleted successfully!");
         fetchCustomers();
       } catch (error) {
@@ -163,7 +163,7 @@ const Customers = () => {
       return;
     }
     axios
-      .get(" https://api.equi.co.in/api/customerstype",
+      .get(" http://127.0.0.1:8000/api/customerstype",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -186,7 +186,7 @@ const Customers = () => {
       return;
     }
     axios
-      .get(" https://api.equi.co.in/api/customersubtypes",
+      .get(" http://127.0.0.1:8000/api/customersubtypes",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

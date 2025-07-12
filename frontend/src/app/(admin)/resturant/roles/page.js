@@ -11,7 +11,7 @@ const Roles = () => {
   // Fetch roles from backend
   const fetchRoles = async () => {
     try {
-      const response = await axios.get(" https://api.equi.co.in/api/roles");
+      const response = await axios.get(" http://127.0.0.1:8000/api/roles");
       setRoles(response.data);
     } catch (error) {
       console.error("Error fetching roles:", error);
@@ -23,7 +23,7 @@ const Roles = () => {
     if (!window.confirm("Are you sure you want to delete this role?")) return;
 
     try {
-      await axios.delete(` https://api.equi.co.in/api/roles/${roleId}`);
+      await axios.delete(` http://127.0.0.1:8000/api/roles/${roleId}`);
       alert("Role deleted successfully!");
       fetchRoles(); // Refresh roles after deletion
     } catch (error) {

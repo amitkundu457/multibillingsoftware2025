@@ -41,7 +41,7 @@
 //     const fetchData = async () => {
 //       try {
 //         const response = await axios.get(
-//           "https://api.equi.co.in/api/billingPurchase",
+//           "http://127.0.0.1:8000/api/billingPurchase",
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -317,7 +317,7 @@ const BillWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://api.equi.co.in/api/parcel-billReport",
+          "http://127.0.0.1:8000/api/parcel-billReport",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

@@ -82,7 +82,7 @@ function ParcelModal({ isOpen, onClose }) {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get("https://api.equi.co.in/api/product-and-service", {
+      .get("http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -116,15 +116,15 @@ function ParcelModal({ isOpen, onClose }) {
   const handleBooking = async () => {
     const token = getCookie("access_token");
 
-    if (!customerDetails?.name || selectedProduct.length === 0) {
-      alert("Please enter customer name and select at least one product.");
+    if (selectedProduct.length === 0) {
+      alert("Please enter  at least one product.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch("https://api.equi.co.in/api/parcel-order", {
+      const response = await fetch("http://127.0.0.1:8000/api/parcel-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +147,7 @@ function ParcelModal({ isOpen, onClose }) {
         setSelectedProduct([]);
         setCustomerDetails(null);
         const printConfirmation = window.confirm(
-          "Do you want to print the bill?"
+          "Do you want to print the kot?"
         );
         if (printConfirmation) {
           Printbill(result.parcel_order_id);
@@ -220,7 +220,7 @@ function ParcelModal({ isOpen, onClose }) {
     }
   };
 
-  const API_URL = "https://api.equi.co.in/api/parcel-types";
+  const API_URL = "http://127.0.0.1:8000/api/parcel-types";
 
   useEffect(() => {
     fetch(API_URL)
@@ -353,7 +353,7 @@ function ParcelModal({ isOpen, onClose }) {
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={`https://api.equi.co.in/${item.image}`}
+                  src={`http://127.0.0.1:8000/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />
