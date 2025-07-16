@@ -97,7 +97,7 @@ function Page() {
   const KarigarListName = async () => {
     if (!token) return;
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/karigar-list", {
+      const response = await axios.get("https://api.equi.co.in/api/karigar-list", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setkarigarList(response.data);
@@ -429,7 +429,7 @@ export default Page;
 //     if (!token) return;
 //     try {
 //       const response = await axios.get(
-//         "http://127.0.0.1:8000/api/karigar-list",
+//         "https://api.equi.co.in/api/karigar-list",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }

@@ -13,7 +13,7 @@ const Page = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/item-list-report");
+        const response = await axios.get(" https://api.equi.co.in/api/item-list-report");
         console.log("Fetched Data:", response.data);
         setItems(response.data);
       } catch (error) {
@@ -25,7 +25,7 @@ const Page = () => {
   }, []);
   const handleDownloadPDF = async (type) => {
     try {
-      const url = ` http://127.0.0.1:8000/api/item-list-forreport?format=${type}&start_date=${startDate}&end_date=${endDate}`;
+      const url = ` https://api.equi.co.in/api/item-list-forreport?format=${type}&start_date=${startDate}&end_date=${endDate}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -134,7 +134,7 @@ const Page = () => {
                 <td className="border px-4 py-2">{item.rate}</td>
                 {/* <td className="border px-4 py-2">
                   <img
-                    src={` http://127.0.0.1:8000/${item.image}`}
+                    src={` https://api.equi.co.in/${item.image}`}
                     alt={item.name}
                     className="w-16 h-16 object-cover rounded"
                   />

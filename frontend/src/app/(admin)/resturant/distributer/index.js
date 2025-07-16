@@ -135,8 +135,8 @@ const DistributorManager = () => {
 
     const url =
       modalType === "create"
-        ? " http://127.0.0.1:8000/api/distrubuters"
-        : ` http://127.0.0.1:8000/api/distrubuters/${currentDistributor.id}`;
+        ? " https://api.equi.co.in/api/distrubuters"
+        : ` https://api.equi.co.in/api/distrubuters/${currentDistributor.id}`;
 
     try {
       if (modalType === "create") {

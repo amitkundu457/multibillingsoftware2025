@@ -169,7 +169,7 @@ Route::delete('products/{id}', [ProductController::class, 'destroy']);
 
 Route::resource('tabs', TabsController::class);
 Route::post('tabs/update/{id}', [TabsController::class, 'update']);
-
+Route::get('/frontend-settings/{type}', [FrontendContnetController::class, 'show']);
 Route::resource('services', ServiceController::class);
 Route::post('/services/update/{id}', [ServiceController::class, 'update']);
 Route::resource('sliders', SliderController::class);
@@ -187,7 +187,8 @@ Route::get('/user-infos/{id}', [UserInfoController::class, 'show']);
 
 Route::get('distributer-assign', [UserInfoController::class, 'distributerassignclient']);
 
-
+Route::post('/razorpay/create-order', [CoinController::class, 'createRazorpayOrder']);
+Route::post('/razorpay/verify-payment', [CoinController::class, 'verifyRazorpayPayment']);
 
 Route::get('/distributors/search', [UserInfoController::class, 'distributersearch']);
 Route::post('/assign-client', [UserInfoController::class, 'assignClient']);

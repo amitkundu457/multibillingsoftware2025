@@ -58,7 +58,7 @@ const Customers = () => {
       };
 
       const { data } = await axios.get(
-        " http://127.0.0.1:8000/api/customers",
+        " https://api.equi.co.in/api/customers",
         config
       );
       setCustomers(data);
@@ -92,7 +92,7 @@ const Customers = () => {
 
       if (modalType === "create") {
         await axios.post(
-          " http://127.0.0.1:8000/api/customers",
+          " https://api.equi.co.in/api/customers",
           payload,
           config
         );
@@ -101,7 +101,7 @@ const Customers = () => {
       } else if (modalType === "edit") {
         console.log("updated.....", payload);
         await axios.post(
-          ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          ` https://api.equi.co.in/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
@@ -122,7 +122,7 @@ const Customers = () => {
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this customer?")) {
       try {
-        await axios.delete(` http://127.0.0.1:8000/api/customers/${id}`);
+        await axios.delete(` https://api.equi.co.in/api/customers/${id}`);
         toast.success("Customer deleted successfully!");
         fetchCustomers();
         console.log("customber deleted ");
@@ -181,7 +181,7 @@ const Customers = () => {
     console.log("customber token", token);
     axios
       .get(
-        "http://127.0.0.1:8000/api/customerstype",
+        "https://api.equi.co.in/api/customerstype",
 
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -201,7 +201,7 @@ const Customers = () => {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get(" http://127.0.0.1:8000/api/customersubtypes", {
+      .get(" https://api.equi.co.in/api/customersubtypes", {
         headers: { Authorization: `Bearer ${token}` },
       }) // Correct endpoint for sub-types
       .then((response) => {
@@ -349,7 +349,7 @@ export default Customers;
 //       const config = {
 //         headers: { Authorization: `Bearer ${token}` },
 //       };
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/customers", config);
+//       const { data } = await axios.get("https://api.equi.co.in/api/customers", config);
 //       setCustomers(data);
 //     } catch (error) {
 //       notyf.error("Error fetching customers!");
@@ -418,7 +418,7 @@ export default Customers;
 //   const handleDelete = async (id) => {
 //     if (confirm("Are you sure you want to delete this customer?")) {
 //       try {
-//         await axios.delete(`http://127.0.0.1:8000/api/customers/${id}`);
+//         await axios.delete(`https://api.equi.co.in/api/customers/${id}`);
 //         toast.success("Customer deleted successfully!");
 //         fetchCustomers();
 //       } catch (error) {
@@ -568,7 +568,7 @@ export default Customers;
 //         }
 //       };
 
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/customers", config);
+//       const { data } = await axios.get("https://api.equi.co.in/api/customers", config);
 
 //       if (language !== "en") {
 //         const translatedData = await translateCustomerData(data, language);
@@ -602,7 +602,7 @@ export default Customers;
 //     if (confirm(t("delete_confirm"))) {
 //       try {
 //         const token = getCookie("access_token");
-//         await axios.delete(`http://127.0.0.1:8000/api/customers/${id}`, {
+//         await axios.delete(`https://api.equi.co.in/api/customers/${id}`, {
 //           headers: { Authorization: `Bearer ${token}` }
 //         });
 //         toast.success(t("deleted"));

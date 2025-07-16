@@ -198,7 +198,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
     }
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/masterlogobill",
+        " https://api.equi.co.in/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -1551,7 +1551,7 @@ export default InvoiceTable;
 //     }
 //     try {
 //       const response = await axios.get(
-//         " http://127.0.0.1:8000/api/masterlogobill",
+//         " https://api.equi.co.in/api/masterlogobill",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }

@@ -15,7 +15,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get(`http://127.0.0.1:8000/api/frontend-settings/${type}`)
+//       .get(`https://api.equi.co.in/api/frontend-settings/${type}`)
 //       .then((res) => {
 //         setContent(res.data.description);
 //         setLoading(false);
@@ -87,10 +87,10 @@ export default function Home({ type = "About BrizIndia" }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
+ 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:8000/api/frontend-settings/${type}`)
+      .get(`https://api.equi.co.in/api/frontend-settings/${type}`)
       .then((res) => {
         setContent(res.data.description);
         setLoading(false);

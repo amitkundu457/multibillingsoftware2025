@@ -82,7 +82,7 @@ function ParcelModal({ isOpen, onClose }) {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get("http://127.0.0.1:8000/api/product-and-service", {
+      .get("https://api.equi.co.in/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -124,7 +124,7 @@ function ParcelModal({ isOpen, onClose }) {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/parcel-order", {
+      const response = await fetch("https://api.equi.co.in/api/parcel-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -220,7 +220,7 @@ function ParcelModal({ isOpen, onClose }) {
     }
   };
 
-  const API_URL = "http://127.0.0.1:8000/api/parcel-types";
+  const API_URL = "https://api.equi.co.in/api/parcel-types";
 
   useEffect(() => {
     fetch(API_URL)
@@ -353,7 +353,7 @@ function ParcelModal({ isOpen, onClose }) {
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={`http://127.0.0.1:8000/${item.image}`}
+                  src={`https://api.equi.co.in/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

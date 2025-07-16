@@ -183,8 +183,8 @@ export default function InvoicePage() {
     try {
       // setLoading(true);
 
-      // let url = `http://127.0.0.1:8000/api/product-service-saloon`;
-      let url = `http://127.0.0.1:8000/api/product-service-saloon`;
+      // let url = `https://api.equi.co.in/api/product-service-saloon`;
+      let url = `https://api.equi.co.in/api/product-service-saloon`;
 
       if (type !== "All") {
         url += `?pro_ser_type=${type}`;
@@ -263,7 +263,7 @@ export default function InvoicePage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/memberships/${id}`
+        ` https://api.equi.co.in/api/memberships/${id}`
       );
 
       console.log("memership  Response:", response.data);
@@ -284,7 +284,7 @@ export default function InvoicePage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/packagesassign/${id}`
+        `https://api.equi.co.in/api/packagesassign/${id}`
       );
 
       console.log("fetchPackageById:", response.data);
@@ -432,7 +432,7 @@ export default function InvoicePage() {
     }
 
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/type", {
+      const response = await axios.get(" https://api.equi.co.in/api/type", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCategory(response.data);
@@ -463,7 +463,7 @@ export default function InvoicePage() {
     if (customerDetails.id) {
       axios
         .get(
-          ` http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
+          ` https://api.equi.co.in/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -481,7 +481,7 @@ export default function InvoicePage() {
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+      const response = await axios.get("https://api.equi.co.in/api/barcodes", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -529,7 +529,7 @@ export default function InvoicePage() {
     try {
       // const response = await getProductService();
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/product-and-service",
+        "https://api.equi.co.in/api/product-and-service",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -544,7 +544,7 @@ export default function InvoicePage() {
   };
 
   // const fetchEmployees = async () => {
-  //   const res = await axios.get(" http://127.0.0.1:8000/api/employees");
+  //   const res = await axios.get(" https://api.equi.co.in/api/employees");
   //   setSalesperson(res.data.employees);
   // };
 
@@ -554,14 +554,14 @@ export default function InvoicePage() {
       notifyTokenMissing();
       return;
     }
-    const res = await axios.get(" http://127.0.0.1:8000/api/stylists", {
+    const res = await axios.get(" https://api.equi.co.in/api/stylists", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setStylist(res.data);
   };
 
   const fetchPrintStatus = async () => {
-    const res = await axios.get(" http://127.0.0.1:8000/api/print-status");
+    const res = await axios.get(" https://api.equi.co.in/api/print-status");
     console.log("API Response:", res.data); // Debugging
     setPrintStatus(Array.isArray(res.data) ? res.data : []); // Ensure it's an array
 
@@ -790,7 +790,7 @@ export default function InvoicePage() {
     console.log(payload);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/saloon-order", // Removed the space
+        "https://api.equi.co.in/api/saloon-order", // Removed the space
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -858,7 +858,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.put(
-        ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        ` https://api.equi.co.in/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -882,7 +882,7 @@ export default function InvoicePage() {
 
   //   try {
   //     const response = await axios.post(
-  //       ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+  //       ` https://api.equi.co.in/api/customer-redeem-point/${customerId}`,
   //       { customer_id: customerId, redeem_points: points } // Ensure both values are sent
   //     );
   //   } catch (error) {

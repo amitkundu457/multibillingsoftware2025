@@ -222,7 +222,7 @@
 //   const fetchBarCodeData = async () => {
 //     try {
 //       const token = getCookie("access_token");
-//       const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+//       const response = await axios.get("https://api.equi.co.in/api/barcodes", {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //         },
@@ -459,7 +459,7 @@
 //     console.log(payload);
 //     try {
 //       const response = await axios.post(
-//         " http://127.0.0.1:8000/api/order-slip",
+//         " https://api.equi.co.in/api/order-slip",
 //         payload,
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
@@ -1815,7 +1815,7 @@ export default function InvoicePage() {
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+      const response = await axios.get("https://api.equi.co.in/api/barcodes", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -1831,7 +1831,7 @@ export default function InvoicePage() {
   const OrderCounts = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get("http://127.0.0.1:8000/api/orderCount", {
+      const response = await axios.get("https://api.equi.co.in/api/orderCount", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -1864,7 +1864,7 @@ export default function InvoicePage() {
       console.log("token", token);
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/stockDetails",
+        "https://api.equi.co.in/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -1887,7 +1887,7 @@ export default function InvoicePage() {
 
   useEffect(() => {
     axios
-      .get(" http://127.0.0.1:8000/api/redeem-setup")
+      .get(" https://api.equi.co.in/api/redeem-setup")
       .then((response) => {
         if (response.data.length > 0) {
           setLoyaltyData(response.data[0]); // Assuming you only need the first item
@@ -1920,7 +1920,7 @@ export default function InvoicePage() {
   const handleSearchOrder = async () => {
     try {
       const data = await axios.get(
-        `http://127.0.0.1:8000/api/orders/search?billno=${orderSearchId}`
+        `https://api.equi.co.in/api/orders/search?billno=${orderSearchId}`
       );
       console.log("orderDetails", data);
       // setOrderDetails({
@@ -1940,7 +1940,7 @@ export default function InvoicePage() {
     if (customerDetails.id) {
       axios
         .get(
-          ` http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
+          ` https://api.equi.co.in/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -2003,7 +2003,7 @@ export default function InvoicePage() {
 
   const fetchEmployees = async () => {
     const token = getCookie("access_token");
-    const res = await axios.get(" http://127.0.0.1:8000/api/employees", {
+    const res = await axios.get(" https://api.equi.co.in/api/employees", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setSalesperson(res.data.employees);
@@ -2374,7 +2374,7 @@ export default function InvoicePage() {
     console.log("payload", payload);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/order-slip",
+        "https://api.equi.co.in/api/order-slip",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -2462,7 +2462,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.put(
-        ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        ` https://api.equi.co.in/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -2486,7 +2486,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.post(
-        ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        ` https://api.equi.co.in/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {

@@ -32,7 +32,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await axios.get("http://127.0.0.1:8000/api/cover/upload", {
+//       const response = await axios.get("https://api.equi.co.in/api/cover/upload", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 
@@ -64,7 +64,7 @@
 //         return;
 //       }
 //       try {
-//         const response = await axios.get("http://127.0.0.1:8000/api/masterlogobill", {
+//         const response = await axios.get("https://api.equi.co.in/api/masterlogobill", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 
@@ -222,7 +222,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
     }
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/cover/upload",
+        "https://api.equi.co.in/api/cover/upload",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -262,7 +262,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
       }
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/masterlogobill",
+          "https://api.equi.co.in/api/masterlogobill",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

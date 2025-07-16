@@ -12,7 +12,7 @@ export default function FrontendEditor({ type = 'Cancellation and Refund Policy'
   // Load content from API
   useEffect(() => {
   axios
-    .get(`http://127.0.0.1:8000/api/frontend-settings/${type}`)
+    .get(`https://api.equi.co.in/api/frontend-settings/${type}`)
     .then((res) => {
       setDescription(res.data.description || '');
       setLoading(false);
@@ -27,7 +27,7 @@ export default function FrontendEditor({ type = 'Cancellation and Refund Policy'
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://127.0.0.1:8000/api/frontend-settings`, {
+      await axios.post(`https://api.equi.co.in/api/frontend-settings`, {
         type,
         description,
       });
@@ -46,7 +46,7 @@ export default function FrontendEditor({ type = 'Cancellation and Refund Policy'
       className="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-10"
     >
       <h2 className="text-2xl font-bold mb-4 text-gray-700">
-        Edit "{type}" Content
+        Edit {type} Content
       </h2>
 
       <div className="bg-white border rounded mb-4">

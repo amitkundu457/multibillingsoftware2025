@@ -87,7 +87,7 @@ const Page = () => {
     if (!newTableNo.trim()) return;
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/kot-tables", {
+      const res = await fetch("https://api.equi.co.in/api/kot-tables", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,13 +113,13 @@ const Page = () => {
     }
   };
 
-  // Fetch data from API http://127.0.0.1:8000/api/product-and-service
+  // Fetch data from API https://api.equi.co.in/api/product-and-service
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      // .get(" http://127.0.0.1:8000/api/product-services",{headers: {
-      .get(" http://127.0.0.1:8000/api/product-and-service", {
+      // .get(" https://api.equi.co.in/api/product-services",{headers: {
+      .get(" https://api.equi.co.in/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -141,7 +141,7 @@ const Page = () => {
     const token = getCookie("access_token");
 
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/kot-tables", {
+      const res = await axios.get("https://api.equi.co.in/api/kot-tables", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -224,7 +224,7 @@ const Page = () => {
 
   //   try {
 
-  //     const response =  await axios.post('http://127.0.0.1:8000/api/kot-orders',payload,{
+  //     const response =  await axios.post('https://api.equi.co.in/api/kot-orders',payload,{
   //       headers:{
   //         "Content-Type":"application/json",
   //         Authorization: `Bearer ${token}`,
@@ -257,7 +257,7 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/kot-orders",
+        "https://api.equi.co.in/api/kot-orders",
         payload,
         {
           headers: {
@@ -586,7 +586,7 @@ const Page = () => {
               >
                 <p className="text-center font-semibold mb-2">{item.name}</p>
                 <img
-                  src={`http://127.0.0.1:8000/${item.image}`}
+                  src={`https://api.equi.co.in/${item.image}`}
                   alt={item.name}
                   className="w-full h-32 object-cover rounded-lg mb-2"
                 />

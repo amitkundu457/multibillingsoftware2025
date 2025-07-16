@@ -11,7 +11,7 @@ export default function Customer({ label }) {
   });
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/customer-visit-sources")
+    axios.get("https://api.equi.co.in/api/customer-visit-sources")
       .then((response) => {
         setCustomerCounts(response.data);
       })

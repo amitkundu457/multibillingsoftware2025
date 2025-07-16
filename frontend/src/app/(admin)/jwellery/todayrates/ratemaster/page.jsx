@@ -52,7 +52,7 @@ import { useRouter } from 'next/navigation';
     
         
         try {
-            const response = await axios.post(' http://127.0.0.1:8000/api/ratemaster', data,
+            const response = await axios.post(' https://api.equi.co.in/api/ratemaster', data,
                 {
                     headers: { Authorization: `Bearer ${token}` },
                   }

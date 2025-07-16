@@ -116,7 +116,7 @@ const BarcodeData = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDownloadSample = () => {
-    window.location.href = " http://127.0.0.1:8000/api/download-sample-barcode";
+    window.location.href = " https://api.equi.co.in/api/download-sample-barcode";
   };
 
   const handleFileChange = (e) => {
@@ -148,7 +148,7 @@ const BarcodeData = () => {
 
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/upload/barcode",
+        " https://api.equi.co.in/api/upload/barcode",
         formDataToSend,
         { headers }
       );
@@ -246,7 +246,7 @@ const BarcodeData = () => {
     const fetchNextBarcode = async () => {
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/next-barcode"
+          " https://api.equi.co.in/api/next-barcode"
         );
         setSuffix(response.data.next_barcode_number.toString()); // Ensure suffix is a string
       } catch (error) {
@@ -269,7 +269,7 @@ const BarcodeData = () => {
    
     try {
       const response = await axios.put(
-        ` http://127.0.0.1:8000/api/barcodes/${selectedRecord.id}`,
+        ` https://api.equi.co.in/api/barcodes/${selectedRecord.id}`,
         data
       );
       if (response.status === 200) {
@@ -294,7 +294,7 @@ const BarcodeData = () => {
     const headers = {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     };
-    const response = await axios.get("http://127.0.0.1:8000/api/purity",{ headers });
+    const response = await axios.get("https://api.equi.co.in/api/purity",{ headers });
     console.log("purity", response);
 
     setPurity(response.data);
@@ -307,7 +307,7 @@ const BarcodeData = () => {
     const headers = {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     };
-    const response = await axios.get("http://127.0.0.1:8000/api/countByAuthenticatedUser",{ headers });
+    const response = await axios.get("https://api.equi.co.in/api/countByAuthenticatedUser",{ headers });
     console.log("setBarcodeCount", response);
 
    setBarcodeCount(response?.data?.barcode_count);
@@ -323,7 +323,7 @@ const BarcodeData = () => {
     if (confirm("Are you sure you want to delete this record?")) {
       try {
         const response = await axios.get(
-          ` http://127.0.0.1:8000/api/barcodes-delete/${id}`
+          ` https://api.equi.co.in/api/barcodes-delete/${id}`
         );
         if (response.status === 200) {
           alert("Data deleted successfully!");

@@ -39,7 +39,7 @@
 
 //     const fetchData = async () => {
 //       try {
-//         const response = await axios.get("http://127.0.0.1:8000/api/cashreport", {
+//         const response = await axios.get("https://api.equi.co.in/api/cashreport", {
 //           headers: { authorization: `Bearer ${token}` },
 //         });
 //         setData(response.data);
@@ -262,7 +262,7 @@
 // }
 //     try {
 //       setLoading(true);
-//       const res = await axios.get("http://127.0.0.1:8000/api/paymenetreport", {
+//       const res = await axios.get("https://api.equi.co.in/api/paymenetreport", {
 //         params: { date },
 //         headers: {
 //           Authorization: `Bearer ${token}` // replace with dynamic token
@@ -355,7 +355,7 @@ const PaymentSummaryCards = () => {
         params.to_date = toDate;
       }
 
-      const res = await axios.get("http://127.0.0.1:8000/api/paymenetreport", {
+      const res = await axios.get("https://api.equi.co.in/api/paymenetreport", {
         params,
         headers: {
           Authorization: `Bearer ${token}`, // Replace dynamically

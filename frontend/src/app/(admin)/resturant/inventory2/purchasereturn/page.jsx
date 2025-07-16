@@ -52,7 +52,7 @@ export default function PurchaseReturn() {
     const fetchStockReturns = async () => {
       try {
         const response = await fetch(
-          " http://127.0.0.1:8000/api/purchase-returns/"
+          " https://api.equi.co.in/api/purchase-returns/"
         );
         const data = await response.json();
         setStockReturns(data);
@@ -75,7 +75,7 @@ if (!token) {
   return;
 }
     axios
-      .get(" http://127.0.0.1:8000/api/suppliers",
+      .get(" https://api.equi.co.in/api/suppliers",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -95,7 +95,7 @@ if (!token) {
     const fetchPayments = async () => {
       try {
         const response = await fetch(
-          " http://127.0.0.1:8000/api/purchase-returns/"
+          " https://api.equi.co.in/api/purchase-returns/"
         );
         const data = await response.json();
         // Sort payments by date (newest first)
@@ -126,7 +126,7 @@ if (!token) {
     console.log(formData);
 
     try {
-      const response = await fetch(" http://127.0.0.1:8000/api/demjg", {
+      const response = await fetch(" https://api.equi.co.in/api/demjg", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

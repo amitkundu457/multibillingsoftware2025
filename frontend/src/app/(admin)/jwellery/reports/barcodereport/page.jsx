@@ -32,7 +32,7 @@ const BarcodeReport = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/barcodeReport", {
+        const response = await axios.get("https://api.equi.co.in/api/barcodeReport", {
           headers: { authorization: `Bearer ${token}` },
         });
         setData(response.data || []);

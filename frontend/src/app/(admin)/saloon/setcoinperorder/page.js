@@ -14,7 +14,7 @@ const CoinSetting = () => {
 
   const fetchCoinsPerOrder = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/api/get-coins-per-order');
+      const res = await axios.get('https://api.equi.co.in/api/get-coins-per-order');
       setCoinsPerOrder(res.data.coins_per_order || '');
     } catch (error) {
       console.error('Failed to fetch:', error);
@@ -26,7 +26,7 @@ const CoinSetting = () => {
     setLoading(true);
     setMessage('');
     try {
-      await axios.post('http://127.0.0.1:8000/api/set-coins-per-order', {
+      await axios.post('https://api.equi.co.in/api/set-coins-per-order', {
         coins_per_order: parseInt(coinsPerOrder),
       });
       setMessage('Coins per order updated successfully!');

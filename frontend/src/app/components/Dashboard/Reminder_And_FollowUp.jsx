@@ -12,7 +12,7 @@ export default function Reminder_And_FollowUp({ label }) {
     async function fetchCounts() {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/reminder-follow-up/today-counts"
+          "https://api.equi.co.in/api/reminder-follow-up/today-counts"
         );
         setCount(response.data);
       } catch (error) {

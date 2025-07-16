@@ -87,7 +87,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       const token = getCookie("access_token");
 
     if (isOpen) {
-      fetch("http://127.0.0.1:8000/api/kot-tables",{ headers: {
+      fetch("https://api.equi.co.in/api/kot-tables",{ headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },})
@@ -99,7 +99,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get("http://127.0.0.1:8000/api/product-and-service", {
+      .get("https://api.equi.co.in/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -141,7 +141,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/book-family-tables",
+        "https://api.equi.co.in/api/book-family-tables",
         {
           method: "POST",
           headers: { "Content-Type": "application/json",
@@ -238,7 +238,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/book-family-tables",
+        "https://api.equi.co.in/api/book-family-tables",
         payload,
         {
           headers: {
@@ -296,7 +296,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     return;
   }
   try {
-   const response =  await axios.put('http://127.0.0.1:8000/api/update-family-tables',updatePayload);
+   const response =  await axios.put('https://api.equi.co.in/api/update-family-tables',updatePayload);
  
 
     setSelectedProduct([]);
@@ -470,7 +470,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={`http://127.0.0.1:8000/${item.image}`}
+                  src={`https://api.equi.co.in/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

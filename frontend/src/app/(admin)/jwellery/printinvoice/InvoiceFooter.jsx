@@ -182,7 +182,7 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
 
     try {
       const res = await axios.get(
-        "http://127.0.0.1:8000/api/terms-condition-invoice",
+        "https://api.equi.co.in/api/terms-condition-invoice",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

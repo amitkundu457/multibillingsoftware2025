@@ -30,9 +30,9 @@ const MembershipServiceRates = () => {
   const fetchData = async () => {
     try {
       const [serviceRatesRes, groupsRes, serviceGroupsRes] = await Promise.all([
-        axios.get("http://127.0.0.1:8000/api/membership-rate"),
-        axios.get("http://127.0.0.1:8000/api/membershipidtype"),
-        axios.get("http://127.0.0.1:8000/api/membership-groups"),
+        axios.get("https://api.equi.co.in/api/membership-rate"),
+        axios.get("https://api.equi.co.in/api/membershipidtype"),
+        axios.get("https://api.equi.co.in/api/membership-groups"),
       ]);
   
       setServiceRates(serviceRatesRes.data);
@@ -49,7 +49,7 @@ const MembershipServiceRates = () => {
   const fetchPlans = async (memberId) => {
     if (!memberId) return;
     try {
-      const response = await axios.get(` http://127.0.0.1:8000/api/membershipid/${memberId}`);
+      const response = await axios.get(` https://api.equi.co.in/api/membershipid/${memberId}`);
       setPlans(response.data);
     } catch (error) {
       console.error("Error fetching membership plans:", error);
@@ -123,9 +123,9 @@ const MembershipServiceRates = () => {
 
     try {
       if (editMode) {
-        await axios.post(` http://127.0.0.1:8000/api/membership-service-rate/${formData.id}`, formData);
+        await axios.post(` https://api.equi.co.in/api/membership-service-rate/${formData.id}`, formData);
       } else {
-        await axios.post(" http://127.0.0.1:8000/api/membership-rate", formData);
+        await axios.post(" https://api.equi.co.in/api/membership-rate", formData);
       }
       closeModal();
       fetchData();

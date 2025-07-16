@@ -33,7 +33,7 @@
 //       notifyTokenMissing();
 //       return;
 //     }
-//     const response = await axios.get("http://127.0.0.1:8000/api/packagename",
+//     const response = await axios.get("https://api.equi.co.in/api/packagename",
 //       {
 //                   headers: { Authorization: `Bearer ${token}` },
 //                 }
@@ -50,11 +50,11 @@
 //     }
 //     e.preventDefault();
 //     if (editingId) {
-//       await axios.post(`http://127.0.0.1:8000/api/packagename/${editingId}`, { name },
+//       await axios.post(`https://api.equi.co.in/api/packagename/${editingId}`, { name },
 
 //       );
 //     } else {
-//       await axios.post("http://127.0.0.1:8000/api/packagename", { name },
+//       await axios.post("https://api.equi.co.in/api/packagename", { name },
 
 // {
 //   headers: { Authorization: `Bearer ${token}` },
@@ -73,7 +73,7 @@
 
 //   const handleDelete = async (id) => {
 //     if (window.confirm("Are you sure you want to delete this subtype?")) {
-//       await axios.delete(`http://127.0.0.1:8000/api/package-category/${id}`);
+//       await axios.delete(`https://api.equi.co.in/api/package-category/${id}`);
 //       fetchSubtypes();
 //     }
 //   };
@@ -148,7 +148,7 @@
 //       notifyTokenMissing();
 //       return;
 //     }
-//     const response = await axios.get("http://127.0.0.1:8000/api/packagename", {
+//     const response = await axios.get("https://api.equi.co.in/api/packagename", {
 //       headers: { Authorization: `Bearer ${token}` },
 //     });
 //     setSubtypes(response.data);
@@ -171,14 +171,14 @@
 // console.log("Editing ID:", editingId);
 //     if (editingId) {
 //       await axios.post(
-//         `http://127.0.0.1:8000/api/packagename/${editingId}`,
+//         `https://api.equi.co.in/api/packagename/${editingId}`,
 //         payload,
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
 //       );
 //     } else {
-//       await axios.post("http://127.0.0.1:8000/api/packagename", payload, {
+//       await axios.post("https://api.equi.co.in/api/packagename", payload, {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //     }
@@ -199,7 +199,7 @@
 
 //   const handleDelete = async (id) => {
 //     if (window.confirm("Are you sure you want to delete this Package?")) {
-//       await axios.delete(`http://127.0.0.1:8000/api/packagename/${id}`);
+//       await axios.delete(`https://api.equi.co.in/api/packagename/${id}`);
 //       fetchSubtypes();
 //     }
 //   };
@@ -307,7 +307,7 @@
 //       return;
 //     }
 //     try {
-//       const res = await axios.get('http://127.0.0.1:8000/api/newPakageindex');
+//       const res = await axios.get('https://api.equi.co.in/api/newPakageindex');
 //       setPackages(res.data);
 //     } catch (error) {
 //       console.error('Failed to fetch packages:', error);
@@ -325,7 +325,7 @@
 //       return;
 //     }
 //     try {
-//       await axios.post('http://127.0.0.1:8000/api/newPakageStore', data,
+//       await axios.post('https://api.equi.co.in/api/newPakageStore', data,
 
 // {
 //   headers: { Authorization: `Bearer ${token}` },
@@ -343,7 +343,7 @@
 //   const handleDelete = async (id) => {
 //     if (!confirm('Are you sure you want to delete this package?')) return;
 //     try {
-//       await axios.delete(`http://127.0.0.1:8000/api/newpackagenamedestroy/${id}`);
+//       await axios.delete(`https://api.equi.co.in/api/newpackagenamedestroy/${id}`);
 //       fetchPackages();
 //     } catch (error) {
 //       console.error('Failed to delete package:', error);
@@ -463,7 +463,7 @@
 //       return;
 //     }
 //     try {
-//       const res = await axios.get('http://127.0.0.1:8000/api/newPakageindex');
+//       const res = await axios.get('https://api.equi.co.in/api/newPakageindex');
 //       setPackages(res.data);
 //     } catch (error) {
 //       console.error('Failed to fetch packages:', error);
@@ -484,7 +484,7 @@
 //     }
 //     console.log("data", data);
 //     try {
-//       await axios.post('http://127.0.0.1:8000/api/newPakageStore', data, {
+//       await axios.post('https://api.equi.co.in/api/newPakageStore', data, {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       reset();
@@ -499,7 +499,7 @@
 //   const handleDelete = async (id) => {
 //     if (!confirm('Are you sure you want to delete this package?')) return;
 //     try {
-//       await axios.delete(`http://127.0.0.1:8000/api/newpackagenamedestroy/${id}`);
+//       await axios.delete(`https://api.equi.co.in/api/newpackagenamedestroy/${id}`);
 //       fetchPackages();
 //     } catch (error) {
 //       console.error('Failed to delete package:', error);
@@ -515,7 +515,7 @@
 //       }
 //       try {
 //         const response = await axios.get(
-//           `http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product`,
+//           `https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Product`,
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -541,7 +541,7 @@
 //       }
 //       try {
 //         const response = await axios.get(
-//           `http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Service`,
+//           `https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Service`,
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -740,7 +740,7 @@ export default function PackageForm() {
 
   const fetchPackages = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/newPakageindex");
+      const res = await axios.get("https://api.equi.co.in/api/newPakageindex");
       setPackages(res.data);
     } catch (error) {
       console.error("Failed to fetch packages:", error);
@@ -755,7 +755,7 @@ export default function PackageForm() {
     }
     try {
       const res = await axios.get(
-        `http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product`,
+        `https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Product`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -774,7 +774,7 @@ export default function PackageForm() {
     }
     try {
       const res = await axios.get(
-        `http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Service`,
+        `https://api.equi.co.in/api/product-service-saloon?pro_ser_type=Service`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -848,7 +848,7 @@ export default function PackageForm() {
     console.log("services", data.service_items);
     console.log("data", data);
     try {
-      await axios.post("http://127.0.0.1:8000/api/newPakageStore", data, {
+      await axios.post("https://api.equi.co.in/api/newPakageStore", data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       reset();
@@ -864,7 +864,7 @@ export default function PackageForm() {
     if (!confirm("Are you sure you want to delete this package?")) return;
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/api/newpackagenamedestroy/${id}`
+        `https://api.equi.co.in/api/newpackagenamedestroy/${id}`
       );
       fetchPackages();
     } catch (error) {

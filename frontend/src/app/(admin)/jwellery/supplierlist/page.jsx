@@ -50,7 +50,7 @@ const SupplierPage = () => {
   //     return;
   //   }
   //   try {
-  //     const response = await fetch(" http://127.0.0.1:8000/api/suppliers",
+  //     const response = await fetch(" https://api.equi.co.in/api/suppliers",
   //       {
   //         headers: { Authorization: `Bearer ${token}` },
   //       }
@@ -69,7 +69,7 @@ const SupplierPage = () => {
       return;
     }
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/suppliers", {
+      const response = await fetch("https://api.equi.co.in/api/suppliers", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await response.json();
@@ -96,7 +96,7 @@ const SupplierPage = () => {
   //     notifyTokenMissing();
   //     return;
   //   }
-  //     const response = await fetch(" http://127.0.0.1:8000/api/suppliers", {
+  //     const response = await fetch(" https://api.equi.co.in/api/suppliers", {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
@@ -130,7 +130,7 @@ const SupplierPage = () => {
         return;
       }
   
-      const response = await fetch("http://127.0.0.1:8000/api/suppliers", {
+      const response = await fetch("https://api.equi.co.in/api/suppliers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +161,7 @@ const SupplierPage = () => {
 
     try {
       const response = await fetch(
-        ` http://127.0.0.1:8000/api/suppliers/${currentSupplierId}`,
+        ` https://api.equi.co.in/api/suppliers/${currentSupplierId}`,
         {
           method: "PUT",
           headers: {
@@ -185,7 +185,7 @@ const SupplierPage = () => {
   // Delete supplier
   const deleteSupplier = async (id) => {
     try {
-      await fetch(` http://127.0.0.1:8000/api/suppliers/${id}`, {
+      await fetch(` https://api.equi.co.in/api/suppliers/${id}`, {
         method: "DELETE",
       });
       setSuppliers(suppliers.filter((supplier) => supplier.id !== id));

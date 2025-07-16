@@ -54,7 +54,7 @@ console.log("seller",sellerState);
     if (!cutomerid) return;
 
     axios
-      .get(`http://127.0.0.1:8000/api/customers/get/${cutomerid}`, {
+      .get(`https://api.equi.co.in/api/customers/get/${cutomerid}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -74,7 +74,7 @@ console.log("seller",sellerState);
 
     if (booking_id) {
       const res = fetch(
-        `http://127.0.0.1:8000/api/family-booking/${booking_id}/generate-bill`,
+        `https://api.equi.co.in/api/family-booking/${booking_id}/generate-bill`,
         {
           method: "POST",
           headers: {

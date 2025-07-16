@@ -11,7 +11,7 @@
 
 //     // Fetch shop data from API
 //     useEffect(() => {
-//         axios.get(" http://127.0.0.1:8000/api/user-infos")
+//         axios.get(" https://api.equi.co.in/api/user-infos")
 //             .then((response) => {
 //                 console.log("API Response:", response.data);
 //                 setShops(response.data.data); // Ensure correct field is extracted
@@ -94,7 +94,7 @@ export default function ShopList() {
 
     // Fetch shop data from API
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/user-infos")
+        axios.get("https://api.equi.co.in/api/user-infos")
             .then((response) => {
                 console.log("API Response:", response.data);
                 setShops(response.data.data);
@@ -150,8 +150,8 @@ export default function ShopList() {
                             {showQRCodes && (
                                 <div className="mt-2">
                                     <QRCode
-                                    //http://127.0.0.1:8000/review/?slug=niraj-roy-urx2mw
-                                        value={`http://127.0.0.1:8000/review/?slug=${shop.slug}`}
+                                    //https://api.equi.co.in/review/?slug=niraj-roy-urx2mw
+                                        value={`https://api.equi.co.in/review/?slug=${shop.slug}`}
                                         size={128}
                                     />
                                 </div>

@@ -3,7 +3,7 @@ import InvoiceClient from '../invoiceClient'
 
 export async function generateStaticParams() {
   try {
-    const response = await axios.get(" http://127.0.0.1:8000/api/invoice-ids");
+    const response = await axios.get(" https://api.equi.co.in/api/invoice-ids");
     const ids = response.data;
 
     return ids.map((id) => ({ id: id.toString() }));

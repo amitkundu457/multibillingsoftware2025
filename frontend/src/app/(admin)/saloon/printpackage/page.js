@@ -76,7 +76,7 @@ const PackageReceipt = () => {
     const fetchPackageDetails = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/printpackage/${id}`
+          `https://api.equi.co.in/api/printpackage/${id}`
         );
         setItemsList(response?.data?.items);
         setCustomerData(response?.data?.customer_info);
@@ -95,7 +95,7 @@ const PackageReceipt = () => {
         }
 
         const clientResponse = await axios.get(
-          `http://127.0.0.1:8000/api/auth/agme`,
+          `https://api.equi.co.in/api/auth/agme`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

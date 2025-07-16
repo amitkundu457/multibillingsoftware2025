@@ -11,7 +11,7 @@ export default function ShopList() {
 
     // Fetch shop data from API
     useEffect(() => {
-        axios.get(" http://127.0.0.1:8000/api/user-infos")
+        axios.get(" https://api.equi.co.in/api/user-infos")
             .then((response) => {
                 console.log("API Response:", response.data);
                 setShops(response.data.data); // Ensure correct field is extracted

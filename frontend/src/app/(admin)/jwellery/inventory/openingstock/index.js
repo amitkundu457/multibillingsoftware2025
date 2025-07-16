@@ -79,7 +79,7 @@ const handleDownloadProductServices = () => {
 
   const handleDeleteAllStock = async () => {
     const response = await axios.delete(
-      " http://127.0.0.1:8000/api/delete-all-stock"
+      " https://api.equi.co.in/api/delete-all-stock"
     );
     if (response.status === 200) {
       alert(response.data.message); // Show success message
@@ -91,7 +91,7 @@ const handleDownloadProductServices = () => {
   };
 
   const handleDownloadSample = () => {
-    window.location.href = " http://127.0.0.1:8000/api/download-sample-stock";
+    window.location.href = " https://api.equi.co.in/api/download-sample-stock";
   };
 
   const handleFileChange = (e) => {
@@ -113,7 +113,7 @@ const handleDownloadProductServices = () => {
 
   //   try {
   //     const response = await axios.post(
-  //       " http://127.0.0.1:8000/api/upload/stock",
+  //       " https://api.equi.co.in/api/upload/stock",
   //       formData,
   //       {
   //         headers: { Authorization: `Bearer ${token}` },
@@ -143,7 +143,7 @@ const handleDownloadProductServices = () => {
   
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/upload/stock",
+        "https://api.equi.co.in/api/upload/stock",
         formData,
         {
           headers: {

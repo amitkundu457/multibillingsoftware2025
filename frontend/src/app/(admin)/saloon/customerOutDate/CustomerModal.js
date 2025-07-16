@@ -72,11 +72,11 @@ const CustomerModal = ({
       };
 
       if (modalType === "create") {
-        await axios.post(" http://127.0.0.1:8000/api/customers", payload, config);
+        await axios.post(" https://api.equi.co.in/api/customers", payload, config);
         notyf.success("Customer created successfully!");
       } else if (modalType === "edit") {
         await axios.post(
-          ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          ` https://api.equi.co.in/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
