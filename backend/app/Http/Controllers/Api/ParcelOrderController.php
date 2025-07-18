@@ -29,12 +29,14 @@ class ParcelOrderController extends Controller
         'items.*.product_id' => 'required|exists:product_services,id',
         'items.*.quantity' => 'required|integer|min:1',
         'items.*.product_price' => 'required|numeric|min:0',
-        'items.*.tax_rate' => 'required|numeric|min:0',
+        'parcelType_id'=> 'required',
+        'items.*.tax_rate' => 'nullable|numeric|min:0',
     ]);
 
     $order = ParcelOrder::create([
         'customer_id' => $request->customer_id,
           'created_by' => $customer->id,
+          'parcelType_id'=>$request->parcelType_id,
 
         'status' => 'pending',
     ]);
@@ -133,7 +135,9 @@ public function generateBill($orderId)
             'message' => 'Bill already generated.',
             'bill' => $order->bill,
             'customer' => $order->customer,
-            'user' => optional($order->customer->user)->only(['id', 'name', 'email']) ?? 'Guest',
+'user' => $order->customer && $order->customer->user
+    ? $order->customer->user->only(['id', 'name', 'email'])
+    : ['id' => null, 'name' => 'Guest', 'email' => null],
             'created_by' => $order->createdBy ? [
                 'id' => $order->createdBy->id,
                 'name' => $order->createdBy->name,

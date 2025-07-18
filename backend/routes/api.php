@@ -154,6 +154,10 @@ Route::post('/brands/update/{id}', [BrandController::class, 'update']); // Edit
 Route::delete('/brands/{id}', [BrandController::class, 'destroy']); // Delete
 
 Route::post('/family-booking-payments', [FamilyBookingPaymentController::class, 'store']);
+Route::get('/family-booking-grand-total/{id}', [familyBookingController::class, 'getFamilyBookingGrandTotal']);
+Route::get('/parcel-order/{orderId}/grand-total', [ParcelOrderController::class, 'getGrandTotal']);
+
+
 
 Route::get('/ecosystems', [EcosystemController::class, 'index']); // Display records
 Route::post('/ecosystems', [EcosystemController::class, 'store']); // Create a record
@@ -455,7 +459,7 @@ Route::delete('purchase/{id}', [PurchaseController::class, 'destroy']);
 Route::delete('/delete-all-purchase', [PurchaseController::class, 'deleteAllPurchase']);
 
 
-//saloon-purchase 
+//saloon-purchase
 Route::post('/saloon-purchase',[PurchaseController::class,'Saloonstore']);
 
 //bulk upload purchase
@@ -495,7 +499,7 @@ Route::post('master-update', [MasterSettingController::class, 'update']);
 Route::post('masterlogobill', [MastersBillController::class, 'store']);
 
 Route::put('/masterlogobill/update/{id}', [MastersBillController::class, 'update']);
-//cover image 
+//cover image
 Route::post('/cover/upload', [MastersBillController::class,'storeCover']);
 Route::get('/cover/upload', [MastersBillController::class,'getCover']);
 
@@ -548,7 +552,7 @@ Route::get('/terms-condition', [TermsAndConditionController::class, 'index']);
 Route::post('/terms-condition', [TermsAndConditionController::class, 'store']);
 Route::put('/terms-condition/{id}', [TermsAndConditionController::class, 'update']);
 Route::delete('/terms-condition/{id}', [TermsAndConditionController::class, 'destroy']);
-//tern and condition for invoice 
+//tern and condition for invoice
 Route::post('/terms-condition-invoice' ,[TermsAndConditionController::class,'storeInvoice']);
 Route::put('/terms-condition-invoice/{id}' ,[TermsAndConditionController::class,'updateTernsCondition']);
 Route::get('/terms-condition-invoice',[TermsAndConditionController::class,'getInvoicecondition']);
@@ -837,12 +841,12 @@ Route::get('/packagesassn/{packageNo}', [PackageAssignController::class, 'getPac
 Route::post('/packageupdate/{packageNo}', [PackageAssignController::class, 'update']);
 
 
-// newpakage route 
+// newpakage route
 Route::post('/newPakageStore', [PackageController::class, 'newPakageStore']);
 Route::get('/newPakageindex', [PackageController::class, 'newPakageindex']);
 Route::delete('/newpackagenamedestroy/{id}', [PackageController::class, 'newpackagenamedestroy']);
 
-//trabsle 
+//trabsle
 Route::post('/translate', [PackageController::class, 'translate']);
 
 
@@ -854,7 +858,7 @@ Route::get('/packageGetAllByPhone/{id}', [PackageController::class, 'packageGetA
 //print package
 Route::get('/printpackage/{id}', [PackageController::class, 'getPackageDetailsByAssignId']);
 
-//saloon report 
+//saloon report
 Route::get('/package-report', [PackageController::class, 'getCustomerPackages']);
 
 
@@ -915,8 +919,9 @@ Route::delete('/kot-tables/{id}', [KotTableController::class, 'destroy']);
 Route::post('/parcel-order', [ParcelOrderController::class, 'storeParcelOrder']);
 Route::post('/parcel-order/{id}/generate-bill', [ParcelOrderController::class, 'generateBill']);
 Route::get('/parcel-kot/{parcel_order_id}', [ParcelOrderController::class, 'getParcelKOT']);
+Route::post('/parcel-payments', [ParcelPaymentController::class, 'store']);
 
-//parcel report 
+//parcel report
 Route::get('/parcel-kot-report',[ParcelOrderController::class,'ParcelKOTReport']);
 Route::get('/parcel-bills',[ParcelOrderController::class,'generateBillReport']);
 Route::get('/parcel-billReport',[ParcelOrderController::class,'ParcelBillreportPrint']);
