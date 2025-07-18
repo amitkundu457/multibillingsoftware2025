@@ -1,5 +1,3 @@
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -198,7 +196,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
     }
     try {
       const response = await axios.get(
-        " https://api.equi.co.in/api/masterlogobill",
+        " http://127.0.0.1:8000/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -298,7 +296,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             {/* <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
               HSN
             </th> */}
-             <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
+            <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
               G.Wt(g)
             </th>
             <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
@@ -329,8 +327,8 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             {/* <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
               Mkg Chg (%)/Rs
             </th> */}
-             <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
-              Gst on mkg 
+            <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
+              Gst on Metal
             </th>
             <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
               Mkg Cost(₹)
@@ -377,7 +375,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                 {invoice.hsn}
               </td> */}
 
-{Number(invoice.ad_wgt) > 0 ? (
+              {Number(invoice.ad_wgt) > 0 ? (
                 <td className="border-r text-xs border-gray-800 text-center">
                   {Number(invoice.gross_weight)}
                   <span className=" text-[9px]">
@@ -413,7 +411,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
               <td className=" border-r  text-xs border-gray-800 text-center ">
                 {invoice.qty}
               </td>
-              {invoice.net_weight > 0 ? (
+              {/* {invoice.net_weight > 0 ? (
                 <td className=" border-r  text-xs border-gray-800 text-center ">
                   {invoice.rate}
                 </td>
@@ -421,10 +419,37 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                 <td className=" border-r text-xs border-gray-800 text-center ">
                   0
                 </td>
-              )}
-              <td className=" border-r font-medium text-[13px] border-gray-800 text-center p-2">
+              )} */}
+{Number(invoice.fixed_amt) > 0 ? (
+  <td className="border-r text-xs border-gray-800 text-center">
+    {parseFloat(invoice.fixed_amt)}<span className=" text-[7px]">fxAmt </span>
+  </td>
+) : invoice.net_weight > 0 ? (
+  <td className="border-r text-xs border-gray-800 text-center">
+    {parseFloat(invoice.rate).toFixed(2)}
+  </td>
+) : (
+  <td className="border-r text-xs border-gray-800 text-center">
+    0.00
+  </td>
+)}
+
+
+{Number(invoice.fixed_amt) > 0 ? (
+  <td className="border-r text-xs border-gray-800 text-center">
+    {(Number(invoice.fixed_amt) * Number(invoice.qty))}
+  </td>
+) : (
+  <td className="border-r font-medium text-[13px] border-gray-800 text-center p-2">
+    {(Number(invoice.rate) * Number(invoice.net_weight)).toFixed(2)}
+  </td>
+)}
+
+
+
+              {/* <td className=" border-r font-medium text-[13px] border-gray-800 text-center p-2">
                 {(Number(invoice.rate) * Number(invoice.net_weight)).toFixed(2)}
-              </td>
+              </td> */}
               <td className=" border-r  text-xs border-gray-800 text-center ">
                 {invoice.diamondDetails}
               </td>
@@ -446,13 +471,11 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                 )}
               </td> */}
               <td className="border-r text-xs border-gray-800 text-center">
-  {invoice?.gstOnMaking}
-</td>
-              
-               <td className=" border-r  text-xs border-gray-800 text-center ">
-               {invoice?.mkg_chg_RS_P == null
-                      ? "0"
-                      : invoice?.mkg_chg_RS_P}
+                {invoice?.gstOnGold}
+              </td>
+
+              <td className=" border-r  text-xs border-gray-800 text-center ">
+                {invoice?.mkg_chg_RS_P == null ? "0" : invoice?.mkg_chg_RS_P}
               </td>
               {/* <td className=" border-r text-xs border-gray-800 text-center ">
                 {Number(invoice?.otherCharge) || 0 +invoice.hallmarkCharge || + invoice?.wastageCharge ||0}
@@ -477,14 +500,11 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                 )}
               </td> */}
               <td className="border-r  text-xs border-gray-800 text-center ">
-              
-                  <span>
-                    {invoice?.making_dsc != null
-                      ? `${invoice.making_dsc}%`
-                      : "0%"}
-                    
-                  </span>
-              
+                <span>
+                  {invoice?.making_dsc != null
+                    ? `${invoice.making_dsc}%`
+                    : "0%"}
+                </span>
               </td>
               <td className=" border-r text-xs border-gray-800 text-center ">
                 {invoice.pro_total}
@@ -573,7 +593,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             <td className=" border-r border-gray-800 text-center p-2"></td>
           </tr>
           <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800  text-center p-2"></td>
@@ -1181,10 +1201,22 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                   <td className="border border-gray-300 px-1 py-2">
                     {invoice.hsn}
                   </td>
-                  <td className="border border-gray-300 px-1 py-2">
-                    {/* {invoice.pro_total} */}
+                  {Number(invoice.fixed_amt) > 0 ? (
+  <td className="border border-gray-300 px-1 py-2">
+    {parseFloat(invoice.pro_total).toFixed(2)}
+  </td>
+) : (
+  <td className="border border-gray-300 px-1 py-2">
+     {invoice?.rate * invoice?.net_weight * invoice?.qty}
+  </td>
+)}
+
+
+
+                  {/* <td className="border border-gray-300 px-1 py-2">
+pro_total
                     {invoice?.rate * invoice?.net_weight * invoice?.qty}
-                  </td>
+                  </td> */}
                   <td className="border border-gray-300 px-1 py-2">
                     {(invoice.tax_rate / 2).toFixed(2)}%
                   </td>
@@ -1330,10 +1362,27 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                   <td className="border border-gray-300 px-1 py-2">
                     {invoice.hsn}
                   </td>
-                  <td className="border border-gray-300 px-1 py-2">
-                    {/* {invoice.pro_total} */}
+
+                  {Number(invoice.fixed_amt) > 0 ? (
+  <td className="border border-gray-300 px-1 py-2">
+    {parseFloat(invoice.pro_total).toFixed(2)}
+  </td>
+) : (
+  <td className="border border-gray-300 px-1 py-2">
+      {invoice?.rate * invoice?.net_weight * invoice?.qty}
+  </td>
+)}
+
+
+
+
+
+
+
+                   {/* <td className="border border-gray-300 px-1 py-2">
+                   
                     {invoice?.rate * invoice?.net_weight * invoice?.qty}
-                  </td>
+                   </td> */}
                   <td colSpan="2" className="border border-gray-300 px-1 py-2">
                     {invoice?.tax_rate}%
                   </td>
@@ -1420,9 +1469,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
 
 export default InvoiceTable;
 
-
-
-// editing 
+// editing
 // "use client";
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
@@ -1551,7 +1598,7 @@ export default InvoiceTable;
 //     }
 //     try {
 //       const response = await axios.get(
-//         " https://api.equi.co.in/api/masterlogobill",
+//         " http://127.0.0.1:8000/api/masterlogobill",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }

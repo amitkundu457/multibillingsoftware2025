@@ -16,7 +16,7 @@ export const Model = ({ onClose, onSave, editData }) => {
 const featchcustomber=async()=>{
     const token = getCookie("access_token");
 
-  const newdata=await axios.get("https://api.equi.co.in/api/customerstype",
+  const newdata=await axios.get("http://127.0.0.1:8000/api/customerstype",
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -57,7 +57,7 @@ const featchcustomber=async()=>{
 
     const apiCall = editData
       ? axios.post(
-          ` https://api.equi.co.in/api/customersubtypes/${editData.id}`,
+          ` http://127.0.0.1:8000/api/customersubtypes/${editData.id}`,
           inputData,
           {
             headers: {
@@ -66,7 +66,7 @@ const featchcustomber=async()=>{
             },
           }
         )
-      : axios.post(" https://api.equi.co.in/api/customersubtypes", inputData, {
+      : axios.post(" http://127.0.0.1:8000/api/customersubtypes", inputData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -179,7 +179,7 @@ const Page = () => {
       return;
     }
     axios
-      .get(" https://api.equi.co.in/api/customersubtypes",
+      .get(" http://127.0.0.1:8000/api/customersubtypes",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -204,7 +204,7 @@ const Page = () => {
       .split("=")[1];
 
     axios
-      .delete(` https://api.equi.co.in/api/customersubtypes/${id}`, {
+      .delete(` http://127.0.0.1:8000/api/customersubtypes/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -41,7 +41,7 @@ export default function KarigarEntry() {
 
   const fetchKarigars = async () => {
     try {
-      const response = await axios.get("https://api.equi.co.in/api/karigar-list", {
+      const response = await axios.get("http://127.0.0.1:8000/api/karigar-list", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setKarigars(response.data);
@@ -56,7 +56,7 @@ export default function KarigarEntry() {
     if (editingKarigar) {
       try {
         const response = await axios.post(
-          `https://api.equi.co.in/api/karigar-list/${editingKarigar.id}`,
+          `http://127.0.0.1:8000/api/karigar-list/${editingKarigar.id}`,
           data,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -75,7 +75,7 @@ export default function KarigarEntry() {
       }
     } else {
       try {
-        const response = await axios.post("https://api.equi.co.in/api/karigar-list", data, {
+        const response = await axios.post("http://127.0.0.1:8000/api/karigar-list", data, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setKarigars((prev) => [...prev, response.data]);
@@ -97,7 +97,7 @@ export default function KarigarEntry() {
   const handleDelete = async (id) => {
     if (!token) return;
     try {
-      const response = await axios.delete(`https://api.equi.co.in/api/karigar-list/${id}`, {
+      const response = await axios.delete(`http://127.0.0.1:8000/api/karigar-list/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status === 200) {

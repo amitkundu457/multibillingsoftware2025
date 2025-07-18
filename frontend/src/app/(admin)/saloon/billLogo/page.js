@@ -42,7 +42,7 @@ useEffect(() => {
   }
   const fetchLogo = async () => {
     try {
-      const response = await axios.get(" https://api.equi.co.in/api/masterlogobill",
+      const response = await axios.get(" http://127.0.0.1:8000/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -88,7 +88,7 @@ useEffect(() => {
       console.log("Uploading file:", fileToUpload);
   
       const response = await axios.post(
-        " https://api.equi.co.in/api/masterlogobill", 
+        " http://127.0.0.1:8000/api/masterlogobill", 
         formData, 
         { headers: { "Content-Type": "multipart/form-data",
            Authorization: `Bearer ${token}`
@@ -118,7 +118,7 @@ useEffect(() => {
     return;
   }
       try {
-        const res = await axios.get("https://api.equi.co.in/api/bis-number-get",
+        const res = await axios.get("http://127.0.0.1:8000/api/bis-number-get",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -149,7 +149,7 @@ useEffect(() => {
     }
 
     try {
-      const response = await axios.post("https://api.equi.co.in/api/bis-number-store", {
+      const response = await axios.post("http://127.0.0.1:8000/api/bis-number-store", {
         bis_number: bisNumber,
        
       },

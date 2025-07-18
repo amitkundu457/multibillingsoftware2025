@@ -43,7 +43,7 @@ export default function Home() {
     }
     try {
       const response = await axios.get(
-        " https://api.equi.co.in/api/product-service-groups",
+        " http://127.0.0.1:8000/api/product-service-groups",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -66,7 +66,7 @@ export default function Home() {
       // Update item
       try {
         const response = await axios.put(
-          ` https://api.equi.co.in/api/product-service-groups/${editingItem.id}`,
+          ` http://127.0.0.1:8000/api/product-service-groups/${editingItem.id}`,
           data
         );
         const updatedItem = response.data;
@@ -85,7 +85,7 @@ export default function Home() {
       // Create new item
       try {
         const response = await axios.post(
-          " https://api.equi.co.in/api/product-service-groups",
+          " http://127.0.0.1:8000/api/product-service-groups",
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -112,7 +112,7 @@ export default function Home() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        ` https://api.equi.co.in/api/product-service-groups/${id}`
+        ` http://127.0.0.1:8000/api/product-service-groups/${id}`
       );
       if (response.status === 200) {
         setItems((prevItems) => prevItems.filter((item) => item.id !== id));

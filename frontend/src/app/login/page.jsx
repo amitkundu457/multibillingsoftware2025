@@ -39,7 +39,7 @@ const Login = () => {
         {/* Right Side - Illustration */}
         <div className="sm:w-1/2 hidden sm:block w-full flex justify-center items-center p-8">
           <img
-            src=" https://api.equi.co.in/undraw_thought-process_pavs.png"
+            src=" http://127.0.0.1:8000/undraw_thought-process_pavs.png"
             className="w-full"
             alt="Illustration"
           />

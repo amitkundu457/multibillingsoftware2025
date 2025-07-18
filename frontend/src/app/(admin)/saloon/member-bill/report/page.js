@@ -50,7 +50,7 @@ if (!token) {
   return;
 }
     try {
-      const response = await axios.get(" https://api.equi.co.in/api/membership-sales-report", {
+      const response = await axios.get(" http://127.0.0.1:8000/api/membership-sales-report", {
         params: {
           from: filters.from || undefined,
           to: filters.to || undefined,
@@ -88,7 +88,7 @@ if (!token) {
 //   return;
 // }
 //     try {
-//       const response = await axios.get(" https://api.equi.co.in/api/membership-plans",
+//       const response = await axios.get(" http://127.0.0.1:8000/api/membership-plans",
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //         },
@@ -106,7 +106,7 @@ const fetchPlans = async () => {
   }
 
   try {
-    const response = await axios.get("https://api.equi.co.in/api/membership-plans", {
+    const response = await axios.get("http://127.0.0.1:8000/api/membership-plans", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -12,7 +12,7 @@ const AdminDashboard = () => {
     useEffect(()=>{
         // fetch distributer count
 
-        axios.get(' https://api.equi.co.in/api/distrubuters/count').then((response)=>{
+        axios.get(' http://127.0.0.1:8000/api/distrubuters/count').then((response)=>{
             setDistCount(response.data);
 
            
@@ -25,7 +25,7 @@ const AdminDashboard = () => {
         })
 
          //fetch client count
-         axios.get(' https://api.equi.co.in/api/user-infos/count').then((response)=>{
+         axios.get(' http://127.0.0.1:8000/api/user-infos/count').then((response)=>{
             setCleintCount(response.data);
 
                 

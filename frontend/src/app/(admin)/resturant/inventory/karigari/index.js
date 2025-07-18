@@ -24,7 +24,7 @@ function Page() {
   // Function to fetch data from the API
 //   const fetchKarigariData = async (selectedType = "") => {
 //     try {
-//         const response = await axios.get("https://api.equi.co.in/api/karigari", {
+//         const response = await axios.get("http://127.0.0.1:8000/api/karigari", {
 //             params: selectedType ? { type: selectedType } : {},
 //         });
 
@@ -39,7 +39,7 @@ function Page() {
 
 const fetchKarigariData = async (selectedType = "") => {
   try {
-    const response = await axios.get("https://api.equi.co.in/api/karigari", {
+    const response = await axios.get("http://127.0.0.1:8000/api/karigari", {
       params: selectedType ? { type: selectedType } : {},
     });
 

@@ -39,7 +39,7 @@ const TaxPage = () => {
     }
 
     try {
-      const response = await axios.get("https://api.equi.co.in/api/tax"
+      const response = await axios.get("http://127.0.0.1:8000/api/tax"
         ,{
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -71,9 +71,9 @@ const TaxPage = () => {
 
     try {
       if (isEditMode) {
-        await axios.put(`https://api.equi.co.in/api/tax/${modalData.id}`, modalData);
+        await axios.put(`http://127.0.0.1:8000/api/tax/${modalData.id}`, modalData);
       } else {
-        await axios.post("https://api.equi.co.in/api/tax", modalData,
+        await axios.post("http://127.0.0.1:8000/api/tax", modalData,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -90,7 +90,7 @@ const TaxPage = () => {
   // Delete tax
   const handleDeleteTax = async (id) => {
     try {
-      await axios.delete(`https://api.equi.co.in/api/tax/${id}`);
+      await axios.delete(`http://127.0.0.1:8000/api/tax/${id}`);
       fetchTaxes();
     } catch (error) {
       console.error("Error deleting tax:", error);

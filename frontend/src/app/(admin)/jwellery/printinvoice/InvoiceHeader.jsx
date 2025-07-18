@@ -36,7 +36,7 @@
 //     }
 //     try {
 //       const response = await axios.get(
-//         "https://api.equi.co.in/api/cover/upload",
+//         "http://127.0.0.1:8000/api/cover/upload",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -76,7 +76,7 @@
 //       }
 //       try {
 //         const response = await axios.get(
-//           "https://api.equi.co.in/api/masterlogobill",
+//           "http://127.0.0.1:8000/api/masterlogobill",
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -256,7 +256,7 @@
 //     // const fetchLogoUrl = async () => {
 //     //   try {
 //     //     const response = await axios.get(
-//     //       "https://api.equi.co.in/api/masterlogobill"
+//     //       "http://127.0.0.1:8000/api/masterlogobill"
 //     //     );
 //     //     console.log("API Response:", response.data);
 
@@ -273,7 +273,7 @@
 //     // };
 //     const fetchLogoUrl = async () => {
 //       try {
-//         const response = await axios.get("https://api.equi.co.in/api/masterlogobill");
+//         const response = await axios.get("http://127.0.0.1:8000/api/masterlogobill");
 //         const logoUrl = response.data.logo;
 
 //         if (logoUrl) {
@@ -436,7 +436,7 @@
 
 //     const fetchLogoUrl = async () => {
 //       try {
-//         const response = await axios.get("https://api.equi.co.in/api/masterlogobill");
+//         const response = await axios.get("http://127.0.0.1:8000/api/masterlogobill");
 //         const logoUrl = response.data.logo;
 
 //         if (logoUrl) {
@@ -600,7 +600,7 @@
 
 //     const fetchLogoUrl = async () => {
 //       try {
-//         const response = await axios.get("https://api.equi.co.in/api/masterlogobill");
+//         const response = await axios.get("http://127.0.0.1:8000/api/masterlogobill");
 //         const logoUrl = response.data.logo;
 
 //         if (logoUrl) {
@@ -779,7 +779,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
     }
     try {
       const response = await axios.get(
-        "https://api.equi.co.in/api/cover/upload",
+        "http://127.0.0.1:8000/api/cover/upload",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -819,7 +819,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
       }
       try {
         const response = await axios.get(
-          "https://api.equi.co.in/api/masterlogobill",
+          "http://127.0.0.1:8000/api/masterlogobill",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

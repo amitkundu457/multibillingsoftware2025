@@ -45,7 +45,7 @@ export default function MembershipSaleForm() {
       };
 
       const { data } = await axios.get(
-        " https://api.equi.co.in/api/customers",
+        " http://127.0.0.1:8000/api/customers",
         config
       );
       setCustomers(data);
@@ -64,7 +64,7 @@ export default function MembershipSaleForm() {
 
     try {
       const { data } = await axios.get(
-        " https://api.equi.co.in/api/membership-plans",
+        " http://127.0.0.1:8000/api/membership-plans",
         config
       );
       setPlans(data);
@@ -80,7 +80,7 @@ export default function MembershipSaleForm() {
       },
     };
     try {
-      const { data } = await axios.get(" https://api.equi.co.in/api/stylists",config);
+      const { data } = await axios.get(" http://127.0.0.1:8000/api/stylists",config);
       setStylists(data);
     } catch (error) {
       console.error("Error fetching stylists:", error);
@@ -95,7 +95,7 @@ export default function MembershipSaleForm() {
     };
     try {
       const { data } = await axios.get(
-        " https://api.equi.co.in/api/membership-sales",config
+        " http://127.0.0.1:8000/api/membership-sales",config
       );
       setSales(data);
     } catch (error) {
@@ -114,13 +114,13 @@ export default function MembershipSaleForm() {
       if (editId) {
         console.log("submit edit time",formData)
         await axios.put(
-          ` https://api.equi.co.in/api/membership-sales/${editId}`,
+          ` http://127.0.0.1:8000/api/membership-sales/${editId}`,
           formData
         );
         toast.success("Membership Plan Updated!");
       } else {
         await axios.post(
-          " https://api.equi.co.in/api/membership-sales",
+          " http://127.0.0.1:8000/api/membership-sales",
           formData, {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -153,7 +153,7 @@ export default function MembershipSaleForm() {
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this sale?")) {
       try {
-        await axios.delete(` https://api.equi.co.in/api/membership-sales/${id}`);
+        await axios.delete(` http://127.0.0.1:8000/api/membership-sales/${id}`);
         toast.success("Membership Plan Deleted!");
         fetchSales();
       } catch (error) {

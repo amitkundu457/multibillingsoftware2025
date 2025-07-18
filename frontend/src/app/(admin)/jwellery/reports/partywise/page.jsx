@@ -35,7 +35,7 @@
 //     const fetchData = async () => {
 //       try {
 //         setLoading(true);
-//         const response = await axios.get("https://api.equi.co.in/api/partyreport", {
+//         const response = await axios.get("http://127.0.0.1:8000/api/partyreport", {
 //           headers: { authorization: `Bearer ${token}` },
 //         });
 //         setData(response?.data);
@@ -301,7 +301,7 @@ const Page = () => {
   // Fetch Customers
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get("https://api.equi.co.in/api/customers", {
+      const res = await axios.get("http://127.0.0.1:8000/api/customers", {
         headers: { authorization: `Bearer ${token}` },
       });
       console.log("Customers:",res);
@@ -314,9 +314,9 @@ const Page = () => {
   // Fetch Report Data
   const fetchReportData = async () => {
     try {
-      // "https://api.equi.co.in/api/partyreport" https://api.equi.co.in/api/agentsalesreport
+      // "http://127.0.0.1:8000/api/partyreport" http://127.0.0.1:8000/api/agentsalesreport
       setLoading(true);
-      const result = await axios.get("https://api.equi.co.in/api/partyreport", {
+      const result = await axios.get("http://127.0.0.1:8000/api/partyreport", {
         headers: { authorization: `Bearer ${token}` },
       });
 console.log("reslut",result)

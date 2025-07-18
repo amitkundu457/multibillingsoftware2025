@@ -505,6 +505,7 @@ public function storeCheckout(Request $request)
                 'gstOnGold' => $product['gstOnGold'] ?? null,
                 'gstOnMaking' => $product['gstOnMaking'] ?? null,
                 'mkg_chg_RS_P' => $product['mkg_chg_RS_P'] ?? null,
+                'fixed_amt' => $product['fixed_amt'] ?? null,
                 
 
             ]);

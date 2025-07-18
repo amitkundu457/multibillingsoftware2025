@@ -322,7 +322,7 @@ export default function InvoicePage() {
     console.log(payload);
     try {
       const response = await axios.post(
-        " https://api.equi.co.in/api/order-slip",
+        " http://127.0.0.1:8000/api/order-slip",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },

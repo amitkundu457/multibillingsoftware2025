@@ -31,7 +31,7 @@ const ReviewForm = () => {
         if (!slug) return;
         const fetchShop = async () => {
             try {
-                const response = await axios.get(` https://api.equi.co.in/api/user-infos-slug/${slug}`);
+                const response = await axios.get(` http://127.0.0.1:8000/api/user-infos-slug/${slug}`);
                 console.log("response id",response)
                 setShop(response.data);
 
@@ -55,7 +55,7 @@ const ReviewForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(" https://api.equi.co.in/api/reviews", formData);
+            await axios.post(" http://127.0.0.1:8000/api/reviews", formData);
             setSubmitted(true);
         } catch (error) {
             alert("Failed to submit review.");

@@ -53,7 +53,7 @@
 //     }
 
 //     try {
-//       const response = await axios.get("https://api.equi.co.in/api/tax", {
+//       const response = await axios.get("http://127.0.0.1:8000/api/tax", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       if (response.data?.data) {
@@ -69,7 +69,7 @@
 //       const fetchInvoiceData = async () => {
 //         setLoading(true);
 //         try {
-//           const response = await fetch(`https://api.equi.co.in/api/printbill/${id}`);
+//           const response = await fetch(`http://127.0.0.1:8000/api/printbill/${id}`);
 //           const data = await response.json();
 //           setInvoiceData(data);
 //         } catch (error) {
@@ -286,7 +286,7 @@ const Page = () => {
     }
 
     try {
-      const response = await axios.get("https://api.equi.co.in/api/tax", {
+      const response = await axios.get("http://127.0.0.1:8000/api/tax", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data?.data) {
@@ -302,7 +302,7 @@ const Page = () => {
       const fetchInvoiceData = async () => {
         setLoading(true);
         try {
-          const response = await fetch(`https://api.equi.co.in/api/printbill/${id}`);
+          const response = await fetch(`http://127.0.0.1:8000/api/printbill/${id}`);
           const data = await response.json();
           setInvoiceData(data);
         } catch (error) {

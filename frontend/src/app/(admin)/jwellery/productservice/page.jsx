@@ -74,7 +74,7 @@ const ItemManagement = () => {
     if (!token) return;
 
     axios
-      .get("https://api.equi.co.in/api/ratemasterget", {
+      .get("http://127.0.0.1:8000/api/ratemasterget", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -147,7 +147,7 @@ const ItemManagement = () => {
 
   const fetchTaxes = async () => {
     try {
-      const response = await axios.get("https://api.equi.co.in/api/tax", {
+      const response = await axios.get("http://127.0.0.1:8000/api/tax", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTaxes(response.data.data);
@@ -185,7 +185,7 @@ const ItemManagement = () => {
 
       if (currentItem) {
         await axios.post(
-          `https://api.equi.co.in/api/product-services/${currentItem.id}?_method=POST`,
+          `http://127.0.0.1:8000/api/product-services/${currentItem.id}?_method=POST`,
           formDataToSend,
           {
             headers: {
@@ -195,7 +195,7 @@ const ItemManagement = () => {
           }
         );
       } else {
-        await axios.post("https://api.equi.co.in/api/product-services", formDataToSend, {
+        await axios.post("http://127.0.0.1:8000/api/product-services", formDataToSend, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
@@ -323,8 +323,8 @@ const ItemManagement = () => {
             {[
               { label: "Item Name", name: "name", type: "text" },
               { label: "Code", name: "code", type: "text" },
-              { label: "MRP", name: "mrp", type: "number" },
-              { label: "gram", name: "gram", type: "number" },
+              { label: "Fixed Amount", name: "mrp", type: "number" },
+              { label: "Gram", name: "gram", type: "number" },
               { label: "HSN", name: "hsn", type: "text" },
             ].map((field) => (
               <div key={field.name}>
@@ -382,7 +382,7 @@ const ItemManagement = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                product tax
+                Product tax
               </label>
               <select
                 name="tax_rate"

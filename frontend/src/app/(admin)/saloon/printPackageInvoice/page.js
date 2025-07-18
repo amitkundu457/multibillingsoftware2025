@@ -22,10 +22,10 @@ const SalonInvoice = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       const response = await axios.get(
-        `https://api.equi.co.in/api/printpackage-bill/${id}`
+        `http://127.0.0.1:8000/api/printpackage-bill/${id}`
       );
       const invoiceResponse = await axios.get(
-        `https://api.equi.co.in/api/generate-package-invoice/22`
+        `http://127.0.0.1:8000/api/generate-package-invoice/22`
       );
 
       setData(response.data);
@@ -41,7 +41,7 @@ const SalonInvoice = () => {
       }
 
       const clientResponse = await axios.get(
-        `https://api.equi.co.in/api/auth/agme`,
+        `http://127.0.0.1:8000/api/auth/agme`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

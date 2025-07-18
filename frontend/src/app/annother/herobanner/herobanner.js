@@ -49,7 +49,7 @@ export default function HeroSection({ scrollToSection }) {
     setError("");
     try {
       const response = await axios.post(
-        "https://api.equi.co.in/api/formverivy",
+        "http://127.0.0.1:8000/api/formverivy",
         { email }
       );
       setStoredEmail(email);

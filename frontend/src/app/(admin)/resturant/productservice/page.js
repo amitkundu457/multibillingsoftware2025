@@ -486,7 +486,7 @@
 //     if (!token) return;
 
 //     axios
-//       .get("https://api.equi.co.in/api/ratemasterget", {
+//       .get("http://127.0.0.1:8000/api/ratemasterget", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((response) => {
@@ -559,7 +559,7 @@
 
 //   const fetchTaxes = async () => {
 //     try {
-//       const response = await axios.get("https://api.equi.co.in/api/tax", {
+//       const response = await axios.get("http://127.0.0.1:8000/api/tax", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setTaxes(response.data.data);
@@ -597,7 +597,7 @@
 
 //       if (currentItem) {
 //         await axios.post(
-//           `https://api.equi.co.in/api/product-services/${currentItem.id}?_method=POST`,
+//           `http://127.0.0.1:8000/api/product-services/${currentItem.id}?_method=POST`,
 //           formDataToSend,
 //           {
 //             headers: {
@@ -607,7 +607,7 @@
 //           }
 //         );
 //       } else {
-//         await axios.post("https://api.equi.co.in/api/product-services", formDataToSend, {
+//         await axios.post("http://127.0.0.1:8000/api/product-services", formDataToSend, {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
 //             "Content-Type": "multipart/form-data",
@@ -958,7 +958,7 @@ const ItemManagement = () => {
     }
 
     try {
-      const response = await axios.get(" https://api.equi.co.in/api/type", {
+      const response = await axios.get(" http://127.0.0.1:8000/api/type", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCategory(response.data);
@@ -999,7 +999,7 @@ const ItemManagement = () => {
     }
 
     axios
-      .get(" https://api.equi.co.in/api/ratemasterget", {
+      .get(" http://127.0.0.1:8000/api/ratemasterget", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -1024,7 +1024,7 @@ const ItemManagement = () => {
 
   // const FetchRateMaster=()=>{
   //   axios
-  //     .get(" https://api.equi.co.in/api/ratemasterget")
+  //     .get(" http://127.0.0.1:8000/api/ratemasterget")
   //     .then((response) => {
   //       setRateMaster(response.data);
   //     })
@@ -1042,7 +1042,7 @@ const ItemManagement = () => {
 
     try {
       // const response = await getProductService();
-      const response=await axios.get("https://api.equi.co.in/api/product-and-service",
+      const response=await axios.get("http://127.0.0.1:8000/api/product-and-service",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -1104,7 +1104,7 @@ const ItemManagement = () => {
       return;
     }
     try {
-      const response = await axios.get(" https://api.equi.co.in/api/tax", {
+      const response = await axios.get(" http://127.0.0.1:8000/api/tax", {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("text list",response);
@@ -1156,7 +1156,7 @@ const ItemManagement = () => {
       if (currentItem) {
         // Update an existing item using updateProductService
         // await updateProductService(currentItem.id, formDataToSend);
-        await axios.post(`https://api.equi.co.in/api/update-product/${currentItem.id}`,formDataToSend,
+        await axios.post(`http://127.0.0.1:8000/api/update-product/${currentItem.id}`,formDataToSend,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -1166,7 +1166,7 @@ const ItemManagement = () => {
       } else {
         // Create a new item using createProductService Saloon-product-services
         // const response = await createProductService(formDataToSend);
-        await axios.post(`https://api.equi.co.in/api/Saloon-product-services`,formDataToSend,
+        await axios.post(`http://127.0.0.1:8000/api/Saloon-product-services`,formDataToSend,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

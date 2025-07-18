@@ -7,7 +7,7 @@ import axios from 'axios';
 const Page = () => {
     const[terms ,setTerms] = useState([]);
     useEffect(()=>{
-        axios.get('https://api.equi.co.in/api/terms-condition').then((response)=>{
+        axios.get('http://127.0.0.1:8000/api/terms-condition').then((response)=>{
             console.log(response.data);
             
             setTerms(response.data);

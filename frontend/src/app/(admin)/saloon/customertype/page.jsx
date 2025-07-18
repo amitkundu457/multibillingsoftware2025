@@ -25,7 +25,7 @@ export const Model = ({ onClose, onSave }) => {
     const token = getCookie("access_token");
 
     axios
-      .post("https://api.equi.co.in/api/customerstype", inputData, {
+      .post("http://127.0.0.1:8000/api/customerstype", inputData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ const Page = () => {
     const token = getCookie("access_token");
 
     axios
-      .get(" https://api.equi.co.in/api/customerstype",
+      .get(" http://127.0.0.1:8000/api/customerstype",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -141,7 +141,7 @@ const Page = () => {
     //   const token = getCookie("access_token");
 
     //   axios
-    //     .post(`https://api.equi.co.in/api/customerstype/${id}`, {
+    //     .post(`http://127.0.0.1:8000/api/customerstype/${id}`, {
     //       headers: {
     //         Authorization: `Bearer ${token}`,
     //       },
@@ -163,7 +163,7 @@ const Page = () => {
       const token = getCookie("access_token");
 
       axios
-        .delete(` https://api.equi.co.in/api/customerstype/${id}`, {
+        .delete(` http://127.0.0.1:8000/api/customerstype/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -269,7 +269,7 @@ export const EditModel = ({ onClose, onSave, id ,selectedItem }) => {
     console.log("input data",inputData)
 
     axios
-      .post(`https://api.equi.co.in/api/customerstype/${id}`, inputData, {
+      .post(`http://127.0.0.1:8000/api/customerstype/${id}`, inputData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

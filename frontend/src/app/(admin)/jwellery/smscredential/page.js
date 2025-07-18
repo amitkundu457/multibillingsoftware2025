@@ -15,7 +15,7 @@ export default function SmsCredentialForm() {
 
   const fetchCredentials = async () => {
     try {
-      const res = await axios.get("https://api.equi.co.in/api/sms-credentials");
+      const res = await axios.get("http://127.0.0.1:8000/api/sms-credentials");
       const existing = res.data[0]; // Since only one record is allowed
       if (existing) {
         setForm({
@@ -40,9 +40,9 @@ export default function SmsCredentialForm() {
     e.preventDefault();
 
     if (credentialId) {
-      await axios.put(`https://api.equi.co.in/api/sms-credentials/${credentialId}`, form);
+      await axios.put(`http://127.0.0.1:8000/api/sms-credentials/${credentialId}`, form);
     } else {
-      const res = await axios.post("https://api.equi.co.in/api/sms-credentials", form);
+      const res = await axios.post("http://127.0.0.1:8000/api/sms-credentials", form);
       setCredentialId(res.data.id); // In case it's new
     }
 
@@ -51,7 +51,7 @@ export default function SmsCredentialForm() {
 
   const handleDelete = async () => {
     if (credentialId && confirm("Are you sure to delete this SMS credential?")) {
-      await axios.delete(`https://api.equi.co.in/api/sms-credentials/${credentialId}`);
+      await axios.delete(`http://127.0.0.1:8000/api/sms-credentials/${credentialId}`);
       setForm({
         business_name: "",
         sms_username: "",

@@ -9,7 +9,7 @@ import {
   deletegetSaleproduct,
   updategetSaleproduct,
 } from "@/app/components/config";
-// const apiUrl = " https://api.equi.co.in/api"; // Replace with your API URL
+// const apiUrl = " http://127.0.0.1:8000/api"; // Replace with your API URL
 
 export default function SaleProducts() {
   const [products, setProducts] = useState([]);

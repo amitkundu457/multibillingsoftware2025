@@ -19,7 +19,7 @@ const Page = () => {
     };
 
     try {
-      const response = await axios.post(" https://api.equi.co.in/api/redeem-setup", data);
+      const response = await axios.post(" http://127.0.0.1:8000/api/redeem-setup", data);
       
       if (response.status === 201) {
         alert("Data saved successfully!");

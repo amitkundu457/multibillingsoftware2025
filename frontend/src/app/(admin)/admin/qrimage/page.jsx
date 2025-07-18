@@ -57,7 +57,7 @@
 
 //     try {
 //       const res = await axios.post(
-//         'https://api.equi.co.in/api/qr/upload', // Replace with your API endpoint
+//         'http://127.0.0.1:8000/api/qr/upload', // Replace with your API endpoint
 //         formData,
 //         {
 //           headers: {
@@ -154,7 +154,7 @@ export default function CoverUpload() {
 
     const fetchExistingImage = async () => {
       try {
-        const res = await axios.get('https://api.equi.co.in/api/qr/upload',
+        const res = await axios.get('http://127.0.0.1:8000/api/qr/upload',
           {
             headers: {
               'Content-Type': 'multipart/form-data',
@@ -193,7 +193,7 @@ export default function CoverUpload() {
 
     try {
       const res = await axios.post(
-        'https://api.equi.co.in/api/qr/upload',
+        'http://127.0.0.1:8000/api/qr/upload',
         formData,
         {
           headers: {

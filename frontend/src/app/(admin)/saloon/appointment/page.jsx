@@ -68,7 +68,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
     }
     try {
       const response = await axios.get(
-        " https://api.equi.co.in/api/appointments",
+        " http://127.0.0.1:8000/api/appointments",
 
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -88,7 +88,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
     }
 
     const response = await axios.get(
-      " https://api.equi.co.in/api/Saloon-service",
+      " http://127.0.0.1:8000/api/Saloon-service",
 
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -107,7 +107,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
     }
 
     const response = await axios.get(
-      " https://api.equi.co.in/api/stylists",
+      " http://127.0.0.1:8000/api/stylists",
 
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -129,7 +129,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
     console.log("payload",formData)
     try {
       await axios.post(
-        " https://api.equi.co.in/api/appointments",
+        " http://127.0.0.1:8000/api/appointments",
         formData,
 
         {
@@ -163,7 +163,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
     console.log("update appoinemtn",formData)
     try {
       await axios.post(
-        ` https://api.equi.co.in/api/appointments/${editingAppointmentId}`,
+        ` http://127.0.0.1:8000/api/appointments/${editingAppointmentId}`,
         formData
       );
       fetchAppointments();
@@ -176,7 +176,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
   // Delete an appointment
   const handleDeleteAppointment = async (id) => {
     try {
-      await axios.delete(` https://api.equi.co.in/api/appointments/${id}`);
+      await axios.delete(` http://127.0.0.1:8000/api/appointments/${id}`);
       fetchAppointments();
     } catch (error) {
       console.error("Error deleting appointment:", error);

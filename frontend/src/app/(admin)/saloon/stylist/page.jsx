@@ -10,7 +10,7 @@ const Saloon = () => {
 
   // Fetch stylists
   const fetchStylists = async () => {
-    const response = await axios.get('https://api.equi.co.in/api/stylists');
+    const response = await axios.get('http://127.0.0.1:8000/api/stylists');
     setStylists(response.data);
   };
 
@@ -39,10 +39,10 @@ const Saloon = () => {
   const handleSave = async () => {
     if (selectedStylist) {
       // Update existing stylist
-      await axios.put(`https://api.equi.co.in/api/stylists/${selectedStylist.id}`, stylistData);
+      await axios.put(`http://127.0.0.1:8000/api/stylists/${selectedStylist.id}`, stylistData);
     } else {
       // Add new stylist
-      await axios.post('https://api.equi.co.in/api/stylists', stylistData);
+      await axios.post('http://127.0.0.1:8000/api/stylists', stylistData);
     }
     fetchStylists(); // Re-fetch the list of stylists
     closeModal();
@@ -51,7 +51,7 @@ const Saloon = () => {
   // Delete Stylist
   const handleDelete = async (id) => {
     if (confirm('Are you sure you want to delete this stylist?')) {
-      await axios.delete(`https://api.equi.co.in/api/stylists/${id}`);
+      await axios.delete(`http://127.0.0.1:8000/api/stylists/${id}`);
       fetchStylists(); // Re-fetch after delete
     }
   };

@@ -262,7 +262,7 @@ const AccountsEntries = () => {
   useEffect(() => {
     if (modalType) {
       axios
-        .get(`https://api.equi.co.in/api/last-transaction-number/${modalType}`)
+        .get(`http://127.0.0.1:8000/api/last-transaction-number/${modalType}`)
         .then((response) => setTransactionNumber(response.data.transaction_no))
         .catch((error) =>
           console.error("Error fetching transaction number:", error)
@@ -273,7 +273,7 @@ const AccountsEntries = () => {
   const fetchLastTransactionNumber = async (transactionType) => {
     try {
       const response = await fetch(
-        `https://api.equi.co.in/api/last-transaction-number/${transactionType}`
+        `http://127.0.0.1:8000/api/last-transaction-number/${transactionType}`
       );
       const data = await response.json();
       return data.transaction_no; // Assuming API returns { transaction_no: "XXX" }
@@ -326,7 +326,7 @@ const AccountsEntries = () => {
     // console.log("data group type", data);
     try {
       const res = await axios.post(
-        " https://api.equi.co.in/api/account-groups",
+        " http://127.0.0.1:8000/api/account-groups",
         data,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -350,7 +350,7 @@ const AccountsEntries = () => {
     const data = { name: newAccountType };
 
     try {
-      const response = await fetch(" https://api.equi.co.in/api/account-types", {
+      const response = await fetch(" http://127.0.0.1:8000/api/account-types", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -565,7 +565,7 @@ const AccountsEntries = () => {
 
     try {
       const response = await axios.post(
-        " https://api.equi.co.in/api/account-masters",
+        " http://127.0.0.1:8000/api/account-masters",
         data,
         {
           headers: {

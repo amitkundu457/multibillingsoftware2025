@@ -94,7 +94,7 @@ const Page = () => {
     console.log(data);
     try {
       const response = await axios.post(
-        ` https://api.equi.co.in/api/solutions/update/${editData.id}`,
+        ` http://127.0.0.1:8000/api/solutions/update/${editData.id}`,
         data,
         {
           //   headers: {

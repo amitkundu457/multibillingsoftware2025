@@ -43,6 +43,7 @@ class ProductAndServiceController extends Controller
             'product_services.id',
             'product_services.group_id',
             'product_services.name',
+            'product_services.mrp',
             'product_services.image',
             'rate_masters.rate',
             'product_services.code',
@@ -59,6 +60,7 @@ class ProductAndServiceController extends Controller
         ->groupBy(
             'product_services.id',
             'product_services.group_id',
+            'product_services.mrp',
             'product_services.name',
             'product_services.image',
             'rate_masters.rate',
@@ -244,6 +246,7 @@ public function store(Request $request)
         'rate' => 'nullable|numeric',
         'pro_ser_type' => 'nullable|string',
         'expires' => 'nullable|date',
+        'mrp' => 'nullable|string',
 
 
 
@@ -304,6 +307,7 @@ public function update(Request $request, $id)
         'code' => 'nullable|string|unique:product_services,code,' . $id, // Ensure 'code' is unique except for this record
         'company_id' => 'nullable|string',
         'group_id' => 'nullable|string',
+        'mrp' => 'nullable|string',
         'tax_rate' => 'nullable|numeric',
         'rate_id' => 'nullable|string',
         'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
@@ -313,6 +317,7 @@ public function update(Request $request, $id)
         'rate' => 'nullable|numeric',
         'pro_ser_type' => 'nullable|string',
         'expires' => 'nullable|date',
+       
 
 
 

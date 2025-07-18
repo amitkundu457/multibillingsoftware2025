@@ -10,7 +10,7 @@ const InvoiceTable = ({ table_no, logoUrl, taxes, companyName }) => {
 
    useEffect(() => {
     if (table_no) {
-      fetch(`https://api.equi.co.in/api/kot-orders/bill`, {
+      fetch(`http://127.0.0.1:8000/api/kot-orders/bill`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

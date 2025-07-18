@@ -380,7 +380,7 @@ console.log("payalod2",payload)
 
     try {
       const response = await axios.post(
-        " https://api.equi.co.in/api/resto-order",
+        " http://127.0.0.1:8000/api/resto-order",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -523,7 +523,7 @@ console.log("payalod2",payload)
                 <div className="w-full h-32 flex items-center justify-center text-gray-500">
                   {item.image ? (
                     <img
-                      src={`https://api.equi.co.in/storage/${item.image}`}
+                      src={`http://127.0.0.1:8000/storage/${item.image}`}
                       alt={item.code}
                     />
                   ) : (

@@ -33,7 +33,7 @@ const Page = () => {
   // Fetch Employees
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get("https://api.equi.co.in/api/employees", {
+      const res = await axios.get("http://127.0.0.1:8000/api/employees", {
         headers: { authorization: `Bearer ${token}` },
       });
       setEmployees(res.data.employees);
@@ -46,7 +46,7 @@ const Page = () => {
   const fetchReportData = async () => {
     try {
       setLoading(true);
-      const result = await axios.get("https://api.equi.co.in/api/agentsalesreport", {
+      const result = await axios.get("http://127.0.0.1:8000/api/agentsalesreport", {
         headers: { authorization: `Bearer ${token}` },
       });
       setData(result.data);

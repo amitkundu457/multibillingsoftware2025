@@ -49,7 +49,7 @@ export default function PurchaseForm() {
     }
 
       axios
-        .get(" https://api.equi.co.in/api/suppliers",
+        .get(" http://127.0.0.1:8000/api/suppliers",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -81,7 +81,7 @@ export default function PurchaseForm() {
   useEffect(() => {
     const fetchStockReturns = async () => {
       try {
-        const response = await fetch(" https://api.equi.co.in/api/stock-returns/");
+        const response = await fetch(" http://127.0.0.1:8000/api/stock-returns/");
         const data = await response.json();
         setStockReturns(data);
       } catch (error) {
@@ -97,7 +97,7 @@ export default function PurchaseForm() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch(" https://api.equi.co.in/api/stock-returns");
+        const response = await fetch(" http://127.0.0.1:8000/api/stock-returns");
         const data = await response.json();
         // Sort payments by date (newest first)
         const sortedPayments = data.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -124,8 +124,8 @@ export default function PurchaseForm() {
 
     try {
 
-     const  response=  axios.post(' https://api.equi.co.in/api/stock-returns',formData);
-      // const response = await fetch(" https://api.equi.co.in/api/stock-returns", {
+     const  response=  axios.post(' http://127.0.0.1:8000/api/stock-returns',formData);
+      // const response = await fetch(" http://127.0.0.1:8000/api/stock-returns", {
       //   method: "POST",
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify(formData),

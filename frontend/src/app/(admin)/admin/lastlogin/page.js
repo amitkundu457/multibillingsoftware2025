@@ -19,7 +19,7 @@ const CustomerReport = () => {
     const fetchCustomers = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(" https://api.equi.co.in/api/lastlogin", {
+            const response = await axios.get(" http://127.0.0.1:8000/api/lastlogin", {
                 params: {
                     start_date: startDate,
                     end_date: endDate,

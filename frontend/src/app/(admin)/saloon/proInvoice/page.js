@@ -131,7 +131,7 @@ const Page = () => {
     const fetchBis = async () => {
       try {
         const res = await axios.get(
-          "https://api.equi.co.in/api/bis-number-get",
+          "http://127.0.0.1:8000/api/bis-number-get",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -152,7 +152,7 @@ const Page = () => {
         return;
       }
       try {
-        const response = await axios.get("https://api.equi.co.in/api/tax", {
+        const response = await axios.get("http://127.0.0.1:8000/api/tax", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.data?.data) {
@@ -184,7 +184,7 @@ const Page = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://api.equi.co.in/api/printbill/${id}`
+          `http://127.0.0.1:8000/api/printbill/${id}`
         );
         setInvoiceData(response.data);
       } catch (error) {

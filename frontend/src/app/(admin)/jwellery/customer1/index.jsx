@@ -61,7 +61,7 @@ const Customers = () => {
         },
       };
   
-      const { data } = await axios.get(" https://api.equi.co.in/api/customers", config);
+      const { data } = await axios.get(" http://127.0.0.1:8000/api/customers", config);
       setCustomers(data);
     } catch (error) {
       notyf.error("Error fetching customers!");
@@ -98,13 +98,13 @@ const Customers = () => {
       };
   
       if (modalType === "create") {
-        await axios.post(" https://api.equi.co.in/api/customers", payload, config);
+        await axios.post(" http://127.0.0.1:8000/api/customers", payload, config);
         notyf.success("Customer created successfully!");
         fetchCustomers();
       } else if (modalType === "edit") {
         console.log("updated.....",payload)
         await axios.post(
-          ` https://api.equi.co.in/api/customers/${currentCustomer.id}`,
+          ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
@@ -126,7 +126,7 @@ const Customers = () => {
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this customer?")) {
       try {
-        await axios.delete(` https://api.equi.co.in/api/customers/${id}`);
+        await axios.delete(` http://127.0.0.1:8000/api/customers/${id}`);
         toast.success("Customer deleted successfully!");
         fetchCustomers();
         console.log("customber deleted ")
@@ -168,7 +168,7 @@ const Customers = () => {
     const token = getCookie("access_token"); // Retrieve token
     console.log("customber token",token)
     axios
-      .get("https://api.equi.co.in/api/customerstype",
+      .get("http://127.0.0.1:8000/api/customerstype",
         
 {
   headers: { Authorization: `Bearer ${token}` },
@@ -190,7 +190,7 @@ const Customers = () => {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get(" https://api.equi.co.in/api/customersubtypes",
+      .get(" http://127.0.0.1:8000/api/customersubtypes",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -346,7 +346,7 @@ export default Customers;
 //     setIsLoading(true);
 //     const token = getCookie("access_token");
 //     try {
-//       const { data } = await apiRequest("get", "https://api.equi.co.in/api/customers", null, token);
+//       const { data } = await apiRequest("get", "http://127.0.0.1:8000/api/customers", null, token);
 //       setCustomers(data);
 //     } catch (error) {
 //       notyf.error("Error fetching customers!");
@@ -376,7 +376,7 @@ export default Customers;
 //       const token = getCookie("access_token");
 //       const payload = { ...data, customer_type: data.customerTypeData, customer_sub_type: data.customerSubTypeData || null };
       
-//       const apiUrl = modalType === "create" ? "https://api.equi.co.in/api/customers" : `https://api.equi.co.in/api/customers/${currentCustomer.id}`;
+//       const apiUrl = modalType === "create" ? "http://127.0.0.1:8000/api/customers" : `http://127.0.0.1:8000/api/customers/${currentCustomer.id}`;
 //       await apiRequest(modalType === "create" ? "post" : "put", apiUrl, payload, token);
       
 //       notyf.success(`${modalType === "create" ? "Customer created" : "Customer updated"} successfully!`);
@@ -392,7 +392,7 @@ export default Customers;
 //   const handleDelete = async (id) => {
 //     if (confirm("Are you sure you want to delete this customer?")) {
 //       try {
-//         await apiRequest("delete", `https://api.equi.co.in/api/customers/${id}`, null, getCookie("access_token"));
+//         await apiRequest("delete", `http://127.0.0.1:8000/api/customers/${id}`, null, getCookie("access_token"));
 //         toast.success("Customer deleted successfully!");
 //         fetchCustomers();
 //       } catch (error) {
@@ -433,8 +433,8 @@ export default Customers;
 
 //   useEffect(() => {
 //     fetchCustomers();
-//     fetchData("https://api.equi.co.in/api/customerstype", setCustomerTypeData);
-//     fetchData("https://api.equi.co.in/api/customersubtypes", setCustomerSubTypeData);
+//     fetchData("http://127.0.0.1:8000/api/customerstype", setCustomerTypeData);
+//     fetchData("http://127.0.0.1:8000/api/customersubtypes", setCustomerSubTypeData);
 //   }, []);
 
 //   return (
@@ -570,7 +570,7 @@ export default Customers;
 // //     setIsLoading(true);
 // //     const token = getCookie("access_token");
 // //     try {
-// //       const { data } = await apiRequest("get", "https://api.equi.co.in/api/customers", null, token);
+// //       const { data } = await apiRequest("get", "http://127.0.0.1:8000/api/customers", null, token);
 // //       setCustomers(data);
 // //     } catch (error) {
 // //       notyf.error("Error fetching customers!");
@@ -626,7 +626,7 @@ export default Customers;
 // //       const token = getCookie("access_token");
 // //       const payload = { ...data, customer_type: data.customerTypeData, customer_sub_type: data.customerSubTypeData || null };
       
-// //       const apiUrl = modalType === "create" ? "https://api.equi.co.in/api/customers" : `https://api.equi.co.in/api/customers/${currentCustomer.id}`;
+// //       const apiUrl = modalType === "create" ? "http://127.0.0.1:8000/api/customers" : `http://127.0.0.1:8000/api/customers/${currentCustomer.id}`;
 // //       await apiRequest(modalType === "create" ? "post" : "put", apiUrl, payload, token);
       
 // //       notyf.success(`${modalType === "create" ? "Customer created" : "Customer updated"} successfully!`);
@@ -641,7 +641,7 @@ export default Customers;
 // //   const handleDelete = async (id) => {
 // //     if (confirm("Are you sure you want to delete this customer?")) {
 // //       try {
-// //         await apiRequest("delete", `https://api.equi.co.in/api/customers/${id}`, null, getCookie("access_token"));
+// //         await apiRequest("delete", `http://127.0.0.1:8000/api/customers/${id}`, null, getCookie("access_token"));
 // //         toast.success("Customer deleted successfully!");
 // //         fetchCustomers();
 // //       } catch (error) {
@@ -653,8 +653,8 @@ export default Customers;
 
 // //   useEffect(() => {
 // //     fetchCustomers();
-// //     fetchData("https://api.equi.co.in/api/customerstype", setCustomerTypeData);
-// //     fetchData("https://api.equi.co.in/api/customersubtypes", setCustomerSubTypeData);
+// //     fetchData("http://127.0.0.1:8000/api/customerstype", setCustomerTypeData);
+// //     fetchData("http://127.0.0.1:8000/api/customersubtypes", setCustomerSubTypeData);
 // //     const countryList = Country.getAllCountries();
 // //     setCountries(countryList);
 // //   }, []);
@@ -894,7 +894,7 @@ export default Customers;
 //     setIsLoading(true);
 //     try {
 //       const token = getCookie("access_token");
-//       const { data } = await apiRequest("get", "https://api.equi.co.in/api/customers", null, token);
+//       const { data } = await apiRequest("get", "http://127.0.0.1:8000/api/customers", null, token);
 //       setCustomers(data);
 //     } catch (error) {
 //       notyf.error("Error fetching customers!");
@@ -943,8 +943,8 @@ export default Customers;
 //         customer_sub_type: data.customerSubTypeData || null,
 //       };
 //       const apiUrl = modalType === "create"
-//         ? "https://api.equi.co.in/api/customers"
-//         : `https://api.equi.co.in/api/customers/${currentCustomer.id}`;
+//         ? "http://127.0.0.1:8000/api/customers"
+//         : `http://127.0.0.1:8000/api/customers/${currentCustomer.id}`;
 
 //       await apiRequest(modalType === "create" ? "post" : "put", apiUrl, payload, token);
 //       notyf.success(`${modalType === "create" ? "Customer created" : "Customer updated"} successfully!`);
@@ -960,7 +960,7 @@ export default Customers;
 //     if (confirm("Are you sure you want to delete this customer?")) {
 //       try {
 //         const token = getCookie("access_token");
-//         await apiRequest("delete", `https://api.equi.co.in/api/customers/${id}`, null, token);
+//         await apiRequest("delete", `http://127.0.0.1:8000/api/customers/${id}`, null, token);
 //         toast.success("Customer deleted successfully!");
 //         fetchCustomers();
 //       } catch (error) {
@@ -972,8 +972,8 @@ export default Customers;
 
 //   useEffect(() => {
 //     fetchCustomers();
-//     fetchData("https://api.equi.co.in/api/customerstype", setCustomerTypeData);
-//     fetchData("https://api.equi.co.in/api/customersubtypes", setCustomerSubTypeData);
+//     fetchData("http://127.0.0.1:8000/api/customerstype", setCustomerTypeData);
+//     fetchData("http://127.0.0.1:8000/api/customersubtypes", setCustomerSubTypeData);
 //     setCountries(Country.getAllCountries());
 //   }, []);
 

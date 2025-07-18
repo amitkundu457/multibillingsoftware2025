@@ -94,7 +94,7 @@ const RegistrationPage = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axios.get(" https://api.equi.co.in/api/roles");
+        const response = await axios.get(" http://127.0.0.1:8000/api/roles");
         console.log("API Response:", response); // Check the full response
         setRoles(response.data);
       } catch (error) {
@@ -203,7 +203,7 @@ const RegistrationPage = () => {
 
       // Send the data to the Laravel backend
       axios
-        .post(" https://api.equi.co.in/api/user-infos", dataToSend, {
+        .post(" http://127.0.0.1:8000/api/user-infos", dataToSend, {
           headers: {
             "Content-Type": "application/json",
           },
