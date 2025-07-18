@@ -37,7 +37,8 @@ class OrderDetails extends Model
         'ad_wgt',
         'gstOnGold',
         'gstOnMaking',
-        'mkg_chg_RS_P'
+        'mkg_chg_RS_P',
+        'fixed_amt'
 
 
 

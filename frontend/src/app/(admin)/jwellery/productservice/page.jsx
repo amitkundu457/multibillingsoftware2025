@@ -323,8 +323,8 @@ const ItemManagement = () => {
             {[
               { label: "Item Name", name: "name", type: "text" },
               { label: "Code", name: "code", type: "text" },
-              { label: "MRP", name: "mrp", type: "number" },
-              { label: "gram", name: "gram", type: "number" },
+              { label: "Fixed Amount", name: "mrp", type: "number" },
+              { label: "Gram", name: "gram", type: "number" },
               { label: "HSN", name: "hsn", type: "text" },
             ].map((field) => (
               <div key={field.name}>
@@ -382,7 +382,7 @@ const ItemManagement = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">
-                product tax
+                Product tax
               </label>
               <select
                 name="tax_rate"

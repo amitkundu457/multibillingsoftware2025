@@ -46,7 +46,7 @@ export default function FrontendEditor({ type = 'marketing automation' }) {
       className="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-10"
     >
       <h2 className="text-2xl font-bold mb-4 text-gray-700">
-        Edit "{type}" Content
+        Edit {type} Content
       </h2>
 
       <div className="bg-white border rounded mb-4">

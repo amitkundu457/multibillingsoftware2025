@@ -87,7 +87,7 @@ export default function Home({ type = "About BrizIndia" }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
+ 
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/frontend-settings/${type}`)

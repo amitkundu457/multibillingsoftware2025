@@ -7,4 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FrontendSetting extends Model
 {
     //
+  
+    protected $fillable = ['description', 'type'];
 }
+

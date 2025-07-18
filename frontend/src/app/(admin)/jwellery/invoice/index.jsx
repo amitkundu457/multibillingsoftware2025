@@ -103,7 +103,6 @@ export default function InvoicePage() {
     ad_wgt: "",
   });
 
-
   const emptyProductDetails = {
     grossWeight: "",
     netWeight: "",
@@ -713,84 +712,7 @@ export default function InvoicePage() {
     calculateTotals(updatedProducts);
   };
 
-  // let totalquantity=0;
-  // setTotalQty pcs
-  //   const handleFormSubmit = (event) => {
-  //     let currentGstAmount = 0;
-
-  //     // setTotalQty pcs
-
-  //     event.preventDefault();
-  //     const formData = new FormData(event.target);
-
-  //     // ad_wgt and netwight
-  //     const ad_wgt = Number(formData.get("ad_wgt")) || 0;
-  //     let netWeight = Number(formData.get("netWeight")) || 0;
-
-  //     // Subtract ad_wgt only if > 0 and <= netWeight
-  //     if (ad_wgt > 0 && ad_wgt <= netWeight) {
-  //       netWeight -= ad_wgt;
-  //     }
-
-  //     const productDetails = {
-  //       code: selectedItem.code,
-  //       type: selectedItem.type,
-  //       name: selectedItem.name,
-  //       rate: selectedItem.rate || 0,
-  //       tax_rate: selectedItem.tax_rate,
-  //       hsn: selectedItem.hsn || "",
-  //       product_id: selectedItem.id || "",
-
-  //       // qty:Number(formData.get("qty"))|| "",
-  //       qty: Number(formData.get("pcs")) || "",
-  //       grossWeight: Number(formData.get("grossWeight")) || 0,
-  //       description: formData.get("description") || "",
-  //       // netWeight: Number(formData.get("netWeight")) || 0,
-  //       // ad_wgt:Number(formData.get("ad_wgt")) || 0,
-  //       netWeight: netWeight, // Adjusted if ad_wgt is valid
-  //       ad_wgt: ad_wgt,
-  //       pcs: Number(formData.get("pcs")) || 1,
-  //       // grm: formData.get("grm") ? Number(formData.get("grm")) : 0,
-  //       //  grm: grm,
-  //       // making: Number(formData.get("making")) || 0,
-  //       // making: making,
-  //       making: Number(formData.get("making")) || 0,
-  //       discountPercent: discountPercent || 0,
-  //       discountRs: discountRs || 0,
-  //       addition: addition || 0,
-
-  //       diamondWeight: Number(formData.get("diamondWeight")) || 0,
-  //       diamondValue: Number(formData.get("diamondValue")) || 0,
-  //       stoneWeight: Number(formData.get("stoneWeight")) || 0,
-  //       stoneValue: Number(formData.get("stoneValue")) || 0,
-  //       huid: formData.get("huid") || "",
-  //       hallmark: formData.get("hallmark") || "",
-  //       hallmarkCharge: formData.get("hallmarkCharge") || "",
-  //       wastageCharge: formData.get("wastageCharge") || "",
-  //       otherCharge: formData.get("otherCharge") || "",
-  //       makingInRs: formData.get("makingInRs") || "",
-  //       pro_total: "",
-  //       making_dsc: formData.get("making_dsc") || "",
-  //       making_gst_percentage: formData.get("making_gst_percentage") || "",
-  //     };
-
-  //     console.log("productDetails....", productDetails);
-
-  //     // setAddedProducts((prev) => [...prev, productDetails]);
-  //     // closeModal();
-  //     // calculateTotals([...addedProducts, productDetails]);
-  //     const newAddedProducts = [...addedProducts, productDetails];
-  //     console.log("newaddProducts",newAddedProducts);
-  // setAddedProducts(newAddedProducts);
-  // calculateTotals(newAddedProducts);
-  // closeModal();
-
-  //     event.target.reset();
-
-  //     // ✅ Reset state variables
-  //     setMaking(null);
-  //     setTotals(null);
-  //   };
+ 
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -807,6 +729,8 @@ export default function InvoicePage() {
       type: selectedItem.type,
       name: selectedItem.name,
       rate: selectedItem.rate || 0,
+   
+      mrp: selectedItem.mrp || 0,
       tax_rate: selectedItem.tax_rate,
       hsn: selectedItem.hsn || "",
       product_id: selectedItem.id || "",
@@ -848,189 +772,7 @@ export default function InvoicePage() {
   // let totalquantity = 0;
   let newGstCount = 0;
   let newTotalQty = 0;
-  // const calculateTotals = (products) => {
-  //   let gross = 0;
-  //   let discount = 0;
-  //   let makingTotal = 0;
-  //   const productWiseTotals = [];
-
-  //   products.forEach((product) => {
-  //     const goldValue = product.rate * product.netWeight;
-  //     const hallmarkvalue = Number(product.hallmark) || 0;
-  //     const hallmarkCharge = Number(product.hallmarkCharge) || 0;
-  //     const wastageValue = Number(product.wastageCharge) || 0;
-  //     const otherCharge = Number(product.otherCharge) || 0;
-  //     const huid = Number(product.huid) || 0;
-
-  //     const makingChargePerGram = (product.rate * product.making) / 100; // Making charge per gram(%)
-  //     console.log("makingChargePerGram", makingChargePerGram);
-  //     const totalMakingCharge =
-  //       makingChargePerGram * product.grossWeight * product.pcs; // Total making charge for  all product
-  //     console.log("totalMakingCharge", totalMakingCharge);
-  //     const makingRsVAlue =
-  //       Number(product.makingInRs) * product.grossWeight * product.pcs || 0;
-  //     let totalMakingChargeInRsPercentage = 0; // Total making charge for  all product
-  //     let totalGstOnMakingCharge = 0; // Total making charge for  all product
-
-  //     //makingchage and makingRs on deposite gold(it wokring on one pices of golde)
-  //     const makingChargePerGramOnDepositMetal =
-  //       (product.rate * product.making) / 100;
-  //     console.log(
-  //       "makingChargePerGramOnDepositMetal",
-  //       makingChargePerGramOnDepositMetal
-  //     );
-  //     const totalMakingChargeOnDepositMetal =
-  //       makingChargePerGramOnDepositMetal * product.ad_wgt;
-  //     console.log(
-  //       "totalMakingChargeOnDepositMetal",
-  //       totalMakingChargeOnDepositMetal
-  //     );
-  //     const makingRsVAlueOnDepositMetal =
-  //       Number(product.makingInRs) * product.ad_wgt || 0;
-  //     console.log(
-  //       "totalMakingChargeOnDepositMetal",
-  //       totalMakingChargeOnDepositMetal
-  //     );
-  //     console.log("makingRsVAlueOnDepositMetal", makingRsVAlueOnDepositMetal);
-  //     let totalMakingChargeInRsPercentageOnDepositMetal = 0; // Total making charge for  all product
-  //     let totalGstOnMakingChargeOnDepositMetal = 0; // Total making charge for  all product
-
-  //     if (product.ad_wgt && product.ad_wgt > 0) {
-  //       console.log("product.ad_wgt", product.ad_wgt);
-  //       if (
-  //         totalMakingChargeOnDepositMetal !== 0 ||
-  //         makingRsVAlueOnDepositMetal !== 0
-  //       ) {
-  //         if (product.making_gst_percentage) {
-  //           totalGstOnMakingChargeOnDepositMetal =
-  //             ((totalMakingChargeOnDepositMetal + makingRsVAlueOnDepositMetal) *
-  //               product.making_gst_percentage) /
-  //             100;
-
-  //           console.log(
-  //             "totalGstOnMakingChargeOnDepositMetal",
-  //             totalGstOnMakingChargeOnDepositMetal
-  //           );
-  //         }
-  //         if (product.making_dsc) {
-  //           const discount_onMakingCharage =
-  //             ((totalMakingChargeOnDepositMetal + makingRsVAlueOnDepositMetal) *
-  //               product.making_dsc) /
-  //             100;
-  //           console.log("discount_onMakingCharage", discount_onMakingCharage);
-  //           totalMakingChargeInRsPercentageOnDepositMetal =
-  //             totalMakingChargeOnDepositMetal +
-  //             makingRsVAlueOnDepositMetal -
-  //             discount_onMakingCharage;
-  //           console.log(
-  //             "totalMakingChargeInRsPercentage",
-  //             totalMakingChargeInRsPercentageOnDepositMetal
-  //           );
-  //         } else {
-  //           totalMakingChargeInRsPercentageOnDepositMetal =
-  //             totalMakingChargeOnDepositMetal + makingRsVAlueOnDepositMetal;
-  //           console.log(
-  //             "totalMakingChargeInRsPercentage",
-  //             totalMakingChargeInRsPercentageOnDepositMetal
-  //           );
-  //         }
-  //       }
-  //     }
-
-  //     if (totalMakingCharge !== 0 || makingRsVAlue !== 0) {
-  //       console.log("totalMakingCharge alreday wokring");
-  //       // if (product.making_gst_percentage) {
-  //       //   totalGstOnMakingCharge =
-  //       //     ((totalMakingCharge + makingRsVAlue) *
-  //       //       product.making_gst_percentage) /
-  //       //     100;
-
-  //       //   console.log("totalGstOnMakingCharge", totalGstOnMakingCharge);
-  //       // }
-  //       if (product.making_dsc) {
-  //         const discount_onMakingCharage =
-  //           ((totalMakingCharge + makingRsVAlue) * product.making_dsc) / 100;
-  //         console.log("discount_onMakingCharage", discount_onMakingCharage);
-  //         totalMakingChargeInRsPercentage =
-  //           totalMakingCharge + makingRsVAlue - discount_onMakingCharage;
-
-  //         //add here for gst on making charge or RS after discount
-  //         totalGstOnMakingCharge =
-  //           (totalMakingChargeInRsPercentage * product.making_gst_percentage) /
-  //           100;
-  //         console.log(
-  //           "totalMakingChargeInRsPercentage",
-  //           totalMakingChargeInRsPercentage
-  //         );
-  //       } else {
-  //         totalMakingChargeInRsPercentage = totalMakingCharge + makingRsVAlue;
-  //         totalGstOnMakingCharge =
-  //           (totalMakingChargeInRsPercentage * product.making_gst_percentage) /
-  //           100;
-  //         console.log(
-  //           "totalMakingChargeInRsPercentage",
-  //           totalMakingChargeInRsPercentage
-  //         );
-  //       }
-  //     }
-
-  //     const RateTotal =
-  //       product.rate * product.netWeight * product.pcs +
-  //       wastageValue +
-  //       hallmarkCharge +
-  //       otherCharge +
-  //       totalMakingChargeInRsPercentage;
-  //     //  totalMakingChargeInRsPercentageOnDepositMetal
-  //     // totalGstOnMakingChargeOnDepositMetal;
-  //     console.log("RateTotal", RateTotal);
-
-  //     const productDiscount = product.discountPercent / 100;
-  //     const AdjustedMaking = product.making - productDiscount;
-
-  //     const StoneTotal = product.stoneWeight * product.stoneValue;
-  //     const DiamondTotal = product.diamondWeight * product.diamondValue;
-  //     const gstonGold =
-  //       (product.rate * product.netWeight * product.pcs * product.tax_rate) /
-  //       100;
-  //     console.log("gst on gold", gstonGold);
-  //     const productTotal = RateTotal + StoneTotal + DiamondTotal;
-  //     console.log("Product Total Rate", productTotal);
-  //     //blow line use to calculate the only gst  over all product
-  //     // totalgstCount += (productTotal * product.tax_rate) / 100;
-  //     totalgstCount += gstonGold + totalGstOnMakingCharge;
-  //     console.log("totalgstCount", totalgstCount);
-  //     totalquantity += product?.pcs;
-  //     console.log("totalquantity", totalquantity);
-  //     console.log("gstongolde", gstonGold);
-  //     console.log("mkgcharage", totalMakingChargeInRsPercentage);
-  //     console.log("gstmkgchgr", totalGstOnMakingCharge);
-  //     productWiseTotals.push({
-  //       code: product.code,
-  //       name: product.name,
-
-  //       rateTotal: RateTotal.toFixed(2),
-  //       adjustedMaking: AdjustedMaking.toFixed(2),
-  //       diamondTotal: DiamondTotal.toFixed(2),
-  //       stoneTotal: StoneTotal.toFixed(2),
-  //       gstOnGold: gstonGold.toFixed(2),
-  //       mkg_chg_RS_P: totalMakingChargeInRsPercentage.toFixed(2),
-
-  //       gstOnMaking: totalGstOnMakingCharge.toFixed(2),
-  //       total: productTotal.toFixed(2),
-  //     });
-
-  //     gross += productTotal;
-  //     discount += productDiscount;
-  //     makingTotal += AdjustedMaking;
-  //   });
-
-  //   setGrossTotal(gross.toFixed(2));
-  //   setDiscountTotal(discount.toFixed(2));
-  //   setProductWiseTotals(productWiseTotals);
-  //   setMakingTotal(makingTotal.toFixed(2));
-  //   setAllProductsGstAmount(totalgstCount.toFixed(2));
-  //   setTotalQty(totalquantity);
-  // };
+ 
 
   const calculateTotals = (products) => {
     let gross = 0;
@@ -1041,6 +783,7 @@ export default function InvoicePage() {
     const productWiseTotals = [];
 
     products.forEach((product) => {
+      console.log("product check",product)
       const goldValue = product.rate * product.netWeight;
       const hallmarkCharge = Number(product.hallmarkCharge) || 0;
       const wastageValue = Number(product.wastageCharge) || 0;
@@ -1092,22 +835,51 @@ export default function InvoicePage() {
         }
       }
 
-      const rateTotal =
-        product.rate * product.netWeight * product.pcs +
-        wastageValue +
-        hallmarkCharge +
-        otherCharge +
-        makingTotalRs;
+      
+      // const rateTotal =
+      //   product.rate * product.netWeight * product.pcs +
+      //   wastageValue +
+      //   hallmarkCharge +
+      //   otherCharge +
+      //   makingTotalRs;
 
+      let rateTotal = 0;
+      let gstOnGold = 0;
+      
+      if (product?.mrp > 0) {
+        console.log("Using MRP for calculation");
+        rateTotal = Number(product.mrp) * product.pcs;
+        gstOnGold = (rateTotal * product.tax_rate) / 100;
+      } else {
+        console.log("Using normal rate calculation");
+        rateTotal =
+          product.rate * product.netWeight * product.pcs +
+          wastageValue +
+          hallmarkCharge +
+          otherCharge +
+          makingTotalRs;
+
+          console.log("Using normal rate calculation",rateTotal);
+      
+        gstOnGold =
+          (product.rate * product.netWeight * product.pcs * product.tax_rate) / 100;
+      }
+      console.log("gstOnGold",gstOnGold)
+      console.log("Using normal rate calculation3",rateTotal);
       const productDiscount = product.discountPercent / 100;
       const AdjustedMaking = product.making - productDiscount;
 
       const stoneTotal = product.stoneWeight * product.stoneValue;
       const diamondTotal = product.diamondWeight * product.diamondValue;
 
-      const gstOnGold =
-        (product.rate * product.netWeight * product.pcs * product.tax_rate) /
-        100;
+      // const gstOnGold =
+      //   (product.rate * product.netWeight * product.pcs * product.tax_rate) /
+      //   100;
+
+      
+       
+
+console.log("ratetoal",rateTotal);
 
       const productTotal = rateTotal + stoneTotal + diamondTotal;
       console.log("grosstotal", productTotal);
@@ -1143,6 +915,7 @@ export default function InvoicePage() {
         gstOnGold: gstOnGold.toFixed(2),
         mkg_chg_RS_P: makingTotalRs.toFixed(2),
         gstOnMaking: gstOnMaking.toFixed(2),
+        fixed_amt:product?.mrp || 0,
         total: productTotal.toFixed(2),
       });
 
@@ -1264,6 +1037,7 @@ export default function InvoicePage() {
         product_id: product.product_id,
         diamondDetails: product.diamondWeight,
         diamondValue: product.diamondValue,
+        fixed_amt:product?.mrp,
         // qty: product.qty,
         qty: product.pcs,
         // grm: product.grm,
@@ -1761,7 +1535,10 @@ export default function InvoicePage() {
         <aside className="w-1/4 bg-gray-100 p-4 relative h-full">
           <div className="mb-16 overflow-y-auto h-[20rem]">
             {addedProducts.map((product, index) => (
-              <div key={index} className=" border flex justify-between items-center p-2 rounded mb-2">
+              <div
+                key={index}
+                className=" border flex justify-between items-center p-2 rounded mb-2"
+              >
                 <div className=" p-2 rounded mb-2 ">
                   {product.name && <p className="font-bold">{product.name}</p>}
 
@@ -1896,7 +1673,7 @@ export default function InvoicePage() {
               <p>Discount:</p>
               <p>₹{discountTotal}</p>
             </div>
-          
+
             {addition > 0 && (
               <div className="flex justify-between">
                 <p>AddtionRs:</p>
@@ -2101,6 +1878,21 @@ export default function InvoicePage() {
                   className="w-full p-2 rounded border"
                 />
               </div>
+
+              {/* fiexed */}
+{/* 
+              {selectedItem?.mrp != null && selectedItem?.mrp !== "" && ( */}
+  <div>
+    <label>Fixed</label>
+    <input
+      name="mrp"
+      value={selectedItem.mrp}
+      readOnly
+      type="number"
+      className="w-full p-2 rounded border"
+    />
+  </div>
+{/* // )} */}
               <div>
                 <label>Pcs</label>
                 <input
