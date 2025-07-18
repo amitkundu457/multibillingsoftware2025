@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ImCross } from "react-icons/im";
@@ -53,6 +53,7 @@ function ParcelModal({ isOpen, onClose }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isFormVisible, setFormVisible] = useState(false);
   const [parcelTypes, setParcelTypes] = useState([]);
+  const [selectedParcelTypeId, setSelectedParcelTypeId] = useState("");
 
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
@@ -124,33 +125,37 @@ function ParcelModal({ isOpen, onClose }) {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/parcel-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/parcel-order",
+        {
           customer_id: customerDetails?.id || null,
+           parcelType_id: selectedParcelTypeId,
           items: selectedProduct.map((item) => ({
             product_id: parseInt(item.id),
             product_price: parseFloat(item.rate),
             quantity: parseInt(item.quantity),
+            parcelType_id:selectedParcelTypeId,
             tax_rate:parseInt(item.tax_rate),
           })),
-        }),
-      });
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      const result = await response.json();
+     // const result =  response;
 
-      if (response.ok) {
+      if (response.status==200) {
         setSelectedProduct([]);
         setCustomerDetails(null);
         const printConfirmation = window.confirm(
           "Do you want to print the kot?"
         );
         if (printConfirmation) {
-          Printbill(result.parcel_order_id);
+          Printbill(response.data.parcel_order_id);
         }
         onClose();
       } else {
@@ -224,7 +229,7 @@ function ParcelModal({ isOpen, onClose }) {
 
   useEffect(() => {
     fetch(API_URL)
-      .then((res) => res.json()) 
+      .then((res) => res.json())
       .then((data) => {
         setParcelTypes(data);
         setLoading(false);
@@ -310,18 +315,23 @@ function ParcelModal({ isOpen, onClose }) {
             </div>
 
             <div className="mt-6">
-            <select className="  border rounded ">
-              <option value="" disabled selected>
-                 Select Parcel Type
-              </option>
-              {parcelTypes.map((type) => (
-                <option key={type.id} value={type.type}>
-                   {type.type}
+              <select
+                className="  border rounded "
+                value={selectedParcelTypeId}
+                onChange={(e) => {
+                  setSelectedParcelTypeId(e.target.value);
+                }}
+              >
+                <option value="" disabled selected>
+                  Select Parcel Type
                 </option>
-              ))}
-            </select>
+                {parcelTypes.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.type}
+                  </option>
+                ))}
+              </select>
             </div>
-           
           </div>
           <div>
             {/* <label className="block mb-1 font-medium">Enter Booking ID</label>
@@ -353,7 +363,7 @@ function ParcelModal({ isOpen, onClose }) {
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={`http://127.0.0.1:8000/${item.image}`}
+                  src={`http://127.0.0.1:8000/storage/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

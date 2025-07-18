@@ -133,7 +133,9 @@ public function generateBill($orderId)
             'message' => 'Bill already generated.',
             'bill' => $order->bill,
             'customer' => $order->customer,
-            'user' => optional($order->customer->user)->only(['id', 'name', 'email']) ?? 'Guest',
+          'user' => $order->customer && $order->customer->user
+    ? $order->customer->user->only(['id', 'name', 'email'])
+    : ['id' => null, 'name' => 'Guest', 'email' => null],
             'created_by' => $order->createdBy ? [
                 'id' => $order->createdBy->id,
                 'name' => $order->createdBy->name,
