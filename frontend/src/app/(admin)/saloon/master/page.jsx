@@ -138,6 +138,12 @@ const MasterMenu = () => {
             count: 4,
             link: `/${productUrl}/customertype`,
         },
+          {
+            show: showMenuIn(["jwellery","saloon"]),
+            name: "t&c Invoice",
+            count: 29,
+            link: `/${productUrl}/t&cInvoice`,
+        },
         {
             show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
             name: "Account Group ",
@@ -157,7 +163,7 @@ const MasterMenu = () => {
             link: `/${productUrl}/rate/`,
         },
          {
-            show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
+            show: showMenuIn(["jwellery", "resturant" ]),
             name: "Rate Master ",
             count: 4,
             link: `/${productUrl}/todayrates/ratemaster`,

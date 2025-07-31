@@ -27,7 +27,7 @@ class BarcodeController extends Controller
                 'barcodes.bill_number', 'barcodes.image', 'barcodes.basic_rate', 'barcodes.purchase_rates',
                 'barcodes.mrp', 'barcodes.sale_rate', 'barcodes.gm', 'barcodes.diamond_value',
                 'barcodes.diamond_details', 'barcodes.stone_details', 'barcodes.stone_value',
-                'product_services.name as product_name'
+                'product_services.name as product_name','product_services.pro_ser_type'
             )
             ->where('barcodes.created_by', $admin->id)
             ->get();

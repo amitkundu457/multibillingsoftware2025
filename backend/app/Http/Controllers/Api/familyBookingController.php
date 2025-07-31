@@ -1,8 +1,7 @@
 <?php
-
 namespace App\Http\Controllers\api;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FamilyBooking;
@@ -59,7 +58,7 @@ class familyBookingController extends Controller
         'items.*.product_id'     => 'required|integer',
         'items.*.quantity'       => 'required|integer|min:1',
         'items.*.product_price'  => 'required|numeric|min:0',
-        // 'items.*.tax_rate'  => 'required|numeric|min:0',
+        'items.*.tax_rate'  => 'nullable|numeric|min:0',
 
     ]);
 
@@ -89,7 +88,7 @@ class familyBookingController extends Controller
             'product_id'        => $item['product_id'],
             'quantity'          => $item['quantity'],
             'product_price'     => $item['product_price'],
-            'tax_rate'=>$item['tax_rate'],
+            'tax_rate' => $item['tax_rate'] ?? null,
 
             'kot_generated'     => true,
         ]);

@@ -232,23 +232,33 @@ const AccountsEntries = () => {
     fetchAccountType();
   }, [modalType, setValue]);
 
+
   const applyFilters = useCallback(() => {
     const filtered = entries.filter((entry) => {
       const entryDate = new Date(entry.created_at);
+      entryDate.setHours(0, 0, 0, 0); // Normalize entry date to start of day
+  
       const fromDate = dateRange.from ? new Date(dateRange.from) : null;
+      if (fromDate) fromDate.setHours(0, 0, 0, 0); // Normalize from date
+  
       const toDate = dateRange.to ? new Date(dateRange.to) : null;
-
+      if (toDate) toDate.setHours(23, 59, 59, 999); // Normalize to end of day
+  
       const isWithinDateRange =
         (!fromDate || entryDate >= fromDate) &&
         (!toDate || entryDate <= toDate);
-
+  
       const matchesFilter = entry.account_type === filter;
-
+  
       return isWithinDateRange && matchesFilter;
     });
-    // Do something with the filtered entries if needed
+  
+    setFilteredEntries(filtered);
   }, [entries, dateRange, filter]);
-
+  
+  useEffect(() => {
+    applyFilters(); // ✅ Runs every time filter changes
+  }, [dateRange, filter, entries, applyFilters]);
   useEffect(() => {
     if (modalType) {
       axios
@@ -282,6 +292,7 @@ const AccountsEntries = () => {
     setModalNumber(generateModalNumber(type)); // Generate the dynamic number
 
     setIsOpen(true); // Open the modal
+    console.log("edit data",entryData);
     if (entryData) {
       setEditId(entryData.id);
       populateFormData(entryData);
@@ -304,7 +315,6 @@ const AccountsEntries = () => {
 
   //store group type
   const groupTypeSubmit = async (e) => {
-
     e.preventDefault();
     const data = { name: newGroupType };
     const token = getToken();
@@ -313,17 +323,17 @@ const AccountsEntries = () => {
       return;
     }
 
-
     // console.log("data group type", data);
     try {
       const res = await axios.post(
-        " http://127.0.0.1:8000/api/account-groups",data,
+        " http://127.0.0.1:8000/api/account-groups",
+        data,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      toast.success("Account Group Created")
-      fetchAccountGroup()
+      toast.success("Account Group Created");
+      fetchAccountGroup();
     } catch (error) {
       toast.error("Account Not Created Failed");
     }
@@ -344,7 +354,7 @@ const AccountsEntries = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-           Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       });
@@ -393,7 +403,7 @@ const AccountsEntries = () => {
     try {
       const response = await getAccount(); // Fetch data from API
       setEntries(response.data);
-
+      console.log("acmount reports", response);
       setFilteredEntries((prevFilteredEntries) => {
         // Preserve the previous filter if applied
         return prevFilteredEntries.length > 0
@@ -462,11 +472,15 @@ const AccountsEntries = () => {
         response = await UpdateAccount(editId, data);
         setSubmitStatus("Record updated successfully!");
         notyf.success("Data updated successfully!");
+        setIsOpen(false); // Close the modal
+    setModalType("");
       } else {
         response = await StoreAccount(data);
         console.log(response);
         setSubmitStatus("Record created successfully!");
         notyf.success("Data placed successfully!");
+        setIsOpen(false); // Close the modal
+    setModalType("");
       }
 
       reset();
@@ -488,6 +502,8 @@ const AccountsEntries = () => {
       notyf.success(`Data placed successfully!`);
       fetchAccountMasters();
       reset(); // Reset the form after successful submission
+      setIsOpen(false); // Close the modal
+    setModalType("");
     } catch (error) {
       console.error(error);
       setSubmitStatus("Failed to create receipt.");
@@ -531,11 +547,6 @@ const AccountsEntries = () => {
     }
   };
 
-
-
-
-
-
   const handleSubmitdata = async (event) => {
     event.preventDefault();
 
@@ -560,7 +571,7 @@ const AccountsEntries = () => {
           headers: {
             "Content-Type": "application/json",
             // Authorization: "Bearer YOUR_ACCESS_TOKEN",
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -667,14 +678,13 @@ const AccountsEntries = () => {
           <label className="block text-sm font-medium text-gray-700">
             Filter:
           </label>
+
           <select
             className="mt-1  p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           >
-            <option className="" value="RECEIPT">
-              RECEIPT
-            </option>
+            <option value="RECEIPT">RECEIPT</option>
             <option value="PAYMENT">PAYMENT</option>
             <option value="JOURNAL">JOURNAL</option>
             <option value="CONTRA">CONTRA</option>
@@ -758,12 +768,12 @@ const AccountsEntries = () => {
                   </td>
                   <td className="px-4 py-2 text-sm text-gray-700 border">
                     <div className="flex items-center space-x-2">
-                      <button
+                      {/* <button
                         className="text-gray-600 hover:text-blue-600"
                         onClick={() => handlePrint(entry.id)}
                       >
                         <FaPrint />
-                      </button>
+                      </button> */}
                       <button
                         className="text-gray-600 hover:text-green-600"
                         onClick={() => handleOpenModal("edit", entry)}
@@ -867,8 +877,107 @@ const AccountsEntries = () => {
               </div>
 
               {/* Account */}
+              {modalType !== "payment" && (
+  <div className="mb-4 flex space-x-3">
+    <div className="w-[80%]">
+      <label>Credit Account</label>
+      <select
+        name="credit_customer_id"
+        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        {...register("credit_customer_id", {
+          required: "Account selection is required",
+        })}
+      >
+        <option value="">Search For Account</option>
+        {accountMasters.map((am) => (
+          <option key={am.id} value={am.id}>
+            {am.account_name}
+          </option>
+        ))}
+      </select>
+      {errors.credit_customer_id && (
+        <p className="text-red-500 text-sm">
+          {errors.credit_customer_id.message}
+        </p>
+      )}
+    </div>
+
+    <span className="text-green-500 font-bold">Cr.</span>
+
+    {/* Add Account Button */}
+    <div
+      className="grid place-items-center mt-3 cursor-pointer"
+      onClick={handleMaster}
+    >
+      <FaUserPlus className="text-[2rem]" />
+    </div>
+  </div>
+)}
+
+
+              {/* Account */}
+              <div className="mb-4 flex space-x-3">
+                {modalType === "contra" || modalType === "journal" ? (
+                  <>
+                    <div className="w-[80%]">
+                      
+                      <label>Debit Account</label>
+                      <select
+                        name="debit_customer_id"
+                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        {...register("debit_customer_id", {
+                          required: "Account selection is required",
+                        })}
+                      >
+                        <option value="">Search For Account</option>
+                        {accountMasters.map((am) => (
+                          <option key={am.id} value={am.id}>
+                            {am.account_name}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.debit_customer_id && (
+                        <p className="text-red-500 text-sm">
+                          {errors.debit_customer_id.message}
+                        </p>
+                      )}
+                    </div>
+                    <span className="text-red-500 font-bold">Dt.</span>
+                  </>
+                ) : null}
+              </div>
+
+              {/* Payment Method */}
+              {(modalType === "receipt" || modalType === "payment") && (
+                <>
+                <div className="mb-4">
+                  <label>Credit Account</label>
+                  <select
+                    name="recive_id"
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    {...register("recive_id", {
+                      required: "Payment method is required",
+                    })}
+                  >
+                    <option value="">Search For Account</option>
+                    <option value="1">Cash</option>
+                    <option value="2">UPI</option>
+                    <option value="3">Card</option>
+                    <option value="4">Net Banking</option>
+                    <option value="5">NEFT</option>
+                    <option value="6">Bank Transfer</option>
+                  </select>
+                  {errors.recive_id && (
+                    <p className="text-red-500 text-sm">
+                      {errors.recive_id.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Account */}
               <div className="mb-4 flex space-x-3">
                 <div className="w-[80%]">
+                <label>Debit Account</label>
                   <select
                     name="credit_customer_id"
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -899,61 +1008,7 @@ const AccountsEntries = () => {
                   <FaUserPlus className="text-[2rem]" />
                 </div>
               </div>
-
-              {/* Account */}
-              <div className="mb-4 flex space-x-3">
-                {modalType === "contra" || modalType === "journal" ? (
-                  <>
-                    <div className="w-[80%]">
-                      <select
-                        name="debit_customer_id"
-                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("debit_customer_id", {
-                          required: "Account selection is required",
-                        })}
-                      >
-                        <option value="">Search For Account</option>
-                        {accountMasters.map((am) => (
-                          <option key={am.id} value={am.id}>
-                            {am.account_name}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.debit_customer_id && (
-                        <p className="text-red-500 text-sm">
-                          {errors.debit_customer_id.message}
-                        </p>
-                      )}
-                    </div>
-                    <span className="text-red-500 font-bold">Dt.</span>
-                  </>
-                ) : null}
-              </div>
-
-              {/* Payment Method */}
-              {(modalType === "receipt" || modalType === "payment") && (
-                <div className="mb-4">
-                  <select
-                    name="recive_id"
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    {...register("recive_id", {
-                      required: "Payment method is required",
-                    })}
-                  >
-                    <option value="">Search For Account</option>
-                    <option value="1">Cash</option>
-                    <option value="2">UPI</option>
-                    <option value="3">Card</option>
-                    <option value="4">Net Banking</option>
-                    <option value="5">NEFT</option>
-                    <option value="6">Bank Transfer</option>
-                  </select>
-                  {errors.recive_id && (
-                    <p className="text-red-500 text-sm">
-                      {errors.recive_id.message}
-                    </p>
-                  )}
-                </div>
+              </>
               )}
 
               {/* Amount */}

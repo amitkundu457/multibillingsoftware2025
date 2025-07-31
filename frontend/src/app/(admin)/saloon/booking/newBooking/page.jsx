@@ -11,6 +11,8 @@ const todayDate = now.toISOString().split('T')[0]; // "YYYY-MM-DD"
 const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:MM"
 
 const Booking = () => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
   const [formData, setFormData] = useState({
     entryDate: todayDate,
     bookingNo: "BKLjkjI1",
@@ -22,7 +24,7 @@ const Booking = () => {
     source: "",
     outOfSalon: false,
     rate: "",
-    service:"",
+    services:[],
     // additionalCharge: "0",
     //discount: "0",
     detail: "",
@@ -84,7 +86,7 @@ const[ serviceList,setService]=useState([]);
       address: formData.address || null,
       source: formData.source || null,
       out_of_salon: formData.outOfSalon || false,
-      service:formData.service|| null,
+      service:formData.services|| [],
       rate: Number(formData.rate) || 0,
       discount: Number(formData.discount) || 0,
       total_price: Number(formData.totalPrice) || 0,
@@ -128,7 +130,7 @@ console.log("booking payload",sanitizedData)
         rate: "",
         discount: "",
         totalPrice: "",
-        service:"",
+        services:[],
         payment: {
           cash: "0",
           card: "0",
@@ -288,11 +290,12 @@ console.log("booking payload",sanitizedData)
             </div>
           </div>
 
-          <div className=" space-x-2">
+          {/* <div className=" space-x-2">
             <label>Serive Lists</label>
             <select
             name="service"
-            value={formData.service}
+             multiple
+            value={formData.service ||  []}
             onChange={handleChange}
             className=" rounded-md"
             >
@@ -303,7 +306,58 @@ console.log("booking payload",sanitizedData)
                 ))
               }
             </select>
-          </div>
+          </div> */}
+            <div className="mb-4 relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Select Services
+              </label>
+
+              {/* Dropdown toggle button */}
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-left text-sm shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+              >
+                {formData.services.length > 0
+                  ? `${formData.services.length} selected`
+                  : "Choose services..."}
+              </button>
+
+              {/* Dropdown menu (shown when open) */}
+              {isDropdownOpen && (
+                <div className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg border border-gray-200 max-h-60 overflow-auto">
+                  <div className="p-2 space-y-2">
+                    {serviceList.map((service) => (
+                      <div key={service.id} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={service.id}
+                          checked={formData.services.includes(service.name)}
+                          onChange={(e) => {
+                            const { checked } = e.target;
+                            setFormData((prev) => ({
+                              ...prev,
+                              services: checked
+                                ? [...prev.services, service.name]
+                                : prev.services.filter(
+                                    (s) => s !== service.name
+                                  ),
+                            }));
+                          }}
+                          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                        />
+                        <label
+                          htmlFor={service.id}
+                          className="ml-2 text-sm text-gray-700"
+                        >
+                          {service.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           <button
             type="submit"
             className="bg-green-600 text-white px-4 py-2 rounded w-full"

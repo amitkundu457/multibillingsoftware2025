@@ -81,6 +81,8 @@ export default function InvoicePage() {
   const [printStatus_id, setPrintStatus_id] = useState("");
   const [printStatus, setPrintStatus] = useState([]);
   const [rate, setRate] = useState(0);
+  const [searchItem,setSearchItem] = useState("");
+
 
   const [addedProducts, setAddedProducts] = useState([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -91,6 +93,7 @@ export default function InvoicePage() {
   const [category, setCategory] = useState([]);
   const [making, setMaking] = useState(null);
   const [isDiscModalOpen, setDiscModalOpen] = useState(false);
+  const [isRSModalOpen,setIsRSModalOpen] = useState(false)
   const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
   const [hallmarksCharge, setHallMarksCharge] = useState(null);
   const [makingInRsCharge, setMakingInRsCharge] = useState(null);
@@ -112,6 +115,7 @@ export default function InvoicePage() {
   const [disTotalMamerAmount, setDisTotalMamerAmount] = useState(0);
   const [dataFilter, setData] = useState([]);
   const [overallDiscount, setOverallDiscount] = useState(0);
+  const [rupeeOverAllsDiscount , setRupeesOverAllDiscount] = useState(0);
   const [reward, setReward] = useState(null);
   const [netWt, setNtWt] = useState(null);
   const [pcss, setPcs] = useState(null);
@@ -148,15 +152,27 @@ export default function InvoicePage() {
   const [pakageChecked, setPakageChecked] = useState(false);
   const [memberships, setMemberships] = useState([]);
   const [pakageList, setPakageList] = useState([]);
+  const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
 
   const [remainingAmount, setRemainingAmount] = useState(gto);
   const [memershipDiscunt, setMemberShipDiscount] = useState(null);
 
-  console.log("overallDiscount", overallDiscount);
-  const overallDiscountAmount = (gto * overallDiscount) / 100;
-  console.log("overallDiscountAmount", overallDiscountAmount);
-  gto = gto - overallDiscountAmount;
-  console.log("gto after overall discount", gto);
+   let overallDiscountAmount = 0;
+
+  if(overallDiscount==0){
+       overallDiscountAmount = Number(rupeeOverAllsDiscount) ;
+
+    gto = gto-rupeeOverAllsDiscount;
+   
+  }
+  else{
+   overallDiscountAmount = (gto * overallDiscount) / 100;
+   gto = gto - overallDiscountAmount;
+ 
+  }
+
+  
+  
 
   const getToken = () => {
     const cookie = document.cookie
@@ -432,9 +448,12 @@ export default function InvoicePage() {
     }
 
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/type", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/product-service-groups",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setCategory(response.data);
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -494,8 +513,6 @@ export default function InvoicePage() {
     }
   };
 
-
-
   useEffect(() => {
     fetchItems();
     fetchItemsCoin();
@@ -507,6 +524,9 @@ export default function InvoicePage() {
     fetchPrintStatus();
   }, []);
 
+
+ 
+
   //set selected categoey
   useEffect(() => {
     if (selectedCategory) {
@@ -517,7 +537,7 @@ export default function InvoicePage() {
     } else {
       setFilteredItems(items);
     }
-  }, [selectedCategory, items]);
+  }, [selectedCategory, items,barcode]);
 
   const fetchItems = async () => {
     const token = getToken();
@@ -542,6 +562,13 @@ export default function InvoicePage() {
       setLoading(false);
     }
   };
+
+
+  useEffect(()=>{
+   const selectedSearchItem =  items.filter((item)=>item.name.toLowerCase().includes(searchItem.toLowerCase()));
+   setFilteredItems(selectedSearchItem)
+
+  },[searchItem])
 
   // const fetchEmployees = async () => {
   //   const res = await axios.get(" http://127.0.0.1:8000/api/employees");
@@ -591,19 +618,21 @@ export default function InvoicePage() {
     }
   };
   const openModal = (item) => {
-    const matchingProduct=items.find((p)=>p.id==item.id)
-    console.log("matching   prodcuts",matchingProduct);
-    if(matchingProduct?.current_stock>0){
+    const matchingProduct = items.find((p) => p.id == item.id);
+    console.log("matching   prodcuts", matchingProduct);
+
+    if (
+      item.pro_ser_type === "Product" &&
+      matchingProduct?.current_stock <= 0
+    ) {
+      toast.error("Out of Stock: This product is currently unavailable");
+      return;
+    } else {
       setSelectedItem(item);
       setIsOpen(true);
     }
-    else{
-      toast.error("Out Of Stock This Products")
 
-    }
-   
     console.log("items", item);
-    
   };
 
   const closeModal = () => {
@@ -620,6 +649,7 @@ export default function InvoicePage() {
   };
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    setBarcode("");
     const formData = new FormData(event.target);
     console.log("fromate data handele submit", formData);
     const productDetails = {
@@ -630,9 +660,8 @@ export default function InvoicePage() {
       tax_rate: selectedItem.tax_rate,
       hsn: selectedItem.hsn || "",
       pcss: Number(formData.get("pcss")) || 1,
-      product_id:selectedItem.id,
+      product_id: selectedItem.id,
 
-      
       discountPercent: Number(formData.get("discountPercent")) || 0,
       pro_total: 150,
     };
@@ -683,8 +712,8 @@ export default function InvoicePage() {
   };
 
   const openCheckout = () => {
-    setCheckoutOpen(true);
-  };
+     setCheckoutOpen(true);
+   };
 
   const closeCheckout = () => {
     setCheckoutOpen(false);
@@ -709,12 +738,12 @@ export default function InvoicePage() {
       return;
     }
     console.log("addedProducts", addedProducts);
-    if (!customerDetails?.id) {
-      notyf.error(
-        "Please ensure customer details are complete before proceeding."
-      );
-      return;
-    }
+    // if (!customerDetails?.id) {
+    //   notyf.error(
+    //     "Please ensure customer details are complete before proceeding."
+    //   );
+    //   return;
+    // }
 
     if (addedProducts.length === 0) {
       toast.error("No products added to the order.");
@@ -762,7 +791,7 @@ export default function InvoicePage() {
         code: product.code,
         tax_rate: product.tax_rate,
         hsn: product.hsn,
-        product_id:product.product_id,
+        product_id: product.product_id,
         rate: product.rate,
         // qty: pcss,
         qty: product.pcss,
@@ -809,6 +838,7 @@ export default function InvoicePage() {
       setGrossTotal(0);
       setDiscountTotal(0);
       setOverallDiscount(0);
+      setRupeesOverAllDiscount(0);
       setTotalTax(0);
       closeCheckout();
       // updateRedeemPoint(customerDetails.id, usingLoyaltyPoints, token);
@@ -900,7 +930,6 @@ export default function InvoicePage() {
     setGrossTotal(totalPrice);
   };
 
-
   const handleSearchBarCode = async () => {
     if (!barcode.trim()) {
       setError("Please enter a barcode or fill details manually.");
@@ -909,23 +938,25 @@ export default function InvoicePage() {
     }
 
     try {
-     
       console.log("alldata", allProducts);
       const foundItem = allProducts.find((p) => p.barcode_no === barcode);
       console.log("bracode2", foundItem);
-     
+
+      const barcodeFilter = filteredItems.filter((p)=>p.id===foundItem.item_id);
+      setFilteredItems(barcodeFilter);
+
+      
 
       if (foundItem) {
         console.log(foundItem.basic_rate);
         // setSelectedItem(foundItem);
         setPcs(Number(foundItem.pcs) || 1);
-        
+
         setIsOpen(true); // <-- open modal with new data
       } else {
         alert("Product with this barcode not found");
       }
-      setBarcode("");
-
+      // setBarcode("");
     } catch (error) {
       console.error("Error searching barcode:", error);
     }
@@ -970,13 +1001,13 @@ export default function InvoicePage() {
             <span className="text-xs">Package</span>
           </Link>
 
-          {/* <Link
-            //  href="/saloon/partialorder"
+          <Link
+              href="/saloon/reports/billreport/"
             className="flex flex-col items-center text-blue-600"
           >
             <VscReport size={20} />
             <span className="text-xs">Report</span>
-          </Link> */}
+          </Link>
         </div>
 
         {/* Right Section */}
@@ -994,6 +1025,12 @@ export default function InvoicePage() {
             onClick={() => setDiscModalOpen(true)}
           >
             % Disc
+          </button>
+           <button
+            className="bg-green-500 text-white px-2 py-1 rounded text-sm"
+            onClick={() => setIsRSModalOpen(true)}
+          >
+            ₹ Disc
           </button>
           {/* <button className="bg-orange-500 text-white px-4 py-1 rounded flex items-center space-x-1">
             <span>Checkout</span>
@@ -1019,7 +1056,7 @@ export default function InvoicePage() {
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="bg-green-600 text-white p-2 text-center">
-                Overall Discount
+                Overall Discount %
               </h2>
               <div className="p-4">
                 <label>Disc%</label>
@@ -1047,6 +1084,51 @@ export default function InvoicePage() {
                 <button
                   className="bg-green-500 text-white px-4 py-2 rounded w-full"
                   onClick={() => setDiscModalOpen(false)}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {isRSModalOpen && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50"
+            onClick={() => setDiscModalOpen(false)}
+          >
+            <div
+              className="bg-white p-4 rounded shadow-lg w-96 text-black"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="bg-green-600 text-white p-2 text-center">
+                Rupees Overall Discount
+              </h2>
+              <div className="p-4">
+                <label>₹ disc.</label>
+                <input
+                  type="text"
+                  value={rupeeOverAllsDiscount}
+                  onChange={(e) => setRupeesOverAllDiscount(e.target.value)}
+                  className="w-full border p-2 rounded mb-2"
+                  defaultValue="0"
+                />
+                {/* <label>Disc (Rs)</label>
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded mb-2"
+                  defaultValue="0"
+                />
+                <label>Addition (Rs)</label>
+                <input
+                  type="text"
+                  className="w-full border p-2 rounded mb-2"
+                  defaultValue="0"
+                />
+                <label>Addition Detail</label>
+                <textarea className="w-full border p-2 rounded mb-4"></textarea> */}
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded w-full"
+                  onClick={() => setIsRSModalOpen(false)}
                 >
                   Done
                 </button>
@@ -1203,7 +1285,9 @@ export default function InvoicePage() {
               <label className="font-medium">Search Item</label>
               <input
                 type="text"
+                value={searchItem}
                 placeholder="Search Item"
+                onChange={(e)=>{setSearchItem(e.target.value)}}
                 className="border rounded px-4 py-2 ml-2"
               />
             </div>
@@ -1250,13 +1334,38 @@ export default function InvoicePage() {
             {/* </div> */}
 
             {/* Barcode Toggle */}
-            {/* <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
               <span className="text-sm font-medium">Barcode</span>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" />
+                <input type="checkbox" className="sr-only peer"
+                onChange={()=>{setShowBarcodeNumber(!showBarcodeNumber)}}
+                 />
                 <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
               </label>
-            </div> */}
+            </div>
+
+            {
+              showBarcodeNumber && (
+                 <div className="flex gap-2">
+              <input
+                type="text"
+                value={barcode}
+                onChange={(e) => {setBarcode(e.target.value)
+                 }}
+                placeholder="Enter Barcode number"
+                className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+              />
+
+              <button
+                type="button"
+                onClick={handleSearchBarCode}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Search
+              </button>
+            </div>
+              )
+            }
             {/* <span>
               <span className="text-blue-950 text-lg font-bold">
                 {" "}
@@ -1381,7 +1490,7 @@ export default function InvoicePage() {
         <Modal open={isOpen} onClose={() => closeModal()} center>
           <form onSubmit={handleFormSubmit} className="space-y-4 rounded-md">
             <h2 className="text-lg font-bold">{selectedItem.name}</h2>
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <input
                 type="text"
                 value={barcode}
@@ -1397,7 +1506,7 @@ export default function InvoicePage() {
               >
                 Search
               </button>
-            </div>
+            </div> */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label>Rate</label>
@@ -1435,7 +1544,8 @@ export default function InvoicePage() {
             <button
               type="submit"
               className="w-full bg-green-500 text-white p-2 rounded mt-4"
-            >
+              onClick={()=>setBarcode("")}
+             >
               Add Product
             </button>
           </form>
@@ -1444,7 +1554,9 @@ export default function InvoicePage() {
 
       {/* Checkout Modal */}
       {checkoutOpen && (
+       
         <Modal
+        
           open={openCheckout}
           onClose={closeCheckout}
           center

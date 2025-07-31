@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { MdCelebration } from "react-icons/md";
 import axios from "axios";
+import useSWR from "swr";
+import Link from 'next/link';
 
 export default function Birthday_and_Aniversary({ label }) {
   const [customers, setCustomers] = useState([]);
@@ -14,6 +16,29 @@ export default function Birthday_and_Aniversary({ label }) {
     }
     return null;
   };
+
+  const {
+    data: user,
+    isLoading,
+    mutate,
+  } = useSWR(`/auth/agme`, async () => {
+    let res = await axios.get("/auth/agme", {
+      headers: { Authorization: `Bearer ${cookies.access_token}` },
+    });
+    return res.data;
+  });
+
+  
+  const roleToUrlMap = {
+    admin: "admin",
+    jwellery: "jwellery",
+    distributor: "distributor",
+    resturant: "resturant",
+    saloon: "saloon",
+  };
+
+  const productUrl = roleToUrlMap[!isLoading && user?.roles?.[0]?.name] || "";
+  console.log("pruddcturl2",productUrl);
 
   const fetchCustomers = async () => {
     try {
@@ -56,13 +81,20 @@ export default function Birthday_and_Aniversary({ label }) {
       </div>
       <div className="mt-2 flex border-2 border-blue-500 rounded-lg p-10 justify-between">
         <div className="flex-col justify-between">
-          <h3 className="text-sm text-gray-500">Today Birthday</h3>
+          <Link href={`/${productUrl}/birthday`} className="cursor-pointer  ">
+          <h3 className="text-sm text-gray-500  hover:text-green-500">Today Birthday</h3>
           <p className="text-purple-600 text-lg font-bold">{todayBirthdays}</p>
+          </Link>
+          
         </div>
 
         <div>
-          <h3 className="text-sm text-gray-500">Today Anniversary</h3>
+          <Link href={`/${productUrl}/birthday`} className="cursor-pointer  ">
+           <h3 className="text-sm text-gray-500 hover:text-green-500">Today Anniversary</h3>
           <p className="text-teal-600 text-lg font-bold">{todayAnniversaries}</p>
+
+          </Link>
+         
         </div>
       </div>
     </div>

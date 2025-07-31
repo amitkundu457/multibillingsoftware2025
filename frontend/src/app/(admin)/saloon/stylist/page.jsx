@@ -1,16 +1,31 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Saloon = () => {
   const [stylists, setStylists] = useState([]);
   const [selectedStylist, setSelectedStylist] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [stylistData, setStylistData] = useState({ name: '', expertise: '', isAvailable: true });
+  const [stylistData, setStylistData] = useState({
+    name: "",
+    expertise: "",
+    isAvailable: true,
+  });
 
+  const getToken = () => {
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+  };
   // Fetch stylists
   const fetchStylists = async () => {
-    const response = await axios.get('http://127.0.0.1:8000/api/stylists');
+    const token = getToken();
+    const response = await axios.get("http://127.0.0.1:8000/api/stylists", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     setStylists(response.data);
   };
 
@@ -24,7 +39,7 @@ const Saloon = () => {
     if (stylist) {
       setStylistData({ ...stylist });
     } else {
-      setStylistData({ name: '', expertise: '', isAvailable: true });
+      setStylistData({ name: "", expertise: "", isAvailable: true });
     }
     setModalOpen(true);
   };
@@ -37,12 +52,26 @@ const Saloon = () => {
 
   // Create or Update Stylist
   const handleSave = async () => {
+        const token = getToken();
+
     if (selectedStylist) {
       // Update existing stylist
-      await axios.put(`http://127.0.0.1:8000/api/stylists/${selectedStylist.id}`, stylistData);
+      await axios.put(
+        `http://127.0.0.1:8000/api/stylists/${selectedStylist.id}`,
+        stylistData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     } else {
       // Add new stylist
-      await axios.post('http://127.0.0.1:8000/api/stylists', stylistData);
+      await axios.post("http://127.0.0.1:8000/api/stylists", stylistData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     }
     fetchStylists(); // Re-fetch the list of stylists
     closeModal();
@@ -50,7 +79,7 @@ const Saloon = () => {
 
   // Delete Stylist
   const handleDelete = async (id) => {
-    if (confirm('Are you sure you want to delete this stylist?')) {
+    if (confirm("Are you sure you want to delete this stylist?")) {
       await axios.delete(`http://127.0.0.1:8000/api/stylists/${id}`);
       fetchStylists(); // Re-fetch after delete
     }
@@ -59,8 +88,8 @@ const Saloon = () => {
   return (
     <div className="p-4">
       {/* Button to Add New Stylist */}
-      <button 
-        onClick={() => openModal()} 
+      <button
+        onClick={() => openModal()}
         className="bg-blue-500 text-white py-2 px-4 rounded-md mb-4 hover:bg-blue-600 transition"
       >
         Add New Stylist
@@ -81,14 +110,14 @@ const Saloon = () => {
               <td className="px-4 py-2">{stylist.name}</td>
               <td className="px-4 py-2">{stylist.expertise}</td>
               <td className="px-4 py-2">
-                <button 
-                  onClick={() => openModal(stylist)} 
+                <button
+                  onClick={() => openModal(stylist)}
                   className="bg-yellow-400 text-white py-1 px-2 rounded-md mr-2 hover:bg-yellow-500 transition"
                 >
                   Edit
                 </button>
-                <button 
-                  onClick={() => handleDelete(stylist.id)} 
+                <button
+                  onClick={() => handleDelete(stylist.id)}
                   className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600 transition"
                 >
                   Delete
@@ -103,18 +132,24 @@ const Saloon = () => {
       {modalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-            <h2 className="text-xl font-semibold mb-4">{selectedStylist ? 'Edit Stylist' : 'Add New Stylist'}</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {selectedStylist ? "Edit Stylist" : "Add New Stylist"}
+            </h2>
             <input
               type="text"
               value={stylistData.name}
-              onChange={(e) => setStylistData({ ...stylistData, name: e.target.value })}
+              onChange={(e) =>
+                setStylistData({ ...stylistData, name: e.target.value })
+              }
               placeholder="Stylist Name"
               className="border border-gray-300 p-2 rounded-md w-full mb-4"
             />
             <input
               type="text"
               value={stylistData.expertise}
-              onChange={(e) => setStylistData({ ...stylistData, expertise: e.target.value })}
+              onChange={(e) =>
+                setStylistData({ ...stylistData, expertise: e.target.value })
+              }
               placeholder="Expertise"
               className="border border-gray-300 p-2 rounded-md w-full mb-4"
             />
@@ -122,20 +157,25 @@ const Saloon = () => {
               <input
                 type="checkbox"
                 checked={stylistData.isAvailable}
-                onChange={(e) => setStylistData({ ...stylistData, isAvailable: e.target.checked })}
+                onChange={(e) =>
+                  setStylistData({
+                    ...stylistData,
+                    isAvailable: e.target.checked,
+                  })
+                }
                 className="mr-2"
               />
               <label>Available</label>
             </div>
             <div className="flex justify-end space-x-2">
-              <button 
-                onClick={handleSave} 
+              <button
+                onClick={handleSave}
                 className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition"
               >
                 Save
               </button>
-              <button 
-                onClick={closeModal} 
+              <button
+                onClick={closeModal}
                 className="bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 transition"
               >
                 Cancel

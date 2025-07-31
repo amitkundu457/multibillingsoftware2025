@@ -33,13 +33,19 @@ class BookingController extends Controller
                 'card_payment'   => 'numeric',
                 'upi_payment'    => 'numeric',
                 'coupon_amount'  => 'numeric',
+                'service'  =>'nullable|array',
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 422);
             }
+             $data = $request->all();
 
-            $booking = Booking::create($request->all());
+        // Convert array of services to comma-separated string
+        if (is_array($data['service'] ?? null)) {
+            $data['service'] = implode(', ', $data['service']);
+        }
+            $booking = Booking::create($data);
 
             return response()->json([
                 'message' => 'Booking created successfully!',

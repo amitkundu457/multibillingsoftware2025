@@ -491,6 +491,9 @@ Route::get('/client-report', [ReportController::class, 'distributerassignclient'
 Route::apiResource('enquiry', EnquiryController::class);
 Route::get('/enquiry/counts', [EnquiryController::class, 'getTotalCount']);
 Route::get('/enquiries/today', [EnquiryController::class, 'getTodayEnquiries']);
+Route::get('/all-payments', [ReportController::class, 'allPayments']);
+
+
 
 
 Route::post('master', [MasterSettingController::class, 'store']);
@@ -886,6 +889,12 @@ Route::get('partyreport',[ReportController::class,'partywisePurchaseReport']);
 //gsdt for demo
 Route::get('gstReportDemo', [ReportController::class, 'gstReportDemo']);
 Route::get('agentReport', [ReportController::class, 'agentReport']);
+Route::get('stylist-report', [ReportController::class, 'stylistReport']);
+Route::get('membership-plan-report', [ReportController::class, 'memberShipPlanReport']);
+
+
+
+
 
 Route::post('/kot-orders', [KotOrderController::class, 'store']);
 Route::get('/kot/{id}/bill', [KotOrderController::class, 'showBill']);

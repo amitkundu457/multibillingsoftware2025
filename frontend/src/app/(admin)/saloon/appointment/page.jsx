@@ -6,27 +6,60 @@ import { Modal } from "react-responsive-modal";
 import axios from "axios";
 import "react-responsive-modal/styles.css";
 
+const ServiceCell = ({ serviceString }) => {
+  const services = serviceString?.split(",") || [];
+  const [showAll, setShowAll] = useState(false);
+
+  if (!serviceString) return <td className="px-4 py-2 text-sm text-gray-800">n/a</td>;
+
+  return (
+    <td className="px-4 py-2 text-sm text-gray-800">
+      {showAll ? (
+        <>
+          {services.join(", ")}{" "}
+          <button onClick={() => setShowAll(false)} className="text-blue-500 underline text-xs">
+            show less
+          </button>
+        </>
+      ) : (
+        <>
+          {services[0]}
+          {services.length > 1 && (
+            <>
+              {" "}
+              ...{" "}
+              <button onClick={() => setShowAll(true)} className="text-blue-500 underline text-xs">
+                more
+              </button>
+            </>
+          )}
+        </>
+      )}
+    </td>
+  );
+};
+
 const AppointmentPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [appointments, setAppointments] = useState([]);
-  const[servicelist,setService]=useState([])
-  const[stylist,setStylist]=useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [servicelist, setService] = useState([]);
+  const [stylist, setStylist] = useState([]);
   const [formData, setFormData] = useState({
     appointment_date: "",
     appointment_time: "",
     name: "",
     phone: "",
-    service: "",
+    services: [],
     gender: "",
-    stylist:""
+    stylist: "",
   });
   const [editingAppointmentId, setEditingAppointmentId] = useState(null);
 
-
-  //time and date 
+  //time and date
   const now = new Date();
-const todayDate = now.toISOString().split('T')[0]; // "YYYY-MM-DD"
-const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:MM"
+  const todayDate = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
+  const currentTime = now.toTimeString().split(":").slice(0, 2).join(":"); // "HH:MM"
   // Open and close modal
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -37,9 +70,9 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
       appointment_time: currentTime,
       name: "",
       phone: "",
-      service: "",
+      services: [],
       gender: "",
-      stylist:""
+      stylist: "",
     });
   };
 
@@ -95,7 +128,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
       }
     );
     setService(response?.data);
-    console.log("saloon serive",response);
+    console.log("saloon serive", response);
   }
 
   //stylist
@@ -114,7 +147,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
       }
     );
     setStylist(response?.data);
-    console.log("stylist",response)
+    console.log("stylist", response);
     // setService(response?.data);
     // console.log("saloon serive",response);
   }
@@ -126,7 +159,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
       notifyTokenMissing();
       return;
     }
-    console.log("payload",formData)
+    console.log("payload", formData);
     try {
       await axios.post(
         " http://127.0.0.1:8000/api/appointments",
@@ -150,9 +183,9 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
       appointment_time: appointment.appointment_time,
       name: appointment.name,
       phone: appointment.phone,
-      service: appointment.service,
+      services: appointment.services,
       gender: appointment.gender,
-      stylist:appointment.stylist
+      stylist: appointment.stylist,
     });
     setEditingAppointmentId(appointment.id);
     openModal();
@@ -160,7 +193,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
 
   // Update an existing appointment
   const handleUpdateAppointment = async () => {
-    console.log("update appoinemtn",formData)
+    console.log("update appoinemtn", formData);
     try {
       await axios.post(
         ` http://127.0.0.1:8000/api/appointments/${editingAppointmentId}`,
@@ -205,7 +238,7 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
   useEffect(() => {
     fetchAppointments();
     fetchService();
-    fetchStylist()
+    fetchStylist();
   }, []);
 
   return (
@@ -283,10 +316,10 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
                   {appointment.phone}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-800">
-                  {appointment.service}
+                  <ServiceCell serviceString={appointment.service} />
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-800">
-                  {appointment.stylist?appointment.stylist:"NA"}
+                  {appointment.stylist ? appointment.stylist : "NA"}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-800">
                   {appointment.gender}
@@ -371,44 +404,71 @@ const currentTime = now.toTimeString().split(':').slice(0, 2).join(':'); // "HH:
               />
             </div>
 
-            <div className="mb-4 flex flex-col">
-              <label className="block text-sm font-medium text-gray-700">
-                Service
+            <div className="mb-4 relative">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Select Services
               </label>
-              {/* <input
-                type="text"
-                name="service"
-                value={formData.service}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              /> */}
-              <select
-              value={formData.service}
-              name="service"
-              onChange={handleChange}
-              className=" rounded-md border-gray-400 outline-none focus:ring-2 focus:ring-green-500"
-              
 
+              {/* Dropdown toggle button */}
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-left text-sm shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
               >
-              <option>Select service</option>
-                {servicelist.map((c)=>(
-                  <option value={c.name} key={c.id}>{c.name}</option>
-                  
-                ))}
-              </select>
+                {formData.services.length > 0
+                  ? `${formData.services.length} selected`
+                  : "Choose services..."}
+              </button>
+
+              {/* Dropdown menu (shown when open) */}
+              {isDropdownOpen && (
+                <div className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg border border-gray-200 max-h-60 overflow-auto">
+                  <div className="p-2 space-y-2">
+                    {servicelist.map((service) => (
+                      <div key={service.id} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id={service.id}
+                          checked={formData.services.includes(service.name)}
+                          onChange={(e) => {
+                            const { checked } = e.target;
+                            setFormData((prev) => ({
+                              ...prev,
+                              services: checked
+                                ? [...prev.services, service.name]
+                                : prev.services.filter(
+                                    (s) => s !== service.name
+                                  ),
+                            }));
+                          }}
+                          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                        />
+                        <label
+                          htmlFor={service.id}
+                          className="ml-2 text-sm text-gray-700"
+                        >
+                          {service.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col mt-4">
               <label className=" text-gray-500">Stylist</label>
-              <select   
-              name="stylist"  
-              value={formData.stylist}
-              onChange={handleChange}
+              <select
+                name="stylist"
+                value={formData.stylist}
+                onChange={handleChange}
                 className=" rounded-md  border-gray-400 outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="">select StyleList</option>
-                {stylist.map((c)=>(
-                  <option value={c.name} key={c.id}>{c.name}</option>
+                {stylist.map((c) => (
+                  <option value={c.name} key={c.id}>
+                    {c.name}
+                  </option>
                 ))}
               </select>
             </div>

@@ -5,6 +5,39 @@ import axios from "axios";
 import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 
+const ServiceCell = ({ serviceString }) => {
+  const services = serviceString?.split(",") || [];
+  const [showAll, setShowAll] = useState(false);
+
+  if (!serviceString) return <td className="px-4 py-2 text-sm text-gray-800">n/a</td>;
+
+  return (
+    <td className="px-4 py-2 text-sm text-gray-800">
+      {showAll ? (
+        <>
+          {services.join(", ")}{" "}
+          <button onClick={() => setShowAll(false)} className="text-blue-500 underline text-xs">
+            show less
+          </button>
+        </>
+      ) : (
+        <>
+          {services[0]}
+          {services.length > 1 && (
+            <>
+              {" "}
+              ...{" "}
+              <button onClick={() => setShowAll(true)} className="text-blue-500 underline text-xs">
+                more
+              </button>
+            </>
+          )}
+        </>
+      )}
+    </td>
+  );
+};
+
 const BookingPage = () => {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
@@ -130,7 +163,7 @@ const BookingPage = () => {
               <td className="border p-2">{booking.customer_name}</td>
               <td className="border p-2">{booking.phone}</td>
               <td className="border p-2">{booking.rate}</td>
-              <td className="border p-2">{booking.service}</td>
+              <td className="border p-2"> <ServiceCell serviceString={booking.service} /></td>
               <td className="border p-2">
                 <button onClick={() => { setFormData(booking); setShowModal(true); }} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</button>
                 <button onClick={() => handleDelete(booking.id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>

@@ -16,5 +16,6 @@ class Stylist extends Model
         'name',
         'expertise',
         'isAvailable',
+        'created_by'
     ];
 }

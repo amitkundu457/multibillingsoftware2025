@@ -160,6 +160,7 @@ const Page = () => {
   const [companyName, setCompanyName] = useState({});
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const [termsCondition,setTermCondition] = useState([]);
 
   
   const printRef = useRef(null);
@@ -293,9 +294,24 @@ const Page = () => {
       }
     };
 
+    
+
     fetchCompanyDetails();
     fetchTaxes();
+    termsAndCondition();
   }, []);
+
+  const termsAndCondition  =  async()=>{
+          const token = getToken();
+
+    const response = await  axios.get("http://127.0.0.1:8000/api/terms-condition-invoice",{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      });
+      setTermCondition(response.data)
+
+    }
 
   useEffect(() => {
     if (!id) return;
@@ -332,6 +348,7 @@ const Page = () => {
           data={invoiceData}
           logoUrl={logoUrl}
           logoBillUrl={logoBillUrl}
+          termCondition = {termsCondition}
         />
         {/* <InvoiceFooter
          companyName={companyName}

@@ -96,14 +96,14 @@ const MasterMenu = () => {
         //     link: `/${productUrl}/web-category`,
         // },t&cInvoice
         {
-            show: showMenuIn(["jwellery", "resturant"]),
+            show: showMenuIn(["jwellery", "resturant",]),
             name: "Ledgers/Account Master",
             count: 29,
             link: `/${productUrl}/inventory/karigari/accountmaster`,
         },
 
         {
-            show: showMenuIn(["jwellery"]),
+            show: showMenuIn(["jwellery","saloon"]),
             name: "t&c Invoice",
             count: 29,
             link: `/${productUrl}/t&cInvoice`,

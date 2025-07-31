@@ -41,6 +41,7 @@ import {
 } from "react-icons/fa";
 import { TbBrand4Chan } from "react-icons/tb";
 import { TfiLayoutSliderAlt } from "react-icons/tfi";
+import { GrWorkshop } from "react-icons/gr";
 import {
   FaChartSimple,
   FaPerson,
@@ -489,6 +490,21 @@ function AdminLayout({ children }) {
           label: "Membership Reports",
           href: `/${productUrl}/member-bill/report/`,
           icon: FaScaleUnbalancedFlip,
+        },
+         {
+          label: "Stylist Reports",
+          href: `/${productUrl}/reports/stylistreport/`,
+          icon: GrWorkshop,
+        },
+         {
+          label: "Customer Reports",
+          href: `/${productUrl}/reports/customerreport/`,
+          icon: GrWorkshop,
+        },
+         {
+          label: "MemberShip plan  Reports",
+          href: `/${productUrl}/reports/membershipplanreport/`,
+          icon: GrWorkshop,
         },
       ],
     },

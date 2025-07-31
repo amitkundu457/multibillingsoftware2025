@@ -33,16 +33,20 @@ class StylistController extends Controller
     public function store(Request $request)
     {
         $customer = JWTAuth::parseToken()->authenticate();
-    Log::info('Authenticated Customer:', ['customer' => $customer]);
+     Log::info('Authenticated Customer:', ['customer' => $customer]);
 
         $request->validate([
             'name' => 'required|string|max:255',
             'expertise' => 'required|string|max:255',
             'isAvailable' => 'boolean',
-        ]);
+                ]);
 
-        $stylist = Stylist::create($request->all());
-        return response()->json($stylist, 201);
+       $stylistData = $request->all();
+       $stylistData['created_by'] = $customer->id;
+
+
+        $stylist = Stylist::create($stylistData);
+        return response()->json($stylistData, 201);
     }
 
     // Display a specific stylist

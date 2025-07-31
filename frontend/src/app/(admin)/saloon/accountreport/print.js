@@ -9,6 +9,7 @@ return response.data.logo_url
 }
 
 const Receipt = ({ entries }) => {
+  console.log("enetris in print files",entries);
   const { data: logoUrl, error } = useSWR('logo', fetcher);
   return (
     <div
@@ -35,8 +36,8 @@ const Receipt = ({ entries }) => {
             <p className="text-sm">
               <strong>Name:</strong>{" "}
               {entries[0]?.accountmasters?.account_name || "N/A"} <br />
-              <strong>Phone:</strong>{" "}
-              {entries[0]?.accountmasters.phone || "N/A"} <br />
+              {/* <strong>Phone:</strong>{" "}
+              {entries[0]?.accountmasters?.phone || "N/A"} <br /> */}
               <strong>City:</strong> {entries[0]?.accountmasters.city || "N/A"}{" "}
               <br />
               <strong>State:</strong>{" "}

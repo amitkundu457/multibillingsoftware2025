@@ -157,7 +157,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
               product_id: item.id,
               product_price: item.rate,
               quantity: item.quantity,
-              tax_rate:item.tax_rate
+              tax_rate:item?.tax_rate || null
             })),
           }),
         }
