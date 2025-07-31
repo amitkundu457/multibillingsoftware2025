@@ -517,7 +517,10 @@ Route::get('/masterlogobill', [MastersBillController::class, 'show']); // Get Lo
 
 Route::get('master', [MasterSettingController::class, 'show']);
 Route::get('graphview', [ReportController::class, 'graphView']);
-
+//kamil routes added 
+Route::get('/family-booking-grand-total/{id}', [familyBookingController::class, 'getFamilyBookingGrandTotal']);
+Route::get('/parcel-order/{orderId}/grand-total', [ParcelOrderController::class, 'getGrandTotal']);
+Route::post('/parcel-payments', [ParcelPaymentController::class, 'store']);
 
 //tax controller
 Route::get('/tax', [TaxController::class, 'index']);

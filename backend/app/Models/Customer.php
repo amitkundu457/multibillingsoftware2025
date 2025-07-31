@@ -16,7 +16,8 @@ class Customer extends Model
     'created_by',
     'customerEnquiry',
     'remarke',
-    'visit_count'
+    'visit_count',
+    'gstNo'
 
     ];
 
