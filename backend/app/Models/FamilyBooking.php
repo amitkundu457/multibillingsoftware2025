@@ -20,10 +20,7 @@ class FamilyBooking extends Model
     {
         return $this->hasMany(KotOrderItem::class, 'family_booking_id');
     }
-    public function payments()
-{
-    return $this->hasMany(FamilyBookingPayment::class);
-}
+ 
 
      public function user()
 {
@@ -33,5 +30,10 @@ class FamilyBooking extends Model
 public function createdBy()
 {
     return $this->belongsTo(User::class, 'created_by');
+}
+
+public function payments()
+{
+    return $this->hasMany(FamilyBookingPayment::class);
 }
 }

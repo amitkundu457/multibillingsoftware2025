@@ -138,6 +138,7 @@ public function index()
             'customers.anniversary',
             'customers.gender',
             'customers.pincode',
+            'customers.gstNo',
             'customers.state',
             'customers.country',
             'customers.address',
@@ -160,6 +161,7 @@ public function index()
             'customers.anniversary',
             'customers.gender',
             'customers.pincode',
+            'customers.gstNo',
             'customers.state',
             'customers.country',
             'customers.address',
@@ -323,6 +325,7 @@ public function searchByPhone(Request $request)
             'customers.anniversary',
             'customers.gender',
             'customers.pincode',
+            'customers.gstNo',
             'customers.state',
             'customers.country',
             'customers.visit_source',
@@ -406,7 +409,7 @@ public function store(Request $request)
         $fields = [
             'dob', 'anniversary', 'gender', 'address',
             'pincode', 'state', 'country', 'visit_source',
-            'customerEnquiry', 'remarke'
+            'customerEnquiry', 'remarke','gstNo'
         ];
 
         foreach ($fields as $field) {
@@ -450,6 +453,7 @@ public function store(Request $request)
         'gender' => 'nullable|string',
         'address' => 'nullable|string',
         'pincode' => 'nullable|string|max:10',
+        'gstNo' => 'nullable|string|max:10',
         'state' => 'nullable|string|max:255',
         'country' => 'nullable|string|max:255',
         'visit_source' => 'nullable|string|max:255',
@@ -489,6 +493,7 @@ public function store(Request $request)
         'gender' => $validatedData['gender'] ?? null,
         'address' => $validatedData['address'],
         'pincode' => $validatedData['pincode'],
+        'gstNo' => $validatedData['gstNo'],
         'state' => $validatedData['state'],
         'country' => $validatedData['country'],
         'visit_source' => $validatedData['visit_source'],
@@ -602,6 +607,7 @@ public function update(Request $request, $id)
             'gender' => 'nullable|string',
             'address' => 'nullable|string',
             'pincode' => 'nullable|string|max:10',
+            'gstNo' => 'nullable|string',
             'state' => 'nullable|string|max:255',
             'country' => 'nullable|string|max:255',
             'visit_source' => 'nullable|string|max:255',
@@ -651,7 +657,7 @@ public function update(Request $request, $id)
         $customerFields = [
             'dob', 'anniversary', 'gender', 'address',
             'pincode', 'state', 'country', 'visit_source',
-            'customerEnquiry', 'remarke'
+            'customerEnquiry', 'remarke','gstNo'
         ];
 
         foreach ($customerFields as $field) {

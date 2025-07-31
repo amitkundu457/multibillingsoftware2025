@@ -535,7 +535,7 @@ export default function InvoicePage() {
         name: customer.name || "",
         id: customer.id || "",
         address: customer.address || "",
-        gstin: customer.gstin || "",
+        gstNo: customer.gstNo || "",
       });
     } catch (error) {
       console.error("Error fetching customer details:", error);
@@ -2472,6 +2472,7 @@ console.log("ratetoal",rateTotal);
                   {/* Customer Name */}
                   <div className="flex items-center space-x-2">
                     <input
+                    readOnly
                       type="text"
                       value={customerDetails.name}
                       onChange={(e) =>
@@ -2501,6 +2502,7 @@ console.log("ratetoal",rateTotal);
                   {/* Address */}
                   <textarea
                     value={customerDetails.address}
+                    readOnly
                     onChange={(e) =>
                       setCustomerDetails((prev) => ({
                         ...prev,
@@ -2516,11 +2518,12 @@ console.log("ratetoal",rateTotal);
                   <div className="flex items-center space-x-2">
                     <input
                       type="text"
-                      value={customerDetails.gstin}
+                      readOnly
+                      value={customerDetails.gstNo}
                       onChange={(e) =>
                         setCustomerDetails((prev) => ({
                           ...prev,
-                          gstin: e.target.value,
+                          gstNo: e.target.value,
                         }))
                       }
                       placeholder="GSTIN"

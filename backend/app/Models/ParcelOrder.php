@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ParcelOrder extends Model
 {
     //
-    protected $fillable = ['customer_id', 'status','token','created_by'];
+    protected $fillable = ['customer_id', 'status','token','created_by','parcelType_id'];
 
     public function customer()
     {
@@ -22,6 +22,10 @@ class ParcelOrder extends Model
     {
         return $this->hasMany(ParcelOrderItem::class);
     }
+   public function payment()
+{
+    return $this->hasMany(ParcelPayment::class, 'order_id');
+}
 
     public function bill()
     {

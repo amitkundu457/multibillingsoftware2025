@@ -162,10 +162,11 @@ const Page = () => {
           }),
         }
       );
+      console.log("response",response)
 
       const result = await response.json();
 
-      if (response.ok) {
+      if (response.status==200) {
         GenerateParcelBillFunction();
         alert("✅ Payment submitted successfully!");
         setIsParcelBillModalOpen(false);

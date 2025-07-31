@@ -1,3 +1,6 @@
+
+
+
 // import React, { useEffect, useState } from "react";
 // import { Modal } from "react-responsive-modal";
 // import axios from "axios";
@@ -48,6 +51,61 @@
 //     }
 //   };
 
+
+//   const defaultValues = {
+//     name: "",
+//     phone: "",
+//     dob: "",
+//     anniversary: "",
+//     email: "",
+//     gender: "",
+//     address: "",
+//     pincode: "",
+//     state: "",
+//     country: "",
+//     city: "",
+//     visit_source: "",
+//     customerTypeData: "",
+//     customerSubTypeData: "",
+//     customerEnquiry: "customer",
+//     remarke: "",
+//   };
+  
+
+//   // const {
+//   //   register,
+//   //   handleSubmit,
+//   //   watch,
+//   //   setValue,
+//   //   reset,
+//   //   formState: { errors },
+//   // } = useForm({
+//   //   defaultValues: {
+//   //     name: "",
+//   //     phone: "",
+//   //     dob: "",
+//   //     anniversary: "",
+//   //     email: "",
+//   //     gender: "",
+//   //     address: "",
+//   //     pincode: "",
+//   //     state: "",
+//   //     country: "",
+//   //     city: "",
+//   //     visit_source: "",
+//   //     // customerType: "",
+//   //     // customerSubType: "",
+//   //     customerTypeData: "",
+//   //     customerSubTypeData: "",
+//   //     customerEnquiry: "customer",
+//   //     remarke: "",
+
+//   //     // customer_sub_type:customerTypeData,
+
+//   //     // customer_type
+//   //   },
+//   // });
+
 //   const {
 //     register,
 //     handleSubmit,
@@ -56,30 +114,7 @@
 //     reset,
 //     formState: { errors },
 //   } = useForm({
-//     defaultValues: {
-//       name: "",
-//       phone: "",
-//       dob: "",
-//       anniversary: "",
-//       email: "",
-//       gender: "",
-//       address: "",
-//       pincode: "",
-//       state: "",
-//       country: "",
-//       city: "",
-//       visit_source: "",
-//       // customerType: "",
-//       // customerSubType: "",
-//       customerTypeData: "",
-//       customerSubTypeData: "",
-//       customerEnquiry: "customer",
-//       remarke: "",
-
-//       // customer_sub_type:customerTypeData,
-
-//       // customer_type
-//     },
+//     defaultValues,
 //   });
 
 //   const notyf = new Notyf(); // Initialize Notyf for notifications
@@ -104,14 +139,7 @@
 //     }
 //   }, [selectedCountry, setValue]);
 
-//   // Fetch cities when state changes
-//   // useEffect(() => {
-//   //   if (selectedState && selectedCountry) {
-//   //     const cityList = City.getCitiesOfState(selectedCountry, selectedState);
-//   //     setCities(cityList);
-//   //     setValue("city", "");
-//   //   }
-//   // }, [selectedState, selectedCountry, setValue]);
+  
 
 //   useEffect(() => {
 //     const token = getToken();
@@ -142,15 +170,32 @@
 //         alert("Failed to fetch customer sub-types");
 //       });
 //   }, []);
+ 
+//   // useEffect(() => {
+//   //   if (modalType === "edit" && currentCustomer) {
+//   //     reset(currentCustomer);
+//   //     setCustomerData(currentCustomer); // preload customer data
+//   //   } else {
+//   //     reset(); // clear form
+//   //     setCustomerData(null); // clear fetched customer data
+//   //   }
+//   // }, [modalType, currentCustomer, reset]);
+
+
 //   useEffect(() => {
-//     // console.log("customerTypeData",customerTypeData)
-//     // Reset form values if it's an edit, otherwise keep defaults
 //     if (modalType === "edit" && currentCustomer) {
-//       reset(currentCustomer); // Pre-fill form for editing customer
+//       reset({
+//         ...defaultValues,
+//         ...currentCustomer,
+//       });
+//       setCustomerData(currentCustomer);
 //     } else {
-//       reset(); // Clear the form for create
+//       reset(defaultValues);
+//       setCustomerData(null);
 //     }
 //   }, [modalType, currentCustomer, reset]);
+  
+  
 
 //   const getCookie = (name) => {
 //     const value = `; ${document.cookie}`;
@@ -161,25 +206,7 @@
 //     return null;
 //   };
 
-//   // //CustomersubType Handler
-//   // const handlerCustomberSubType = async () => {
-//   //   const response = await axios.get(" http://127.0.0.1:8000/api/customersubtypes");
-//   //   setCustomerSubTypeData(response.data);
-
-//   //   console.log("customerSubType", data);
-//   // };
-
-//   // //CustomerType Handler
-//   // const handlerCustomberType = async () => {
-//   //   const response = await axios.get(" http://127.0.0.1:8000/api/customerstype");
-//   //   setCustomerTypeData(response?.data?.data)
-//   //   console.log("customerType", data);
-//   // };
-
-//   // useEffect(() => {
-//   //   handlerCustomberSubType();
-//   //   handlerCustomberType();
-//   // }, []);
+  
 
 //   const onSubmit = async (data) => {
 //     try {
@@ -271,15 +298,18 @@
 
 //   const phone = watch("phone");
 
+ 
+  
 //   useEffect(() => {
 //     const delayDebounce = setTimeout(() => {
-//       if (phone && phone.length >= 10) {
+//       if (phone && phone.length >= 10 && modalType === "create") {
 //         getphoneSearch(phone)
 //           .then((res) => {
 //             if (res?.data) {
 //               const customer = res.data;
-//               setCustomerData(res.data);
-
+//               setCustomerData(customer);
+  
+//               // fill fields only in create mode
 //               setValue("name", customer.name);
 //               setValue("address", customer.address);
 //               setValue("email", customer.email);
@@ -296,15 +326,15 @@
 //               setValue("customerEnquiry", customer.customerEnquiry);
 //             }
 //           })
-//           .catch((err) => {
-//             // Optional: clear form or show message if not found
-//             console.log("Customer not found, please enter manually.");
+//           .catch(() => {
+//             console.log("Customer not found.");
 //           });
 //       }
-//     }, 800); // debounce input by 800ms
-
+//     }, 800);
+  
 //     return () => clearTimeout(delayDebounce);
-//   }, [phone, setValue]);
+//   }, [phone, setValue, modalType]);
+  
 
 //   return (
 //     <>
@@ -539,27 +569,7 @@
 //                 )}
 //               </div>
 
-//               {/* City Field */}
-
-//               {/* <div>
-//     <label className="block text-sm font-medium text-gray-600 mb-1">
-//       City <span className="text-red-500">*</span>
-//     </label>
-//     <select
-//       {...register("city")}
-//       className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-200"
-//     >
-//       <option value="">Select City</option>
-//       {cities.map((city) => (
-//         <option key={city.name} value={city.name}>
-//           {city.name}
-//         </option>
-//       ))}
-//     </select>
-//     {errors.city && (
-//       <p className="text-red-500 text-xs">{errors.city.message}</p>
-//     )}
-//   </div> */}
+              
 //             </div>
 
 //             {/* remakr here  */}
@@ -623,6 +633,11 @@
 // export default CustomerModal;
 
 
+
+
+
+
+
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-responsive-modal";
 import axios from "axios";
@@ -677,6 +692,7 @@ const CustomerModal = ({
   const defaultValues = {
     name: "",
     phone: "",
+    gstNo:"",
     dob: "",
     anniversary: "",
     email: "",
@@ -940,6 +956,7 @@ if (modalType === "create") {
               setValue("anniversary", customer.anniversary);
               setValue("gender", customer.gender);
               setValue("pincode", customer.pincode);
+              setValue("gstNo", customer.gstNo);
               setValue("state", customer.state);
               setValue("country", customer.country);
               setValue("remarke", customer.remarke);
@@ -1118,6 +1135,16 @@ if (modalType === "create") {
                 <label className="block text-gray-700">Pincode</label>
                 <input
                   {...register("pincode")}
+                  type="text"
+                  className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            <div className="flex space-x-3">
+              <div className="w-full">
+                <label className="block text-gray-700">Gst No</label>
+                <input
+                  {...register("gstNo")}
                   type="text"
                   className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
