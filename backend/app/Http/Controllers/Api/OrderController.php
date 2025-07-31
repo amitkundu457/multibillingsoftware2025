@@ -352,6 +352,204 @@ public function getTodayOrders()
 //     }
 
 
+// public function storeCheckout(Request $request)
+// {
+//     Log::info('Received Request Data:', $request->all());
+
+//     try {
+//         DB::beginTransaction(); // ✅ Begin DB transaction
+
+//         // Authenticate the customer
+//         $customer = JWTAuth::parseToken()->authenticate();
+//         Log::info('Authenticated Customer:', ['customer' => $customer]);
+
+//         // Validate request
+//         $validated = $request->validate([
+//             'paymentMethods' => 'required|array',
+//             'products' => 'required',
+//             'products.*.name' => 'required',
+//             'products.*.code' => 'nullable',
+//             'products.*.stoneWeight' => 'nullable',
+//             'products.*.stoneValue' => 'nullable',
+//             'products.*.huid' => 'nullable',
+//             'products.*.hallmark' => 'nullable',
+//             'products.*.hallmarkCharge' => 'nullable',
+//             'products.*.makingInRs' => 'nullable',
+//             'products.*.wastageCharge' => 'nullable',
+//             'products.*.grossWeight' => 'nullable',
+//             'products.*.netWeight' => 'nullable',
+//             'products.*.making' => 'nullable',
+//             'products.*.rate' => 'nullable',
+//             'grossTotal' => 'nullable',
+//             'discountTotal' => 'nullable',
+//             'dateid' => 'nullable',
+//             'customer_id' => 'required',
+//             'price' => 'nullable',
+//             'tax_rate'=> 'nullable',
+//             'products.*pro_total' => 'required|array',
+//             'products.*.hsn' => 'nullable',
+//             'products.making_gst_percentage' => 'nullable',
+//         ]);
+
+//         // // Check coins
+//         $totalCoins = DB::table('coni_purchases')
+//             ->where('created_by', $customer->id)
+//             ->sum('coins');
+
+//         if ($totalCoins <= 0) {
+//             return response()->json([
+//                 'message' => 'Insufficient coins to deduct',
+//                 'available_coins' => $totalCoins,
+//             ], 400);
+//         }
+
+//         // Deduct coins
+//         $setting = OrderCoinSetting::latest()->first();
+//         $coinToDeduct = $setting->coins_per_order;
+//         $coinsToDeduct = $coinToDeduct;
+//         $coinRecords = DB::table('coni_purchases')
+//             ->where('created_by', $customer->id)
+//             ->orderBy('id', 'asc')
+//             ->get();
+
+//         foreach ($coinRecords as $record) {
+//             if ($coinsToDeduct <= 0) break;
+
+//             if ($record->coins > $coinsToDeduct) {
+//                 DB::table('coni_purchases')->where('id', $record->id)->update([
+//                     'coins' => $record->coins - $coinsToDeduct
+//                 ]);
+//                 $coinsToDeduct = 0;
+//             } else {
+//                 DB::table('coni_purchases')->where('id', $record->id)->update(['coins' => 0]);
+//                 $coinsToDeduct -= $record->coins;
+//             }
+//         }
+
+//         // ✅ Fetch bill count
+//         $billCount = DB::table('bill_counts')->where('created_by', $customer->id)->first();
+//         $currentBillCount = $billCount ? $billCount->bill_count + 1 : 1;
+
+//         // ✅ Create the order
+//         $order = Order::create([
+//             'billno' => 'BN' . time() . rand(100, 999),
+//             'gross_total' => $validated['grossTotal'],
+//             'discount' => $validated['discountTotal'],
+//             'total_price' => $validated['grossTotal'] - $validated['discountTotal'] + $request->totalTax + $request->additionRs,
+//             'customer_id' => $validated['customer_id'],
+//             'created_by' => $customer->id,
+//             'bill_inv' => $request->bill_inv,
+//             'salesman_id' => $request->salesman_id,
+//             'stylist_id' => $request->stylist_id,
+//             'order_slip' => $request->order_slip,
+//             'date' => $validated['dateid'],
+//             'discountPercent' => $request->discountPercent,
+//             'discountRs' => $request->discountRs,
+//             'additionRS' => $request->additionRs,
+//             'additionDetail' => $request->additionDetail,
+//             'totalqty' => $request->totalqty,
+//             'totalTax' => $request->totalTax,
+//             'minAdjAmt' => $request->minAdjAmt,
+//             'minAdAmt' => $request->minAdAmt,
+//             'billcountnumber' => $request->order_slip == 1 ? $currentBillCount : $currentBillCount, // If order_slip == 1, set billcountNumber to currentBillCount
+//         ]);
+
+//         // ✅ Only update bill_counts if order_slip is not 1
+//         if ($request->order_slip != 1) {
+//             if (!$billCount) {
+//                 DB::table('bill_counts')->insert([
+//                     'created_by' => $customer->id,
+//                     'bill_count' => 1,
+//                 ]);
+//             } else {
+//                 DB::table('bill_counts')->where('created_by', $customer->id)->update([
+//                     'bill_count' => $currentBillCount,
+//                 ]);
+//             }
+//         }
+
+//         // Update last_order_at
+//         DB::table('customers')->where('user_id', $validated['customer_id'])->update([
+//             'last_order_at' => now()
+//         ]);
+
+//         // Create order details
+//         foreach ($validated['products'] as $product) {
+//             $order->details()->create([
+//                 'product_name' => $product['name'],
+//                 'product_id'=> $product['product_id'] ?? null,
+//                 'product_code' => $product['code'],
+//                 'gross_weight' => $product['grossWeight'],
+//                 'net_weight' => $product['netWeight'],
+//                 'making' => $product['making'],
+//                 'makingInRs'=> $product['makingInRs'],
+//                 'rate' => $product['rate'],
+//                 'tax_rate' => $product['tax_rate'],
+//                 'pro_total' => number_format((float) $product['pro_total'], 2, '.', ''),
+//                 'stone_weight' => $product['stoneWeight'] ?? null,
+//                 'stone_value' => $product['stoneValue'] ?? null,
+//                 'huid' => $product['huid'] ?? null,
+//                 'hallmark' => $product['hallmark'] ?? null,
+//                 'qty' => $product['qty'] ?? null,
+//                 'hallmarkCharge' => $product['hallmarkCharge'] ?? null,
+//                 'wastageCharge' => $product['wastageCharge'] ?? null,
+//                 'hsn' => $product['hsn'] ?? null,
+//                 'making_dsc' => $product['making_dsc'] ?? null,
+//                 'metal_value' => $product['metal_value'] ?? null,
+//                 'otherCharge' => $product['otherCharge'] ?? null,
+//                 'diamondDetails' => $product['diamondDetails'] ?? null,
+//                 'diamondValue' => $product['diamondValue'] ?? null,
+//                 'description' => $product['description'] ?? null,
+//                 'making_gst_percentage' => $product['making_gst_percentage'] ?? null,
+//                 'ad_wgt' => $product['ad_wgt'] ?? null,
+//                 'gstOnGold' => $product['gstOnGold'] ?? null,
+//                 'gstOnMaking' => $product['gstOnMaking'] ?? null,
+//                 'mkg_chg_RS_P' => $product['mkg_chg_RS_P'] ?? null,
+//                 'fixed_amt' => $product['fixed_amt'] ?? null,
+
+
+//             ]);
+//         }
+
+//         // Store payment methods
+//         foreach ($validated['paymentMethods'] as $paymentData) {
+//             Payment::create([
+//                 'order_id' => $order->id,
+//                 'customer_id' => $validated['customer_id'],
+//                 'payment_date' => now(),
+//                 'payment_method' => $paymentData['payment_method'],
+//                 'price' => $paymentData['price'],
+//                 'created_by'=>$customer->id,
+//             ]);
+//         }
+
+//         DB::commit(); // ✅ Commit transaction
+
+//         return response()->json([
+//             'message' => 'Order placed successfully',
+//             'order_id' => $order->id,
+//             'bill_inv' => $order->bill_inv,
+//         ], 201);
+
+//     } catch (\Illuminate\Validation\ValidationException $e) {
+//         DB::rollBack();
+//         Log::error('Validation Error:', ['errors' => $e->errors()]);
+//         return response()->json([
+//             'message' => 'Validation failed',
+//             'errors' => $e->errors(),
+//         ], 422);
+
+//     } catch (\Exception $e) {
+//         DB::rollBack();
+//         Log::error('Error in Checkout:', ['message' => $e->getMessage()]);
+//         return response()->json([
+//             'message' => 'An error occurred while placing the order',
+//             'error' => $e->getMessage(),
+//         ], 500);
+//     }
+// }
+
+
 public function storeCheckout(Request $request)
 {
     Log::info('Received Request Data:', $request->all());
@@ -383,7 +581,7 @@ public function storeCheckout(Request $request)
             'grossTotal' => 'nullable',
             'discountTotal' => 'nullable',
             'dateid' => 'nullable',
-            'customer_id' => 'required',
+            'customer_id' => 'nullable',
             'price' => 'nullable',
             'tax_rate'=> 'nullable',
             'products.*pro_total' => 'required|array',
@@ -436,7 +634,7 @@ public function storeCheckout(Request $request)
             'gross_total' => $validated['grossTotal'],
             'discount' => $validated['discountTotal'],
             'total_price' => $validated['grossTotal'] - $validated['discountTotal'] + $request->totalTax + $request->additionRs,
-            'customer_id' => $validated['customer_id'],
+            'customer_id' => $validated['customer_id'] ?? null,
             'created_by' => $customer->id,
             'bill_inv' => $request->bill_inv,
             'salesman_id' => $request->salesman_id,
@@ -469,9 +667,11 @@ public function storeCheckout(Request $request)
         }
 
         // Update last_order_at
+        if(!empty($validated['customer_id'])){
         DB::table('customers')->where('user_id', $validated['customer_id'])->update([
             'last_order_at' => now()
         ]);
+    }
 
         // Create order details
         foreach ($validated['products'] as $product) {
@@ -505,8 +705,7 @@ public function storeCheckout(Request $request)
                 'gstOnGold' => $product['gstOnGold'] ?? null,
                 'gstOnMaking' => $product['gstOnMaking'] ?? null,
                 'mkg_chg_RS_P' => $product['mkg_chg_RS_P'] ?? null,
-                'fixed_amt' => $product['fixed_amt'] ?? null,
-                
+
 
             ]);
         }
@@ -515,11 +714,10 @@ public function storeCheckout(Request $request)
         foreach ($validated['paymentMethods'] as $paymentData) {
             Payment::create([
                 'order_id' => $order->id,
-                'customer_id' => $validated['customer_id'],
+                'customer_id' => $validated['customer_id'] ?? null,
                 'payment_date' => now(),
                 'payment_method' => $paymentData['payment_method'],
                 'price' => $paymentData['price'],
-                'created_by'=>$customer->id,
             ]);
         }
 
@@ -552,7 +750,7 @@ public function storeCheckout(Request $request)
 
 
 
-    //restroOrder 
+    //restroOrder
     public function storeCheckoutResto(Request $request)
     {
         Log::info('Received Request Data:', $request->all());
@@ -1241,7 +1439,7 @@ public function storeCheckout(Request $request)
                 'adjustAmount'=>$request->adjustAmount,
                 'advanceAmount'=>$request->advanceAmount,
                 'depositeMaterial'=>$request->depositeMaterial,
-               
+
 
             ]);
 
