@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Stock;
+use App\Models\ProductService;
 use Illuminate\Http\Request;
  use Illuminate\Support\Facades\Validator;
  use Tymon\JWTAuth\Facades\JWTAuth;
@@ -38,30 +39,17 @@ class StockController extends Controller
         return \response()->json(['stock'=>$stock]);
     }
 
-    // public function store(Request $request){
-    //     $validated = $request->validate([
-    //         'product_service_id'=>'required',
-    //         'quantity'=>'required',
-    //         'gross_weight'=>'required',
-    //         'net_weight'=>'required',
-    //         'rate'=>'nullable',
-    //         'mrp'=>'nullable',
-    //         'date'=>'nullable'
-    //     ]);
-
-    //     Stock::create($validated);
-    //     return \response()->json(['message'=>'Stock created successfully!']);
-    // }
-//     public function store(Request $request)
+    
+// public function store(Request $request)
 // {
 //     $customer = JWTAuth::parseToken()->authenticate();
 //     Log::info('Authenticated Customer:', ['customer' => $customer]);
 
 //     $validated = $request->validate([
-//         'product_service_id' => 'required',
-//         'quantity' => 'required',
-//         'gross_weight' => 'required',
-//         'net_weight' => 'required',
+//         'product_service_id' => 'nullable',
+//         'quantity' => 'nullable',
+//         'gross_weight' => 'nullable',
+//         'net_weight' => 'nullable',
 //         'rate' => 'nullable',
 //         'mrp' => 'nullable',
 //         'date' => 'nullable'
@@ -78,37 +66,55 @@ class StockController extends Controller
 //     ]);
 // }
 
-
 public function store(Request $request)
 {
     $customer = JWTAuth::parseToken()->authenticate();
     Log::info('Authenticated Customer:', ['customer' => $customer]);
 
     $validated = $request->validate([
-        'product_service_id' => 'nullable',
-        'quantity' => 'nullable',
-        'gross_weight' => 'nullable',
-        'net_weight' => 'nullable',
-        'rate' => 'nullable',
-        'mrp' => 'nullable',
-        'date' => 'nullable'
+        'product_service_id' => 'required|exists:product_services,id',
+        'quantity' => 'required|integer|min:1',
+        'gross_weight' => 'nullable|numeric',
+        'net_weight' => 'nullable|numeric',
+        'rate' => 'nullable|numeric',
+        'mrp' => 'nullable|numeric',
+        'date' => 'nullable|date',
+        'source' => 'nullable|string',
+        'remarks' => 'nullable|string'
     ]);
 
+    // Ensure product exists and belongs to current customer
+    $product = ProductService::where('id', $validated['product_service_id'])
+                             ->where('created_by', $customer->id)
+                             ->first();
+
+    if (!$product) {
+        return response()->json(['message' => 'Product not found'], 404);
+    }
+
+    // Update current stock
+    $product->current_stock += $validated['quantity'];
+    $product->save();
+
+    // Create stock transaction
+    
+
+    // Create stock record
     $stock = Stock::create([
         ...$validated,
         'created_by' => $customer->id
     ]);
 
     return response()->json([
-        'message' => 'Stock created successfully!',
-        'data' => $stock
+        'message' => 'Stock created !',
+        'data' => [
+            'stock' => $stock,
+            
+        ]
     ]);
 }
 
-
    
-
-//updated 
 
 
 
@@ -117,6 +123,7 @@ public function store(Request $request)
 //     $customer = JWTAuth::parseToken()->authenticate();
 //     Log::info('Authenticated Customer:', ['customer' => $customer]);
 
+//     // Still validate that a file was uploaded
 //     $request->validate([
 //         'csv_file' => 'required|file|mimes:csv,txt',
 //     ]);
@@ -127,14 +134,7 @@ public function store(Request $request)
 //     // Remove and normalize header
 //     $header = array_map('trim', array_shift($data));
 
-//     $requiredColumns = ['product_service_id', 'quantity', 'gross_weight', 'net_weight'];
-//     foreach ($requiredColumns as $column) {
-//         if (!in_array($column, $header)) {
-//             return response()->json([
-//                 'error' => "Missing required column: $column"
-//             ], 422);
-//         }
-//     }
+    
 
 //     $stocks = [];
 
@@ -145,17 +145,16 @@ public function store(Request $request)
 //         // Convert empty strings to null or default values
 //         foreach ($rowData as $key => $value) {
 //             if ($value === '') {
-//                 // Set adj_status to 0 if empty, otherwise null
 //                 $rowData[$key] = ($key === 'adj_status') ? 0 : null;
 //             }
 //         }
 
-//         // Validate
+//         // ✅ Validation with all fields nullable
 //         $validator = Validator::make($rowData, [
-//             'product_service_id' => 'required|integer',
-//             'quantity' => 'required|numeric',
-//             'gross_weight' => 'required|numeric',
-//             'net_weight' => 'required|numeric',
+//             'product_service_id' => 'nullable|integer',
+//             'quantity' => 'nullable|numeric',
+//             'gross_weight' => 'nullable|numeric',
+//             'net_weight' => 'nullable|numeric',
 //             'rate' => 'nullable|numeric',
 //             'mrp' => 'nullable|numeric',
 //             'date' => 'nullable|date',
@@ -182,32 +181,18 @@ public function store(Request $request)
 //     ]);
 // }
 
-
 public function uploadCSV(Request $request)
 {
     $customer = JWTAuth::parseToken()->authenticate();
     Log::info('Authenticated Customer:', ['customer' => $customer]);
 
-    // Still validate that a file was uploaded
     $request->validate([
         'csv_file' => 'required|file|mimes:csv,txt',
     ]);
 
     $file = $request->file('csv_file');
     $data = array_map('str_getcsv', file($file->getRealPath()));
-
-    // Remove and normalize header
     $header = array_map('trim', array_shift($data));
-
-    // ❌ Removed required column check
-    // $requiredColumns = ['product_service_id', 'quantity', 'gross_weight', 'net_weight'];
-    // foreach ($requiredColumns as $column) {
-    //     if (!in_array($column, $header)) {
-    //         return response()->json([
-    //             'error' => "Missing required column: $column"
-    //         ], 422);
-    //     }
-    // }
 
     $stocks = [];
 
@@ -215,23 +200,22 @@ public function uploadCSV(Request $request)
         $row = array_map('trim', $row);
         $rowData = array_combine($header, $row);
 
-        // Convert empty strings to null or default values
+        // Convert empty strings to null
         foreach ($rowData as $key => $value) {
             if ($value === '') {
-                $rowData[$key] = ($key === 'adj_status') ? 0 : null;
+                $rowData[$key] = null;
             }
         }
 
-        // ✅ Validation with all fields nullable
+        // Validate input
         $validator = Validator::make($rowData, [
-            'product_service_id' => 'nullable|integer',
-            'quantity' => 'nullable|numeric',
+            'product_service_id' => 'required|integer|exists:product_services,id',
+            'quantity' => 'required|numeric|min:0',
             'gross_weight' => 'nullable|numeric',
             'net_weight' => 'nullable|numeric',
             'rate' => 'nullable|numeric',
             'mrp' => 'nullable|numeric',
             'date' => 'nullable|date',
-            'adj_status' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
@@ -241,34 +225,77 @@ public function uploadCSV(Request $request)
             ], 422);
         }
 
+        // Fetch product to adjust stock
+        $product = ProductService::where('id', $rowData['product_service_id'])
+                                 ->where('created_by', $customer->id)
+                                 ->first();
+
+        if (!$product) {
+            return response()->json([
+                'error' => "Product not found on row " . ($rowIndex + 2)
+            ], 404);
+        }
+
+        // Always treat as stock-in
+        $quantity = (float) $rowData['quantity'];
+        $product->current_stock += $quantity;
+        $product->save();
+
         $rowData['created_by'] = $customer->id;
         $stocks[] = $rowData;
     }
 
-    // Bulk insert
+    // Bulk insert into stocks
     Stock::insert($stocks);
 
     return response()->json([
-        'message' => count($stocks) . ' stock items created successfully!',
+        'message' => count($stocks) . ' stock items created and adjusted successfully!',
         'data' => $stocks
     ]);
 }
 
-
 //delete meatho
+// public function destroy($id)
+// {
+//     $stock = Stock::find($id);
+
+//     if (!$stock) {
+//         return response()->json(['message' => 'Stock not found'], 404);
+//     }
+
+//     $stock->delete();
+
+//     return response()->json(['message' => 'Stock deleted successfully']);
+// }
+
 public function destroy($id)
 {
-    $stock = Stock::find($id);
+    $customer = JWTAuth::parseToken()->authenticate();
+
+    // Find the stock record for this user
+    $stock = Stock::where('id', $id)
+                  ->where('created_by', $customer->id)
+                  ->first();
 
     if (!$stock) {
         return response()->json(['message' => 'Stock not found'], 404);
     }
 
+    // Find the associated product
+    $product = ProductService::where('id', $stock->product_service_id)
+                              ->where('created_by', $customer->id)
+                              ->first();
+
+    if ($product && $stock->quantity) {
+        $product->current_stock -= $stock->quantity;
+        $product->save();
+    }
+
+    
     $stock->delete();
 
     return response()->json(['message' => 'Stock deleted successfully']);
 }
-
 
 
 //     public function deleteAllStock()
@@ -284,24 +311,52 @@ public function destroy($id)
 //     Stock::truncate(); //
 //     return response()->json(['message' => 'All stock records deleted'], 200);
 // }
+// public function deleteAllStock()
+// {
+//     $customer = JWTAuth::parseToken()->authenticate();
+//     Log::info('Authenticated Customer:', ['customer' => $customer]);
+
+//     // Count records for the current user
+//     $userStockCount = Stock::where('created_by', $customer->id)->count();
+
+//     if ($userStockCount === 0) {
+//         return response()->json(['message' => 'No records found to delete'], 404);
+//     }
+
+//     // Delete records only for the authenticated user
+//     Stock::where('created_by', $customer->id)->delete();
+
+//     return response()->json(['message' => 'All your stock records have been deleted'], 200);
+// }
+
 public function deleteAllStock()
 {
     $customer = JWTAuth::parseToken()->authenticate();
     Log::info('Authenticated Customer:', ['customer' => $customer]);
 
-    // Count records for the current user
-    $userStockCount = Stock::where('created_by', $customer->id)->count();
+    // Get all stock records for the user
+    $userStocks = Stock::where('created_by', $customer->id)->get();
 
-    if ($userStockCount === 0) {
+    if ($userStocks->isEmpty()) {
         return response()->json(['message' => 'No records found to delete'], 404);
     }
 
-    // Delete records only for the authenticated user
+    foreach ($userStocks as $stock) {
+        $product = ProductService::where('id', $stock->product_service_id)
+                                 ->where('created_by', $customer->id)
+                                 ->first();
+
+        if ($product && $stock->quantity) {
+            $product->current_stock -= $stock->quantity;
+            $product->save();
+        }
+    }
+
+    // Delete all the stock records after adjusting product stock
     Stock::where('created_by', $customer->id)->delete();
 
-    return response()->json(['message' => 'All your stock records have been deleted'], 200);
+    return response()->json(['message' => 'All your stock records have been deleted and product stocks adjusted.'], 200);
 }
-
 
     public function adjust(){
         $stock = Stock::with('product_service')
