@@ -21,7 +21,7 @@ const Saloon = () => {
   // Fetch stylists
   const fetchStylists = async () => {
     const token = getToken();
-    const response = await axios.get("http://127.0.0.1:8000/api/stylists", {
+    const response = await axios.get(" http://127.0.0.1:8000/api/stylists", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -57,7 +57,7 @@ const Saloon = () => {
     if (selectedStylist) {
       // Update existing stylist
       await axios.put(
-        `http://127.0.0.1:8000/api/stylists/${selectedStylist.id}`,
+        ` http://127.0.0.1:8000/api/stylists/${selectedStylist.id}`,
         stylistData,
         {
           headers: {
@@ -67,7 +67,7 @@ const Saloon = () => {
       );
     } else {
       // Add new stylist
-      await axios.post("http://127.0.0.1:8000/api/stylists", stylistData, {
+      await axios.post(" http://127.0.0.1:8000/api/stylists", stylistData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -80,7 +80,7 @@ const Saloon = () => {
   // Delete Stylist
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this stylist?")) {
-      await axios.delete(`http://127.0.0.1:8000/api/stylists/${id}`);
+      await axios.delete(` http://127.0.0.1:8000/api/stylists/${id}`);
       fetchStylists(); // Re-fetch after delete
     }
   };

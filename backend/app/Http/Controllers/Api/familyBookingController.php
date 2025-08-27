@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\KotOrderItem;
 use App\Models\KotBill;
 use App\Models\Order;
+use App\Models\UserInformation;
 use Illuminate\Support\Facades\Log;
 
 
@@ -110,9 +111,26 @@ public function updateFamilyTableWithItems(Request $request)
         'items.*.product_price'  => 'required|numeric|min:0',
     ]);
 
+
+
     $familyBookingId = $request->input('family_booking_id');
 
     foreach ($request->items as $item) {
+
+       $existingItem =  KotOrderItem::where('family_booking_id',$familyBookingId)
+       ->where('product_id',$item['product_id'])
+       ->first();
+
+       if($existingItem){
+
+        $existingItem->quantity = $existingItem->quantity + $item['quantity'];
+        $existingItem->product_price = $existingItem->product_price + $item['product_price'];
+        $existingItem->save();
+
+
+       }
+       else{
+
         KotOrderItem::create([
             'family_booking_id' => $familyBookingId,
             'product_id'        => $item['product_id'],
@@ -120,6 +138,8 @@ public function updateFamilyTableWithItems(Request $request)
             'product_price'     => $item['product_price'],
             'kot_generated'     => true,
         ]);
+       }
+
     }
 
     return response()->json([
@@ -163,6 +183,8 @@ public function generateFamilyBookingBill($familyBookingId)
     $user = JWTAuth::parseToken()->authenticate();
 
     $booking = FamilyBooking::with(['tables', 'user.customer', 'createdBy', 'payments'])->findOrFail($familyBookingId);
+$client_address = UserInformation::where('user_id', $user->id)->firstOrFail();
+
 
     $items = KotOrderItem::where('family_booking_id', $familyBookingId)->get();
 
@@ -197,7 +219,9 @@ public function generateFamilyBookingBill($familyBookingId)
                     'tax_rate' => $item->tax_rate,
                 ];
             }),
+
             'subtotal' => $existingBill->subtotal,
+            'client_address'=>$client_address,
             'gst' => $existingBill->gst,
             'grand_total' => $existingBill->grand_total,
             'payments' => $booking->payments->map(function ($payment) {
@@ -310,7 +334,7 @@ public function generateFamilyBookingBill($familyBookingId)
                 'product_id' => $item['product_id'],
                 'quantity' => $item['quantity'],
                 'product_price' => $item['product_price'],
-                'kot_generated' => true,
+                'kot_generated' => false,
                 // 'created_by'=> $customer->id
             ]);
         }
@@ -318,6 +342,8 @@ public function generateFamilyBookingBill($familyBookingId)
 
     return response()->json(['message' => 'KOT created successfully for multiple tables.']);
 }
+
+
 
 
 public function getFamilyBookingKot($bookingId)
@@ -331,7 +357,7 @@ public function getFamilyBookingKot($bookingId)
       $tables = DB::table('family_booking_kots')
         ->join('kot_tables', 'family_booking_kots.kot_table_id', '=', 'kot_tables.id')
         ->where('family_booking_kots.family_booking_id', $bookingId)
-        ->pluck('kot_tables.table_no');
+         ->pluck('kot_tables.table_no');
 
 
     //  $items = DB::table('kot_order_items')
@@ -341,6 +367,7 @@ public function getFamilyBookingKot($bookingId)
      $items = DB::table('kot_order_items')
         ->join('product_services', 'kot_order_items.product_id', '=', 'product_services.id')
         ->where('kot_order_items.family_booking_id', $bookingId)
+        ->where('kot_order_items.kot_generated', true)
         ->select(
             'kot_order_items.id as item_id',
             'kot_order_items.product_id',

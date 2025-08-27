@@ -101,7 +101,7 @@ const AppointmentPage = () => {
     }
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/appointments",
+        "  http://127.0.0.1:8000/api/appointments",
 
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -121,7 +121,7 @@ const AppointmentPage = () => {
     }
 
     const response = await axios.get(
-      " http://127.0.0.1:8000/api/Saloon-service",
+      "  http://127.0.0.1:8000/api/Saloon-service",
 
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -140,7 +140,7 @@ const AppointmentPage = () => {
     }
 
     const response = await axios.get(
-      " http://127.0.0.1:8000/api/stylists",
+      "  http://127.0.0.1:8000/api/stylists",
 
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -162,7 +162,7 @@ const AppointmentPage = () => {
     console.log("payload", formData);
     try {
       await axios.post(
-        " http://127.0.0.1:8000/api/appointments",
+        "  http://127.0.0.1:8000/api/appointments",
         formData,
 
         {
@@ -196,7 +196,7 @@ const AppointmentPage = () => {
     console.log("update appoinemtn", formData);
     try {
       await axios.post(
-        ` http://127.0.0.1:8000/api/appointments/${editingAppointmentId}`,
+        `  http://127.0.0.1:8000/api/appointments/${editingAppointmentId}`,
         formData
       );
       fetchAppointments();
@@ -209,7 +209,7 @@ const AppointmentPage = () => {
   // Delete an appointment
   const handleDeleteAppointment = async (id) => {
     try {
-      await axios.delete(` http://127.0.0.1:8000/api/appointments/${id}`);
+      await axios.delete(`  http://127.0.0.1:8000/api/appointments/${id}`);
       fetchAppointments();
     } catch (error) {
       console.error("Error deleting appointment:", error);

@@ -94,12 +94,14 @@ const[ serviceList,setService]=useState([]);
       card_payment: Number(formData.payment.card) || 0,
       upi_payment: Number(formData.payment.upi) || 0,
       coupon_amount: Number(formData.payment.couponAmount) || 0,
+       status: "jwellery billing",
+        sms_credential_id: 1,
     };
 
     console.log("Submitting Data:", JSON.stringify(sanitizedData, null, 2));
 console.log("booking payload",sanitizedData)
     try {
-      const response = await fetch(" http://127.0.0.1:8000/api/bookings", {
+      const response = await fetch("  http://127.0.0.1:8000/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -154,7 +156,7 @@ console.log("booking payload",sanitizedData)
       }
   
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/Saloon-service",
+        "  http://127.0.0.1:8000/api/Saloon-service",
   
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -4,7 +4,7 @@ import axios from "axios";
 import { ImCross } from "react-icons/im";
 import { FaPlus } from "react-icons/fa";
 // import { getphoneSearchrest } from "@/app/components/config";
-import { getphoneSearchrest} from  "../../../components/config"
+import { getphoneSearchrest } from "../../../components/config";
 import { IoIosSearch } from "react-icons/io";
 import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
@@ -47,7 +47,6 @@ export const ShowProduct = ({
 };
 
 export default function FamilyBookingModal({ isOpen, onClose }) {
-  const [customerName, setCustomerName] = useState("");
   const [membersCount, setMembersCount] = useState("");
   const [tableOptions, setTableOptions] = useState([]);
   const [selectedTables, setSelectedTables] = useState([]);
@@ -55,8 +54,18 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isFormVisible, setFormVisible] = useState(false);
-  const [familyBookingId, setFamilyBookingId] = useState('');
+  const [familyBookingId, setFamilyBookingId] = useState("");
+  const [itemsCategory, setItemsCategory] = useState([]);
+  const [data, setData] = useState([]);
+    const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
+    const [barcode, setBarcode] = useState("");
+    const [allProducts, setAllProducts] = useState([]);
+    const [searchItem,setSearchItem]  = useState(null);
+  
+  const [pcss, setPcs] = useState(null);
 
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [filteredItems, setFilteredItems] = useState(data);
 
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
@@ -64,11 +73,32 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     gstin: "",
   });
 
-  const [data, setData] = useState([]);
-
   const handleOpenModal = () => {
     setFormVisible(true); // Open modal
   };
+
+  const handleCategoryChange = (e) => {
+    const categoryId = e.target.value;
+    setSelectedCategory(categoryId);
+
+    if (categoryId === "") {
+      setFilteredItems(data); // Show all if no category
+    } else {
+      const filtered = data.filter(
+        (item) => item.type.toString() === categoryId
+      );
+      setFilteredItems(filtered);
+    }
+  };
+  
+  useEffect(()=>{
+    const newItem = data.filter((p)=>p.name.toLowerCase().includes(searchItem.toLowerCase()));
+  setFilteredItems(newItem);
+
+
+  },[searchItem]);
+
+  
 
   const handleCloseModal = () => {
     setFormVisible(false); // Close modal
@@ -84,22 +114,24 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   };
 
   useEffect(() => {
-      const token = getCookie("access_token");
+    const token = getCookie("access_token");
 
     if (isOpen) {
-      fetch("http://127.0.0.1:8000/api/kot-tables",{ headers: {
+      fetch(" http://127.0.0.1:8000/api/kot-tables", {
+        headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
-        },})
+        },
+      })
         .then((res) => res.json())
         .then((data) => setTableOptions(data.tables));
     }
-  }, [isOpen,selectedTables]);
+  }, [isOpen, selectedTables]);
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get("http://127.0.0.1:8000/api/product-and-service", {
+      .get(" http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -107,12 +139,52 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       })
       .then((response) => {
         setData(response.data);
+        setFilteredItems(response.data);
       })
       .catch((error) => {
         alert("Failed to fetch products");
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      const token = getCookie("access_token");
+
+      try {
+        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setItemsCategory(response.data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  useEffect(() => {
+      
+      fetchBarCodeData();
+      
+    }, []);
+
+  const fetchBarCodeData = async () => {
+      try {
+        const token = getCookie("access_token");
+        const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        setAllProducts(response.data);
+        return response.data; // Return the fetched data
+      } catch (error) {
+        console.error("Error fetching barcode data:", error);
+      }
+    };
 
   const Printbill = (bookingId) => {
     if (!bookingId) {
@@ -131,8 +203,8 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   };
 
   const handleBooking = async () => {
-        const token = getCookie("access_token");
-    if (  selectedProduct.length==0 || selectedTables.length === 0) {
+    const token = getCookie("access_token");
+    if (selectedProduct.length == 0 || selectedTables.length === 0) {
       alert("Please select at least one product and one table.");
       return;
     }
@@ -141,23 +213,23 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/book-family-tables",
+        " http://127.0.0.1:8000/api/book-family-tables",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json",
-                      Authorization: `Bearer ${token}`,
-
-           },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({
-            customer_name: customerDetails?.name || "",     
-            customer_id: customerDetails?.id || null,       
+            customer_name: customerDetails?.name || "",
+            customer_id: customerDetails?.id || null,
             members_count: membersCount,
             table_ids: selectedTables,
             items: selectedProduct?.map((item) => ({
               product_id: item.id,
               product_price: item.rate,
               quantity: item.quantity,
-              tax_rate:item?.tax_rate || null
+              tax_rate: item?.tax_rate || null,
             })),
           }),
         }
@@ -170,12 +242,9 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
           "Do you want to print the kot ?"
         );
         if (printConfirmation) {
-         
           Printbill(result.booking_id);
-          
-          
         }
-         
+
         onClose();
       } else {
         alert(result.message || "Booking failed.");
@@ -185,7 +254,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       alert("Something went wrong.");
     } finally {
       setSelectedProduct([]);
-          setSelectedTables([]);
+      setSelectedTables([]);
       setLoading(false);
     }
   };
@@ -244,7 +313,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/book-family-tables",
+        " http://127.0.0.1:8000/api/book-family-tables",
         payload,
         {
           headers: {
@@ -272,7 +341,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   const handleSearch = async () => {
     try {
       const response = await getphoneSearchrest(phoneNumber);
-      console.log("response customer",response);
+      console.log("response customer", response);
       const customer = response.data;
       setCustomerDetails({
         name: customer.name || "",
@@ -286,43 +355,72 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     }
   };
   const updatePayload = {
-   family_booking_id:familyBookingId,
-     items: selectedProduct?.map((item) => ({
-              product_id: item.id,
-              product_price: item.rate,
-              quantity: item.quantity,
-            }))
-    
-  }
+    family_booking_id: familyBookingId,
+    items: selectedProduct?.map((item) => ({
+      product_id: item.id,
+      product_price: item.rate,
+      quantity: item.quantity,
+    })),
+  };
 
-
-  const   handleAddItemClick = async () => {
-  if (!familyBookingId) {
-    alert('Please enter a booking ID');
-    return;
-  }
-  try {
-   const response =  await axios.put('http://127.0.0.1:8000/api/update-family-tables',updatePayload);
- 
-
-    setSelectedProduct([]);
-
-    const printConfirmation = window.confirm(
-        "Do you want to print the bill?"
+  const handleAddItemClick = async () => {
+    if (!familyBookingId) {
+      alert("Please enter a booking ID");
+      return;
+    }
+    try {
+      const response = await axios.put(
+        " http://127.0.0.1:8000/api/update-family-tables",
+        updatePayload
       );
 
-       if (printConfirmation) {
+      setSelectedProduct([]);
+
+      const printConfirmation = window.confirm(
+        "Do you want to print the Kot?"
+      );
+
+      if (printConfirmation) {
         Printbill(response.data.family_booking_id);
       }
+    } catch (error) {}
 
-  } catch (error) {
-    
-  }
+    // Navigate to item-add form or open modal
+    // Example: navigate(`/add-items/${familyBookingId}`);
+    console.log("Add item for booking ID:", familyBookingId);
+  };
 
-  // Navigate to item-add form or open modal
-  // Example: navigate(`/add-items/${familyBookingId}`);
-  console.log("Add item for booking ID:", familyBookingId);
-};
+    const handleSearchBarCode = async () => {
+    if (!barcode.trim()) {
+      setError("Please enter a barcode or fill details manually.");
+      // setIsEditable(true);
+      return;
+    }
+
+    try {
+      console.log("alldata", allProducts);
+      const foundItem = allProducts.find((p) => p.barcode_no === barcode);
+      console.log("bracode2", foundItem);
+
+      const barcodeFilter = filteredItems.filter((p)=>p.id===foundItem.item_id);
+      setFilteredItems(barcodeFilter);
+
+      
+
+      if (foundItem) {
+        console.log(foundItem.basic_rate);
+        // setSelectedItem(foundItem);
+        setPcs(Number(foundItem.pcs) || 1);
+
+        setIsOpen(true); // <-- open modal with new data
+      } else {
+        alert("Product with this barcode not found");
+      }
+      // setBarcode("");
+    } catch (error) {
+      console.error("Error searching barcode:", error);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -411,7 +509,6 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
               />
             </div>
             <div>
-              
               <label className="block mb-1 font-medium">Select Tables</label>
               <div className="max-h-40 overflow-y-auto border p-2 rounded bg-white">
                 {tableOptions.map((table) => {
@@ -447,36 +544,101 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
             </div>
           </div>
           <div>
-    <label className="block mb-1 font-medium">Enter Booking ID</label>
-    <div className="flex gap-2">
-      <input
-        type="number"
-        placeholder="Family Booking ID"
-        className="p-2 border rounded w-1/2"
-        value={familyBookingId}
-        onChange={(e) => setFamilyBookingId(Number(e.target.value))}
-      />
-       <button
-        className="bg-blue-600 text-white px-4 rounded"
-        onClick={handleAddItemClick}
-      >
-        Add Item
-      </button>
-    
-    </div>
-  </div>
+            <label className="block mb-1 font-medium">Enter Booking ID</label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                placeholder="Family Booking ID"
+                className="p-2 border rounded w-1/2"
+                value={familyBookingId}
+                onChange={(e) => setFamilyBookingId(Number(e.target.value))}
+              />
+              <button
+                className="bg-blue-600 text-white px-4 rounded"
+                onClick={handleAddItemClick}
+              >
+                Add Item
+              </button>
+              {/* filtered product */}
+              <div>
+                <input
+                type="text"
+                placeholder="Item name"
+                value={searchItem}
+                onChange={(e)=>setSearchItem(e.target.value)}
+                />
+ 
+              </div>
+               <div className="flex items-center gap-3">
+                <select
+                  name="category"
+                  id="category"
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-gray-700 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none"
+                >
+                  <option value="">Select Category </option>
+                  {itemsCategory.map((type) => (
+                    <option key={type.id} value={type.id}>
+                      {type.name}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={() => setFilteredItems(data)} // Reset filter
+                  className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300"
+                >
+                  Reset
+                </button>
+              </div>
+               {/* Barcode Toggle */}
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium">Barcode</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer"
+                onChange={()=>{setShowBarcodeNumber(!showBarcodeNumber)}}
+                 />
+                <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+              </label>
+            </div>
+            {/* barcode input feild */}
+            {
+              showBarcodeNumber && (
+                 <div className="flex gap-2">
+              <input
+                type="text"
+                value={barcode}
+                onChange={(e) => {setBarcode(e.target.value)
+                 }}
+                placeholder="Enter Barcode number"
+                className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+              />
+
+              <button
+                type="button"
+                onClick={handleSearchBarCode}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Search
+              </button>
+            </div>
+              )
+            }
+            </div>
+          </div>
 
           {/* Products Grid */}
           <h3 className="text-2xl font-semibold mb-4">Select Products</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 overflow-y-auto max-h-[400px] mb-6 border p-4 rounded">
-            {data.map((item) => (
+            {filteredItems.map((item) => (
               <div
                 key={item.id}
                 onClick={() => handleSelectProduct(item)}
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={`http://127.0.0.1:8000/${item.image}`}
+                  src={` http://127.0.0.1:8000/storage/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

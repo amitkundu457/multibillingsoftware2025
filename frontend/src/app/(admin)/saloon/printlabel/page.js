@@ -24,7 +24,7 @@ const ProductSearch = () => {
 
   const fetchAllBarCode = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+    const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
       headers: { Authorization: `Bearer ${token}` },
     });
     const allBarCodeData = response.data;
@@ -43,7 +43,7 @@ const ProductSearch = () => {
 
       try {
         const res = await axios.get(
-          `http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+          ` http://127.0.0.1:8000/api/barcode-search?search=${search}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -117,7 +117,7 @@ const ProductSearch = () => {
       }
 
       await axios.post(
-        "http://127.0.0.1:8000/api/barcode-print-history",
+        " http://127.0.0.1:8000/api/barcode-print-history",
         {
           barcodes: selectedItems.map((item) => ({
             barcode_id: item.id,

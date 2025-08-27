@@ -9,7 +9,7 @@ const StylistReport = () => {
    useEffect(() => {
     const fetchReport = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/stylist-report');
+        const response = await axios.get(' http://127.0.0.1:8000/api/stylist-report');
         setData(response.data.data);
       } catch (error) {
         console.error('Error fetching stylist report:', error);

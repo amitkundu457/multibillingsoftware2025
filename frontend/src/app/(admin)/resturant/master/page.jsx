@@ -135,14 +135,14 @@ const MasterMenu = () => {
             link: `/${productUrl}/company`,
         },
         {
-            show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
+            show: showMenuIn(["jwellery"  ,"saloon"]),
             name: "Product Group",
             count: 16,
             link: `/${productUrl}/productgroup`,
         },
         {
             show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
-            name: "Product Type",
+            name: "Product category",
             count: 16,
             link: `/${productUrl}/producttype`,
         },
@@ -201,7 +201,7 @@ const MasterMenu = () => {
             link: `/${productUrl}/customersubtype`,
         },
         {
-            show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
+            show: showMenuIn(["jwellery" ,"saloon"]),
             name: "Item Type ",
             count: 4,
             link: `/${productUrl}/rate/`,
@@ -211,6 +211,18 @@ const MasterMenu = () => {
             name: "Rate Master ",
             count: 4,
             link: `/${productUrl}/todayrates/ratemaster`,
+        },
+         {
+            show: showMenuIn(["resturant"]),
+            name: "Manage Table",
+            count: 4,
+            link: `/${productUrl}/tablemanage`,
+        },
+        {
+            show: showMenuIn(["resturant"]),
+            name: "parcel type",
+            count: 4,
+            link: `/${productUrl}/parceltype`,
         },
 
 

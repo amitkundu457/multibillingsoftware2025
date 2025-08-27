@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ParcelOrder;
 use App\Models\User;
 use App\Models\Customer;
-
+use App\Models\UserInformation;
 use App\Models\ParcelOrderItem;
 
 use App\Models\ParcelBill;
@@ -128,6 +128,7 @@ public function generateBill($orderId)
     $customer = JWTAuth::parseToken()->authenticate();
 
     $order = ParcelOrder::with('items.product', 'customer', 'createdBy', 'payment', 'bill')->findOrFail($orderId);
+   $client_address =  UserInformation::where('user_id',$customer->id)->firstOrFail();
 
     // ✅ Return if bill already generated
     if ($order->bill) {
@@ -154,6 +155,7 @@ public function generateBill($orderId)
                     'total' => round($item->quantity * $item->product_price, 2),
                 ];
             }),
+            'client_address'=>$client_address,
             'payments' => $order->payment->map(function ($payment) {
                 return [
                     'payment_method' => $payment->payment_method,

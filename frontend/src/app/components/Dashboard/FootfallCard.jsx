@@ -72,7 +72,7 @@ if (!token) {
 
     try {
       // Fetch today's orders & repeat customers
-      const orderResponse = await axios.get("http://127.0.0.1:8000/api/orders/today",
+      const orderResponse = await axios.get(" http://127.0.0.1:8000/api/orders/today",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -82,7 +82,7 @@ if (!token) {
       setRepeatCustomers(orderResponse.data.repeat_customers);
 
       // Fetch today's enquiries
-      const enquiryResponse = await axios.get("http://127.0.0.1:8000/api/customerequires-count",
+      const enquiryResponse = await axios.get(" http://127.0.0.1:8000/api/customerequires-count",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

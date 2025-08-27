@@ -66,7 +66,7 @@ const RechargeUI = () => {
 
       // Add the token to the request headers
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/coinpurchase", // Laravel API endpoint
+        " http://127.0.0.1:8000/api/coinpurchase", // Laravel API endpoint
         payload,
         {
           headers: {

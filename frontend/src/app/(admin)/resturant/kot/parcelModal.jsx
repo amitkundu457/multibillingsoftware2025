@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { ImCross } from "react-icons/im";
@@ -54,14 +54,20 @@ function ParcelModal({ isOpen, onClose }) {
   const [isFormVisible, setFormVisible] = useState(false);
   const [parcelTypes, setParcelTypes] = useState([]);
   const [selectedParcelTypeId, setSelectedParcelTypeId] = useState("");
+  const [itemsCategory, setItemsCategory] = useState([]);
+  const [data, setData] = useState([]);
+const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
+    const [barcode, setBarcode] = useState("");
+    const [allProducts, setAllProducts] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [filteredItems, setFilteredItems] = useState(data);
+      const [searchItem,setSearchItem]  = useState(null);
 
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
     address: "",
     gstin: "",
   });
-
-  const [data, setData] = useState([]);
 
   const handleOpenModal = () => {
     setFormVisible(true); // Open modal
@@ -80,10 +86,80 @@ function ParcelModal({ isOpen, onClose }) {
     return null;
   };
 
+  const handleCategoryChange = (e) => {
+    const categoryId = e.target.value;
+    setSelectedCategory(categoryId);
+
+    if (categoryId === "") {
+      setFilteredItems(data); // Show all if no category
+    } else {
+      const filtered = data.filter(
+        (item) => item.type.toString() === categoryId
+      );
+      setFilteredItems(filtered);
+    }
+  };
+
+   useEffect(() => {
+        
+        fetchBarCodeData();
+        
+      }, []);
+  
+    const fetchBarCodeData = async () => {
+        try {
+          const token = getCookie("access_token");
+          const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+    
+          setAllProducts(response.data);
+          return response.data; // Return the fetched data
+        } catch (error) {
+          console.error("Error fetching barcode data:", error);
+        }
+      };
+  
+
+      const handleSearchBarCode = async () => {
+    if (!barcode.trim()) {
+      setError("Please enter a barcode or fill details manually.");
+      // setIsEditable(true);
+      return;
+    }
+    
+
+    try {
+      console.log("alldata", allProducts);
+      const foundItem = allProducts.find((p) => p.barcode_no === barcode);
+      console.log("bracode2", foundItem);
+
+      const barcodeFilter = filteredItems.filter((p)=>p.id===foundItem.item_id);
+      setFilteredItems(barcodeFilter);
+
+      
+
+      if (foundItem) {
+        console.log(foundItem.basic_rate);
+        // setSelectedItem(foundItem);
+        setPcs(Number(foundItem.pcs) || 1);
+
+        setIsOpen(true); // <-- open modal with new data
+      } else {
+        alert("Product with this barcode not found");
+      }
+      // setBarcode("");
+    } catch (error) {
+      console.error("Error searching barcode:", error);
+    }
+  };
+
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get("http://127.0.0.1:8000/api/product-and-service", {
+      .get(" http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -91,12 +167,38 @@ function ParcelModal({ isOpen, onClose }) {
       })
       .then((response) => {
         setData(response.data);
+        setFilteredItems(response.data);
       })
       .catch((error) => {
         alert("Failed to fetch products");
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      const token = getCookie("access_token");
+
+      try {
+        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setItemsCategory(response.data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+
+   useEffect(()=>{
+    const newItem = data.filter((p)=>p.name.toLowerCase().includes(searchItem.toLowerCase()));
+  setFilteredItems(newItem);
+
+
+  },[searchItem]);
 
   const Printbill = (bookingId) => {
     if (!bookingId) {
@@ -126,16 +228,16 @@ function ParcelModal({ isOpen, onClose }) {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/parcel-order",
+        " http://127.0.0.1:8000/api/parcel-order",
         {
           customer_id: customerDetails?.id || null,
-           parcelType_id: selectedParcelTypeId,
+          parcelType_id: selectedParcelTypeId,
           items: selectedProduct.map((item) => ({
             product_id: parseInt(item.id),
             product_price: parseFloat(item.rate),
             quantity: parseInt(item.quantity),
-            parcelType_id:selectedParcelTypeId,
-            tax_rate:parseInt(item.tax_rate),
+            parcelType_id: selectedParcelTypeId,
+            tax_rate: parseInt(item.tax_rate),
           })),
         },
         {
@@ -145,10 +247,11 @@ function ParcelModal({ isOpen, onClose }) {
           },
         }
       );
+      setSelectedProduct([]);
 
-     // const result =  response;
+      // const result =  response;
 
-      if (response.status==200) {
+      if (response.status == 200) {
         setSelectedProduct([]);
         setCustomerDetails(null);
         const printConfirmation = window.confirm(
@@ -225,7 +328,7 @@ function ParcelModal({ isOpen, onClose }) {
     }
   };
 
-  const API_URL = "http://127.0.0.1:8000/api/parcel-types";
+  const API_URL = " http://127.0.0.1:8000/api/parcel-types";
 
   useEffect(() => {
     fetch(API_URL)
@@ -333,6 +436,74 @@ function ParcelModal({ isOpen, onClose }) {
               </select>
             </div>
           </div>
+          <div className="flex items-center gap-3 mb-6">
+            <select
+              name="category"
+              id="category"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+              className="w-48 border border-purple-900 border-r-4 rounded-lg px-3 py-2 bg-white text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            >
+              <option value="">Select Category </option>
+              {itemsCategory.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.name}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              onClick={() => setFilteredItems(data)} // Reset filter
+              className="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300"
+            >
+              Reset
+            </button>
+            {/* Barcode Toggle */}
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium">Barcode</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" className="sr-only peer"
+                onChange={()=>{setShowBarcodeNumber(!showBarcodeNumber)}}
+                 />
+                <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+              </label>
+               {/* barcode input feild */}
+            {
+              showBarcodeNumber && (
+                 <div className="flex gap-2">
+              <input
+                type="text"
+                value={barcode}
+                onChange={(e) => {setBarcode(e.target.value)
+                 }}
+                placeholder="Enter Barcode number"
+                className="w-3/7 p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+              />
+
+              <button
+                type="button"
+                onClick={handleSearchBarCode}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Search
+              </button>
+            </div>
+              )
+            }
+             {/* filtered product */}
+              <div>
+                <input
+                type="text"
+                placeholder="Item name"
+                value={searchItem}
+                onChange={(e)=>setSearchItem(e.target.value)}
+                />
+ 
+              </div>
+          </div>
+          
+            </div>
+           
           <div>
             {/* <label className="block mb-1 font-medium">Enter Booking ID</label>
     <div className="flex gap-2">
@@ -356,14 +527,14 @@ function ParcelModal({ isOpen, onClose }) {
           {/* Products Grid */}
           <h3 className="text-2xl font-semibold mb-4">Select Products</h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 overflow-y-auto max-h-[400px] mb-6 border p-4 rounded">
-            {data.map((item) => (
+            {filteredItems.map((item) => (
               <div
                 key={item.id}
                 onClick={() => handleSelectProduct(item)}
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={`http://127.0.0.1:8000/storage/${item.image}`}
+                  src={` http://127.0.0.1:8000/storage/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

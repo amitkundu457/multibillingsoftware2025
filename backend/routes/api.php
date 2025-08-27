@@ -242,6 +242,8 @@ Route::delete('/customers/{id}', [CustomerController::class, 'destroy']); // Del
 Route::get('/customer-visit-sources', [CustomerController::class, 'getVisitSourceCounts']);
 // Route::get('/customers/get', action: [familyBookingController::class, 'show']); // Fetch all customers
 Route::post('/send-customer-sms', [CustomerController::class, 'sendCustomerSms']);
+Route::post('/send-jwel-billing-sms', [OrderController::class, 'sendBillingSms']);
+
 
 
 Route::get('/customerstype', [CustomerController::class, 'typeindex']); // Fetch all customers
@@ -517,7 +519,7 @@ Route::get('/masterlogobill', [MastersBillController::class, 'show']); // Get Lo
 
 Route::get('master', [MasterSettingController::class, 'show']);
 Route::get('graphview', [ReportController::class, 'graphView']);
-//kamil routes added 
+//kamil routes added
 Route::get('/family-booking-grand-total/{id}', [familyBookingController::class, 'getFamilyBookingGrandTotal']);
 Route::get('/parcel-order/{orderId}/grand-total', [ParcelOrderController::class, 'getGrandTotal']);
 Route::post('/parcel-payments', [ParcelPaymentController::class, 'store']);

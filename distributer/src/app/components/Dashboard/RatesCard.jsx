@@ -11,7 +11,7 @@ export default function RatesCard() {
 
   // Fetch rate data
   const fetchRateMasters = () => {
-    axios.get('http://127.0.0.1:8000/api/ratemaster/')
+    axios.get(' http://127.0.0.1:8000/api/ratemaster/')
       .then((response) => {
         // Ensure the data is an array before setting it
         setData(Array.isArray(response.data) ? response.data : []);

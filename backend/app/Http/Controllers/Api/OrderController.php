@@ -7,13 +7,17 @@ use App\Models\Order;
 use App\Models\OrderDetails;
 use App\Models\PurchaseItem;
 use App\Models\OrderCoinSetting;
+use Illuminate\Support\Facades\Http;
+
+use App\Models\Customer;
 
 use App\Models\ProductService;
 use App\Models\Payment;
  use App\Models\SaloonOrder;
 use Carbon\Carbon;
 
-
+use App\Models\SmsSetting;
+use App\Models\SmsCredential;
 
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -587,6 +591,10 @@ public function storeCheckout(Request $request)
             'products.*pro_total' => 'required|array',
             'products.*.hsn' => 'nullable',
             'products.making_gst_percentage' => 'nullable',
+           'phone_no' => 'nullable',
+            'status' => 'required',
+            'sms_credential_id' => 'required',
+
         ]);
 
         // // Check coins
@@ -721,7 +729,9 @@ public function storeCheckout(Request $request)
             ]);
         }
 
+
         DB::commit(); // ✅ Commit transaction
+       $this->sendBillingSms($request->phone_no,$request->status,$request->sms_credential_id);
 
         return response()->json([
             'message' => 'Order placed successfully',
@@ -745,7 +755,60 @@ public function storeCheckout(Request $request)
             'error' => $e->getMessage(),
         ], 500);
     }
+
 }
+
+public function sendBillingSms($phone_no,$status,$sms_credential_id)
+{
+
+
+    // 🔍 Find customer by phone
+    $customer = Customer::where('phone', $phone_no)->first();
+    if (!$customer) {
+        return response()->json(['message' => 'Customer not found with this phone number'], 404);
+    }
+
+    // 🔍 Get message from sms_settings table
+    // $message = SmsSetting::where('status', $request->status)
+    //     ->where('sms_credential_id', $request->sms_credential_id)
+    //     ->value('description');
+    $message = SmsSetting::where('status', $status)
+    ->where('sms_credential_id', $sms_credential_id)
+    ->value('description');
+
+// 🧼 Clean non-breaking spaces (e.g., \u00a0)
+$message = str_replace("\xC2\xA0", ' ', $message);
+
+    if (!$message) {
+        return response()->json(['message' => 'Message not found for this status'], 404);
+    }
+
+    // 🔍 Get SMS credential details
+    $credential = SmsCredential::find($sms_credential_id);
+
+    if (!$credential) {
+        return response()->json(['message' => 'Credential not found'], 404);
+    }
+    // ✅ Send SMS
+    $response = Http::get("https://sms.bluwaves.in/sendsms/bulk.php", [
+        'username'    => $credential->sms_username,
+        'password'    => $credential->sms_password,
+        'type'        => 'TEXT',
+        'sender'      => $credential->sms_sender,
+        'mobile'      => $phone_no,
+        'message'     => $message,
+        'entityId'    => $credential->sms_entity_id,
+        'templateId'  => SmsSetting::where('status', $status)
+                          ->where('sms_credential_id', $sms_credential_id)
+                          ->value('template_id')
+    ]);
+
+    return response()->json([
+        'message' => 'SMS sent',
+        'sms_response' => $response->body(),
+    ]);
+}
+
 
 
 
