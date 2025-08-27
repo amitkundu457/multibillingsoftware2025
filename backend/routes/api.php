@@ -339,6 +339,8 @@ Route::get('/bis-number-get', [BISNumberController::class, 'index']);
 
 
 
+//update billid
+Route::put('/updateCheckoutResto/{id}', [OrderController::class, 'updateCheckoutResto']);
 
 
 Route::get('/order', [OrderController::class, 'index']);
@@ -491,6 +493,9 @@ Route::get('/client-report', [ReportController::class, 'distributerassignclient'
 Route::apiResource('enquiry', EnquiryController::class);
 Route::get('/enquiry/counts', [EnquiryController::class, 'getTotalCount']);
 Route::get('/enquiries/today', [EnquiryController::class, 'getTodayEnquiries']);
+Route::get('/all-payments', [ReportController::class, 'allPayments']);
+
+
 
 
 Route::post('master', [MasterSettingController::class, 'store']);
@@ -628,9 +633,13 @@ Route::post('/saloon-purchase-return', [SalesReturnController::class, 'SaloonPur
 Route::get('/saloon-purchase-returns', [SalesReturnController::class, 'saloonPurchaseReturnIndex']);
 
 Route::get('/saloon-purchase-all', [SalesReturnController::class, 'saloonPurchaseIndex']);
-//sallon seles return
+//sallon seles return 
 Route::post('/saloon-sale-returns',[SalesReturnController::class,'Saloonstores']);
 Route::get('/saloon-sales-returns',[SalesReturnController::class,'saloonSalesReturnIndex']);
+
+//jwel return 
+Route::post('/jwel-sale-returns',[SalesReturnController::class,'jewlstores']);
+Route::get('/jwel-sales-returns',[SalesReturnController::class,'jwelSalesReturnIndex']);
 //purity
 
 Route::get('/purity', [PurityController::class, 'index']);
@@ -889,6 +898,12 @@ Route::get('partyreport',[ReportController::class,'partywisePurchaseReport']);
 //gsdt for demo
 Route::get('gstReportDemo', [ReportController::class, 'gstReportDemo']);
 Route::get('agentReport', [ReportController::class, 'agentReport']);
+Route::get('stylist-report', [ReportController::class, 'stylistReport']);
+Route::get('membership-plan-report', [ReportController::class, 'memberShipPlanReport']);
+
+
+
+
 
 Route::post('/kot-orders', [KotOrderController::class, 'store']);
 Route::get('/kot/{id}/bill', [KotOrderController::class, 'showBill']);

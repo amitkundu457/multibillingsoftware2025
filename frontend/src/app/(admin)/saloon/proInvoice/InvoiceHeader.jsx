@@ -379,7 +379,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
             {data.users.customers.map((customer) => (
               <div key={customer.id}>
                 <p className="text-sm">
-                  <span className=" font-bold">{data.users.name}</span> 
+                  <span className=" font-bold">{data?.users?.name}</span> 
                 </p>
                 {/* <p className="text-sm">Address: {customer.address || "N/A"}</p> */}
                 <p className="text-sm">

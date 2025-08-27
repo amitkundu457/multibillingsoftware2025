@@ -782,9 +782,9 @@ const Page = () => {
         </div>
 
         {/* // Show product selection when a table is selected */}
-        <div className="flex">
+        {/* <div className="flex"> */}
           {/* Product Grid */}
-          <div className="w-3/4 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-[300px] overflow-y-auto">
+          {/* <div className="w-3/4 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-[300px] overflow-y-auto">
             {data.map((item) => (
               <div
                 onClick={() => handleSelectProduct(item)}
@@ -800,8 +800,8 @@ const Page = () => {
                 <p className="text-center text-xl font-bold text-green-600">
                   ₹{item.rate}
                 </p>
-              </div>
-            ))}
+              </div> */}
+            {/* ))} */}
           </div>
 
           {/* Selected Products */}
@@ -829,10 +829,10 @@ const Page = () => {
               Order
             </button>
           </div> */}
-        </div>
-      </div>
+        {/* </div> */}
+      {/* </div> */}
 
-      {isLogoutModel && <LogoutModel onClose={() => setIsLogoutModel(false)} />}
+       {isLogoutModel && <LogoutModel onClose={() => setIsLogoutModel(false)} />}
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">

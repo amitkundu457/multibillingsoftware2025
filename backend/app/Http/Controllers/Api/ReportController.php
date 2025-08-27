@@ -272,7 +272,7 @@ public function gstReport()
             'orders.totalqty as total_qty',
             'orders.totalTax as total_tax',
             'orders.date as invoice_date',
-            'users.name as customer_name', 
+            'users.name as customer_name',
         )
         ->where('orders.created_by', $customer->id)
         ->groupBy(
@@ -281,7 +281,7 @@ public function gstReport()
             'orders.id', // Group by the orders.id
             'orders.totalqty', // Add orders.totalqty to the GROUP BY clause
             'orders.totalTax' , // Add orders.totalTax to the GROUP BY clause
-            'users.name', 
+            'users.name',
         );
 
     return $query->get();
@@ -590,8 +590,8 @@ public function partyWisePurchaseReport(){
 
 public function getPaymentTotalByMethod(Request $request)
 {
-    
-    
+
+
     $user = JWTAuth::parseToken()->authenticate();
 
     $from = $request->query('from_date');
@@ -625,11 +625,11 @@ public function getPaymentTotalByMethod(Request $request)
     ]);
 }
 
-//saloon daily case 
+//saloon daily case
 // public function dailycaseSaloon(Request $request)
 // {
-    
-    
+
+
 //     $user = JWTAuth::parseToken()->authenticate();
 
 //     $from = $request->query('from_date');
@@ -711,6 +711,73 @@ public function dailycaseSaloon(Request $request)
     ]);
 }
 
+public function allPayments()
+{
+    $parcel = DB::table('parcel_payments')
+        ->select('amount', 'payment_method', 'created_at');
+
+    $family = DB::table('family_booking_payments')
+        ->select('amount', 'payment_method', 'created_at');
+
+    $combined = $parcel->unionAll($family)->get();
+
+    return response()->json([
+        'data' => $combined
+    ]);
+}
+
+
+public function  stylistReport(){
+    $response = DB::table('saloon_orders')
+    ->join('stylists', 'stylists.id', '=', 'saloon_orders.stylist_id')
+    ->join('saloon_order_details', 'saloon_orders.id', '=', 'saloon_order_details.saloon_order_id')
+    ->join('product_services', 'product_services.id', '=', 'saloon_order_details.product_id')
+    ->join('customers','customers.user_id','=','saloon_orders.customer_id')
+    ->select('stylists.name as stylist_name','stylists.expertise as expertise','stylists.isAvailable as available',
+
+
+    DB::raw('COUNT(saloon_order_details.id) as total_services'),DB::raw('SUM(saloon_order_details.pro_total) as total_price'),
+    DB::raw('COUNT( DISTINCT saloon_orders.customer_id) as total_customers')
+
+    )->groupBy('stylists.id','stylists.name')
+    ->get();
+
+    return response()->json([
+    'data'=>$response,
+    'message'=>'report fetch successfully'
+   ]);
+}
+
+
+public function memberShipPlanReport(){
+        $user = JWTAuth::parseToken()->authenticate();
+
+  $response =   DB::table('membership_plans')
+  ->join('membership_sales','membership_plans.id','=','membership_sales.plan_id')
+  ->select('membership_plans.name as plan_name','membership_plans.validity' ,'membership_plans.created_by','membership_plans.fees as price',
+  DB::raw('COUNT(membership_sales.id) as total_customer'),
+  DB::raw('SUM(membership_sales.amount) as total_revenue'),
+        DB::raw('GROUP_CONCAT(membership_sales.sale_date ORDER BY membership_sales.sale_date ASC) as all_sale_dates')
+
+
+  )
+  ->where('membership_plans.created_by', $user->id)
+  ->groupBy('membership_sales.plan_id' )
+  ->get();
+
+   $response->transform(function ($item) {
+        $item->all_sale_dates = $item->all_sale_dates
+            ? explode(',', $item->all_sale_dates)
+            : [];
+        return $item;
+    });
+
+   return response()->json([
+    'data'=>$response,
+    'message'=>'report fetch successfully'
+   ]);
+
+}
 
 
 }

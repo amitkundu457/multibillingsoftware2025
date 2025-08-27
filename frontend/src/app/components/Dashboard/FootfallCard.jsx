@@ -1,11 +1,39 @@
  "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import useSWR from "swr";
+import Link from "next/link";
+
 
 export default function FootfallCard() {
   const [todayOrders, setTodayOrders] = useState(0);
   const [repeatCustomers, setRepeatCustomers] = useState(0);
   const [todayEnquiries, setTodayEnquiries] = useState(0);
+
+   //add for dynamic url
+  const {
+    data: user,
+    isLoading,
+    mutate,
+  } = useSWR(`/auth/agme`, async () => {
+    let res = await axios.get("/auth/agme", {
+      headers: { Authorization: `Bearer ${cookies.access_token}` },
+    });
+    return res.data;
+  });
+
+  
+  const roleToUrlMap = {
+    admin: "admin",
+    jwellery: "jwellery",
+    distributor: "distributor",
+    resturant: "resturant",
+    saloon: "saloon",
+  };
+
+  const productUrl = roleToUrlMap[!isLoading && user?.roles?.[0]?.name] || "";
+  console.log("pruddcturl2",productUrl);
+
 
 
 
@@ -77,16 +105,25 @@ if (!token) {
 
       <div className="flex justify-between mt-4">
         <div>
-          <h3 className="text-sm">New Billing</h3>
+          <Link href={`/${productUrl}/reports/billreport`} className="cursor-pointer">
+           <h3 className="text-sm  hover:text-green-700">New Billing</h3>
           <p className="text-purple-600 text-lg font-bold">{todayOrders}</p>
+          </Link>
+         
         </div>
         <div>
-          <h3 className="text-sm">Repeat Customer</h3>
+          <Link href={`/${productUrl}/reports/customerreport`} className="cursor-pointer">
+          <h3 className="text-sm hover:text-green-700">Repeat Customer</h3>
           <p className="text-purple-600 text-lg font-bold">{repeatCustomers}</p>
+          </Link>
+          
         </div>
         <div>
-          <h3 className="text-sm">Enquiry</h3>
+          <Link href={`/${productUrl}/enquiry`} className="cursor-pointer">
+          <h3 className="text-sm hover:text-green-700">Enquiry</h3>
           <p className="text-purple-600 text-lg font-bold">{todayEnquiries}</p>
+          </Link>
+          
         </div>
       </div>
     </div>

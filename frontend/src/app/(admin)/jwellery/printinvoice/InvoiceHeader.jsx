@@ -850,17 +850,16 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
     <div className="border-t border-r border-l w-full border-gray-800 ">
       {/* {
         fetchedLogoUrl==null &&( */}
-          <div className="bg-red-200 w-full h-[100px]  overflow-hidden">
+          {/* <div className="bg-red-200 w-full h-[100px]  overflow-hidden">
         <img
           src={fetchcoverimage}
           alt="Cover image Logo"
           // className="w-full h-[20px] object-contain"
           className="w-full h-[100px] object-cover"
         />
-      </div>
+      </div> */}
 
-        {/* )
-      } */}
+      
       
       {/* Top Section */}
       <div className="border border-black w-full p-4 flex items-start">
@@ -966,7 +965,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
           {/* Bill To Section */}
           <div className="border-r border-gray-800 p-4">
             <p className="font-bold">BILL TO:</p>
-            {data.users.customers.map((customer) => (
+            {data?.users?.customers?.map((customer) => (
               <div key={customer.id}>
                 <p className="text-sm">
                   <span className=" font-bold">Name:</span> {data.users.name}

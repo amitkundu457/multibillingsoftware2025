@@ -49,6 +49,10 @@ class AppointmentController extends Controller
     // Get all request data
     $data = $request->all();
 
+     if (is_array($data['services'])) {
+        $data['service'] = implode(' , ', $data['services']);
+    }
+
     // Add the authenticated user's ID to the data
     $data['created_by'] = $customer->id;
 

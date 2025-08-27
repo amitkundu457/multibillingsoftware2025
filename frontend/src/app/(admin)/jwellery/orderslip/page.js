@@ -1827,7 +1827,7 @@ export default function InvoicePage() {
       console.error("Error fetching barcode data:", error);
     }
   };
-
+//new this api
   const OrderCounts = async () => {
     try {
       const token = getCookie("access_token");
@@ -1916,7 +1916,7 @@ export default function InvoicePage() {
       alert("Customer not found");
     }
   };
-
+//no use of this function
   const handleSearchOrder = async () => {
     try {
       const data = await axios.get(
@@ -2041,7 +2041,8 @@ export default function InvoicePage() {
     console.log("taxSelected", selectTax);
     if (matchingProduct?.available_quantity === null) {
       toast.error("Please create the stock this Product...");
-    } else if (matchingProduct?.available_quantity >= 0) {
+    // } else if (matchingProduct?.available_quantity >= 0) {
+    } else if (matchingProduct) {
       setSelectedItem(item);
       setIsOpen(true);
       console.log(matchingProduct);
@@ -2251,6 +2252,9 @@ export default function InvoicePage() {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
+
+
+  //new and different this function 
 
   const handleCheckoutSubmit = async () => {
     const token = getCookie("access_token");
@@ -3724,7 +3728,7 @@ export default function InvoicePage() {
                     >
                       <FaPlus />
                     </button>
-                    {/* Conditionally Render the QuickCustomerRegister Component */}
+                
                   </div>
 
                   {/* Customer Name */}

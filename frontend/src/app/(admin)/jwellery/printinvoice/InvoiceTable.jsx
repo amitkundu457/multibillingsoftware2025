@@ -420,32 +420,32 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                   0
                 </td>
               )} */}
-{Number(invoice.fixed_amt) > 0 ? (
-  <td className="border-r text-xs border-gray-800 text-center">
-    {parseFloat(invoice.fixed_amt)}<span className=" text-[7px]">fxAmt </span>
-  </td>
-) : invoice.net_weight > 0 ? (
-  <td className="border-r text-xs border-gray-800 text-center">
-    {parseFloat(invoice.rate).toFixed(2)}
-  </td>
-) : (
-  <td className="border-r text-xs border-gray-800 text-center">
-    0.00
-  </td>
-)}
+              {Number(invoice.fixed_amt) > 0 ? (
+                <td className="border-r text-xs border-gray-800 text-center">
+                  {parseFloat(invoice.fixed_amt)}
+                  <span className=" text-[7px]">fxAmt </span>
+                </td>
+              ) : invoice.net_weight > 0 ? (
+                <td className="border-r text-xs border-gray-800 text-center">
+                  {parseFloat(invoice.rate).toFixed(2)}
+                </td>
+              ) : (
+                <td className="border-r text-xs border-gray-800 text-center">
+                  0.00
+                </td>
+              )}
 
-
-{Number(invoice.fixed_amt) > 0 ? (
-  <td className="border-r text-xs border-gray-800 text-center">
-    {(Number(invoice.fixed_amt) * Number(invoice.qty))}
-  </td>
-) : (
-  <td className="border-r font-medium text-[13px] border-gray-800 text-center p-2">
-    {(Number(invoice.rate) * Number(invoice.net_weight)).toFixed(2)}
-  </td>
-)}
-
-
+              {Number(invoice.fixed_amt) > 0 ? (
+                <td className="border-r text-xs border-gray-800 text-center">
+                  {Number(invoice.fixed_amt) * Number(invoice.qty)}
+                </td>
+              ) : (
+                <td className="border-r font-medium text-[13px] border-gray-800 text-center p-2">
+                  {(Number(invoice.rate) * Number(invoice.net_weight)).toFixed(
+                    2
+                  )}
+                </td>
+              )}
 
               {/* <td className=" border-r font-medium text-[13px] border-gray-800 text-center p-2">
                 {(Number(invoice.rate) * Number(invoice.net_weight)).toFixed(2)}
@@ -930,6 +930,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
               <td className=" border-r border-gray-800 text-center p-1"></td>
               <td className="border-r border-gray-800 text-center p-1"></td>
               <td className="border-r border-gray-800 text-center p-1"></td>
+              <td className="border-r border-gray-800 text-center p-1"></td>
               <td className="border-r border-gray-800 text-xs text-center font-semibold">
                 - ₹{parseFloat(data?.minAdAmt).toFixed(2)}
               </td>
@@ -944,6 +945,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
               <td className="border-r text-xs border-gray-800 text-center">
                 Adjustment Rs
               </td>
+              <td className="border-r border-gray-800 text-center p-1"></td>
               <td className="border-r border-gray-800 text-center p-1"></td>
               <td className="border-r border-gray-800 text-center p-1"></td>
               <td className="border-r border-gray-800 text-center p-1"></td>
@@ -1202,16 +1204,14 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                     {invoice.hsn}
                   </td>
                   {Number(invoice.fixed_amt) > 0 ? (
-  <td className="border border-gray-300 px-1 py-2">
-    {parseFloat(invoice.pro_total).toFixed(2)}
-  </td>
-) : (
-  <td className="border border-gray-300 px-1 py-2">
-     {invoice?.rate * invoice?.net_weight * invoice?.qty}
-  </td>
-)}
-
-
+                    <td className="border border-gray-300 px-1 py-2">
+                      {parseFloat(invoice.pro_total).toFixed(2)}
+                    </td>
+                  ) : (
+                    <td className="border border-gray-300 px-1 py-2">
+                      {invoice?.rate * invoice?.net_weight * invoice?.qty}
+                    </td>
+                  )}
 
                   {/* <td className="border border-gray-300 px-1 py-2">
 pro_total
@@ -1364,22 +1364,16 @@ pro_total
                   </td>
 
                   {Number(invoice.fixed_amt) > 0 ? (
-  <td className="border border-gray-300 px-1 py-2">
-    {parseFloat(invoice.pro_total).toFixed(2)}
-  </td>
-) : (
-  <td className="border border-gray-300 px-1 py-2">
-      {invoice?.rate * invoice?.net_weight * invoice?.qty}
-  </td>
-)}
+                    <td className="border border-gray-300 px-1 py-2">
+                      {parseFloat(invoice.pro_total).toFixed(2)}
+                    </td>
+                  ) : (
+                    <td className="border border-gray-300 px-1 py-2">
+                      {invoice?.rate * invoice?.net_weight * invoice?.qty}
+                    </td>
+                  )}
 
-
-
-
-
-
-
-                   {/* <td className="border border-gray-300 px-1 py-2">
+                  {/* <td className="border border-gray-300 px-1 py-2">
                    
                     {invoice?.rate * invoice?.net_weight * invoice?.qty}
                    </td> */}

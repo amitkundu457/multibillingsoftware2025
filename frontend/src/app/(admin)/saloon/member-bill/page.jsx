@@ -248,6 +248,7 @@ export default function MembershipSaleForm() {
             <label className="block text-gray-700">Sale Date</label>
             <input
               type="date"
+              defaultValue={new Date().toISOString().split("T")[0]}
               {...register("sale_date")}
               className="w-full border-gray-300 rounded-lg p-2 mt-1"
               required

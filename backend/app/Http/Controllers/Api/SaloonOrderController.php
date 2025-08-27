@@ -24,12 +24,12 @@ class SaloonOrderController extends Controller
     //
     public function storeCheckout(Request $request)
     {
-        Log::info('Received Request Data:', $request->all());
+        // Log::info('Received Request Data:', $request->all());
 
         try {
             // Authenticate the customer
             $customer = JWTAuth::parseToken()->authenticate();
-            Log::info('Authenticated Customer:', ['customer' => $customer]);
+            // Log::info('Authenticated Customer:', ['customer' => $customer]);
 
             // Validate incoming request data
             $validated = $request->validate([
@@ -44,7 +44,7 @@ class SaloonOrderController extends Controller
                  'grossTotal' => 'nullable',
                 'discountTotal' => 'nullable',
                 'dateid' => 'nullable',
-                'customer_id' => 'required|',
+                'customer_id' => 'nullable|',
                 'price' => 'nullable',
                // 'tax_rate'=> 'nullable',
                 'products.*pro_total' => 'required|array',
@@ -103,7 +103,7 @@ class SaloonOrderController extends Controller
                 'gross_total' => $validated['grossTotal'],
                 'discount' => $validated['discountTotal'],
                 'total_price' => $validated['grossTotal'] - $validated['discountTotal'],
-                'customer_id' => $validated['customer_id'],
+                'customer_id' => $validated['customer_id'] ?? null,
                 'created_by' => $customer->id,
                 'bill_inv' => $request->bill_inv,
                 'salesman_id' => $request->salesman_id,
@@ -116,9 +116,16 @@ class SaloonOrderController extends Controller
                 // 'usingLoyaltyPoints' => $validated['usingLoyaltyPoints'],
             ]);
            // Update last_order_at for the customer
-            DB::table('customers')
-           ->where('user_id', $validated['customer_id'])
-           ->update(['last_order_at' => now()]);
+        //     DB::table('customers')
+        //    ->where('user_id', $validated['customer_id'])
+        //    ->update(['last_order_at' => now()]);
+
+        if ($request->has('customer_id')) {
+         DB::table('customers')
+        ->where('user_id', $request->customer_id)
+        ->update(['last_order_at' => now()]);
+}
+
 
             // Store each product in the order details
             foreach ($validated['products'] as $product) {
@@ -159,7 +166,7 @@ class SaloonOrderController extends Controller
            foreach ($validated['paymentMethods'] as $paymentData) {
           SaloonPayment::create([
          'order_id' => $order->id,
-         'customer_id' => $validated['customer_id'],
+         'customer_id' => $validated['customer_id'] ?? null ,
          'payment_date' => now(),
          'payment_method' => $paymentData['payment_method'],  // payment method (cash, card, upi)
          'price' => $paymentData['price'],  // payment amount

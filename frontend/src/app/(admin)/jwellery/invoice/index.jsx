@@ -71,6 +71,8 @@ export default function InvoicePage() {
 
   const [dateid, setDateid] = useState(today);
   const [barcode, setBarcode] = useState("");
+    const [modalBarcode, setModalBarcode] = useState("");
+
   const [productList, setProductList] = useState([]);
   const [checkRender, setCheckRender] = useState(false);
   const [selectTax, setTax] = useState("");
@@ -103,6 +105,7 @@ export default function InvoicePage() {
     ad_wgt: "",
   });
 
+
   const emptyProductDetails = {
     grossWeight: "",
     netWeight: "",
@@ -126,6 +129,11 @@ export default function InvoicePage() {
   };
 
   const [isEditable, setIsEditable] = useState(true);
+   useEffect(() => {
+    if (barcode) {
+      handleSearchBarCode(barcode);
+    }
+  }, [barcode,modalBarcode]);
 
   const handleSearchBarCode = async () => {
     if (!barcode.trim()) {
@@ -138,6 +146,9 @@ export default function InvoicePage() {
     console.log("barcode all ", foundProduct);
 
     if (foundProduct) {
+ const matchedItems = items.filter(item => item.id === foundProduct.item_id);
+setFilteredItems(matchedItems);
+
       // Auto-fill details if found
       setProductDetails((prevDetails) => ({
         ...prevDetails, // Preserve existing values
@@ -191,7 +202,7 @@ export default function InvoicePage() {
         description: "",
       });
       setIsEditable(true);
-      setError("Product not found. Enter details manually.");
+     // setError("Product not found. Enter details manually.");
     }
   };
 
@@ -535,6 +546,7 @@ export default function InvoicePage() {
         name: customer.name || "",
         id: customer.id || "",
         address: customer.address || "",
+        // gstin: customer.gstin || "",
         gstNo: customer.gstNo || "",
       });
     } catch (error) {
@@ -666,18 +678,21 @@ export default function InvoicePage() {
     }
   };
   const openModal = (item) => {
+    console.log("prodccut items stock lists",item)
     setCheckRender(!checkRender);
+    console.log("productList", productList);
     const matchingProduct = productList.find(
       (product) => product.id === item.id
     );
     setTax(matchingProduct?.tax_rate);
     console.log("matchingProduct", matchingProduct);
     console.log("taxSelected", selectTax);
-    if (matchingProduct?.available_quantity === null) {
+    if (matchingProduct?.current_stock === null) {
       toast.error("Please create the stock this Product...");
-    } else if (matchingProduct?.available_quantity > 0) {
+    } else if (matchingProduct?.current_stock > 0) {
       setSelectedItem(item);
       setProductDetails(emptyProductDetails);
+      setModalBarcode(barcode);
       setIsOpen(true);
       console.log(matchingProduct);
     } else {
@@ -712,7 +727,7 @@ export default function InvoicePage() {
     calculateTotals(updatedProducts);
   };
 
- 
+  
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -729,7 +744,6 @@ export default function InvoicePage() {
       type: selectedItem.type,
       name: selectedItem.name,
       rate: selectedItem.rate || 0,
-   
       mrp: selectedItem.mrp || 0,
       tax_rate: selectedItem.tax_rate,
       hsn: selectedItem.hsn || "",
@@ -772,7 +786,7 @@ export default function InvoicePage() {
   // let totalquantity = 0;
   let newGstCount = 0;
   let newTotalQty = 0;
- 
+  
 
   const calculateTotals = (products) => {
     let gross = 0;
@@ -932,6 +946,7 @@ console.log("ratetoal",rateTotal);
     setTotalQuantity(newTotalQty);
   };
 
+
   const openCheckout = () => {
     setCheckoutOpen(true);
   };
@@ -959,12 +974,12 @@ console.log("ratetoal",rateTotal);
       return;
     }
 
-    if (!customerDetails?.id) {
-      notyf.error(
-        "Please ensure customer details are complete before proceeding."
-      );
-      return;
-    }
+    // if (!customerDetails?.id) {
+    //   notyf.error(
+    //     "Please ensure customer details are complete before proceeding."
+    //   );
+    //   return;
+    // }
 
     if (addedProducts.length === 0) {
       notyf.error("No products added to the order.");
@@ -1481,6 +1496,26 @@ console.log("ratetoal",rateTotal);
                 <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
               </label>
             </div>
+
+            {isBarcodeEnabled && (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={barcode}
+                onChange={(e) => setBarcode(e.target.value.trim())}
+                  placeholder="Enter Barcode number"
+                  className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+                />
+
+                {/* <button
+                  type="button"
+                  onClick={handleSearchBarCode}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Search
+                </button> */}
+              </div>
+            )}
             {/* <span>
               <span className="text-blue-950 text-lg font-bold">
                 {" "}
@@ -1535,10 +1570,7 @@ console.log("ratetoal",rateTotal);
         <aside className="w-1/4 bg-gray-100 p-4 relative h-full">
           <div className="mb-16 overflow-y-auto h-[20rem]">
             {addedProducts.map((product, index) => (
-              <div
-                key={index}
-                className=" border flex justify-between items-center p-2 rounded mb-2"
-              >
+              <div key={index} className=" border flex justify-between items-center p-2 rounded mb-2">
                 <div className=" p-2 rounded mb-2 ">
                   {product.name && <p className="font-bold">{product.name}</p>}
 
@@ -1673,7 +1705,7 @@ console.log("ratetoal",rateTotal);
               <p>Discount:</p>
               <p>₹{discountTotal}</p>
             </div>
-
+          
             {addition > 0 && (
               <div className="flex justify-between">
                 <p>AddtionRs:</p>
@@ -1710,6 +1742,7 @@ console.log("ratetoal",rateTotal);
       {/* Modal */}
       {selectedItem && (
         <Modal open={isOpen} onClose={() => closeModal()} center>
+          
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <h2 className="text-lg font-bold">{selectedItem.name}</h2>
 
@@ -1717,19 +1750,21 @@ console.log("ratetoal",rateTotal);
               <div className="flex gap-2">
                 <input
                   type="text"
-                  value={barcode}
-                  onChange={(e) => setBarcode(e.target.value)}
+                  
+
+                  value={modalBarcode}
+                  onChange={(e) => setModalBarcode(barcode)}
                   placeholder="Enter Barcode number"
                   className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
                 />
 
-                <button
+                {/* <button
                   type="button"
                   onClick={handleSearchBarCode}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Search
-                </button>
+                </button> */}
               </div>
             )}
 
@@ -1878,11 +1913,7 @@ console.log("ratetoal",rateTotal);
                   className="w-full p-2 rounded border"
                 />
               </div>
-
-              {/* fiexed */}
-{/* 
-              {selectedItem?.mrp != null && selectedItem?.mrp !== "" && ( */}
-  <div>
+              <div>
     <label>Fixed</label>
     <input
       name="mrp"
@@ -1892,7 +1923,6 @@ console.log("ratetoal",rateTotal);
       className="w-full p-2 rounded border"
     />
   </div>
-{/* // )} */}
               <div>
                 <label>Pcs</label>
                 <input
@@ -2472,7 +2502,6 @@ console.log("ratetoal",rateTotal);
                   {/* Customer Name */}
                   <div className="flex items-center space-x-2">
                     <input
-                    readOnly
                       type="text"
                       value={customerDetails.name}
                       onChange={(e) =>
@@ -2502,7 +2531,6 @@ console.log("ratetoal",rateTotal);
                   {/* Address */}
                   <textarea
                     value={customerDetails.address}
-                    readOnly
                     onChange={(e) =>
                       setCustomerDetails((prev) => ({
                         ...prev,
@@ -2516,7 +2544,7 @@ console.log("ratetoal",rateTotal);
 
                   {/* GSTIN */}
                   <div className="flex items-center space-x-2">
-                    <input
+                  <input
                       type="text"
                       readOnly
                       value={customerDetails.gstNo}

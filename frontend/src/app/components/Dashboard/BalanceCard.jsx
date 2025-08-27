@@ -185,13 +185,13 @@ export default function BalanceCard({ label }) {
 {/* ///jwellery/reports/billwise/ */}
       <div className="mt-2 grid grid-cols-3 gap-4 border-2 border-blue-500 rounded-lg p-10">
         <div>
-         <a href={`/${productUrl}/reports/billwise`} className="cursor-pointer  " >
+         <a href={`/${productUrl}/reports/billreport`} className="cursor-pointer  " >
          <h3 className="text-sm text-gray-500 hover:text-green-700">Total Invoice</h3>
          <p className="text-purple-600 text-lg font-bold ">{totalOrder}</p>
          </a>
         </div>
         <div>
-        <a href={`/${productUrl}/reports/billwise`} className="cursor-pointer  " >
+        <a href={`/${productUrl}/reports/billreport`} className="cursor-pointer  " >
         <h3 className="text-sm text-gray-500 hover:text-green-700">This Month</h3>
           <p className="text-blue-600 text-lg font-bold">{thisMonthOrder}</p>
         </a>

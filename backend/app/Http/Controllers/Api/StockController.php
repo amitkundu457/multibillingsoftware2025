@@ -28,6 +28,7 @@ class StockController extends Controller
 
     $stock = Stock::with('product_service')
         ->where('created_by', $customer->id)
+        ->latest()
         ->get();
 
     return response()->json(['stock' => $stock]);
@@ -346,8 +347,12 @@ public function deleteAllStock()
                                  ->where('created_by', $customer->id)
                                  ->first();
 
-        if ($product && $stock->quantity) {
-            $product->current_stock -= $stock->quantity;
+        // if ($product && $stock->quantity) {
+        //     $product->current_stock -= $stock->quantity;
+        //     $product->save();
+        // }
+        if ($product) {
+            $product->current_stock = 0;
             $product->save();
         }
     }

@@ -67,7 +67,7 @@ const ItemManagement = () => {
     }
 
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/type", {
+      const response = await axios.get("http://127.0.0.1:8000/api/product-service-groups", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCategory(response.data);

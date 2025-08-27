@@ -137,7 +137,7 @@ export default function MembershipPlans() {
               </div>
 
               <div className="mb-3">
-                <label className="block text-sm font-medium">Validity (Months)</label>
+                <label className="block text-sm font-medium">Validity (days)</label>
                 <input
                   type="number"
                   {...register("validity", { required: true, min: 1 })}
