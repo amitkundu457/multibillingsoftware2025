@@ -29,7 +29,7 @@ const Model = ({ closeModal, selectedItem }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const url = " http://127.0.0.1:8000/api/ratemaster";
+        const url = " https://apibrize.brizindia.com/api/ratemaster";
         const method = selectedItem ? axios.put : axios.post; // Determine POST or PUT
         const endpoint = selectedItem ? `${url}/${selectedItem.id}` : url; // Add ID for PUT requests
 

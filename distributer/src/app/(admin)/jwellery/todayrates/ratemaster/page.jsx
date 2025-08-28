@@ -19,7 +19,7 @@ import axios from 'axios';
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(' http://127.0.0.1:8000/api/ratemaster', data)
+        axios.post(' https://apibrize.brizindia.com/api/ratemaster', data)
             .then((response) => {
                 alert("Data submitted successfully!");
                 console.log(response);

@@ -57,7 +57,7 @@ if (!token) {
 
     try {
       const res = await axios.post(
-        ' http://127.0.0.1:8000/api/cover/upload', // Replace with your API endpoint
+        ' https://apibrize.brizindia.com/api/cover/upload', // Replace with your API endpoint
         formData,
         {
           headers: {

@@ -54,7 +54,7 @@ export default function PrintFamilyBillPage() {
     if (!cutomerid) return;
 
     axios
-      .get(` http://127.0.0.1:8000/api/customers/get/${cutomerid}`, {
+      .get(` https://apibrize.brizindia.com/api/customers/get/${cutomerid}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -74,7 +74,7 @@ export default function PrintFamilyBillPage() {
 
     if (booking_id) {
       const res = fetch(
-        ` http://127.0.0.1:8000/api/family-booking/${booking_id}/generate-bill`,
+        ` https://apibrize.brizindia.com/api/family-booking/${booking_id}/generate-bill`,
         {
           method: "POST",
           headers: {
@@ -279,7 +279,7 @@ export default function PrintFamilyBillPage() {
               bill.client_address?.address_2 ||
               "NA"}
           </p>
-          <p>Phone: {bill?.client_address.mobile_number ?? "N/A"}</p>
+          <p>Phone: {bill?.client_address?.mobile_number ?? "N/A"}</p>
           <p className="text-gray-700 text-sm">
             {bill?.client_address?.email || "No Email Provided"}
           </p>
@@ -331,7 +331,7 @@ export default function PrintFamilyBillPage() {
               >
                 <td className="text-left">{item.product_name}</td>
                 <td className="text-right">{item.quantity}</td>
-                <td className="text-right">{item?.tax_rate}%</td>
+                <td className="text-right">{item.tax_rate}%</td>
                 <td className="text-right">₹{item.total.toFixed(2)}</td>
               </tr>
             ))}

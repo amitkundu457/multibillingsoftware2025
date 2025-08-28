@@ -36,7 +36,7 @@ export const Model = ({ onClose, onSave }) => {
     
     axios
       .post(
-        " http://127.0.0.1:8000/api/customerstypes",
+        " https://apibrize.brizindia.com/api/customerstypes",
         inputData,
         {
           headers: {
@@ -104,7 +104,7 @@ const Page = () => {
 
   useEffect(() => {
     axios
-      .get(' http://127.0.0.1:8000/api/customerstypes')
+      .get(' https://apibrize.brizindia.com/api/customerstypes')
       .then((response) => {
         setData(response.data);
       })

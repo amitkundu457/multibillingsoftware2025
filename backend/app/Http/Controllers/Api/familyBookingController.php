@@ -136,6 +136,7 @@ public function updateFamilyTableWithItems(Request $request)
             'product_id'        => $item['product_id'],
             'quantity'          => $item['quantity'],
             'product_price'     => $item['product_price'],
+             'tax_rate' => $item['tax_rate'] ?? null,
             'kot_generated'     => true,
         ]);
        }

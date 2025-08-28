@@ -15,7 +15,7 @@ const IndexPage = () => {
   }, []);
 
   const fetchRateMasters = () => {
-    axios.get(' http://127.0.0.1:8000/api/ratemaster/')
+    axios.get(' https://apibrize.brizindia.com/api/ratemaster/')
       .then((response) => {
         setRateDatas(response.data);
       })
@@ -37,7 +37,7 @@ const IndexPage = () => {
 
   const deleteRateMaster = (id) => {
     if (window.confirm("Are you sure you want to delete this rate?")) {
-      axios.delete(` http://127.0.0.1:8000/api/ratemaster/${id}`)
+      axios.delete(` https://apibrize.brizindia.com/api/ratemaster/${id}`)
         .then(() => {
           setRateDatas(rateDatas.filter((data) => data.id !== id));
           alert("Rate deleted successfully");

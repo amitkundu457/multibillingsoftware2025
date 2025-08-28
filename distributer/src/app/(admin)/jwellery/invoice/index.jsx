@@ -286,7 +286,7 @@ export default function InvoicePage() {
     console.log(payload);
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/order",
+        " https://apibrize.brizindia.com/api/order",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -463,7 +463,7 @@ export default function InvoicePage() {
               <div className=" w-full h-32 flex items-center justify-center text-gray-500">
                 {item.image ? (
                   <img
-                    src={` http://127.0.0.1:8000/storage/${item.image}`}
+                    src={` https://apibrize.brizindia.com/storage/${item.image}`}
                     alt={item.code}
                     width={100}
                     height={100}

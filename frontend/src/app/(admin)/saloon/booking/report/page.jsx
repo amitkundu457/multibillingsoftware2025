@@ -72,7 +72,7 @@ const BookingPage = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/bookings");
+      const response = await axios.get("  https://apibrize.brizindia.com/api/bookings");
       setBookings(response.data);
       console.log("booking get api",response)
       setFilteredBookings(response.data);
@@ -107,9 +107,9 @@ const BookingPage = () => {
     e.preventDefault();
     try {
       if (formData.id) {
-        await axios.put(`  http://127.0.0.1:8000/api/bookings/${formData.id}`, formData);
+        await axios.put(`  https://apibrize.brizindia.com/api/bookings/${formData.id}`, formData);
       } else {
-        const response = await axios.post("  http://127.0.0.1:8000/api/bookings", formData);
+        const response = await axios.post("  https://apibrize.brizindia.com/api/bookings", formData);
         setBookings([...bookings, response.data]);
         setFilteredBookings([...filteredBookings, response.data]);
       }
@@ -122,7 +122,7 @@ const BookingPage = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`  http://127.0.0.1:8000/api/bookings/${id}`);
+      await axios.delete(`  https://apibrize.brizindia.com/api/bookings/${id}`);
       fetchBookings();
     } catch (error) {
       console.error("Error deleting booking:", error);
