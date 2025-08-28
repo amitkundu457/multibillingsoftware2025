@@ -331,7 +331,7 @@ export default function PrintFamilyBillPage() {
               >
                 <td className="text-left">{item.product_name}</td>
                 <td className="text-right">{item.quantity}</td>
-                <td className="text-right">{item.tax_rate}%</td>
+                <td className="text-right">{item?.tax_rate}%</td>
                 <td className="text-right">₹{item.total.toFixed(2)}</td>
               </tr>
             ))}
