@@ -183,7 +183,7 @@ public function generateFamilyBookingBill($familyBookingId)
 {
     $user = JWTAuth::parseToken()->authenticate();
 
-    $booking = FamilyBooking::with(['tables', 'user.customer', 'createdBy', 'payments'])->findOrFail($familyBookingId);
+    $booking = FamilyBooking::with(['tables', 'user.customer', 'createdBy', 'payments'])->where('id',$familyBookingId)->first();
 $client_address = UserInformation::where('user_id', $user->id)->firstOrFail();
 
 
