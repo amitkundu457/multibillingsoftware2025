@@ -66,7 +66,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await axios.get(" http://127.0.0.1:8000/api/tax",
+//       const response = await axios.get("  https://apibrize.brizindia.com/api/tax",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -108,7 +108,7 @@
 //       const fetchInvoiceData = async () => {
 //         setLoading(true);
 //         try {
-//           const response = await axios.get(` http://127.0.0.1:8000/api/saloon-printbill/${id}`);
+//           const response = await axios.get(`  https://apibrize.brizindia.com/api/saloon-printbill/${id}`);
 //           setInvoiceData(response.data);
 //         } catch (error) {
 //           console.error("Error fetching invoice data:", error);
@@ -285,7 +285,7 @@ const Page = () => {
         return;
       }
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/tax", {
+        const response = await axios.get(" https://apibrize.brizindia.com/api/tax", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTaxes(response.data?.data || []);
@@ -304,7 +304,7 @@ const Page = () => {
   const termsAndCondition  =  async()=>{
           const token = getToken();
 
-    const response = await  axios.get("http://127.0.0.1:8000/api/terms-condition-invoice",{
+    const response = await  axios.get(" https://apibrize.brizindia.com/api/terms-condition-invoice",{
         headers:{
           Authorization:`Bearer ${token}`
         }
@@ -320,7 +320,7 @@ const Page = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/saloon-printbill/${id}`
+          ` https://apibrize.brizindia.com/api/saloon-printbill/${id}`
         );
         setInvoiceData(response.data);
       } catch (error) {

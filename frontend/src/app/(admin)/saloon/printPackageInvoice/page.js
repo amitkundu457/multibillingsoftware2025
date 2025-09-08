@@ -22,10 +22,10 @@ const SalonInvoice = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/printpackage-bill/${id}`
+        ` https://apibrize.brizindia.com/api/printpackage-bill/${id}`
       );
       const invoiceResponse = await axios.get(
-        `http://127.0.0.1:8000/api/generate-package-invoice/22`
+        ` https://apibrize.brizindia.com/api/generate-package-invoice/22`
       );
 
       setData(response.data);
@@ -41,7 +41,7 @@ const SalonInvoice = () => {
       }
 
       const clientResponse = await axios.get(
-        `http://127.0.0.1:8000/api/auth/agme`,
+        ` https://apibrize.brizindia.com/api/auth/agme`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -47,12 +47,13 @@ const ParcelBill = () => {
     fetchCompanyDetails();
   }, []);
   useEffect(() => {
+    if (!parcel_order_id) return; 
     const fetchBill = async () => {
       const token = getCookie("access_token");
 
       try {
         const res = await fetch(
-          `http://127.0.0.1:8000/api/parcel-order/${parcel_order_id}/generate-bill`,
+          ` https://apibrize.brizindia.com/api/parcel-order/${parcel_order_id}/generate-bill`,
           {
             method: "POST",
             headers: {
@@ -64,7 +65,7 @@ const ParcelBill = () => {
 
         const data = await res.json();
         console.log("billpracel", data);
-        setBillData(data);
+       setBillData(data);
         setbuyState(data?.customer?.state);
         // if (res.ok);
         // else console.error('Server error:', data.message);
@@ -74,9 +75,9 @@ const ParcelBill = () => {
         setLoading(false);
       }
     };
+    fetchBill();
 
-    if (parcel_order_id) fetchBill();
-  }, [parcel_order_id]);
+   }, [parcel_order_id]);
   const isSameState = buyerState && sellerState && buyerState === sellerState;
   console.log("isSameState", isSameState);
   const handlePrint = () => {
@@ -261,14 +262,40 @@ const ParcelBill = () => {
         }`}
       >
         {/* Header */}
-        <div className="header">
-          <div className="restaurant-name text-green-700 font-extrabold text-lg">
-            {billData?.created_by?.name || "Unknown Creator"}
-          </div>
+        
+       <div className="header text-center">
+        {/* gst */}
+          
+  {/* Shop Owner Name */}
+  <h1 className="text-green-700 font-extrabold text-xl uppercase tracking-wide">
+    {billData?.created_by?.name || "Unknown Creator"}
+  </h1>
 
-          <div className="bill-type"> BILL</div>
-          <div className="divider"></div>
-        </div>
+  {/* Address */}
+  <p className="text-gray-700 text-sm">
+    {billData?.client_address?.address_1 ||
+      billData?.client_address?.address_2 ||
+      "Address Not Available"}
+  </p>
+
+  {/* Contact Info */}
+  <p className="text-gray-700 text-sm">
+    {billData?.client_address?.mobile_number || "No Contact Number"}
+  </p>
+  <p className="text-gray-700 text-sm">
+    {billData?.client_address?.email || "No Email Provided"}
+  </p>
+  <div>
+   <h1 className="text-gray-700 font-extrabold   uppercase tracking-wide">
+    GST IN:{billData?.client_address?.gst || "GSt not provided"}
+  </h1>
+</div>
+
+  {/* Divider */}
+  <div className="my-2 border-t border-gray-300"></div>
+</div>
+
+
 
         {/* Order Info */}
         <div className="mb-3">

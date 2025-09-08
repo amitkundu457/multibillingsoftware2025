@@ -29,7 +29,7 @@ import {useCookies} from "react-cookie";
   //
   //   try {
   //     const response = await axios.post(
-  //       " http://127.0.0.1:8000/api/login",
+  //       "  https://apibrize.brizindia.com/api/login",
   //       {
   //         email,
   //         password,
@@ -64,7 +64,7 @@ import {useCookies} from "react-cookie";
   
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/login",
+        " https://apibrize.brizindia.com/api/login",
         { email, password },
         { headers: { "Content-Type": "application/json" } }
       );

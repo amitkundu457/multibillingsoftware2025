@@ -45,7 +45,7 @@ export default function MembershipSaleForm() {
       };
 
       const { data } = await axios.get(
-        " http://127.0.0.1:8000/api/customers",
+        "  https://apibrize.brizindia.com/api/customers",
         config
       );
       setCustomers(data);
@@ -64,7 +64,7 @@ export default function MembershipSaleForm() {
 
     try {
       const { data } = await axios.get(
-        " http://127.0.0.1:8000/api/membership-plans",
+        "  https://apibrize.brizindia.com/api/membership-plans",
         config
       );
       setPlans(data);
@@ -80,7 +80,7 @@ export default function MembershipSaleForm() {
       },
     };
     try {
-      const { data } = await axios.get(" http://127.0.0.1:8000/api/stylists",config);
+      const { data } = await axios.get("  https://apibrize.brizindia.com/api/stylists",config);
       setStylists(data);
     } catch (error) {
       console.error("Error fetching stylists:", error);
@@ -95,7 +95,7 @@ export default function MembershipSaleForm() {
     };
     try {
       const { data } = await axios.get(
-        " http://127.0.0.1:8000/api/membership-sales",config
+        "  https://apibrize.brizindia.com/api/membership-sales",config
       );
       setSales(data);
     } catch (error) {
@@ -114,13 +114,13 @@ export default function MembershipSaleForm() {
       if (editId) {
         console.log("submit edit time",formData)
         await axios.put(
-          ` http://127.0.0.1:8000/api/membership-sales/${editId}`,
+          `  https://apibrize.brizindia.com/api/membership-sales/${editId}`,
           formData
         );
         toast.success("Membership Plan Updated!");
       } else {
         await axios.post(
-          " http://127.0.0.1:8000/api/membership-sales",
+          "  https://apibrize.brizindia.com/api/membership-sales",
           formData, {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -153,7 +153,7 @@ export default function MembershipSaleForm() {
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this sale?")) {
       try {
-        await axios.delete(` http://127.0.0.1:8000/api/membership-sales/${id}`);
+        await axios.delete(`  https://apibrize.brizindia.com/api/membership-sales/${id}`);
         toast.success("Membership Plan Deleted!");
         fetchSales();
       } catch (error) {

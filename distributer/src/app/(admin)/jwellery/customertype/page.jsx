@@ -36,7 +36,7 @@ export const Model = ({ onClose, onSave }) => {
     
     axios
       .post(
-        "http://127.0.0.1:8000/api/customerstypes",
+        " http://127.0.0.1:8000/api/customerstypes",
         inputData,
         {
           headers: {
@@ -104,7 +104,7 @@ const Page = () => {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/api/customerstypes')
+      .get(' http://127.0.0.1:8000/api/customerstypes')
       .then((response) => {
         setData(response.data);
       })

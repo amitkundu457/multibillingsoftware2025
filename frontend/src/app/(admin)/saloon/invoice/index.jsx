@@ -199,8 +199,8 @@ export default function InvoicePage() {
     try {
       // setLoading(true);
 
-      // let url = `http://127.0.0.1:8000/api/product-service-saloon`;
-      let url = `http://127.0.0.1:8000/api/product-service-saloon`;
+      // let url = ` https://apibrize.brizindia.com/api/product-service-saloon`;
+      let url = ` https://apibrize.brizindia.com/api/product-service-saloon`;
 
       if (type !== "All") {
         url += `?pro_ser_type=${type}`;
@@ -279,7 +279,7 @@ export default function InvoicePage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/memberships/${id}`
+        `  https://apibrize.brizindia.com/api/memberships/${id}`
       );
 
       console.log("memership  Response:", response.data);
@@ -300,7 +300,7 @@ export default function InvoicePage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/packagesassign/${id}`
+        ` https://apibrize.brizindia.com/api/packagesassign/${id}`
       );
 
       console.log("fetchPackageById:", response.data);
@@ -449,7 +449,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/product-service-groups",
+        " https://apibrize.brizindia.com/api/product-service-groups",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -482,7 +482,7 @@ export default function InvoicePage() {
     if (customerDetails.id) {
       axios
         .get(
-          ` http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
+          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -500,7 +500,7 @@ export default function InvoicePage() {
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+      const response = await axios.get(" https://apibrize.brizindia.com/api/barcodes", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -549,7 +549,7 @@ export default function InvoicePage() {
     try {
       // const response = await getProductService();
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/product-and-service",
+        " https://apibrize.brizindia.com/api/product-and-service",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -571,7 +571,7 @@ export default function InvoicePage() {
   },[searchItem])
 
   // const fetchEmployees = async () => {
-  //   const res = await axios.get(" http://127.0.0.1:8000/api/employees");
+  //   const res = await axios.get("  https://apibrize.brizindia.com/api/employees");
   //   setSalesperson(res.data.employees);
   // };
 
@@ -581,14 +581,14 @@ export default function InvoicePage() {
       notifyTokenMissing();
       return;
     }
-    const res = await axios.get(" http://127.0.0.1:8000/api/stylists", {
+    const res = await axios.get("  https://apibrize.brizindia.com/api/stylists", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setStylist(res.data);
   };
 
   const fetchPrintStatus = async () => {
-    const res = await axios.get(" http://127.0.0.1:8000/api/print-status");
+    const res = await axios.get("  https://apibrize.brizindia.com/api/print-status");
     console.log("API Response:", res.data); // Debugging
     setPrintStatus(Array.isArray(res.data) ? res.data : []); // Ensure it's an array
 
@@ -819,7 +819,7 @@ export default function InvoicePage() {
     console.log(payload);
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/saloon-order", // Removed the space
+        " https://apibrize.brizindia.com/api/saloon-order", // Removed the space
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -888,7 +888,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.put(
-        ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -912,7 +912,7 @@ export default function InvoicePage() {
 
   //   try {
   //     const response = await axios.post(
-  //       ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+  //       `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
   //       { customer_id: customerId, redeem_points: points } // Ensure both values are sent
   //     );
   //   } catch (error) {

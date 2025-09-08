@@ -1,12 +1,12 @@
 import apiClient from "@/app/lib/axios";
 
 // const apiClient = axios.create({
-//   baseURL: "http://127.0.0.1:8000/api/",
+//   baseURL: " http://127.0.0.1:8000/api/",
 // });
 
 // console.log(apiClient.get('https://google.com'))
 
-export const baseImageURL = "http://127.0.0.1:8000/";
+export const baseImageURL = " http://127.0.0.1:8000/";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;

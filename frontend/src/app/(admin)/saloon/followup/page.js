@@ -52,7 +52,7 @@ if (!token) {
 
     setLoading(true);
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/enquiry",
+      const response = await axios.get("  https://apibrize.brizindia.com/api/enquiry",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -108,17 +108,17 @@ if (!token) {
 
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/enquerymessage",
+        "  https://apibrize.brizindia.com/api/enquerymessage",
         { phone } // Passing the specific phone number in the request body
       );
       const followUpResponse = await axios.post(
-        "http://127.0.0.1:8000/api/reminder-follow-up/follow-up",followUpPayload,
+        " https://apibrize.brizindia.com/api/reminder-follow-up/follow-up",followUpPayload,
         {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const RemindersResponse = await axios.post(
-          "http://127.0.0.1:8000/api/reminder-follow-up/reminder",ReminderPayload,
+          " https://apibrize.brizindia.com/api/reminder-follow-up/reminder",ReminderPayload,
           {
             headers: { Authorization: `Bearer ${token}` },
           });

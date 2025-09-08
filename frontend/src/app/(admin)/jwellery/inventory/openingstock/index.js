@@ -73,7 +73,7 @@
 
 //   const handleDeleteAllStock = async () => {
 //     const response = await axios.delete(
-//       " http://127.0.0.1:8000/api/delete-all-stock"
+//       " https://apibrize.brizindia.com/api/delete-all-stock"
 //     );
 //     if (response.status === 200) {
 //       alert(response.data.message); // Show success message
@@ -85,7 +85,7 @@
 //   };
 
 //   const handleDownloadSample = () => {
-//     window.location.href = " http://127.0.0.1:8000/api/download-sample-stock";
+//     window.location.href = " https://apibrize.brizindia.com/api/download-sample-stock";
 //   };
 
 //   const handleFileChange = (e) => {
@@ -109,7 +109,7 @@
 
 //     try {
 //       const response = await axios.post(
-//         "http://127.0.0.1:8000/api/upload/stock",
+//         "https://apibrize.brizindia.com/api/upload/stock",
 //         formData,
 //         {
 //           headers: {
@@ -489,7 +489,7 @@ function Page() {
   };
 
   // const handleDeleteAllStock = async () => {
-  //   const response = await axios.delete("http://127.0.0.1:8000/api/delete-all-stock");
+  //   const response = await axios.delete("https://apibrize.brizindia.com/api/delete-all-stock");
   //   if (response.status === 200) {
   //     alert(response.data.message);
   //     setDeleteModel(false);
@@ -507,7 +507,7 @@ function Page() {
     }
   
     try {
-      const response = await axios.delete("http://127.0.0.1:8000/api/delete-all-stock", {
+      const response = await axios.delete("https://apibrize.brizindia.com/api/delete-all-stock", {
         headers: {
           Authorization: `Bearer ${token}`, // Attach token here
         },
@@ -527,7 +527,7 @@ function Page() {
   
 
   const handleDownloadSample = () => {
-    window.location.href = "http://127.0.0.1:8000/api/download-sample-stock";
+    window.location.href = "https://apibrize.brizindia.com/api/download-sample-stock";
   };
 
   const handleFileChange = (e) => {
@@ -551,7 +551,7 @@ function Page() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/upload/stock",
+        " https://apibrize.brizindia.com/api/upload/stock",
         formData,
         {
           headers: {

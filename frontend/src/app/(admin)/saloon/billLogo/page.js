@@ -41,7 +41,7 @@ useEffect(() => {
   }
   const fetchLogo = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/masterlogobill",
+      const response = await axios.get("  https://apibrize.brizindia.com/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -87,7 +87,7 @@ useEffect(() => {
       console.log("Uploading file:", fileToUpload);
   
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/masterlogobill", 
+        "  https://apibrize.brizindia.com/api/masterlogobill", 
         formData, 
         { headers: { "Content-Type": "multipart/form-data",
            Authorization: `Bearer ${token}`

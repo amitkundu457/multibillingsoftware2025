@@ -39,7 +39,7 @@ const Page = () => {
 
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/gstReport",
+          " https://apibrize.brizindia.com/api/gstReport",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

@@ -105,7 +105,7 @@ const ProductWise = () => {
     const fetchData = async () => {
       setLoading(true); // Show Loading
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/purchase",
+        const response = await axios.get(" https://apibrize.brizindia.com/api/purchase",
           {
             headers: { Authorization: `Bearer ${token}` },
           });

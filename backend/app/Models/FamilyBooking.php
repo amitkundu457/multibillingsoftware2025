@@ -20,11 +20,15 @@ class FamilyBooking extends Model
     {
         return $this->hasMany(KotOrderItem::class, 'family_booking_id');
     }
- 
+
 
      public function user()
 {
     return $this->belongsTo(User::class, 'customer_id');
+}
+public function userInfo()
+{
+    return $this->belongsTo(UserInformation::class, 'created_by');
 }
 
 public function createdBy()

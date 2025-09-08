@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+ use Illuminate\Http\Request;
+ use Illuminate\Support\Facades\Http;
+
 use App\Models\Booking;
 use Illuminate\Support\Facades\Validator;
 
+use App\Models\SmsSetting;
+use App\Models\SmsCredential;
+use App\Models\Customer;
+use App\Http\Controllers\Controller;
 
 
 class BookingController extends Controller
@@ -34,6 +39,8 @@ class BookingController extends Controller
                 'upi_payment'    => 'numeric',
                 'coupon_amount'  => 'numeric',
                 'service'  =>'nullable|array',
+                 'status' => 'required',
+            'sms_credential_id' => 'required',
             ]);
 
             if ($validator->fails()) {
@@ -45,13 +52,70 @@ class BookingController extends Controller
         if (is_array($data['service'] ?? null)) {
             $data['service'] = implode(', ', $data['service']);
         }
+
             $booking = Booking::create($data);
+           $this->sendBillingSms($request->phone,$request->status,$request->sms_credential_id);
 
             return response()->json([
                 'message' => 'Booking created successfully!',
                 'data'    => $booking
             ], 201);
         }
+
+
+        public function sendBillingSms($phone_no,$status,$sms_credential_id)
+{
+
+
+    // 🔍 Find customer by phone
+    $customer = Customer::where('phone', $phone_no)->first();
+    if (!$customer) {
+        return response()->json(['message' => 'Customer not found with this phone number'], 404);
+    }
+
+    // 🔍 Get message from sms_settings table
+    // $message = SmsSetting::where('status', $request->status)
+    //     ->where('sms_credential_id', $request->sms_credential_id)
+    //     ->value('description');
+    $message = SmsSetting::where('status', $status)
+    ->where('sms_credential_id', $sms_credential_id)
+    ->value('description');
+
+// 🧼 Clean non-breaking spaces (e.g., \u00a0)
+$message = str_replace("\xC2\xA0", ' ', $message);
+
+    if (!$message) {
+        return response()->json(['message' => 'Message not found for this status'], 404);
+    }
+
+    // 🔍 Get SMS credential details
+    $credential = SmsCredential::find($sms_credential_id);
+
+    if (!$credential) {
+        return response()->json(['message' => 'Credential not found'], 404);
+    }
+    // ✅ Send SMS
+    $response = Http::get("https://sms.bluwaves.in/sendsms/bulk.php", [
+        'username'    => $credential->sms_username,
+        'password'    => $credential->sms_password,
+        'type'        => 'TEXT',
+        'sender'      => $credential->sms_sender,
+        'mobile'      => $phone_no,
+        'message'     => $message,
+        'entityId'    => $credential->sms_entity_id,
+        'templateId'  => SmsSetting::where('status', $status)
+                          ->where('sms_credential_id', $sms_credential_id)
+                          ->value('template_id')
+    ]);
+
+    return response()->json([
+        'message' => 'SMS sent',
+        'sms_response' => $response->body(),
+    ]);
+}
+
+
+
 
         // Fetch All Bookings
         public function index() {

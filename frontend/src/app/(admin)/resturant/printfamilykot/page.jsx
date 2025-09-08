@@ -30,7 +30,7 @@ const Page = () => {
   useEffect(() => {
     const token = getCookie("access_token");
 
-    fetch(`http://127.0.0.1:8000/api/get-family-kot/${bookingId}`, {
+    fetch(` https://apibrize.brizindia.com/api/get-family-kot/${bookingId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

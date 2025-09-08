@@ -23,7 +23,7 @@ const ProductSearch = () => {
 
   const fetchAllBarCode = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+    const response = await axios.get(" https://apibrize.brizindia.com/api/barcodes", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setBarcodeData(response.data);
@@ -38,10 +38,11 @@ const ProductSearch = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          `http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+          ` https://apibrize.brizindia.com/api/barcode-search?search=${search}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        setProducts(res.data);
+      const onlyProduct =   res.data.filter((item=>item.pro_ser_type ==="Product"));
+        setProducts(onlyProduct);
       } catch (err) {
         console.error("Product fetch error", err);
       }
@@ -98,7 +99,7 @@ const ProductSearch = () => {
     }
 
     await axios.post(
-      "http://127.0.0.1:8000/api/barcode-print-history",
+      " https://apibrize.brizindia.com/api/barcode-print-history",
       {
         barcodes: selectedItems.map((item) => ({
           barcode_id: item.id,

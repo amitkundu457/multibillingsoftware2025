@@ -16,7 +16,7 @@ export default function MembershipReport() {
       try {
         const token = getToken();
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/membership-plan-report",
+          " https://apibrize.brizindia.com/api/membership-plan-report",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

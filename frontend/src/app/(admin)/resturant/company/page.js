@@ -8,7 +8,22 @@ export default function Home() {
   const [items, setItems] = useState([]);
   const [editingItem, setEditingItem] = useState(null);
 
+  // Fetch items using Axios
+  useEffect(() => {
+    const token = getCookie("access_token");
+    if (!token) {
+      // Only notify, don't return from component
+      if (typeof window !== "undefined" && window.notyf) {
+        window.notyf.error("Authentication token not found!");
+      } else {
+        console.error("Authentication token not found!");
+      }
+      return;
+    }
+    console.log("token from compines", token);
 
+    fetchItems();
+  }, []);
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -19,43 +34,22 @@ export default function Home() {
     return null;
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // Fetch items using Axios
-  useEffect(() => {
-    
-
-const token = getCookie("access_token");
-if (!token) {
-  // Only notify, don't return from component
-  if (typeof window !== "undefined" && window.notyf) {
-    window.notyf.error("Authentication token not found!");
-  } else {
-    console.error("Authentication token not found!");
-  }
-  return;
-}
-    fetchItems();
-  }, []);
   const fetchItems = async () => {
+    const token = getCookie("access_token");
+    if (!token) {
+      // Only notify, don't return from component
+      if (typeof window !== "undefined" && window.notyf) {
+        window.notyf.error("Authentication token not found!");
+      } else {
+        console.error("Authentication token not found!");
+      }
+      return;
+    }
+
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/company",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(" https://apibrize.brizindia.com/api/company", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setItems(response.data);
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -64,11 +58,21 @@ if (!token) {
 
   // Handle form submission for creating or updating items
   const onSubmit = async (data) => {
+    const token = getCookie("access_token");
+    if (!token) {
+      // Only notify, don't return from component
+      if (typeof window !== "undefined" && window.notyf) {
+        window.notyf.error("Authentication token not found!");
+      } else {
+        console.error("Authentication token not found!");
+      }
+      return;
+    }
     if (editingItem) {
       // Update item
       try {
         const response = await axios.put(
-          ` http://127.0.0.1:8000/api/company/${editingItem.id}`,
+          `  https://apibrize.brizindia.com/api/company/${editingItem.id}`,
           data
         );
         const updatedItem = response.data;
@@ -87,8 +91,9 @@ if (!token) {
       // Create new item
       try {
         const response = await axios.post(
-          " http://127.0.0.1:8000/api/company",
+          "  https://apibrize.brizindia.com/api/company",
           data,
+
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -113,7 +118,7 @@ if (!token) {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        ` http://127.0.0.1:8000/api/company/${id}`
+        `  https://apibrize.brizindia.com/api/company/${id}`
       );
       if (response.status === 200) {
         setItems((prevItems) => prevItems.filter((item) => item.id !== id));
@@ -129,7 +134,7 @@ if (!token) {
       {/* Left side form */}
       <div className="w-1/3 p-6 bg-gray-100">
         <h2 className="text-2xl font-semibold mb-4">
-          {editingItem ? "Edit Comapy" : "Create Company"}
+          {editingItem ? "Edit Brand" : "Create Brand"}
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">

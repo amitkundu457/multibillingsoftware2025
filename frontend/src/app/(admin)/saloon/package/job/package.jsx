@@ -39,7 +39,7 @@ export default function BookingModal({ customer_id }) {
 
   const fetchNumber = () => {
     axios
-      .get("http://127.0.0.1:8000/api/packagesnext-numbers")
+      .get(" https://apibrize.brizindia.com/api/packagesnext-numbers")
       .then((res) => {
         setNextNumber(res.data);
         setValue("packageNo", res.data.package_no || "");
@@ -51,7 +51,7 @@ export default function BookingModal({ customer_id }) {
   const fetchPackages = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/packagename",
+        " https://apibrize.brizindia.com/api/packagename",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -76,7 +76,7 @@ export default function BookingModal({ customer_id }) {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/packagesassn/${packageNo}`,
+        ` https://apibrize.brizindia.com/api/packagesassn/${packageNo}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -127,8 +127,8 @@ export default function BookingModal({ customer_id }) {
   const onSubmit = (data) => {
     const apiUrl =
       mode === "new"
-        ? `http://127.0.0.1:8000/api/packagesassign/${customer_id}`
-        : `http://127.0.0.1:8000/api/packageupdate/${data.packageNo}`;
+        ? ` https://apibrize.brizindia.com/api/packagesassign/${customer_id}`
+        : ` https://apibrize.brizindia.com/api/packageupdate/${data.packageNo}`;
     const method = mode === "new" ? axios.post : axios.post;
 
     method(apiUrl, data, {

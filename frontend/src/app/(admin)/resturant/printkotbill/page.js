@@ -23,8 +23,8 @@ export default function PrintFamilyBillPage() {
     return null;
   };
 
-console.log("buyer",buyerState);
-console.log("seller",sellerState);
+  console.log("buyer", buyerState);
+  console.log("seller", sellerState);
   //restunat deatils
   useEffect(() => {
     const fetchCompanyDetails = async () => {
@@ -54,14 +54,14 @@ console.log("seller",sellerState);
     if (!cutomerid) return;
 
     axios
-      .get(`http://127.0.0.1:8000/api/customers/get/${cutomerid}`, {
+      .get(` https://apibrize.brizindia.com/api/customers/get/${cutomerid}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
         console.log("customer details", response);
-        setbuyState(response?.data?.data?.state?.trim().toLowerCase() || "");        // setCustomer(response.data.data);
+        setbuyState(response?.data?.data?.state?.trim().toLowerCase() || ""); // setCustomer(response.data.data);
       })
       .catch((err) => {
         console.error(err);
@@ -74,7 +74,7 @@ console.log("seller",sellerState);
 
     if (booking_id) {
       const res = fetch(
-        `http://127.0.0.1:8000/api/family-booking/${booking_id}/generate-bill`,
+        ` https://apibrize.brizindia.com/api/family-booking/${booking_id}/generate-bill`,
         {
           method: "POST",
           headers: {
@@ -101,8 +101,6 @@ console.log("seller",sellerState);
         .finally(() => setLoading(false));
     }
   }, [booking_id]);
-
-
 
   //gst condtion
   const isSameState = buyerState && sellerState && buyerState === sellerState;
@@ -276,8 +274,15 @@ console.log("seller",sellerState);
           <h1 className="text-lg font-bold">
             🌟 {bill?.created_by?.name || "Unknown Creator"} 🌟
           </h1>
-          <p>123 Main Street, City</p>
-          <p>Phone: +91-9876543210</p>
+          <p>
+            {bill?.client_address?.address_1 ||
+              bill.client_address?.address_2 ||
+              "NA"}
+          </p>
+          <p>Phone: {bill?.client_address.mobile_number ?? "N/A"}</p>
+          <p className="text-gray-700 text-sm">
+            {bill?.client_address?.email || "No Email Provided"}
+          </p>
           <p className="mt-1">----------------------------</p>
 
           <h2 className="text-base font-semibold"> Bill</h2>
@@ -286,6 +291,11 @@ console.log("seller",sellerState);
           <p className="text-yellow-600 font-bold">
             Customer Name: {bill.customer_name}
           </p>
+          <div>
+            <h1 className="text-gray-700 font-extrabold   uppercase tracking-wide">
+              GST IN:{bill?.client_address?.gst || "GSt not provided"}
+            </h1>
+          </div>
 
           {/* Address Section */}
           {bill.user_info && (
@@ -333,63 +343,59 @@ console.log("seller",sellerState);
           {/* <p>Subtotal: ₹{bill.subtotal.toFixed(2)}</p>
           <p>CGST (9%): ₹{(bill.gst / 2).toFixed(2)}</p>
           <p>SGST (9%): ₹{(bill.gst / 2).toFixed(2)}</p> */}
-          {
-            !isSameState &&(
-              <div>
-                 <p>CGST : ₹{(bill.gst / 2).toFixed(2)}</p>
-                 <p>SGST : ₹{(bill.gst / 2).toFixed(2)}</p>
-              </div>
-             
-            )
-          }
-          {
-            isSameState &&(
-              <div>
-                 <p>IGST : ₹{(bill.gst).toFixed(2)}</p>
-               
-              </div>
-             
-            )
-          }
+          {!isSameState && (
+            <div>
+              <p>CGST : ₹{(bill.gst / 2).toFixed(2)}</p>
+              <p>SGST : ₹{(bill.gst / 2).toFixed(2)}</p>
+            </div>
+          )}
+          {isSameState && (
+            <div>
+              <p>IGST : ₹{bill.gst.toFixed(2)}</p>
+            </div>
+          )}
           <p className="font-bold text-base">
             Grand Total: ₹{bill.grand_total}
           </p>
         </div>
 
         {/* Payment Summary */}
-{bill?.payments?.length > 0 && (
-  <div className="mt-2 border-t border-dotted border-black pt-2 text-sm w-full">
-    <p className="text-center font-semibold underline mb-1">Payment Details</p>
-    <table className="w-full">
-      <thead>
-        <tr>
-          <th className="text-left">Method</th>
-          <th className="text-right">Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        {bill.payments.map((payment, index) => (
-          <tr key={index}>
-            <td className="text-left">{payment.payment_method}</td>
-            <td className="text-right">₹{parseFloat(payment.amount).toFixed(2)}</td>
-          </tr>
-        ))}
-      </tbody>
-      <tfoot>
-        <tr className="font-semibold">
-          <td className="text-left">Total Paid</td>
-          <td className="text-right">
-            ₹
-            {bill.payments
-              .reduce((sum, p) => sum + parseFloat(p.amount), 0)
-              .toFixed(2)}
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-)}
-
+        {bill?.payments?.length > 0 && (
+          <div className="mt-2 border-t border-dotted border-black pt-2 text-sm w-full">
+            <p className="text-center font-semibold underline mb-1">
+              Payment Details
+            </p>
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <th className="text-left">Method</th>
+                  <th className="text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bill.payments.map((payment, index) => (
+                  <tr key={index}>
+                    <td className="text-left">{payment.payment_method}</td>
+                    <td className="text-right">
+                      ₹{parseFloat(payment.amount).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr className="font-semibold">
+                  <td className="text-left">Total Paid</td>
+                  <td className="text-right">
+                    ₹
+                    {bill.payments
+                      .reduce((sum, p) => sum + parseFloat(p.amount), 0)
+                      .toFixed(2)}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        )}
 
         {/* Footer */}
         <div className="text-center mt-4 text-xs">

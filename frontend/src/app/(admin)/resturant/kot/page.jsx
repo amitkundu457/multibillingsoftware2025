@@ -76,6 +76,7 @@ const Page = () => {
   const paymentOptionsOfFamily = ["Cash", "UPI", "Card", "Others"];
 
   const [parcelOrderDetails, setParcelOrderDetails] = useState(null);
+  const [itemsCategory, setItemsCategory] = useState([]);
 
   const [paymentInputs, setPaymentInputs] = useState([]);
   const paymentOptions = ["Cash", "UPI", "Card", "Others"];
@@ -95,6 +96,24 @@ const Page = () => {
     return null;
   };
 
+  useEffect(() => {
+ 
+    const fetchItems = async () => {
+      const token = getCookie("access_token");
+
+      try {
+        const response = await axios.get(" https://apibrize.brizindia.com/api/type", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setItemsCategory(response.data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    fetchItems();
+  }, [ ]);
+
   const handleParcelSearchOrder = async () => {
     const token = getCookie("access_token");
 
@@ -105,7 +124,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/parcel-order/${parcelOrderId}/grand-total`,
+        ` https://apibrize.brizindia.com/api/parcel-order/${parcelOrderId}/grand-total`,
         {
           method: "GET",
           headers: {
@@ -146,7 +165,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/parcel-payments`,
+        ` https://apibrize.brizindia.com/api/parcel-payments`,
         {
           method: "POST",
           headers: {
@@ -162,11 +181,11 @@ const Page = () => {
           }),
         }
       );
-      console.log("response",response)
+      console.log("response", response);
 
       const result = await response.json();
 
-      if (response.status==200) {
+      if (response.status == 200) {
         GenerateParcelBillFunction();
         alert("✅ Payment submitted successfully!");
         setIsParcelBillModalOpen(false);
@@ -204,7 +223,7 @@ const Page = () => {
   useEffect(() => {
     if (familyBookingId) {
       fetch(
-        `http://127.0.0.1:8000/api/family-booking-grand-total/${familyBookingId}`
+        ` https://apibrize.brizindia.com/api/family-booking-grand-total/${familyBookingId}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -243,7 +262,7 @@ const Page = () => {
       };
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/family-booking-payments", // Replace with your real API route
+        " https://apibrize.brizindia.com/api/family-booking-payments", // Replace with your real API route
         payload,
         {
           headers: {
@@ -253,7 +272,7 @@ const Page = () => {
       );
 
       console.log("Payment stored:", response.data);
-       alert("Payment saved successfully!");
+      alert("Payment saved successfully!");
       setfamilyBookingId(0);
       GenerateBillFunction();
       setIsBillModalOpen(false); // close modal
@@ -290,7 +309,7 @@ const Page = () => {
     if (!newTableNo.trim()) return;
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/kot-tables", {
+      const res = await fetch(" https://apibrize.brizindia.com/api/kot-tables", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -316,13 +335,13 @@ const Page = () => {
     }
   };
 
-  // Fetch data from API http://127.0.0.1:8000/api/product-and-service
+  // Fetch data from API  https://apibrize.brizindia.com/api/product-and-service
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      // .get(" http://127.0.0.1:8000/api/product-services",{headers: {
-      .get(" http://127.0.0.1:8000/api/product-and-service", {
+      // .get("  https://apibrize.brizindia.com/api/product-services",{headers: {
+      .get("  https://apibrize.brizindia.com/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -344,7 +363,7 @@ const Page = () => {
     const token = getCookie("access_token");
 
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/kot-tables", {
+      const res = await axios.get(" https://apibrize.brizindia.com/api/kot-tables", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -427,7 +446,7 @@ const Page = () => {
 
   //   try {
 
-  //     const response =  await axios.post('http://127.0.0.1:8000/api/kot-orders',payload,{
+  //     const response =  await axios.post(' https://apibrize.brizindia.com/api/kot-orders',payload,{
   //       headers:{
   //         "Content-Type":"application/json",
   //         Authorization: `Bearer ${token}`,
@@ -459,7 +478,7 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/kot-orders",
+        " https://apibrize.brizindia.com/api/kot-orders",
         payload,
         {
           headers: {
@@ -671,12 +690,13 @@ const Page = () => {
           id="category"
           className="border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
         >
-          <option value="">Select Category</option>
-          <option value="veg">Veg</option>
-          <option value="nonveg">Non-Veg</option>
-          <option value="lunch">Lunch</option>
-          <option value="dinner">Dinner</option>
+          {itemsCategory.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.name}
+            </option>
+          ))}
         </select>
+
         {/* <MdOutlineRefresh
           size={24}
           className="text-blue-500 cursor-pointer hover:rotate-90 transition-transform"
@@ -783,8 +803,8 @@ const Page = () => {
 
         {/* // Show product selection when a table is selected */}
         {/* <div className="flex"> */}
-          {/* Product Grid */}
-          {/* <div className="w-3/4 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-[300px] overflow-y-auto">
+        {/* Product Grid */}
+        {/* <div className="w-3/4 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-[300px] overflow-y-auto">
             {data.map((item) => (
               <div
                 onClick={() => handleSelectProduct(item)}
@@ -793,7 +813,7 @@ const Page = () => {
               >
                 <p className="text-center font-semibold mb-2">{item.name}</p>
                 <img
-                  src={`http://127.0.0.1:8000/${item.image}`}
+                  src={` https://apibrize.brizindia.com/${item.image}`}
                   alt={item.name}
                   className="w-full h-32 object-cover rounded-lg mb-2"
                 />
@@ -801,11 +821,11 @@ const Page = () => {
                   ₹{item.rate}
                 </p>
               </div> */}
-            {/* ))} */}
-          </div>
+        {/* ))} */}
+      </div>
 
-          {/* Selected Products */}
-          {/* <div className="w-1/4 p-4 bg-gray-100 border-l border-gray-300 rounded-lg shadow-md">
+      {/* Selected Products */}
+      {/* <div className="w-1/4 p-4 bg-gray-100 border-l border-gray-300 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4 text-gray-800">
               Selected Products
             </h2>
@@ -829,10 +849,10 @@ const Page = () => {
               Order
             </button>
           </div> */}
-        {/* </div> */}
+      {/* </div> */}
       {/* </div> */}
 
-       {isLogoutModel && <LogoutModel onClose={() => setIsLogoutModel(false)} />}
+      {isLogoutModel && <LogoutModel onClose={() => setIsLogoutModel(false)} />}
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -914,36 +934,36 @@ const Page = () => {
                 </div>
 
                 {/* Payment Input Fields */}
-               {paymentInputsOfFamily.map((input, index) => {
-  const totalEntered = paymentInputsOfFamily.reduce(
-    (sum, item, i) => sum + (i === index ? 0 : parseFloat(item.amount || 0)),
-    0
-  );
+                {paymentInputsOfFamily.map((input, index) => {
+                  const totalEntered = paymentInputsOfFamily.reduce(
+                    (sum, item, i) =>
+                      sum + (i === index ? 0 : parseFloat(item.amount || 0)),
+                    0
+                  );
 
-  const grandTotal = parseFloat(grandTotalOfFamily || 0);
-  const maxAllowed = Math.max(grandTotal - totalEntered, 0);
+                  const grandTotal = parseFloat(grandTotalOfFamily || 0);
+                  const maxAllowed = Math.max(grandTotal - totalEntered, 0);
 
-  return (
-    <div key={index} className="flex items-center gap-2 mb-2">
-      <span className="w-1/2 font-medium">{input.mode}</span>
-      <input
-        type="number"
-        placeholder="Amount"
-        min={0}
-        max={maxAllowed}
-        value={input.amount}
-        onChange={(e) => {
-          const value = parseFloat(e.target.value) || 0;
-          if (value <= maxAllowed) {
-            updatePaymentInputOfFamily(index, "amount", value);
-          }
-        }}
-        className="w-1/2 border border-gray-300 rounded p-2 text-sm"
-      />
-    </div>
-  );
-})}
-
+                  return (
+                    <div key={index} className="flex items-center gap-2 mb-2">
+                      <span className="w-1/2 font-medium">{input.mode}</span>
+                      <input
+                        type="number"
+                        placeholder="Amount"
+                        min={0}
+                        max={maxAllowed}
+                        value={input.amount}
+                        onChange={(e) => {
+                          const value = parseFloat(e.target.value) || 0;
+                          if (value <= maxAllowed) {
+                            updatePaymentInputOfFamily(index, "amount", value);
+                          }
+                        }}
+                        className="w-1/2 border border-gray-300 rounded p-2 text-sm"
+                      />
+                    </div>
+                  );
+                })}
               </>
             )}
 
@@ -1078,9 +1098,9 @@ const Page = () => {
               </button>
               <button
                 onClick={submitParcelPayment}
-                disabled={remainingAmount >0}
+                disabled={remainingAmount > 0}
                 className={`px-5 py-2 rounded-md text-white ${
-                  remainingAmount >0
+                  remainingAmount > 0
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-green-600 hover:bg-green-700"
                 }`}

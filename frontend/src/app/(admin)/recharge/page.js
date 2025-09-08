@@ -91,7 +91,7 @@ const QrImagePreview = () => {
 
       // Add the token to the request headers
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/coinpurchase", // Laravel API endpoint
+        " https://apibrize.brizindia.com/api/coinpurchase", // Laravel API endpoint
         payload,
         {
           headers: {
@@ -117,7 +117,7 @@ const QrImagePreview = () => {
       try {
         const token = getCookie("access_token");
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/auth/agme",
+          " https://apibrize.brizindia.com/api/auth/agme",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -135,7 +135,7 @@ const QrImagePreview = () => {
   // ✅ Fetch QR image
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/qr/upload")
+      .get(" https://apibrize.brizindia.com/api/qr/upload")
       .then((res) => {
         if (res.data?.data?.cover) {
           setImageUrl(res.data.data.cover);
@@ -164,7 +164,7 @@ const QrImagePreview = () => {
      
 
       const { data } = await axios.post(
-        "http://127.0.0.1:8000/api/razorpay/create-order",
+        " https://apibrize.brizindia.com/api/razorpay/create-order",
         {
          coins,
          amount
@@ -201,7 +201,7 @@ const QrImagePreview = () => {
         handler: async function (response) {
           try {
             const verifyRes = await axios.post(
-              "http://127.0.0.1:8000/api/razorpay/verify-payment",
+              " https://apibrize.brizindia.com/api/razorpay/verify-payment",
               {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_order_id: response.razorpay_order_id,

@@ -448,7 +448,7 @@ setFilteredItems(matchedItems);
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get("http://127.0.0.1:8000/api/barcodes", {
+      const response = await axios.get(" https://apibrize.brizindia.com/api/barcodes", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -464,7 +464,7 @@ setFilteredItems(matchedItems);
     try {
       const token = getCookie("access_token");
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/billcountnumber",
+        " https://apibrize.brizindia.com/api/billcountnumber",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -501,7 +501,7 @@ setFilteredItems(matchedItems);
       console.log("token", token);
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/stockDetails",
+        " https://apibrize.brizindia.com/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -524,7 +524,7 @@ setFilteredItems(matchedItems);
 
   useEffect(() => {
     axios
-      .get(" http://127.0.0.1:8000/api/redeem-setup")
+      .get("  https://apibrize.brizindia.com/api/redeem-setup")
       .then((response) => {
         if (response.data.length > 0) {
           setLoyaltyData(response.data[0]); // Assuming you only need the first item
@@ -558,7 +558,7 @@ setFilteredItems(matchedItems);
   const handleSearchOrder = async () => {
     try {
       const res = await axios.get(
-        `http://127.0.0.1:8000/api/orders/search?billno=${orderSearchId}`
+        ` https://apibrize.brizindia.com/api/orders/search?billno=${orderSearchId}`
       );
       console.log("orderDetails", res);
       const orderDetailsData = res.data?.data[0];
@@ -585,7 +585,7 @@ setFilteredItems(matchedItems);
     if (customerDetails.id) {
       axios
         .get(
-          ` http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
+          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -649,7 +649,7 @@ setFilteredItems(matchedItems);
 
   const fetchEmployees = async () => {
     const token = getCookie("access_token");
-    const res = await axios.get(" http://127.0.0.1:8000/api/employees", {
+    const res = await axios.get("  https://apibrize.brizindia.com/api/employees", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setSalesperson(res.data.employees);
@@ -781,6 +781,8 @@ setFilteredItems(matchedItems);
     setMaking(null);
     setTotals(null);
   };
+
+ 
 
   // let totalgstCount = 0;
   // let totalquantity = 0;
@@ -1086,11 +1088,14 @@ console.log("ratetoal",rateTotal);
       additionDetail: additionDetail || "",
       minAdjAmt: Number(adjustAmount) || 0,
       minAdAmt: Number(advanceMoney) || 0,
+       phone_no:phoneNumber?? "",
+         status: "jwellery billing",
+        sms_credential_id: 1,
     };
     console.log("payload", payload);
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/order",
+        "  https://apibrize.brizindia.com/api/order",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -1118,12 +1123,15 @@ console.log("ratetoal",rateTotal);
       updateRedeemPoint(customerDetails.id, usingLoyaltyPoints, token);
       // Show confirmation dialog for printing the bill
       // const printConfirmation = window.confirm("Do you want to print the bill?");
+
       const printConfirmation = window.confirm(
         "Do you want to print the bill?"
       );
       if (printConfirmation) {
         Printbill(response.data.order_id, response.data.bill_inv); // Call the direct print function
       }
+                 
+
     } catch (error) {
       notyf.error("Failed to place order. Please try again.");
     }
@@ -1145,7 +1153,21 @@ console.log("ratetoal",rateTotal);
 
     // Open the URL in a new tab
     window.open(printUrl, "_blank");
+      
   };
+  // const handleSendSms = async () => {
+  //   try {
+  //     await axios.post(" https://apibrize.brizindia.com/api/send-jwel-billing-sms", {
+  //       phone_no:phoneNumber?? "",
+  //        status: "jwellery billing",
+  //       sms_credential_id: 1,
+  //     });
+  //     alert("SMS sent successfully");
+  //   } catch (err) {
+  //     alert("SMS failed to send");
+  //     console.error(err);
+  //   }
+  //  };
   //update redeem point
 
   const updateRedeemPoint = async (customerId, points, token) => {
@@ -1162,7 +1184,7 @@ console.log("ratetoal",rateTotal);
 
     try {
       const response = await axios.put(
-        ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -1186,7 +1208,7 @@ console.log("ratetoal",rateTotal);
 
     try {
       const response = await axios.post(
-        ` http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {

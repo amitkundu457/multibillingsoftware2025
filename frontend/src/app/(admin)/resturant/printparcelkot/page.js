@@ -22,7 +22,7 @@ const ParcelKOT = () => {
 
     const fetchKOT = async () => {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/parcel-kot/${parcel_order_id}`,
+        const response = await fetch(` https://apibrize.brizindia.com/api/parcel-kot/${parcel_order_id}`,
           {
              headers: {
         Authorization: `Bearer ${token}`,
