@@ -13,6 +13,9 @@ import { Notyf } from "notyf";
 import Printbill from "@/app/(admin)/jwellery/invoice/printbill";
 import FamilyBookingModal from "./familyBookingModal";
 import ParcelModal from "./parcelModal";
+import { MdTableBar } from "react-icons/md";
+import { MdOutlineTableBar } from "react-icons/md";       // Material Icons (restaurant-specific)
+import { LuRefreshCcw } from "react-icons/lu";
 
 // ShowProduct Component (with quantity control)
 export const ShowProduct = ({
@@ -102,7 +105,7 @@ const Page = () => {
       const token = getCookie("access_token");
 
       try {
-        const response = await axios.get(" https://apibrize.brizindia.com/api/type", {
+        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setItemsCategory(response.data);
@@ -124,7 +127,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        ` https://apibrize.brizindia.com/api/parcel-order/${parcelOrderId}/grand-total`,
+        ` http://127.0.0.1:8000/api/parcel-order/${parcelOrderId}/grand-total`,
         {
           method: "GET",
           headers: {
@@ -165,7 +168,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        ` https://apibrize.brizindia.com/api/parcel-payments`,
+        ` http://127.0.0.1:8000/api/parcel-payments`,
         {
           method: "POST",
           headers: {
@@ -223,7 +226,7 @@ const Page = () => {
   useEffect(() => {
     if (familyBookingId) {
       fetch(
-        ` https://apibrize.brizindia.com/api/family-booking-grand-total/${familyBookingId}`
+        ` http://127.0.0.1:8000/api/family-booking-grand-total/${familyBookingId}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -262,7 +265,7 @@ const Page = () => {
       };
 
       const response = await axios.post(
-        " https://apibrize.brizindia.com/api/family-booking-payments", // Replace with your real API route
+        " http://127.0.0.1:8000/api/family-booking-payments", // Replace with your real API route
         payload,
         {
           headers: {
@@ -309,7 +312,7 @@ const Page = () => {
     if (!newTableNo.trim()) return;
 
     try {
-      const res = await fetch(" https://apibrize.brizindia.com/api/kot-tables", {
+      const res = await fetch(" http://127.0.0.1:8000/api/kot-tables", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -335,13 +338,13 @@ const Page = () => {
     }
   };
 
-  // Fetch data from API  https://apibrize.brizindia.com/api/product-and-service
+  // Fetch data from API  http://127.0.0.1:8000/api/product-and-service
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      // .get("  https://apibrize.brizindia.com/api/product-services",{headers: {
-      .get("  https://apibrize.brizindia.com/api/product-and-service", {
+      // .get("  http://127.0.0.1:8000/api/product-services",{headers: {
+      .get("  http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -363,7 +366,7 @@ const Page = () => {
     const token = getCookie("access_token");
 
     try {
-      const res = await axios.get(" https://apibrize.brizindia.com/api/kot-tables", {
+      const res = await axios.get(" http://127.0.0.1:8000/api/kot-tables", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -446,7 +449,7 @@ const Page = () => {
 
   //   try {
 
-  //     const response =  await axios.post(' https://apibrize.brizindia.com/api/kot-orders',payload,{
+  //     const response =  await axios.post(' http://127.0.0.1:8000/api/kot-orders',payload,{
   //       headers:{
   //         "Content-Type":"application/json",
   //         Authorization: `Bearer ${token}`,
@@ -478,7 +481,7 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-        " https://apibrize.brizindia.com/api/kot-orders",
+        " http://127.0.0.1:8000/api/kot-orders",
         payload,
         {
           headers: {
@@ -766,38 +769,53 @@ const Page = () => {
 
       {/* show table icon  */}
       <div className="p-6">
+         
         <div>
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800 flex justify-between items-center">
-            Choose a Table
+          <h2 className="text-2xl font-semibold mb-4 text-gray-800 flex justify-end items-center">
+            {/* Choose a Table */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md shadow transition"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md shadow transition mr-2"
             >
               Add Table
             </button>
+            <div
+                    onClick={() => {
+                      window.location.reload();
+                    }}
+                    className="flex flex-col items-center text-blue-600 cursor-pointer"
+                  >
+                    <LuRefreshCcw size={20} />
+                    <span className="text-xs">Refresh</span>
+                  </div>
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-            {tables.map((table) =>
-              table && table.table_no ? (
-                <button
-                  key={table.id}
-                  // onClick={() => onSelectTable(table.table_no)}
-                  className={`text-white font-bold rounded-xl h-24 flex items-center justify-center shadow transition
-    ${
-      selectedTable === table.table_no
-        ? "bg-red-600 hover:bg-red-700"
-        : table.status === "booked"
-        ? "bg-red-600 hover:bg-red-700"
-        : table.status === "available"
-        ? "bg-green-500 hover:bg-green-600"
-        : "bg-yellow-500 hover:bg-yellow-600"
-    }
-  `}
-                >
-                  {table.table_no}
-                </button>
-              ) : null
-            )}
+           {tables.map((table) =>
+  table && table.table_no ? (
+    <button
+      key={table.id}
+      className={`relative flex flex-col items-center justify-center w-32 h-32 rounded-2xl shadow-lg font-semibold transition-all duration-300
+        ${
+          selectedTable === table.table_no
+            ? "bg-gradient-to-br from-red-500 to-red-700 text-white scale-105"
+            : table.status === "booked"
+            ? "bg-gradient-to-br from-red-500 to-red-700 text-white"
+            : table.status === "available"
+            ? "bg-gradient-to-br from-green-400 to-green-600 text-white hover:scale-105"
+            : "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white hover:scale-105"
+        }`}
+    >
+      {/* Table Icon */}
+      <MdOutlineTableBar size={42} className="mb-2 drop-shadow-lg" />
+
+      {/* Table Number */}
+      <span className="text-lg tracking-wide">{table.table_no}</span>
+
+      
+    </button>
+  ) : null
+)}
+
           </div>
         </div>
 
@@ -813,7 +831,7 @@ const Page = () => {
               >
                 <p className="text-center font-semibold mb-2">{item.name}</p>
                 <img
-                  src={` https://apibrize.brizindia.com/${item.image}`}
+                  src={` http://127.0.0.1:8000/${item.image}`}
                   alt={item.name}
                   className="w-full h-32 object-cover rounded-lg mb-2"
                 />

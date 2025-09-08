@@ -37,7 +37,7 @@ const ImageUploadUpdate = () => {
 
       try {
         const response = await axios.get(
-          "  https://apibrize.brizindia.com/api/masterlogobill",
+          "  http://127.0.0.1:8000/api/masterlogobill",
 
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -83,7 +83,7 @@ const ImageUploadUpdate = () => {
       console.log("Uploading file:", fileToUpload);
 
       const response = await axios.post(
-        "  https://apibrize.brizindia.com/api/masterlogobill",
+        "  http://127.0.0.1:8000/api/masterlogobill",
         formData,
 
         {
@@ -120,7 +120,7 @@ const ImageUploadUpdate = () => {
     const fetchBis = async () => {
       try {
         const res = await axios.get(
-          " https://apibrize.brizindia.com/api/bis-number-get",
+          " http://127.0.0.1:8000/api/bis-number-get",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -148,7 +148,7 @@ const ImageUploadUpdate = () => {
 
     try {
       const response = await axios.post(
-        " https://apibrize.brizindia.com/api/bis-number-store",
+        " http://127.0.0.1:8000/api/bis-number-store",
         {
           bis_number: bisNumber,
         },
@@ -193,7 +193,7 @@ const ImageUploadUpdate = () => {
       </div>
 
       <div className="space-y-4 max-w-sm mx-auto mt-10 p-4 border rounded shadow">
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Enter BIS Number
           </label>
@@ -204,16 +204,16 @@ const ImageUploadUpdate = () => {
             className="w-full border border-gray-300 rounded px-3 py-2"
             placeholder="e.g. BIS123456"
           />
-        </div>
+        </div> */}
 
-        <div>
+        {/* <div>
           <button
             onClick={handleSaveBIS}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
             Save BIS Number
           </button>
-        </div>
+        </div> */}
       </div>
 
       {message && (

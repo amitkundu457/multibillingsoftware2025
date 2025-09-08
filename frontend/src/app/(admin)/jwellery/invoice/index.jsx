@@ -448,7 +448,7 @@ setFilteredItems(matchedItems);
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get(" https://apibrize.brizindia.com/api/barcodes", {
+      const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -464,7 +464,7 @@ setFilteredItems(matchedItems);
     try {
       const token = getCookie("access_token");
       const response = await axios.get(
-        " https://apibrize.brizindia.com/api/billcountnumber",
+        " http://127.0.0.1:8000/api/billcountnumber",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -501,7 +501,7 @@ setFilteredItems(matchedItems);
       console.log("token", token);
 
       const response = await axios.get(
-        " https://apibrize.brizindia.com/api/stockDetails",
+        " http://127.0.0.1:8000/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -524,7 +524,7 @@ setFilteredItems(matchedItems);
 
   useEffect(() => {
     axios
-      .get("  https://apibrize.brizindia.com/api/redeem-setup")
+      .get("  http://127.0.0.1:8000/api/redeem-setup")
       .then((response) => {
         if (response.data.length > 0) {
           setLoyaltyData(response.data[0]); // Assuming you only need the first item
@@ -557,7 +557,7 @@ setFilteredItems(matchedItems);
   const handleSearchOrder = async () => {
     try {
       const res = await axios.get(
-        ` https://apibrize.brizindia.com/api/orders/search?billno=${orderSearchId}`
+        ` http://127.0.0.1:8000/api/orders/search?billno=${orderSearchId}`
       );
       console.log("orderDetails", res);
       const orderDetailsData = res.data?.data[0];
@@ -584,7 +584,7 @@ setFilteredItems(matchedItems);
     if (customerDetails.id) {
       axios
         .get(
-          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
+          `  http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -648,7 +648,7 @@ setFilteredItems(matchedItems);
 
   const fetchEmployees = async () => {
     const token = getCookie("access_token");
-    const res = await axios.get("  https://apibrize.brizindia.com/api/employees", {
+    const res = await axios.get("  http://127.0.0.1:8000/api/employees", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setSalesperson(res.data.employees);
@@ -1317,7 +1317,7 @@ setFilteredItems(matchedItems);
     console.log("payload", payload);
     try {
       const response = await axios.post(
-        "  https://apibrize.brizindia.com/api/order",
+        "  http://127.0.0.1:8000/api/order",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -1379,7 +1379,7 @@ setFilteredItems(matchedItems);
   };
   // const handleSendSms = async () => {
   //   try {
-  //     await axios.post(" https://apibrize.brizindia.com/api/send-jwel-billing-sms", {
+  //     await axios.post(" http://127.0.0.1:8000/api/send-jwel-billing-sms", {
   //       phone_no:phoneNumber?? "",
   //        status: "jwellery billing",
   //       sms_credential_id: 1,
@@ -1406,7 +1406,7 @@ setFilteredItems(matchedItems);
 
     try {
       const response = await axios.put(
-        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
+        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -1430,7 +1430,7 @@ setFilteredItems(matchedItems);
 
     try {
       const response = await axios.post(
-        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
+        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {

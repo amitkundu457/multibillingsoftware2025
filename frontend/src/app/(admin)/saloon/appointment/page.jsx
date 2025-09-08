@@ -10,14 +10,18 @@ const ServiceCell = ({ serviceString }) => {
   const services = serviceString?.split(",") || [];
   const [showAll, setShowAll] = useState(false);
 
-  if (!serviceString) return <td className="px-4 py-2 text-sm text-gray-800">n/a</td>;
+  if (!serviceString)
+    return <td className="px-4 py-2 text-sm text-gray-800">n/a</td>;
 
   return (
     <td className="px-4 py-2 text-sm text-gray-800">
       {showAll ? (
         <>
           {services.join(", ")}{" "}
-          <button onClick={() => setShowAll(false)} className="text-blue-500 underline text-xs">
+          <button
+            onClick={() => setShowAll(false)}
+            className="text-blue-500 underline text-xs"
+          >
             show less
           </button>
         </>
@@ -28,7 +32,10 @@ const ServiceCell = ({ serviceString }) => {
             <>
               {" "}
               ...{" "}
-              <button onClick={() => setShowAll(true)} className="text-blue-500 underline text-xs">
+              <button
+                onClick={() => setShowAll(true)}
+                className="text-blue-500 underline text-xs"
+              >
                 more
               </button>
             </>
@@ -45,6 +52,13 @@ const AppointmentPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [servicelist, setService] = useState([]);
   const [stylist, setStylist] = useState([]);
+  const [slots, setSlots] = useState([]);
+  const [newSlot, setNewSlot] = useState("");
+    const [open, setOpen] = useState(false);
+
+    const [selectedSlot, setSelectedSlot] = useState("");
+
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     appointment_date: "",
     appointment_time: "",
@@ -53,6 +67,7 @@ const AppointmentPage = () => {
     services: [],
     gender: "",
     stylist: "",
+    slot:""
   });
   const [editingAppointmentId, setEditingAppointmentId] = useState(null);
 
@@ -73,6 +88,7 @@ const AppointmentPage = () => {
       services: [],
       gender: "",
       stylist: "",
+      slot:""
     });
   };
 
@@ -82,6 +98,37 @@ const AppointmentPage = () => {
       .split("; ")
       .find((row) => row.startsWith("access_token="));
     return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+  };
+
+  const fetchSlots = async () => {
+    try {
+      const res = await axios.get(
+        "http://127.0.0.1:8000/api/appointment-slots"
+      );
+      setSlots(res.data || []);
+    } catch (error) {
+      console.error("Error fetching slots:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSlots();
+  }, []);
+
+  const addSlot = async () => {
+    if (!newSlot) return;
+    setLoading(true);
+    try {
+      await axios.post("http://127.0.0.1:8000/api/appointment-slots", {
+        slot: newSlot,
+      });
+      setNewSlot("");
+      fetchSlots();
+    } catch (error) {
+      console.error("Error adding slot:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const notifyTokenMissing = () => {
@@ -101,7 +148,7 @@ const AppointmentPage = () => {
     }
     try {
       const response = await axios.get(
-        "  https://apibrize.brizindia.com/api/appointments",
+        "  http://127.0.0.1:8000/api/appointments",
 
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -121,7 +168,7 @@ const AppointmentPage = () => {
     }
 
     const response = await axios.get(
-      "  https://apibrize.brizindia.com/api/Saloon-service",
+      "  http://127.0.0.1:8000/api/Saloon-service",
 
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -140,7 +187,7 @@ const AppointmentPage = () => {
     }
 
     const response = await axios.get(
-      "  https://apibrize.brizindia.com/api/stylists",
+      "  http://127.0.0.1:8000/api/stylists",
 
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -162,7 +209,7 @@ const AppointmentPage = () => {
     console.log("payload", formData);
     try {
       await axios.post(
-        "  https://apibrize.brizindia.com/api/appointments",
+        "  http://127.0.0.1:8000/api/appointments",
         formData,
 
         {
@@ -186,6 +233,7 @@ const AppointmentPage = () => {
       services: appointment.services,
       gender: appointment.gender,
       stylist: appointment.stylist,
+      slot:appointment.slot
     });
     setEditingAppointmentId(appointment.id);
     openModal();
@@ -196,7 +244,7 @@ const AppointmentPage = () => {
     console.log("update appoinemtn", formData);
     try {
       await axios.post(
-        `  https://apibrize.brizindia.com/api/appointments/${editingAppointmentId}`,
+        `  http://127.0.0.1:8000/api/appointments/${editingAppointmentId}`,
         formData
       );
       fetchAppointments();
@@ -209,7 +257,7 @@ const AppointmentPage = () => {
   // Delete an appointment
   const handleDeleteAppointment = async (id) => {
     try {
-      await axios.delete(`  https://apibrize.brizindia.com/api/appointments/${id}`);
+      await axios.delete(`  http://127.0.0.1:8000/api/appointments/${id}`);
       fetchAppointments();
     } catch (error) {
       console.error("Error deleting appointment:", error);
@@ -277,6 +325,9 @@ const AppointmentPage = () => {
               <th className="px-4 py-2 text-left text-md font-medium text-gray-700">
                 Appointment Date
               </th>
+               <th className="px-4 py-2 text-left text-md font-medium text-gray-700">
+                Appointment slot
+              </th>
               <th className="px-4 py-2 text-left text-md font-medium text-gray-700">
                 Time
               </th>
@@ -305,6 +356,9 @@ const AppointmentPage = () => {
               <tr key={appointment.id} className="border-t">
                 <td className="px-4 py-2 text-sm text-gray-800">
                   {appointment.appointment_date}
+                </td>
+                 <td className="px-4 py-2 text-sm text-gray-800">
+                  {appointment.slot}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-800">
                   {appointment.appointment_time}
@@ -352,6 +406,35 @@ const AppointmentPage = () => {
           </h2>
           <form onSubmit={handleSubmit}>
             {/* Form fields */}
+           
+            
+      {/* Select existing slot */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Select Appointment Slot
+        </label>
+        <div className="flex space-x-2">
+          <select
+           name="slot"
+            value={formData.slot}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md"
+          >
+            <option value="">-- Select Slot --</option>
+            {slots.map((slot) => (
+              <option key={slot.id} value={slot.slot}>
+                {slot.slot}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={() => setOpen(true)}
+            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+          >
+            +
+          </button>
+        </div>
+      </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">
                 Appointment Date
@@ -415,8 +498,8 @@ const AppointmentPage = () => {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-left text-sm shadow-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
               >
-                {formData.services.length > 0
-                  ? `${formData.services.length} selected`
+                {formData.services?.length > 0
+                  ? `${formData.services?.length} selected`
                   : "Choose services..."}
               </button>
 
@@ -500,6 +583,23 @@ const AppointmentPage = () => {
             </div>
           </form>
         </div>
+      </Modal>
+
+       <Modal open={open} onClose={() => setOpen(false)} center>
+        <h2 className="text-lg font-bold mb-4">Add New Appointment Slot</h2>
+        <input
+          type="text"
+          placeholder="Enter new slot (e.g. 2:00 PM - 3:00 PM)"
+          value={newSlot}
+          onChange={(e) => setNewSlot(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md mb-4"
+        />
+        <button
+          onClick={addSlot}
+          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          Save Slot
+        </button>
       </Modal>
     </div>
   );

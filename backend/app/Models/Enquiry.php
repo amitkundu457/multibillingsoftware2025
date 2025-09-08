@@ -8,7 +8,7 @@ class Enquiry extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description','source', 'date','phone', 'email','status', 'follow_up_date', 'follow_up_notes'];
+    protected $fillable = ['name', 'description','source', 'date','phone', 'email','status', 'follow_up_date', 'follow_up_notes','created_by'];
 
     public function reminders()
     {

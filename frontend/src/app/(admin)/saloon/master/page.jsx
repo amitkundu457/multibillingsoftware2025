@@ -145,6 +145,24 @@ const MasterMenu = () => {
             link: `/${productUrl}/t&cInvoice`,
         },
         {
+            show: showMenuIn(["saloon"]),
+            name: "Sms Setting",
+            count: 4,
+            link: `/${productUrl}/smssetting`,
+        },
+        {
+            show: showMenuIn(["saloon"]),
+            name: "Sms Credential",
+            count: 4,
+            link: `/${productUrl}/smscredential`,
+        },
+        {
+            show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
+            name: "Set Message Advance Date",
+            count: 93,
+            link: `/${productUrl}/AdvanceMessageDate`,
+        },
+        {
             show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
             name: "Account Group ",
             count: 4,

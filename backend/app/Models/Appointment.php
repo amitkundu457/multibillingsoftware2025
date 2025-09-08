@@ -17,9 +17,10 @@ class Appointment extends Model
         'name',             // Client's name
         'phone',            // Client's phone number
         'service',          // Type of service for the appointment
-        'gender',  
+        'gender',
         'created_by',
-        'stylist'
+        'stylist',
+        'slot'
                  // Gender of the client (Male, Female, Other)
     ];
 

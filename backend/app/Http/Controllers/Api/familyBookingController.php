@@ -46,7 +46,7 @@ class familyBookingController extends Controller
 
     public function bookFamilyTableWithItems(Request $request)
 {
-    $user = JWTAuth::parseToken()->authenticate();
+     $user = JWTAuth::parseToken()->authenticate();
 
     Log::info($request->all());
     $request->validate([
@@ -184,10 +184,15 @@ public function generateFamilyBookingBill($familyBookingId)
     $user = JWTAuth::parseToken()->authenticate();
 
     $booking = FamilyBooking::with(['tables', 'user.customer', 'createdBy', 'payments'])->where('id',$familyBookingId)->first();
+Log::info("customer_id", ['customer_id' => $booking->customer_id]);
+
+
 $client_address = UserInformation::where('user_id', $user->id)->firstOrFail();
 
 
     $items = KotOrderItem::where('family_booking_id', $familyBookingId)->get();
+
+
 
     // ✅ Check if bill already exists
     $existingBill = KotBill::where('family_booking_id', $familyBookingId)->first();
@@ -272,6 +277,23 @@ $client_address = UserInformation::where('user_id', $user->id)->firstOrFail();
     ]);
 
     KotTable::whereIn('id', $booking->tables->pluck('id'))->update(['status' => 'available']);
+
+
+
+     if($booking->customer_id){
+        DB::table('customer_last_orders')->updateOrInsert(
+            ['customer_id'=> $booking->customer_id,
+           'vendor_type'=>"restaurant",],
+            [
+                'created_by'=>$user->id,
+                'last_order_date'=> now()->toDateString(),
+                'vendor_type'=>"restaurant",
+                'updated_at'      => now(),
+               'created_at'      => now(),
+
+            ]
+        );
+    }
 
     return response()->json([
         'message' => 'Bill generated successfully.',

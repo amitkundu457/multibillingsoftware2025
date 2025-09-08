@@ -52,7 +52,7 @@ if (!token) {
 
     setLoading(true);
     try {
-      const response = await axios.get("  https://apibrize.brizindia.com/api/enquiry",
+      const response = await axios.get("  http://127.0.0.1:8000/api/enquiry",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -108,17 +108,17 @@ if (!token) {
 
     try {
       const response = await axios.post(
-        "  https://apibrize.brizindia.com/api/enquerymessage",
+        "  http://127.0.0.1:8000/api/enquerymessage",
         { phone } // Passing the specific phone number in the request body
       );
       const followUpResponse = await axios.post(
-        " https://apibrize.brizindia.com/api/reminder-follow-up/follow-up",followUpPayload,
+        " http://127.0.0.1:8000/api/reminder-follow-up/follow-up",followUpPayload,
         {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const RemindersResponse = await axios.post(
-          " https://apibrize.brizindia.com/api/reminder-follow-up/reminder",ReminderPayload,
+          " http://127.0.0.1:8000/api/reminder-follow-up/reminder",ReminderPayload,
           {
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -143,14 +143,14 @@ if (!token) {
       >
         <div className="flex items-center gap-2">
           <FaBell className="text-green-500" />
-          <span className="text-lg font-semibold">Reminder</span>
+          <span className="text-lg font-semibold">Reminder And Follow-up</span>
         </div>
         <div className="w-8 h-8 flex items-center justify-center bg-blue-400 text-white font-bold rounded-full">
           {reminders.length}
         </div>
       </div>
 
-      <div
+      {/* <div
         className="flex justify-between items-center mt-3 cursor-pointer"
         onClick={() => setIsOpen(true)}
       >
@@ -161,7 +161,7 @@ if (!token) {
         <div className="w-8 h-8 flex items-center justify-center bg-orange-400 text-white font-bold rounded-full">
           0
         </div>
-      </div>
+      </div> */}
 
       {/* Modal */}
       {isOpen && (
@@ -240,7 +240,7 @@ if (!token) {
                       </div>
 
                       {/* Actions Menu */}
-                      {showActions === index && (
+                      {/* {showActions === index && (
                         <div className="absolute top-10 right-0 bg-white border shadow-lg rounded-lg p-3 flex gap-3">
                           <button
                             onClick={() => handleSendSms(reminder.phone,reminder)}
@@ -258,7 +258,7 @@ if (!token) {
                             <FaSyncAlt />
                           </button>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   ))
                 ) : (

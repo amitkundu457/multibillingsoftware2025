@@ -1,8 +1,9 @@
-"use client";
+ "use client";
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { getMe } from "../../../components/config";
+
 export default function PrintFamilyBillPage() {
   const searchParams = useSearchParams();
   const booking_id = searchParams.get("id");
@@ -14,6 +15,8 @@ export default function PrintFamilyBillPage() {
   const [companyName, setCompanyName] = useState("");
   const [buyerState, setbuyState] = useState("");
   const [sellerState, setSellerState] = useState("");
+  const [logoUrl, setLogoUrl] = useState("");
+
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -23,58 +26,71 @@ export default function PrintFamilyBillPage() {
     return null;
   };
 
-  console.log("buyer", buyerState);
-  console.log("seller", sellerState);
-  //restunat deatils
+  const getToken = () => {
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+  };
+
+  useEffect(() => {
+    const fetchLogoUrl = async () => {
+      const token = getToken();
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/masterlogobill",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setLogoUrl(response.data.logo);
+    };
+    fetchLogoUrl();
+  }, []);
+
   useEffect(() => {
     const fetchCompanyDetails = async () => {
       try {
         const response = await getMe();
-        console.log("Company details fetched:", response); // Log the API response to verify the data
         if (response && response.data) {
-          setCompanyName(response.data); // Update state with the company name
+          setCompanyName(response.data);
           setSellerState(
             response?.data?.user?.information?.state?.trim().toLowerCase() || ""
           );
         } else {
-          console.log("Company name not found in the response");
-          setCompanyName(""); // Set default if name is not found
+          setCompanyName("");
         }
       } catch (error) {
         console.error("Error fetching company details:", error);
       }
     };
-
     fetchCompanyDetails();
   }, []);
 
-  //customer details here
+  // Customer details
   useEffect(() => {
     const token = getCookie("access_token");
     if (!cutomerid) return;
 
     axios
-      .get(` https://apibrize.brizindia.com/api/customers/get/${cutomerid}`, {
+      .get(`http://127.0.0.1:8000/api/customers/get/${cutomerid}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        console.log("customer details", response);
-        setbuyState(response?.data?.data?.state?.trim().toLowerCase() || ""); // setCustomer(response.data.data);
+        setbuyState(response?.data?.data?.state?.trim().toLowerCase() || "");
       })
       .catch((err) => {
         console.error(err);
-        // setError("Failed to fetch customer details");
       });
   }, [cutomerid]);
 
+  // Bill details
   useEffect(() => {
     const token = getCookie("access_token");
-
     if (booking_id) {
-      const res = fetch(
-        ` https://apibrize.brizindia.com/api/family-booking/${booking_id}/generate-bill`,
+      fetch(
+        `http://127.0.0.1:8000/api/family-booking/${booking_id}/generate-bill`,
         {
           method: "POST",
           headers: {
@@ -86,8 +102,6 @@ export default function PrintFamilyBillPage() {
         .then(async (res) => {
           const data = await res.json();
           setcutomerid(data?.customer_id);
-          console.log("printkot bill", data);
-          setcutomerid(data?.customer_id);
           if (!res.ok && data.bill_already_generated) {
             alert(
               `⚠️ Bill has already been generated for booking ID ${booking_id}.`
@@ -95,16 +109,15 @@ export default function PrintFamilyBillPage() {
           } else {
             setBill(data);
           }
-          setBill(data);
         })
         .catch(console.error)
         .finally(() => setLoading(false));
     }
   }, [booking_id]);
 
-  //gst condtion
+  // GST condition
   const isSameState = buyerState && sellerState && buyerState === sellerState;
-  console.log("isSameState", isSameState);
+
   const handlePrint = () => {
     const printContent = billRef.current;
     if (!printContent) {
@@ -112,7 +125,6 @@ export default function PrintFamilyBillPage() {
       return;
     }
 
-    // Create a hidden iframe
     const iframe = document.createElement("iframe");
     iframe.style.position = "fixed";
     iframe.style.right = "0";
@@ -142,43 +154,13 @@ export default function PrintFamilyBillPage() {
         padding: 10px 5px;
         line-height: 1.2;
       }
-      .header {
+      .logo-container {
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
       }
-      .restaurant-name {
-        font-size: 16px;
-        font-weight: bold;
-        margin-bottom: 3px;
-      }
-      .divider {
-        border-top: 1px dashed #000;
-        margin: 5px 0;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      th {
-        text-align: left;
-        padding: 2px 0;
-        border-bottom: 1px dashed #000;
-      }
-      td {
-        padding: 3px 0;
-      }
-      .text-right {
-        text-align: right;
-      }
-      .total-row {
-        border-top: 1px dashed #000;
-        font-weight: bold;
-        padding-top: 5px;
-      }
-      .footer {
-        text-align: center;
-        margin-top: 10px;
-        font-size: 10px;
+      .logo-container img {
+        max-width: 60px;
+        height: auto;
       }
     `;
 
@@ -198,20 +180,13 @@ export default function PrintFamilyBillPage() {
         max-width: 210mm;
         padding: 20px;
       }
-      table {
-        width: 100%;
-        border-collapse: collapse;
+      .logo-container {
+        text-align: left;
+        margin-bottom: 10px;
       }
-      th, td {
-        padding: 6px 0;
-        border-bottom: 1px solid #ddd;
-      }
-      .text-right { 
-        text-align: right; 
-      }
-      .total-row { 
-        font-weight: bold; 
-        border-top: 2px solid #000;
+      .logo-container img {
+        max-width: 120px;
+        height: auto;
       }
     `;
 
@@ -221,18 +196,14 @@ export default function PrintFamilyBillPage() {
       <html>
         <head>
           <title>Family Bill - Booking #${booking_id}</title>
-          <style>
-            ${styles}
-          </style>
+          <style>${styles}</style>
         </head>
         <body>
           ${contentClone.innerHTML}
           <script>
             setTimeout(() => {
               window.print();
-              setTimeout(() => {
-                window.close();
-              }, 100);
+              setTimeout(() => window.close(), 100);
             }, 200);
           </script>
         </body>
@@ -269,6 +240,25 @@ export default function PrintFamilyBillPage() {
             : "w-[210mm] bg-white p-6 font-sans text-[14px]"
         }`}
       >
+        {/* Logo Section */}
+        {logoUrl && (
+          <div
+            className={`logo-container ${
+              printStyle === "thermal" ? "text-center" : "text-left"
+            }`}
+          >
+            <img
+              src={logoUrl}
+              alt="Logo"
+              className={`${
+                printStyle === "thermal"
+                  ? "mx-auto w-[60px] h-auto"
+                  : "w-[120px] h-auto"
+              }`}
+            />
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center mb-2">
           <h1 className="text-lg font-bold">
@@ -292,28 +282,13 @@ export default function PrintFamilyBillPage() {
             Customer Name: {bill.customer_name}
           </p>
           <div>
-            <h1 className="text-gray-700 font-extrabold   uppercase tracking-wide">
-              GST IN:{bill?.client_address?.gst || "GSt not provided"}
+            <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
+              GST IN: {bill?.client_address?.gst || "GST not provided"}
             </h1>
           </div>
-
-          {/* Address Section */}
-          {bill.user_info && (
-            <div className="mt-1 text-left text-xs leading-tight inline-block">
-              <p>Phone No.: {bill.user_info[0]?.phone || "-"}</p>
-              <p>
-                Address: {bill.user_info[0]?.address || "-"},{" "}
-                {bill.user_info[0]?.state || "-"},
-                {bill.user_info[0]?.pincode || "-"}
-              </p>
-            </div>
-          )}
-
-          <p className="mt-1">Tables: {bill.tables.join(", ")}</p>
-          <p>----------------------------</p>
         </div>
 
-        {/* Bill Items */}
+        {/* Items */}
         <table className="w-full mb-2">
           <thead>
             <tr>
@@ -340,26 +315,19 @@ export default function PrintFamilyBillPage() {
 
         {/* Totals */}
         <div className="text-right space-y-1 mt-2 border-t border-dotted border-black pt-2">
-          {/* <p>Subtotal: ₹{bill.subtotal.toFixed(2)}</p>
-          <p>CGST (9%): ₹{(bill.gst / 2).toFixed(2)}</p>
-          <p>SGST (9%): ₹{(bill.gst / 2).toFixed(2)}</p> */}
           {!isSameState && (
             <div>
               <p>CGST : ₹{(bill.gst / 2).toFixed(2)}</p>
               <p>SGST : ₹{(bill.gst / 2).toFixed(2)}</p>
             </div>
           )}
-          {isSameState && (
-            <div>
-              <p>IGST : ₹{bill.gst.toFixed(2)}</p>
-            </div>
-          )}
+          {isSameState && <p>IGST : ₹{bill.gst.toFixed(2)}</p>}
           <p className="font-bold text-base">
             Grand Total: ₹{bill.grand_total}
           </p>
         </div>
 
-        {/* Payment Summary */}
+        {/* Payments */}
         {bill?.payments?.length > 0 && (
           <div className="mt-2 border-t border-dotted border-black pt-2 text-sm w-full">
             <p className="text-center font-semibold underline mb-1">

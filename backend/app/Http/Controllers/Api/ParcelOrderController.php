@@ -10,6 +10,8 @@ use App\Models\UserInformation;
 use App\Models\ParcelOrderItem;
 
 use App\Models\ParcelBill;
+use Illuminate\Support\Facades\DB;
+
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Log;
 
@@ -128,7 +130,25 @@ public function generateBill($orderId)
     $customer = JWTAuth::parseToken()->authenticate();
 
     $order = ParcelOrder::with('items.product', 'customer', 'createdBy', 'payment', 'bill')->findOrFail($orderId);
-   $client_address =  UserInformation::where('user_id',$customer->id)->firstOrFail();
+    Log::info("customer_id", ['customer_id' => $order->customer_id]);
+
+    $client_address =  UserInformation::where('user_id',$customer->id)->firstOrFail();
+
+
+
+    if($order->customer_id){
+        DB::table('customer_last_orders')->updateOrInsert(
+            ['customer_id'=> $order->customer_id,'vendor_type'=>"restaurant"],
+            [
+                'created_by'=>$customer->id,
+                'last_order_date'=> now()->toDateString(),
+                'vendor_type'=>"restaurant",
+                'updated_at'      => now(),
+               'created_at'      => now(),
+
+            ]
+        );
+    }
 
     // ✅ Return if bill already generated
     if ($order->bill) {
@@ -193,11 +213,14 @@ public function generateBill($orderId)
 
     $bill = ParcelBill::create([
         'parcel_order_id' => $order->id,
+        'customer_id'     => $order->customer_id,
         'subtotal' => $subtotal,
         'gst' => $totalGst,
         'grand_total' => $grandTotal,
         'created_by' => $customer->id,
     ]);
+
+
 
     return response()->json([
         'message' => 'Bill generated',

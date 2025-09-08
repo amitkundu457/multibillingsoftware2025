@@ -22,7 +22,7 @@ function Page() {
   // Function to update status
   const ApproveStatus = async (id, newStatus) => {
     try {
-      const response = await axios.post(` https://apibrize.brizindia.com/api/approve/${id}`, {
+      const response = await axios.post(` http://127.0.0.1:8000/api/approve/${id}`, {
         status: newStatus, // Send only status in the body, since ID is in the URL
       });
   
@@ -38,7 +38,7 @@ function Page() {
 
   const RejectStatus = async (id, newStatus) => {
     try {
-      const response = await axios.post(` https://apibrize.brizindia.com/api/reject/${id}`, {
+      const response = await axios.post(` http://127.0.0.1:8000/api/reject/${id}`, {
         status: newStatus, // Send only status in the body, since ID is in the URL
       });
   

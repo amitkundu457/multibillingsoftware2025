@@ -109,7 +109,7 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
     const fetchBarCodeData = async () => {
         try {
           const token = getCookie("access_token");
-          const response = await axios.get(" https://apibrize.brizindia.com/api/barcodes", {
+          const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -159,7 +159,7 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get(" https://apibrize.brizindia.com/api/product-and-service", {
+      .get(" http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -180,7 +180,7 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
       const token = getCookie("access_token");
 
       try {
-        const response = await axios.get(" https://apibrize.brizindia.com/api/type", {
+        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setItemsCategory(response.data);
@@ -228,7 +228,7 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
 
     try {
       const response = await axios.post(
-        " https://apibrize.brizindia.com/api/parcel-order",
+        " http://127.0.0.1:8000/api/parcel-order",
         {
           customer_id: customerDetails?.id || null,
           parcelType_id: selectedParcelTypeId,
@@ -328,7 +328,7 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
     }
   };
 
-  const API_URL = " https://apibrize.brizindia.com/api/parcel-types";
+  const API_URL = " http://127.0.0.1:8000/api/parcel-types";
 
   useEffect(() => {
     fetch(API_URL)
@@ -534,7 +534,7 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={` https://apibrize.brizindia.com/storage/${item.image}`}
+                  src={` http://127.0.0.1:8000/storage/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

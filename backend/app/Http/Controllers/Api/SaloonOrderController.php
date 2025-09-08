@@ -12,6 +12,11 @@ use App\Models\SaloonPayment;
 use App\Exports\OrderReportExport;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\SmsSetting;
+use App\Models\SmsCredential;
+use App\Models\Customer;
+use Illuminate\Support\Facades\Http;
+use App\Events\OrderPlaced;
 
 use App\Exports\PurchaseBillExport;
 use Illuminate\Support\Facades\Log;
@@ -28,8 +33,8 @@ class SaloonOrderController extends Controller
 
         try {
             // Authenticate the customer
-            $customer = JWTAuth::parseToken()->authenticate();
-            Log::info('Authenticated Customer:', ['customer' => $customer]);
+            $user = JWTAuth::parseToken()->authenticate();
+            Log::info('Authenticated Customer:', ['customer' => $user]);
 
             // Validate incoming request data
             $validated = $request->validate([
@@ -95,6 +100,12 @@ class SaloonOrderController extends Controller
             //         $coinsToDeduct -= $record->coins;
             //     }
             // }
+            // ✅ Fetch customer phone
+    $customerPhone = null;
+    if (!empty($validated['customer_id'])) {
+        $customer = Customer::find($validated['customer_id']);
+        $customerPhone = $customer?->phone; // null safe
+    }
 
 
             // Create the order record
@@ -104,7 +115,7 @@ class SaloonOrderController extends Controller
                 'discount' => $validated['discountTotal'],
                 'total_price' => $validated['grossTotal'] - $validated['discountTotal'],
                 'customer_id' => $validated['customer_id'] ?? null,
-                'created_by' => $customer->id,
+                'created_by' => $user->id,
                 'bill_inv' => $request->bill_inv,
                 'salesman_id' => $request->salesman_id,
                 'stylist_id' => $request->stylist_id,
@@ -170,7 +181,7 @@ class SaloonOrderController extends Controller
          'payment_date' => now(),
          'payment_method' => $paymentData['payment_method'],  // payment method (cash, card, upi)
          'price' => $paymentData['price'],  // payment amount
-         'created_by'=> $customer->id, // Assuming you want to store the creator's ID
+         'created_by'=> $user->id, // Assuming you want to store the creator's ID
           ]);
          }
 
@@ -205,7 +216,26 @@ class SaloonOrderController extends Controller
             // ]);
 
             // Return a success response
-            return response()->json([
+
+        $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
+
+            if($customerId){
+        DB::table('customer_last_orders')->updateOrInsert(
+            ['customer_id'=>$customerId->id,'vendor_type'=>"saloon"],
+            [
+                'created_by'=>$user->id,
+                'last_order_date'=> now()->toDateString(),
+                 'updated_at'      => now(),
+               'created_at'      => now(),
+
+            ]
+        );
+    }
+
+            // event(new OrderPlaced($customerPhone,"saloon billing",1));
+           $this->sendBillingSms($customerPhone,"saloon billing",1);
+
+             return response()->json([
                 'message' => 'Order placed successfully',
                 'order_id' => $order->id,
                 'bill_inv' => $order->bill_inv,
@@ -224,6 +254,62 @@ class SaloonOrderController extends Controller
             ], 500);
         }
     }
+
+
+     public function sendBillingSms($phone_no,$status,$sms_credential_id)
+{
+
+
+    // 🔍 Find customer by phone
+    $customer = Customer::where('phone', $phone_no)->first();
+    if (!$customer) {
+        return response()->json(['message' => 'Customer not found with this phone number'], 404);
+    }
+
+    // 🔍 Get message from sms_settings table
+    // $message = SmsSetting::where('status', $request->status)
+    //     ->where('sms_credential_id', $request->sms_credential_id)
+    //     ->value('description');
+    $message = SmsSetting::where('status', $status)
+    ->where('sms_credential_id', $sms_credential_id)
+    ->value('description');
+
+// 🧼 Clean non-breaking spaces (e.g., \u00a0)
+$message = str_replace("\xC2\xA0", ' ', $message);
+
+    if (!$message) {
+        return response()->json(['message' => 'Message not found for this status'], 404);
+    }
+
+    // 🔍 Get SMS credential details
+    $credential = SmsCredential::find($sms_credential_id);
+
+    if (!$credential) {
+        return response()->json(['message' => 'Credential not found'], 404);
+    }
+    // ✅ Send SMS
+    $response = Http::get("https://sms.bluwaves.in/sendsms/bulk.php", [
+        'username'    => $credential->sms_username,
+        'password'    => $credential->sms_password,
+        'type'        => 'TEXT',
+        'sender'      => $credential->sms_sender,
+        'mobile'      => $phone_no,
+        'message'     => $message,
+        'entityId'    => $credential->sms_entity_id,
+        'templateId'  => SmsSetting::where('status', $status)
+                          ->where('sms_credential_id', $sms_credential_id)
+                          ->value('template_id')
+    ]);
+
+    return response()->json([
+        'message' => 'SMS sent',
+        'sms_response' => $response->body(),
+    ]);
+}
+
+
+
+
 
 
     public function generateNextBillNo()

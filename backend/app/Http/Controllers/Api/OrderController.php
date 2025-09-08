@@ -729,6 +729,22 @@ public function storeCheckout(Request $request)
             ]);
         }
 
+          $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
+
+        if($customerId){
+        DB::table('customer_last_orders')->updateOrInsert(
+            ['customer_id'=>$customerId->id,'vendor_type'=>"jwellery"],
+            [
+                'created_by'=>$customer->id,
+                'last_order_date'=> now()->toDateString(),
+
+                'updated_at'      => now(),
+               'created_at'      => now(),
+
+            ]
+        );
+    }
+
 
         DB::commit(); // ✅ Commit transaction
        $this->sendBillingSms($request->phone_no,$request->status,$request->sms_credential_id);

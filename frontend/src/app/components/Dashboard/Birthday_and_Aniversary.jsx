@@ -45,7 +45,7 @@ export default function Birthday_and_Aniversary({ label }) {
       const token = getCookie("access_token");
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const { data } = await axios.get(" https://apibrize.brizindia.com/api/customers", config);
+      const { data } = await axios.get(" http://127.0.0.1:8000/api/customers", config);
       
       console.log("Fetched Customers:", data); // Debugging log
       setCustomers(data);
@@ -59,14 +59,20 @@ export default function Birthday_and_Aniversary({ label }) {
   }, []);
 
   // Get today's date in YYYY-MM-DD format
-  const today = new Date().toISOString().split("T")[0];
-
+const today = new Date();
+const todayMonthDay = `${today.getMonth() + 1}-${today.getDate()}`;
   // Count today's birthdays
-  const todayBirthdays = customers.filter(customer => customer.dob === today).length;
-
+const todayBirthdays = customers.filter(customer => {
+    const dob = new Date(customer.dob);
+    const dobMonthDay = `${dob.getMonth() + 1}-${dob.getDate()}`;
+    return dobMonthDay === todayMonthDay;
+}).length;
   // Count today's anniversaries
-  const todayAnniversaries = customers.filter(customer => customer.anniversary === today).length;
-
+const todayAnniversaries = customers.filter(customer => {
+    const anniversary = new Date(customer.anniversary);
+    const AnniversaryMonthDay = `${anniversary.getMonth() + 1}-${anniversary.getDate()}`;
+    return AnniversaryMonthDay === todayMonthDay;
+}).length;
   return (
     <div className="p-4 bg-white shadow-md rounded-lg border border-gray-200">
       <div className="flex items-center justify-between">
