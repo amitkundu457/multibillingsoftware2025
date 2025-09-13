@@ -342,6 +342,8 @@ Route::get('/bis-number-get', [BISNumberController::class, 'index']);
 
 
 
+//update billid
+Route::put('/updateCheckoutResto/{id}', [OrderController::class, 'updateCheckoutResto']);
 
 
 Route::get('/order', [OrderController::class, 'index']);
@@ -634,9 +636,13 @@ Route::post('/saloon-purchase-return', [SalesReturnController::class, 'SaloonPur
 Route::get('/saloon-purchase-returns', [SalesReturnController::class, 'saloonPurchaseReturnIndex']);
 
 Route::get('/saloon-purchase-all', [SalesReturnController::class, 'saloonPurchaseIndex']);
-//sallon seles return
+//sallon seles return 
 Route::post('/saloon-sale-returns',[SalesReturnController::class,'Saloonstores']);
 Route::get('/saloon-sales-returns',[SalesReturnController::class,'saloonSalesReturnIndex']);
+
+//jwel return 
+Route::post('/jwel-sale-returns',[SalesReturnController::class,'jewlstores']);
+Route::get('/jwel-sales-returns',[SalesReturnController::class,'jwelSalesReturnIndex']);
 //purity
 
 Route::get('/purity', [PurityController::class, 'index']);

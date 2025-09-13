@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Log;
+use Carbon\Carbon;
 use App\Models\Coin;
 use App\Models\Order;
+use App\Models\Payment;
+
 use App\Models\OrderDetails;
 use App\Models\PurchaseItem;
 use App\Models\OrderCoinSetting;
@@ -12,21 +16,21 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Customer;
 
 use App\Models\ProductService;
-use App\Models\Payment;
+
  use App\Models\SaloonOrder;
-use Carbon\Carbon;
+
 
 use App\Models\SmsSetting;
 use App\Models\SmsCredential;
 
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 use App\Exports\OrderReportExport;
 use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Exports\PurchaseBillExport;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductWisePurchaseExport;
@@ -660,6 +664,12 @@ public function storeCheckout(Request $request)
             'billcountnumber' => $request->order_slip == 1 ? $currentBillCount : $currentBillCount, // If order_slip == 1, set billcountNumber to currentBillCount
         ]);
 
+
+
+        
+
+
+
         // ✅ Only update bill_counts if order_slip is not 1
         if ($request->order_slip != 1) {
             if (!$billCount) {
@@ -713,10 +723,26 @@ public function storeCheckout(Request $request)
                 'gstOnGold' => $product['gstOnGold'] ?? null,
                 'gstOnMaking' => $product['gstOnMaking'] ?? null,
                 'mkg_chg_RS_P' => $product['mkg_chg_RS_P'] ?? null,
+                'fixed_amt' => $product['fixed_amt'] ?? null,
 
 
             ]);
+
+            if (!empty($product['product_id']) && isset($product['qty'])) {
+                $productService = ProductService::find($product['product_id']);
+        
+                if ($productService) {
+                    $newStock = $productService->current_stock - $product['qty'];
+                    $productService->current_stock = max(0, $newStock); // Prevent negative stock
+                    $productService->save();
+                } else {
+                    Log::warning('ProductService not found for product_id: ' . $product['product_id']);
+                }
+            }
         }
+
+
+       
 
         // Store payment methods
         foreach ($validated['paymentMethods'] as $paymentData) {
@@ -1047,6 +1073,299 @@ $message = str_replace("\xC2\xA0", ' ', $message);
 
     //     return $newBillNo;
     // }
+
+
+    // public function updateCheckoutResto(Request $request, $id)
+    // {
+    //     Log::info('Update Request Data:', $request->all());
+    
+    //     try {
+    //         $customer = JWTAuth::parseToken()->authenticate();
+    
+    //         // ✅ Keep validation same as store
+    //         $validated = $request->validate([
+    //             'paymentMethods' => 'required|array',
+    //             'products' => 'required|array',
+    //             'products.*.name' => 'required',
+    //             'products.*.code' => 'nullable',
+    //             'products.*.stoneWeight' => 'nullable',
+    //             'products.*.stoneValue' => 'nullable',
+    //             'products.*.huid' => 'nullable',
+    //             'products.*.hallmark' => 'nullable',
+    //             'products.*.hallmarkCharge' => 'nullable',
+    //             'products.*.makingInRs' => 'nullable',
+    //             'products.*.wastageCharge' => 'nullable',
+    //             'products.*.grossWeight' => 'nullable',
+    //             'products.*.netWeight' => 'nullable',
+    //             'products.*.making' => 'nullable',
+    //             'products.*.rate' => 'nullable',
+    //             'grossTotal' => 'nullable',
+    //             'discountTotal' => 'nullable',
+    //             'dateid' => 'nullable',
+    //             'customer_id' => 'nullable',
+    //             'price' => 'nullable',
+    //             'tax_rate'=> 'nullable',
+    //             'products.*.pro_total' => 'nullable|numeric',
+    //             'products.*.hsn' => 'nullable',
+    //             'products.*.making_gst_percentage' => 'nullable',
+    //         ]);
+    
+    //         // 🔎 Find order
+    //         $order = Order::findOrFail($id);
+    
+    //         // ✅ Update order header (same calc as store)
+    //         $order->update([
+    //             'gross_total' => $validated['grossTotal'],
+    //             'discount' => $validated['discountTotal'],
+    //             'total_price' => $validated['grossTotal'] - $validated['discountTotal']
+    //                               + ($request->totalTax ?? 0)
+    //                               + ($request->additionRs ?? 0),
+    //             'customer_id' => $validated['customer_id'],
+    //             'bill_inv' => $request->bill_inv,
+    //             'salesman_id' => $request->salesman_id,
+    //             'stylist_id' => $request->stylist_id,
+    //             'order_slip' => $request->order_slip,
+    //             'date' => $validated['dateid'],
+    //             'discountPercent'=>$request->discountPercent,
+    //             'discountRs'=>$request->discountRs,
+    //             'additionRS'=>$request->additionRs,
+    //             'additionDetail'=>$request->additionDetail,
+    //             'totalqty'=>$request->totalqty,
+    //             'totalTax'=>$request->totalTax,
+    //             'minAdjAmt'=>$request->minAdjAmt,
+    //             'minAdAmt'=>$request->minAdAmt,
+    //             'created_by' => $customer->id, // ✅ keep track of editor
+    //         ]);
+    
+    //         // ✅ Update last_order_at
+    //         DB::table('customers')
+    //             ->where('user_id', $validated['customer_id'])
+    //             ->update(['last_order_at' => now()]);
+    
+    //         // 🔄 Refresh products
+    //         $order->details()->delete();
+           
+    //         foreach ($validated['products'] as $product) {
+    //             $order->details()->create([
+    //                 'product_name' => $product['name'],
+    //                 'product_id'=> $product['product_id'] ?? null,
+    //                 'product_code' => $product['code'] ?? null,
+    //                 'gross_weight' => $product['grossWeight'] ?? null,
+    //                 'net_weight' => $product['netWeight'] ?? null,
+    //                 'making' => $product['making'] ?? null,
+    //                 'makingInRs'=> $product['makingInRs'] ?? null,
+    //                 'rate' => $product['rate'] ?? null,
+    //                 'tax_rate' => $product['tax_rate'] ?? null,
+    //                 'pro_total' => number_format((float) ($product['pro_total'] ?? 0), 2, '.', ''),
+    //                 'stone_weight' => $product['stoneWeight'] ?? null,
+    //                 'stone_value' => $product['stoneValue'] ?? null,
+    //                 'huid' => $product['huid'] ?? null,
+    //                 'hallmark' => $product['hallmark'] ?? null,
+    //                 'qty' => $product['qty'] ?? null,
+    //                 'hallmarkCharge' => $product['hallmarkCharge'] ?? null,
+    //                 'wastageCharge' => $product['wastageCharge'] ?? null,
+    //                 'hsn' => $product['hsn'] ?? null,
+    //                 'making_dsc' => $product['making_dsc'] ?? null,
+    //                 'metal_value' => $product['metal_value'] ?? null,
+    //                 'otherCharge' => $product['otherCharge'] ?? null,
+    //                 'diamondDetails' => $product['diamondDetails'] ?? null,
+    //                 'diamondValue' => $product['diamondValue'] ?? null,
+    //                 'description'=>$product['description'] ?? null,
+    //                 'making_gst_percentage'=>$product['making_gst_percentage'] ?? null,
+    //             ]);
+    //         }
+    
+    //         // 🔄 Refresh payments
+    //         $order->payments()->delete();
+    //         foreach ($validated['paymentMethods'] as $paymentData) {
+    //             Payment::create([
+    //                 'order_id' => $order->id,
+    //                 'customer_id' => $validated['customer_id'],
+    //                 'payment_date' => now(),
+    //                 'payment_method' => $paymentData['payment_method'],
+    //                 'price' => $paymentData['price'],
+    //             ]);
+    //         }
+    
+    //         return response()->json([
+    //             'message' => 'Order updated successfully',
+    //             'order_id' => $order->id,
+    //             'bill_inv' => $order->bill_inv,
+    //         ], 200);
+    
+    //     } catch (\Illuminate\Validation\ValidationException $e) {
+    //         Log::error('Validation Error:', ['errors' => $e->errors()]);
+    //         return response()->json([
+    //             'message' => 'Validation failed',
+    //             'errors' => $e->errors(),
+    //         ], 422);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error in Update:', ['message' => $e->getMessage()]);
+    //         return response()->json([
+    //             'message' => 'An error occurred while updating the order',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
+
+
+    public function updateCheckoutResto(Request $request, $id)
+{
+    // Log::info('Update Request Data:', $request->all());
+
+    try {
+        DB::beginTransaction(); // 🚀 Transaction start
+
+        $customer = JWTAuth::parseToken()->authenticate();
+
+        $validated = $request->validate([
+            'paymentMethods' => 'required|array',
+            'products' => 'required|array',
+            'products.*.product_id' => 'required|integer',
+            'products.*.name' => 'required',
+            'products.*.code' => 'nullable',
+            'products.*.grossWeight' => 'nullable',
+            'products.*.qty' => 'nullable',
+            'products.*.netWeight' => 'nullable',
+            'products.*.making' => 'nullable',
+            'products.*.makingInRs' => 'nullable',
+            'products.*.rate' => 'nullable',
+            'products.*.tax_rate' => 'nullable|numeric',
+            'products.*.pro_total' => 'nullable|numeric',
+            'products.*.hsn' => 'nullable',
+            'products.*.making_gst_percentage' => 'nullable',
+            'grossTotal' => 'nullable|numeric',
+            'discountTotal' => 'nullable|numeric',
+            'customer_id' => 'nullable|integer',
+            'dateid' => 'nullable|date',
+        ]);
+
+        // 🔎 Find order
+        $order = Order::findOrFail($id);
+
+        // ✅ Update order
+        $order->update([
+            'gross_total' => $validated['grossTotal'],
+            'discount' => $validated['discountTotal'],
+            'total_price' => $validated['grossTotal'] - $validated['discountTotal']
+                            + ($request->totalTax ?? 0)
+                            + ($request->additionRs ?? 0),
+            'customer_id' => $validated['customer_id'],
+            'bill_inv' => $request->bill_inv,
+            'salesman_id' => $request->salesman_id,
+            'stylist_id' => $request->stylist_id,
+            'order_slip' => $request->order_slip,
+            'date' => $validated['dateid'],
+            'discountPercent'=>$request->discountPercent,
+            'discountRs'=>$request->discountRs,
+            'additionRS'=>$request->additionRs,
+            'additionDetail'=>$request->additionDetail,
+            'totalqty'=>$request->totalqty,
+            'totalTax'=>$request->totalTax,
+            'minAdjAmt'=>$request->minAdjAmt,
+            'minAdAmt'=>$request->minAdAmt,
+            'created_by' => $customer->id,
+        ]);
+
+        // ✅ Update last_order_at
+        DB::table('customers')
+            ->where('user_id', $validated['customer_id'])
+            ->update(['last_order_at' => now()]);
+
+        /*
+        |----------------------------------------------------------------------
+        | Update Order Details (Products)
+        |----------------------------------------------------------------------
+        */
+        $existingProductIds = $order->details()->pluck('product_id')->toArray();
+        $incomingProductIds = collect($validated['products'])->pluck('product_id')->toArray();
+
+        foreach ($validated['products'] as $product) {
+            $order->details()->updateOrCreate(
+                [
+                    'order_id' => $order->id,
+                    'product_id' => $product['product_id'] ?? null,
+                ],
+                [
+                    'product_name' => $product['name'],
+                    'product_id' => $product['product_id'],
+                    'product_code' => $product['code'] ?? null,
+                    'gross_weight' => $product['grossWeight'] ?? null,
+                    'net_weight' => $product['netWeight'] ?? null,
+                    'making' => $product['making'] ?? null,
+                    'makingInRs'=> $product['makingInRs'] ?? null,
+                    'rate' => $product['rate'] ?? null,
+                    'tax_rate' => $product['tax_rate'] ?? null,
+                    'pro_total' => number_format((float) ($product['pro_total'] ?? 0), 2, '.', ''),
+                    'stone_weight' => $product['stoneWeight'] ?? null,
+                    'stone_value' => $product['stoneValue'] ?? null,
+                    'huid' => $product['huid'] ?? null,
+                    'hallmark' => $product['hallmark'] ?? null,
+                    'qty' => $product['qty'] ?? null,
+                    'hallmarkCharge' => $product['hallmarkCharge'] ?? null,
+                    'wastageCharge' => $product['wastageCharge'] ?? null,
+                    'hsn' => $product['hsn'] ?? null,
+                    'making_dsc' => $product['making_dsc'] ?? null,
+                    'metal_value' => $product['metal_value'] ?? null,
+                    'otherCharge' => $product['otherCharge'] ?? null,
+                    'diamondDetails' => $product['diamondDetails'] ?? null,
+                    'diamondValue' => $product['diamondValue'] ?? null,
+                    'description'=>$product['description'] ?? null,
+                    'making_gst_percentage'=>$product['making_gst_percentage'] ?? null,
+                ]
+            );
+        }
+
+        $order->details()->whereNotIn('product_id', $incomingProductIds)->delete();
+
+        /*
+        |----------------------------------------------------------------------
+        | Update Payments
+        |----------------------------------------------------------------------
+        */
+        $existingMethods = $order->payments()->pluck('payment_method')->toArray();
+        $incomingMethods = collect($validated['paymentMethods'])->pluck('payment_method')->toArray();
+
+        foreach ($validated['paymentMethods'] as $paymentData) {
+            $order->payments()->updateOrCreate(
+                [
+                    'order_id' => $order->id,
+                    'payment_method' => $paymentData['payment_method'],
+                ],
+                [
+                    'customer_id' => $validated['customer_id'],
+                    'payment_date' => now(),
+                    'price' => $paymentData['price'],
+                ]
+            );
+        }
+
+        $order->payments()->whereNotIn('payment_method', $incomingMethods)->delete();
+
+        DB::commit(); // ✅ Everything ok → save changes
+
+        return response()->json([
+            'message' => 'Order updated successfully',
+            'order_id' => $order->id,
+            'bill_inv' => $order->bill_inv,
+        ], 200);
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        DB::rollBack(); // ❌ Error → rollback
+        return response()->json([
+            'message' => 'Validation failed',
+            'errors' => $e->errors(),
+        ], 422);
+    } catch (\Exception $e) {
+        DB::rollBack(); // ❌ Error → rollback
+        return response()->json([
+            'message' => 'An error occurred while updating the order',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
+    
 
 
     public function generateNextBillNo()
@@ -1980,110 +2299,11 @@ public function Ordersearch(Request $request)
     }
 
 
-    // public function stockDetails()
-    // {
-    //     $customer = JWTAuth::parseToken()->authenticate();
-    //     return ProductService::join('rate_masters', 'rate_masters.id', '=', 'product_services.rate_id')
-    //     ->join('stocks', 'product_services.id', '=', 'stocks.product_service_id')
-    //     ->leftJoinSub(
-    //         \DB::table('order_details')
-    //             ->select('product_id', \DB::raw('SUM(qty) as total_ordered_quantity'))
-    //             ->groupBy('product_id'),
-    //         'orders',
-    //         'product_services.id',
-    //         '=',
-    //         'orders.product_id'
-    //     ) // Subquery to get total ordered quantity per product
-    //     ->select(
-    //         'product_services.id',
-    //         'product_services.name',
-    //         'product_services.image',
-    //         'rate_masters.rate',
-    //         'product_services.code',
-    //         'product_services.type',
-    //         'product_services.tax_rate',
-    //         'product_services.hsn',
-    //         'product_services.brand',
-    //         'product_services.description',
-    //         'product_services.pro_ser_type',
-    //         'product_services.expires',
-    //         \DB::raw('SUM(stocks.quantity) as total_quantity'),
-    //         \DB::raw('COALESCE(orders.total_ordered_quantity, 0) as total_ordered_quantity'),
-    //         \DB::raw('SUM(stocks.quantity) - COALESCE(orders.total_ordered_quantity, 0) as available_quantity')
-    //     )
-    //     ->where('product_services.created_by', $customer->id)
-    //     ->groupBy(
-    //         'product_services.id',
-    //         'product_services.name',
-    //         'product_services.image',
-    //         'rate_masters.rate',
-    //         'product_services.code',
-    //         'product_services.type',
-    //         'product_services.tax_rate',
-    //         'product_services.hsn',
-    //         'product_services.brand',
-    //         'product_services.description',
-    //         'product_services.pro_ser_type',
-    //         'product_services.expires',
-    //         'orders.total_ordered_quantity'
-    //     )
-    //     ->get();
+    
 
 
-    // }
+   
 
-    // public function stockDetails()
-    // {
-    //     // $customer = JWTAuth::parseToken()->authenticate();
-    //     $totalPcs = PurchaseItem::sum('pcs');
-    //     return ProductService::join('rate_masters', 'rate_masters.id', '=', 'product_services.rate_id')
-    //     ->join('stocks', 'product_services.id', '=', 'stocks.product_service_id')
-    //     ->leftJoinSub(
-    //         \DB::table('order_details')
-    //             ->select('product_id', \DB::raw('SUM(qty) as total_ordered_quantity'))
-    //             ->groupBy('product_id'),
-    //         'orders',
-    //         'product_services.id',
-    //         '=',
-    //         'orders.product_id'
-    //     ) // Subquery to get total ordered quantity per product
-    //     ->select(
-    //         'product_services.id',
-    //         'product_services.name',
-    //         'product_services.image',
-    //         'rate_masters.rate',
-    //         'product_services.code',
-    //         'product_services.type',
-    //         'product_services.tax_rate',
-    //         'product_services.hsn',
-    //         'product_services.brand',
-    //         'product_services.description',
-    //         'product_services.pro_ser_type',
-    //         'product_services.expires',
-    //         \DB::raw('SUM(stocks.quantity) as total_quantity'),
-    //         \DB::raw('COALESCE(orders.total_ordered_quantity, 0) as total_ordered_quantity'),
-    //         \DB::raw('SUM(stocks.quantity) - COALESCE(orders.total_ordered_quantity, 0) as available_quantity')
-    //     )
-    //     // ->where('product_services.created_by', $customer->id)
-    //     ->groupBy(
-    //         'product_services.id',
-    //         'product_services.name',
-    //         'product_services.image',
-    //         'rate_masters.rate',
-    //         'product_services.code',
-    //         'product_services.type',
-    //         'product_services.tax_rate',
-    //         'product_services.hsn',
-    //         'product_services.brand',
-    //         'product_services.description',
-    //         'product_services.pro_ser_type',
-    //         'product_services.expires',
-    //         'orders.total_ordered_quantity'
-    //     )
-    //     ->get();
-
-
-    // }
 //     public function stockDetails()
 // {
 //     // Optional: Get authenticated user
@@ -2142,9 +2362,79 @@ public function Ordersearch(Request $request)
 // }
 
 
+// public function stockDetails()
+// {
+//     // Optional: Authenticated user
+//     $customer = JWTAuth::parseToken()->authenticate();
+
+//     // Subquery for total ordered quantity
+//     $orderSub = \DB::table('order_details')
+//         ->select('product_id', \DB::raw('SUM(qty) as total_ordered_quantity'))
+//         ->groupBy('product_id');
+
+//     // Subquery for total purchased pcs
+//     $purchaseSub = \DB::table('purchase_items')
+//         ->select('product_service_id', \DB::raw('SUM(pcs) as total_purchased_pcs'))
+//         ->groupBy('product_service_id');
+
+//     return ProductService::join('rate_masters', 'rate_masters.id', '=', 'product_services.rate_id')
+//         ->join('stocks', 'product_services.id', '=', 'stocks.product_service_id')
+//         ->leftJoinSub($orderSub, 'orders', 'product_services.id', '=', 'orders.product_id')
+//         ->leftJoinSub($purchaseSub, 'purchases', 'product_services.id', '=', 'purchases.product_service_id')
+//         ->select(
+//             'product_services.id',
+//             'product_services.group_id',
+//             'product_services.name',
+//             'product_services.image',
+//             'rate_masters.rate',
+//             'product_services.code',
+//             'product_services.type',
+//             'product_services.tax_rate',
+//             'product_services.hsn',
+//             'product_services.brand',
+//             'product_services.description',
+//             'product_services.pro_ser_type',
+//             'product_services.expires',
+//             'product_services.current_stock',
+
+//             \DB::raw('SUM(stocks.quantity) as stock_quantity'),
+//             \DB::raw('COALESCE(purchases.total_purchased_pcs, 0) as total_purchased_pcs'),
+//             \DB::raw('COALESCE(orders.total_ordered_quantity, 0) as total_ordered_quantity'),
+//             // Add stock + purchased_pcs
+//             \DB::raw('(SUM(stocks.quantity) + COALESCE(purchases.total_purchased_pcs, 0)) as total_quantity'),
+//             \DB::raw('(SUM(stocks.quantity) + COALESCE(purchases.total_purchased_pcs, 0)) - COALESCE(orders.total_ordered_quantity, 0) as available_quantity')
+//         )
+//         ->where('product_services.created_by', $customer->id)
+//         ->groupBy(
+//             'product_services.id',
+//             'product_services.name',
+//             'product_services.image',
+//             'product_services.group_id',
+//             'rate_masters.rate',
+//             'product_services.code',
+//             'product_services.type',
+//             'product_services.tax_rate',
+//             'product_services.hsn',
+//             'product_services.brand',
+//             'product_services.current_stock',
+//             'product_services.description',
+//             'product_services.pro_ser_type',
+//             'product_services.expires',
+//             'orders.total_ordered_quantity',
+//             'purchases.total_purchased_pcs'
+//         )
+//         ->get();
+// }
+
+
+
 public function stockDetails()
 {
-    // Optional: Authenticated user
+  
+
+
+        try {
+             // Optional: Authenticated user
     $customer = JWTAuth::parseToken()->authenticate();
 
     // Subquery for total ordered quantity
@@ -2172,6 +2462,7 @@ public function stockDetails()
             'product_services.tax_rate',
             'product_services.hsn',
             'product_services.brand',
+            'product_services.current_stock',
             'product_services.description',
             'product_services.pro_ser_type',
             'product_services.expires',
@@ -2194,6 +2485,7 @@ public function stockDetails()
             'product_services.tax_rate',
             'product_services.hsn',
             'product_services.brand',
+            'product_services.current_stock',
             'product_services.description',
             'product_services.pro_ser_type',
             'product_services.expires',
@@ -2201,62 +2493,17 @@ public function stockDetails()
             'purchases.total_purchased_pcs'
         )
         ->get();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
 }
 
 
 
 
-//     public function stockDetails()
-// {
-//     // $customer = JWTAuth::parseToken()->authenticate();
-//     // $totalPcs = PurchaseItem::sum('pcs');
-//     return ProductService::join('rate_masters', 'rate_masters.id', '=', 'product_services.rate_id')
-//         ->join('stocks', 'product_services.id', '=', 'stocks.product_service_id')
-
-//         ->leftJoinSub(
-//             \DB::table('order_details')
-//                 ->select('product_id', \DB::raw('SUM(qty) as total_ordered_quantity'))
-//                 ->groupBy('product_id'),
-//             'orders',
-//             'product_services.id',
-//             '=',
-//             'orders.product_id'
-//         )
-//         ->select(
-//             'product_services.id',
-//             'product_services.name',
-//             'product_services.image',
-//             'rate_masters.rate',
-//             'product_services.code',
-//             'product_services.type',
-//             'product_services.tax_rate',
-//             'product_services.hsn',
-//             'product_services.brand',
-//             'product_services.description',
-//             'product_services.pro_ser_type',
-//             'product_services.expires',
-//             \DB::raw('SUM(stocks.quantity) as total_quantity'),
-//             \DB::raw('COALESCE(orders.total_ordered_quantity, 0) as total_ordered_quantity'),
-//             \DB::raw('SUM(stocks.quantity) - COALESCE(orders.total_ordered_quantity, 0) as available_quantity'),
-//         )
-//         // ->where('product_services.created_by', $customer->id)
-//         ->groupBy(
-//             'product_services.id',
-//             'product_services.name',
-//             'product_services.image',
-//             'rate_masters.rate',
-//             'product_services.code',
-//             'product_services.type',
-//             'product_services.tax_rate',
-//             'product_services.hsn',
-//             'product_services.brand',
-//             'product_services.description',
-//             'product_services.pro_ser_type',
-//             'product_services.expires',
-
-//         )
-//         ->get();
-// }
 
     //today devlivary on base of created date on orders
     public function todayOrderCount()

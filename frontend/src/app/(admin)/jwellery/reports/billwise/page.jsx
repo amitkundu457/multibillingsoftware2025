@@ -262,6 +262,12 @@ const BillWise = () => {
                   >
                     BillPdf
                   </a>
+                  {/* <a
+    href={`/jwellery/billing/edit?id=${item.pdf_id}`}
+    className="inline-block bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700"
+  >
+    Edit
+  </a> */}
                 </td>
               </tr>
             ))}
@@ -273,3 +279,4 @@ const BillWise = () => {
 };
 
 export default BillWise;
+

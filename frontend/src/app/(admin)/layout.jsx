@@ -697,10 +697,15 @@ function AdminLayout({ children }) {
         //   label: "Stock.",
         //   href: `/${productUrl}/inventory/stock`,
         //   icon: MdHome,
-        // },
+        // },purchaselist
         {
           label: "Stock List.",
           href: `/${productUrl}/inventory/stocklist`,
+          icon: MdHome,
+        },
+        {
+          label: "Purchase List.",
+          href: `/${productUrl}/inventory/purchaselist`,
           icon: MdHome,
         },
         {

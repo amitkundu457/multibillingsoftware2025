@@ -10,5 +10,5 @@ const axios = Axios.create({
 
 export default axios;
 
-//export const reporturl=`https://brizindia.com`
- export const reporturl=`http://localhost:3000`
+export const reporturl=`https://brizindia.com`
+//  export const reporturl=`http://localhost:3000`

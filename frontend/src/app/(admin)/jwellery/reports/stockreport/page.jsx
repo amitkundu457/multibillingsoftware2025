@@ -1,83 +1,4 @@
-// "use client";
 
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-
-// export default function Home() {
-//     const [productList, setProductList] = useState([]);
-//     const [loading, setLoading] = useState(false);
-
-//     const getCookie = (name) => {
-//         const value = `; ${document.cookie}`;
-//         const parts = value.split(`; ${name}=`);
-//         if (parts.length === 2) {
-//             return decodeURIComponent(parts.pop().split(";").shift());
-//         }
-//         return null;
-//     };
-
-//     const token = getCookie("access_token");
-    
-//     useEffect(() => {
-//         if (!token) {
-//             console.error("Authentication token not found!");
-//             return;
-//         }
-//         fetchProductsList();
-//     }, [token]);
-
-//     const fetchProductsList = async () => {
-//         setLoading(true);
-//         try {
-//             const response = await axios.get(" http://127.0.0.1:8000/api/stockDetails", {
-//                 headers: { Authorization: `Bearer ${token}` },
-//             });
-//             setProductList(response.data);
-//         } catch (error) {
-//             console.error("Error fetching items:", error);
-//         } finally {
-//             setLoading(false);  // ✅ Ensures loading is reset even if an error occurs
-//         }
-//     };
-
-//     return (
-//         <>
-//             <h1>Stock Report</h1>
-//             {loading ? (
-//                 <div>Loading....</div>
-//             ) : (
-//                 <div className="p-4 bg-gray-100 min-h-screen">
-//                     <table className="min-w-full bg-white border border-gray-200 shadow-lg rounded-lg">
-//                         <thead>
-//                             <tr className="bg-blue-500 text-white text-left">
-//                                 <th className="py-2 px-4 border">Product Name</th>
-//                                 <th className="py-2 px-4 border">Total Quantity</th>
-//                                 <th className="py-2 px-4 border">Status</th>
-//                             </tr>
-//                         </thead>
-//                         <tbody>
-//                             {productList.map((item) => (
-//                                 <tr key={item.id} className="hover:bg-gray-100">
-//                                     <td className="py-2 px-4 border">{item.name}</td>
-                                    
-//                                     <td className="py-2 px-4 border">{item.available_quantity>0 ? item.available_quantity : "0"}</td>
-
-//                                     <td className="py-2 px-4 border">
-//                                         {item.available_quantity > 0 ? (
-//                                             <span className="text-green-500">In Stock</span>
-//                                         ) : (
-//                                             <span className="text-red-500">Out of Stock</span>
-//                                         )}
-//                                     </td>
-//                                 </tr>
-//                             ))}
-//                         </tbody>
-//                     </table>
-//                 </div>
-//             )}
-//         </>
-//     );
-// }
 
 
 "use client";
@@ -141,6 +62,7 @@ export default function Home() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log("Fetched items:", response.data);
       setProductList(response.data);
       setFilteredList(response.data);
     } catch (error) {
@@ -237,12 +159,12 @@ export default function Home() {
                      <td className="py-2 px-4 border">{index+1}</td>
                     <td className="py-2 px-4 border">{item.name}</td>
                     <td className="py-2 px-4 border">
-                      {item.available_quantity > 0
-                        ? item.available_quantity
-                        : "0"}
+                      {item.current_stock > 0
+                        ? item.current_stock
+                        : item.current_stock}
                     </td>
                     <td className="py-2 px-4 border">
-                      {item.available_quantity > 0 ? (
+                      {item.current_stock > 0 ? (
                         <span className="text-green-500">In Stock</span>
                       ) : (
                         <span className="text-red-500">Out of Stock</span>

@@ -30,7 +30,7 @@ class SaloonOrderController extends Controller
     //
     public function storeCheckout(Request $request)
     {
-        Log::info('Received Request Data:', $request->all());
+        // Log::info('Received Request Data:', $request->all());
 
         try {
             // Authenticate the customer

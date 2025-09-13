@@ -60,6 +60,18 @@ public function saloonSalesReturnIndex(){
         return response()->json($salesreturns);
 }
 
+public function jwelSalesReturnIndex(){
+    $customer=JWTAuth::parseToken()->authenticate();
+    Log::info('authenticeted Cutomer',['customer'=>$customer]);
+    $salesreturns=SalesReturn::with('product','saleReturnPayments')
+        ->where('created_by',$customer->id)
+        ->orderBy('created_at','desc')
+        ->get();
+
+        return response()->json($salesreturns);
+}
+
+
 
 //purchase return index saloon 
 public function saloonPurchaseReturnIndex(){
@@ -336,6 +348,64 @@ public function SaloonPurchaseReturnstores(Request $request)
     
 
     public function Saloonstores(Request $request)
+{
+    try {
+        $customer = JWTAuth::parseToken()->authenticate();
+        Log::info('Authenticated Customer:', ['customer' => $customer]);
+
+        $data = $request->all();
+
+        \DB::beginTransaction();
+
+        // Create SalesReturn
+        $salesReturn = SalesReturn::create([
+            'customer_name' => $data['customer_name'] ?? null,
+            'date' => $data['date'] ?? null,
+            'status' => $data['status'] ?? null,
+            'reference_no' => $data['reference_no'] ?? null,
+            'reason' => $data['reason'] ?? null,
+            'created_by' => $customer->id,
+            'quantity' => isset($data['quantity']) ? (int)$data['quantity'] : 1,
+            'product_service_id' => $data['product_service_id'] ?? null,
+        ]);
+
+        // Create SalesReturnPayment
+        SalesReturnPayment::create([
+            'amount' => isset($data['amount']) ? (float)$data['amount'] : 0,
+            'payment_type' => $data['payment_type'] ?? null,
+            'payment_note' => $data['payment_note'] ?? null,
+            'sales_return_id' => $salesReturn->id,
+        ]);
+
+        // Subtract quantity from ProductService current_stock
+        if (!empty($data['product_service_id'])) {
+            $product = ProductService::where('id', $data['product_service_id'])
+                ->where('created_by', $customer->id)
+                ->first();
+
+            if ($product) {
+                $product->current_stock += (int)($data['quantity'] ?? 1);
+                
+                $product->save();
+            }
+        }
+
+        \DB::commit();
+
+        return response()->json(['message' => 'Data stored successfully'], 201);
+
+    } catch (\Exception $e) {
+        \DB::rollBack();
+        Log::error('Error storing sales return:', ['exception' => $e]);
+        return response()->json([
+            'error' => 'Something went wrong',
+            'details' => $e->getMessage()
+        ], 500);
+    }
+}
+
+//jwel sales return 
+public function jewlstores(Request $request)
 {
     try {
         $customer = JWTAuth::parseToken()->authenticate();
