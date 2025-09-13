@@ -926,12 +926,13 @@ if (modalType === "create") {
         status: "Registered Customer",
         sms_credential_id: 1,
       });
-      alert("SMS sent successfully");
+      setSmsModal(false); 
+      // alert("SMS sent successfully");
     } catch (err) {
       alert("SMS failed to send");
       console.error(err);
     }
-    setSmsModal(false); // Close modal
+    // Close modal
   };
 
   const phone = watch("phone");

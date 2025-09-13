@@ -83,7 +83,7 @@ import axios from "axios";
 import Navbar from "../ui/NavBar";
 import FooterSection from "../ui/Fotter";
 
-export default function Home({ type = "crm" }) {
+export default function Home({ type = "Contact Support" }) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(true);

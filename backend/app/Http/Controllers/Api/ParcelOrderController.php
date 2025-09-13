@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Customer;
 use App\Models\UserInformation;
 use App\Models\ParcelOrderItem;
+use App\Models\OrderCoinSetting;
+
 
 use App\Models\ParcelBill;
 use Illuminate\Support\Facades\DB;
@@ -219,6 +221,41 @@ public function generateBill($orderId)
         'grand_total' => $grandTotal,
         'created_by' => $customer->id,
     ]);
+
+      // // Check coins
+        $totalCoins = DB::table('coni_purchases')
+            ->where('created_by', $customer->id)
+            ->sum('coins');
+
+        if ($totalCoins <= 0) {
+            return response()->json([
+                'message' => 'Insufficient coins to deduct',
+                'available_coins' => $totalCoins,
+            ], 400);
+        }
+
+        // Deduct coins
+        $setting = OrderCoinSetting::where('created_by',$customer->id)->latest()->first();
+        $coinToDeduct = $setting?$setting->coins_per_order:0;
+        $coinsToDeduct = $coinToDeduct;
+        $coinRecords = DB::table('coni_purchases')
+            ->where('created_by', $customer->id)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        foreach ($coinRecords as $record) {
+            if ($coinsToDeduct <= 0) break;
+
+            if ($record->coins > $coinsToDeduct) {
+                DB::table('coni_purchases')->where('id', $record->id)->update([
+                    'coins' => $record->coins - $coinsToDeduct
+                ]);
+                $coinsToDeduct = 0;
+            } else {
+                DB::table('coni_purchases')->where('id', $record->id)->update(['coins' => 0]);
+                $coinsToDeduct -= $record->coins;
+            }
+        }
 
 
 

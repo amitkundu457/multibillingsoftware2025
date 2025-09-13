@@ -185,12 +185,13 @@ const Page = () => {
         }
       );
       console.log("response", response);
+              alert("✅ Payment submitted successfully!");
+
 
       const result = await response.json();
 
       if (response.status == 200) {
         GenerateParcelBillFunction();
-        alert("✅ Payment submitted successfully!");
         setIsParcelBillModalOpen(false);
         // Optionally reset state
       } else if (response.status === 409) {

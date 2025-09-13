@@ -26,12 +26,30 @@ export const ShowProduct = ({
       <div className="flex items-center space-x-2 mt-2">
         <button
           onClick={onDecrease}
-          className="text-blue-500 font-semibold text-lg"
+          className=" px-4 py-1 
+    rounded-xl 
+    bg-gradient-to-r from-red-500 to-red-600 
+    text-white font-semibold  
+    shadow-md hover:shadow-lg 
+    hover:scale-105 transform transition-all duration-300 ease-in-out
+    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1"
         ></button>
+        <button
+          onClick={onDecrease}
+          className="text-blue-500 font-semibold text-lg"
+        >
+          
+        </button>
         <span className="font-bold text-xl">{quantity}</span>
         <button
           onClick={onIncrease}
-          className="text-blue-500 font-semibold text-lg"
+          className=" px-4 py-0
+    rounded-xl 
+    bg-gradient-to-r from-blue-500 to-indigo-600 
+    text-white font-semibold text-lg 
+    shadow-md hover:shadow-lg 
+    hover:scale-105 transform transition-all duration-300 ease-in-out
+    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1"
         >
           +
         </button>
@@ -56,12 +74,12 @@ function ParcelModal({ isOpen, onClose }) {
   const [selectedParcelTypeId, setSelectedParcelTypeId] = useState("");
   const [itemsCategory, setItemsCategory] = useState([]);
   const [data, setData] = useState([]);
-const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
-    const [barcode, setBarcode] = useState("");
-    const [allProducts, setAllProducts] = useState([]);
+  const [showBarcodeNumber, setShowBarcodeNumber] = useState(false);
+  const [barcode, setBarcode] = useState("");
+  const [allProducts, setAllProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [filteredItems, setFilteredItems] = useState(data);
-      const [searchItem,setSearchItem]  = useState(null);
+  const [searchItem, setSearchItem] = useState(null);
 
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
@@ -100,46 +118,42 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
     }
   };
 
-   useEffect(() => {
-        
-        fetchBarCodeData();
-        
-      }, []);
-  
-    const fetchBarCodeData = async () => {
-        try {
-          const token = getCookie("access_token");
-          const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-    
-          setAllProducts(response.data);
-          return response.data; // Return the fetched data
-        } catch (error) {
-          console.error("Error fetching barcode data:", error);
-        }
-      };
-  
+  useEffect(() => {
+    fetchBarCodeData();
+  }, []);
 
-      const handleSearchBarCode = async () => {
+  const fetchBarCodeData = async () => {
+    try {
+      const token = getCookie("access_token");
+      const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setAllProducts(response.data);
+      return response.data; // Return the fetched data
+    } catch (error) {
+      console.error("Error fetching barcode data:", error);
+    }
+  };
+
+  const handleSearchBarCode = async () => {
     if (!barcode.trim()) {
       setError("Please enter a barcode or fill details manually.");
       // setIsEditable(true);
       return;
     }
-    
 
     try {
       console.log("alldata", allProducts);
       const foundItem = allProducts.find((p) => p.barcode_no === barcode);
       console.log("bracode2", foundItem);
 
-      const barcodeFilter = filteredItems.filter((p)=>p.id===foundItem.item_id);
+      const barcodeFilter = filteredItems.filter(
+        (p) => p.id === foundItem.item_id
+      );
       setFilteredItems(barcodeFilter);
-
-      
 
       if (foundItem) {
         console.log(foundItem.basic_rate);
@@ -192,13 +206,12 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
     fetchItems();
   }, []);
 
-
-   useEffect(()=>{
-    const newItem = data.filter((p)=>p.name.toLowerCase().includes(searchItem.toLowerCase()));
-  setFilteredItems(newItem);
-
-
-  },[searchItem]);
+  useEffect(() => {
+    const newItem = data.filter((p) =>
+      p.name.toLowerCase().includes(searchItem.toLowerCase())
+    );
+    setFilteredItems(newItem);
+  }, [searchItem]);
 
   const Printbill = (bookingId) => {
     if (!bookingId) {
@@ -462,48 +475,49 @@ const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
             <div className="flex items-center space-x-2">
               <span className="text-sm font-medium">Barcode</span>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer"
-                onChange={()=>{setShowBarcodeNumber(!showBarcodeNumber)}}
-                 />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  onChange={() => {
+                    setShowBarcodeNumber(!showBarcodeNumber);
+                  }}
+                />
                 <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
               </label>
-               {/* barcode input feild */}
-            {
-              showBarcodeNumber && (
-                 <div className="flex gap-2">
-              <input
-                type="text"
-                value={barcode}
-                onChange={(e) => {setBarcode(e.target.value)
-                 }}
-                placeholder="Enter Barcode number"
-                className="w-3/7 p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
-              />
+              {/* barcode input feild */}
+              {showBarcodeNumber && (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={barcode}
+                    onChange={(e) => {
+                      setBarcode(e.target.value);
+                    }}
+                    placeholder="Enter Barcode number"
+                    className="w-3/7 p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+                  />
 
-              <button
-                type="button"
-                onClick={handleSearchBarCode}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Search
-              </button>
-            </div>
-              )
-            }
-             {/* filtered product */}
+                  <button
+                    type="button"
+                    onClick={handleSearchBarCode}
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  >
+                    Search
+                  </button>
+                </div>
+              )}
+              {/* filtered product */}
               <div>
                 <input
-                type="text"
-                placeholder="Item name"
-                value={searchItem}
-                onChange={(e)=>setSearchItem(e.target.value)}
+                  type="text"
+                  placeholder="Item name"
+                  value={searchItem}
+                  onChange={(e) => setSearchItem(e.target.value)}
                 />
- 
               </div>
-          </div>
-          
             </div>
-           
+          </div>
+
           <div>
             {/* <label className="block mb-1 font-medium">Enter Booking ID</label>
     <div className="flex gap-2">

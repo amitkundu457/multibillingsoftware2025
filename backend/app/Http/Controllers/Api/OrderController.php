@@ -610,8 +610,8 @@ public function storeCheckout(Request $request)
         }
 
         // Deduct coins
-        $setting = OrderCoinSetting::latest()->first();
-        $coinToDeduct = $setting->coins_per_order;
+        $setting = OrderCoinSetting::where('created_by',$customer->id)->latest()->first();
+        $coinToDeduct = $setting?$setting->coins_per_order:0;
         $coinsToDeduct = $coinToDeduct;
         $coinRecords = DB::table('coni_purchases')
             ->where('created_by', $customer->id)

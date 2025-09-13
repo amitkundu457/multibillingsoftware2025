@@ -22,6 +22,7 @@ use App\Exports\PurchaseBillExport;
 use Illuminate\Support\Facades\Log;
  use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductWisePurchaseExport;
+use App\Models\OrderCoinSetting;
 
 
 class SaloonOrderController extends Controller
@@ -185,6 +186,28 @@ class SaloonOrderController extends Controller
           ]);
          }
 
+         // Deduct coins
+        $setting = OrderCoinSetting::where('created_by',$user->id)->latest()->first();
+        $coinToDeduct = $setting?$setting->coins_per_order:0;
+        $coinsToDeduct = $coinToDeduct;
+        $coinRecords = DB::table('coni_purchases')
+            ->where('created_by', $user->id)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        foreach ($coinRecords as $record) {
+            if ($coinsToDeduct <= 0) break;
+
+            if ($record->coins > $coinsToDeduct) {
+                DB::table('coni_purchases')->where('id', $record->id)->update([
+                    'coins' => $record->coins - $coinsToDeduct
+                ]);
+                $coinsToDeduct = 0;
+            } else {
+                DB::table('coni_purchases')->where('id', $record->id)->update(['coins' => 0]);
+                $coinsToDeduct -= $record->coins;
+            }
+        }
 
 // 'created_by', $customer->id
 //          if (!empty($request->payments) && is_array($request->payments)) {

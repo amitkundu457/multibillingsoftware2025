@@ -130,8 +130,8 @@
 //     //admin side rechage
 //     public function coinpurchaseadmin(Request $request)
 //     {
-        
-       
+
+
 
 //         // Log::info($customer);
 //         $validated = $request->validate([
@@ -375,15 +375,19 @@ class CoinController extends Controller
 
     public function setCoinsPerOrder(Request $request)
     {
+         $customer = JWTAuth::parseToken()->authenticate();
         $request->validate([
             'coins_per_order' => 'required|integer|min:0',
         ]);
 
         // You can choose to allow only one row or version it (latest used)
-        OrderCoinSetting::truncate(); // optional: ensures only one value is stored
-        OrderCoinSetting::create([
-            'coins_per_order' => $request->coins_per_order
-        ]);
+         //OrderCoinSetting::truncate(); // optional: ensures only one value is stored
+        OrderCoinSetting::updateOrCreate(
+             [ 'created_by'=>$customer->id],
+              [ 'coins_per_order' => $request->coins_per_order]
+        );
+
+
 
         return response()->json([
             'message' => 'Coins per order set successfully.'
@@ -392,7 +396,9 @@ class CoinController extends Controller
 
  public function getCoinsPerOrder()
 {
-    $setting = OrderCoinSetting::latest()->first();
+             $customer = JWTAuth::parseToken()->authenticate();
+
+    $setting = OrderCoinSetting::where('created_by',$customer->id)->first();
 
     return response()->json([
         'coins_per_order' => $setting ? (int) $setting->coins_per_order : null,
@@ -410,7 +416,7 @@ public function createRazorpayOrder(Request $request)
     ]);
 
     try {
-        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+        $api = new Api(config('services.razorpay.key'), config('services.razorpay.secret'));
 
         $order = $api->order->create([
             'receipt' => 'receipt_' . uniqid(),
@@ -426,7 +432,7 @@ public function createRazorpayOrder(Request $request)
             'customer_id' => $customer->id,
         ]);
     } catch (\Exception $e) {
-      
+
 
         return response()->json([
             'message' => 'Razorpay order creation failed.',

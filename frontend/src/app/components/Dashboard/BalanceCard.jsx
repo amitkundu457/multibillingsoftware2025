@@ -6,6 +6,8 @@ import RechargeUI from "../../(admin)/recharge/page";
 import axios from 'axios';
 import useSWR from "swr";
 import { useCookies } from "react-cookie";
+import { LuLogOut } from "react-icons/lu";
+import LogoutModel from "../../components/logout/page";
 
 import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
@@ -21,6 +23,8 @@ export default function BalanceCard({ label }) {
   const [thisMonthOrder, setThisMonthOrder] = useState(0);
   const [lastRecharge,setLastRecharge] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies();
+    const [isLogoutModel, setIsLogoutModel] = useState(false);
+
   //add for dynamic url
   const {
     data: user,
@@ -130,6 +134,10 @@ export default function BalanceCard({ label }) {
       console.log("Coins are sufficient, continue using the app");
     }
   };
+  const handleLogoutClick = () => {
+    // setIsModalOpen(false);
+    setIsLogoutModel(true);
+  };
 
   return (
     <div className={`relative p-4 bg-white shadow-md rounded-lg border border-gray-200 ${itemcoin === 0 ? "pointer-events-none opacity-50" : ""}`}>
@@ -144,14 +152,24 @@ export default function BalanceCard({ label }) {
       >
         <h2 className="text-xl font-semibold text-red-600">Low Balance!</h2>
         <p className="text-gray-700">You have 0 coins. Please recharge to continue.</p>
-        <div className="mt-4">
+        <div className="mt-4 flex justify-between">
           <button
             onClick={handleRechargeClick}
             className="bg-blue-600 p-2 rounded text-white"
           >
             Recharge
           </button>
+           <button
+                  onClick={handleLogoutClick}
+                  className="text-3xl text-gray-600 hover:text-red-500 transition duration-300"
+                >
+                  <LuLogOut />
+                </button>
         </div>
+         <div>
+               
+                 {isLogoutModel && <LogoutModel onClose={() => setIsLogoutModel(false)} />}
+              </div> 
       </Modal>
 
       {/* Modal for Recharge UI */}
@@ -178,7 +196,8 @@ export default function BalanceCard({ label }) {
           className="bg-blue-600 p-2 rounded text-white"
         >
           Recharge
-        </Link> 
+        </Link>
+        
           </div>
         </div>
       </div>
@@ -202,6 +221,7 @@ export default function BalanceCard({ label }) {
           <p className="text-teal-600 text-lg font-bold">{lastRecharge}</p>
         </div>
       </div>
+      
     </div>
   );
 }
