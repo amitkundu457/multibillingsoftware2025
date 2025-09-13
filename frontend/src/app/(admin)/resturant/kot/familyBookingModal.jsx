@@ -24,14 +24,26 @@ export const ShowProduct = ({
       <p className="text-lg text-green-600">₹{price}</p>
       <p className="text-sm text-gray-500">Quantity: {quantity}</p>
       <div className="flex items-center space-x-2 mt-2">
-        <button
+       <button
           onClick={onDecrease}
-          className="text-blue-500 font-semibold text-lg"
+          className=" px-4 py-1 
+    rounded-xl 
+    bg-gradient-to-r from-red-500 to-red-600 
+    text-white font-semibold  
+    shadow-md hover:shadow-lg 
+    hover:scale-105 transform transition-all duration-300 ease-in-out
+    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1"
         ></button>
         <span className="font-bold text-xl">{quantity}</span>
         <button
           onClick={onIncrease}
-          className="text-blue-500 font-semibold text-lg"
+          className=" px-4 py-0
+    rounded-xl 
+    bg-gradient-to-r from-blue-500 to-indigo-600 
+    text-white font-semibold text-lg 
+    shadow-md hover:shadow-lg 
+    hover:scale-105 transform transition-all duration-300 ease-in-out
+    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1"
         >
           +
         </button>

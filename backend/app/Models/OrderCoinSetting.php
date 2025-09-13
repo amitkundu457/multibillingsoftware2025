@@ -14,6 +14,6 @@ class OrderCoinSetting extends Model
     protected $table = 'order_coin_settings';
 
     protected $fillable = [
-        'coins_per_order',
+        'coins_per_order','created_by'
     ];
 }

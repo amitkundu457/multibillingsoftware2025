@@ -151,10 +151,10 @@ const QrImagePreview = () => {
   // ✅ Handle payment
   const handlePayment = async () => {
     const token = getCookie("access_token");
-    if (!razorpayLoaded) {
-      alert("Razorpay is still loading. Please wait a moment and try again.");
-      return;
-    }
+    // if (!razorpayLoaded) {
+    //   alert("Razorpay is still loading. Please wait a moment and try again.");
+    //   return;
+    // }
     setIsLoading(true);
 
     try {
@@ -251,11 +251,7 @@ const QrImagePreview = () => {
 
   return (
     <>
-      <Script
-        src="https://checkout.razorpay.com/v1/checkout.js"
-        strategy="lazyOnload"
-        onLoad={() => setRazorpayLoaded(true)}
-      />
+      
       <div className="p-6 mx-auto bg-white shadow-lg rounded-lg">
       {/* Header */}
       {/* <div className="text-lg font-semibold text-gray-700 mb-4">

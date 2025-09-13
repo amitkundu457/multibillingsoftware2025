@@ -70,7 +70,7 @@ export default function CustomerReportPage() {
     }
   };
 
-  const fetchCustomerSubTypeData = async () => {
+  const fetchCustomerSubTypeData = async (cust_type_id) => {
     const token = getCookie("access_token"); // Retrieve token
 
     try {
@@ -82,8 +82,10 @@ export default function CustomerReportPage() {
           },
         }
       );
-
-      setCustomerSubTypeData(response.data); // ✅ correct data usage
+      const filtered = response.data.filter(
+        (item) => item.type_id == cust_type_id
+      );
+      setCustomerSubTypeData(filtered); // ✅ correct data usage
     } catch (error) {
       console.error("Error fetching customer types:", error);
     }
@@ -116,84 +118,85 @@ export default function CustomerReportPage() {
   };
 
   const exportToPDF = () => {
-  const doc = new jsPDF();
+    const doc = new jsPDF();
 
-  autoTable(doc, {
-    head: [[
-      "#",
-      "Name",
-      "Phone",
-      "Email",
-      "DOB",
-      "Anniversary",
-      // "Visit Source",
-      "Visit counts",
-      "Address",
-      "Total Orders",
-      "Total Amount"
-    ]],
-    body: filteredData.map((c, i) => [
-      i + 1,
-      c.name || "NA",
-      c.phone || "NA",
-      c.email || "NA",
-      c.dob || "NA",
-      c.anniversary || "NA",
-      c.visit_count || "NA",
-      `${c.address || "NA"}, ${c.state || "NA"}, ${c.pincode || "NA"}`,
-      c.total_orders ?? 0,
-      c.order_totals
-        ? `₹ ${(
-            c.order_totals
+    autoTable(doc, {
+      head: [
+        [
+          "#",
+          "Name",
+          "Phone",
+          "Email",
+          "DOB",
+          "Anniversary",
+          // "Visit Source",
+          "Visit counts",
+          "Address",
+          "Total Orders",
+          "Total Amount",
+        ],
+      ],
+      body: filteredData.map((c, i) => [
+        i + 1,
+        c.name || "NA",
+        c.phone || "NA",
+        c.email || "NA",
+        c.dob || "NA",
+        c.anniversary || "NA",
+        c.visit_count || "NA",
+        `${c.address || "NA"}, ${c.state || "NA"}, ${c.pincode || "NA"}`,
+        c.total_orders ?? 0,
+        c.order_totals
+          ? `₹ ${c.order_totals
               .split(",")
               .reduce((sum, val) => sum + parseFloat(val || 0), 0)
-          ).toFixed(2)}`
-        : "₹ 0.00"
-    ]),
-    styles: {
-      fontSize: 8,
-    },
-    headStyles: {
-      fillColor: [22, 160, 133],
-    },
-    margin: { top: 10 },
-  });
+              .toFixed(2)}`
+          : "₹ 0.00",
+      ]),
+      styles: {
+        fontSize: 8,
+      },
+      headStyles: {
+        fillColor: [22, 160, 133],
+      },
+      margin: { top: 10 },
+    });
 
-  doc.save("customer_report.pdf");
-};
-
+    doc.save("customer_report.pdf");
+  };
 
   const exportToExcel = () => {
-  const worksheet = XLSX.utils.json_to_sheet(
-    filteredData.map((c, i) => ({
-      "#": i + 1,
-      Name: c.name || "NA",
-      Phone: c.phone || "NA",
-      Email: c.email || "NA",
-      DOB: c.dob || "NA",
-      Anniversary: c.anniversary || "NA",
-      "Visit Source": c.visit_source || "NA",
-      Address: `${c.address || "NA"}, ${c.state || "NA"}, ${c.pincode || "NA"}`,
-      "Total Orders": c.total_orders ?? 0,
-      "Total Amount": c.order_totals
-        ? c.order_totals
-            .split(",")
-            .reduce((sum, val) => sum + parseFloat(val || 0), 0)
-            .toFixed(2)
-        : "0.00",
-    }))
-  );
+    const worksheet = XLSX.utils.json_to_sheet(
+      filteredData.map((c, i) => ({
+        "#": i + 1,
+        Name: c.name || "NA",
+        Phone: c.phone || "NA",
+        Email: c.email || "NA",
+        DOB: c.dob || "NA",
+        Anniversary: c.anniversary || "NA",
+        "Visit Source": c.visit_source || "NA",
+        Address: `${c.address || "NA"}, ${c.state || "NA"}, ${
+          c.pincode || "NA"
+        }`,
+        "Total Orders": c.total_orders ?? 0,
+        "Total Amount": c.order_totals
+          ? c.order_totals
+              .split(",")
+              .reduce((sum, val) => sum + parseFloat(val || 0), 0)
+              .toFixed(2)
+          : "0.00",
+      }))
+    );
 
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Customers");
-  const excelBuffer = XLSX.write(workbook, {
-    bookType: "xlsx",
-    type: "array",
-  });
-  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  saveAs(blob, "customer_report.xlsx");
-};
-
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Customers");
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, "customer_report.xlsx");
+  };
 
   return (
     <div className="p-6">
@@ -208,7 +211,10 @@ export default function CustomerReportPage() {
             <select
               className="border border-gray-300 p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
+              onChange={(e) => {
+                setSelectedType(e.target.value);
+                fetchCustomerSubTypeData(e.target.value);
+              }}
             >
               <option value="">Select Customer Type</option>
               {customerTypeData.map((data) => (
@@ -299,7 +305,7 @@ export default function CustomerReportPage() {
               <th className="border p-2 text-left">Email</th>
               <th className="border p-2 text-left">DOB</th>
               <th className="border p-2 text-left">Anniversary</th>
-             
+
               <th className="border p-2 text-left">Address</th>
               <th className="border p-2 text-left">Visit Count</th>
 
@@ -309,25 +315,25 @@ export default function CustomerReportPage() {
             </tr>
           </thead>
           <tbody>
-           {Array.isArray(filteredData) && filteredData.length > 0 ? (
-  filteredData.map((data, index) => (
-    <tr key={data.id || index} className="hover:bg-gray-50">
-      <td className="border p-2">{index + 1}</td>
-      <td className="border p-2">{data.customer_name || "NA"}</td>
-      <td className="border p-2">{data.phone || "NA"}</td>
-      <td className="border p-2">{data.email || "NA"}</td>
-      <td className="border p-2">{data.dob || "NA"}</td>
-      <td className="border p-2">{data.anniversary || "NA"}</td>
-    
+            {Array.isArray(filteredData) && filteredData.length > 0 ? (
+              filteredData.map((data, index) => (
+                <tr key={data.id || index} className="hover:bg-gray-50">
+                  <td className="border p-2">{index + 1}</td>
+                  <td className="border p-2">{data.customer_name || "NA"}</td>
+                  <td className="border p-2">{data.phone || "NA"}</td>
+                  <td className="border p-2">{data.email || "NA"}</td>
+                  <td className="border p-2">{data.dob || "NA"}</td>
+                  <td className="border p-2">{data.anniversary || "NA"}</td>
 
-      <td className="border p-2">
-        {data.address || "NA"}, {data.pincode || "NA"}, {data.state || "NA"}
-      </td>
-      <td className="border p-2">{data.visit_count || "0"}</td>
+                  <td className="border p-2">
+                    {data.address || "NA"}, {data.pincode || "NA"},{" "}
+                    {data.state || "NA"}
+                  </td>
+                  <td className="border p-2">{data.visit_count || "0"}</td>
 
-      {/* <td className="border p-2">{data.total_orders ?? 0}</td> */}
+                  {/* <td className="border p-2">{data.total_orders ?? 0}</td> */}
 
-      {/* <td className="border p-2 text-sm font-semibold">
+                  {/* <td className="border p-2 text-sm font-semibold">
         ₹{" "}
         {data.order_totals
           ? data.order_totals
@@ -336,16 +342,15 @@ export default function CustomerReportPage() {
               .toFixed(2)
           : "0.00"}
       </td> */}
-    </tr>
-  ))
-) : (
-  <tr>
-    <td colSpan="10" className="text-center p-4">
-      No customers found.
-    </td>
-  </tr>
-)}
-
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="10" className="text-center p-4">
+                  No customers found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

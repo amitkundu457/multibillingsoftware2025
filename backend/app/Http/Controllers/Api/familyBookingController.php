@@ -11,6 +11,8 @@ use App\Models\KotOrderItem;
 use App\Models\KotBill;
 use App\Models\Order;
 use App\Models\UserInformation;
+use App\Models\OrderCoinSetting;
+
 use Illuminate\Support\Facades\Log;
 
 
@@ -294,6 +296,30 @@ $client_address = UserInformation::where('user_id', $user->id)->firstOrFail();
             ]
         );
     }
+
+    // Deduct coins
+        $setting = OrderCoinSetting::where('created_by',$user->id)->latest()->first();
+        $coinToDeduct = $setting?$setting->coins_per_order:0;
+        $coinsToDeduct = $coinToDeduct;
+        $coinRecords = DB::table('coni_purchases')
+            ->where('created_by', $user->id)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        foreach ($coinRecords as $record) {
+            if ($coinsToDeduct <= 0) break;
+
+            if ($record->coins > $coinsToDeduct) {
+                DB::table('coni_purchases')->where('id', $record->id)->update([
+                    'coins' => $record->coins - $coinsToDeduct
+                ]);
+                $coinsToDeduct = 0;
+            } else {
+                DB::table('coni_purchases')->where('id', $record->id)->update(['coins' => 0]);
+                $coinsToDeduct -= $record->coins;
+            }
+        }
+
 
     return response()->json([
         'message' => 'Bill generated successfully.',

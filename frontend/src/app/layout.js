@@ -29,7 +29,10 @@ export default function RootLayout({ children }) {
          <Toaster  position="top-center" /> 
          
           {children}
-       
+       <script
+       async
+        src="https://checkout.razorpay.com/v1/checkout.js"
+       />
       </body>
     </html>
   );
