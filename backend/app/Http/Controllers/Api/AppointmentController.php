@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 
+use App\Events\AppointmentBooked;
 
 
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -58,6 +59,9 @@ class AppointmentController extends Controller
 
     // Create the appointment and save to the database
     $appointment = Appointment::create($data);
+
+        event(new AppointmentBooked($appointment,"saloon Appointment",1)); // SMS trigger
+
 
     // Return a successful response with the created appointment
     return response()->json([

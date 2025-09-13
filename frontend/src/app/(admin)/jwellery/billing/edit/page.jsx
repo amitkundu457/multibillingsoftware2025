@@ -213,7 +213,7 @@ export default function EditBillPage() {
     (async () => {
       try {
         const res = await axios.get(
-          `https://apibrize.brizindia.com/api/printbill/${id}`,
+          `http://127.0.0.1:8000/api/printbill/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -389,7 +389,7 @@ console.log("Saving payload:", payload);
     setSaving(true);
     try {
       // ⚠️ Adjust the endpoint to your actual update route if different
-      await axios.put(`https://apibrize.brizindia.com/api/updateCheckoutResto/${billId}`, payload, {
+      await axios.put(`http://127.0.0.1:8000/api/updateCheckoutResto/${billId}`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Bill updated successfully!");

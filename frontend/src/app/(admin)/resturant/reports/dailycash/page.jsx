@@ -33,7 +33,7 @@ const PaymentSummaryCards = () => {
 
     try {
       setLoading(true);
-      const res = await axios.get(" https://apibrize.brizindia.com/api/all-payments", {
+      const res = await axios.get(" http://127.0.0.1:8000/api/all-payments", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

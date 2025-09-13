@@ -64,6 +64,15 @@ const[ serviceList,setService]=useState([]);
     }));
   };
 
+  function generateBookingNo() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = 'BK';
+  for (let i = 0; i < 6; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
   useEffect(()=>{
     fetchService();
   },[]);
@@ -78,7 +87,7 @@ const[ serviceList,setService]=useState([]);
 
     const sanitizedData = {
       entry_date: formData.entryDate || null,
-      booking_no: formData.bookingNo || null,
+      booking_no: formData.generateBookingNo|| null,
       booking_date: formData.bookingDate || null,
       booking_time: formData.bookingTime || null,
       phone: formData.phone || null,
@@ -101,7 +110,7 @@ const[ serviceList,setService]=useState([]);
     console.log("Submitting Data:", JSON.stringify(sanitizedData, null, 2));
 console.log("booking payload",sanitizedData)
     try {
-      const response = await fetch("  https://apibrize.brizindia.com/api/bookings", {
+      const response = await fetch("  http://127.0.0.1:8000/api/bookings", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -156,7 +165,7 @@ console.log("booking payload",sanitizedData)
       }
   
       const response = await axios.get(
-        "  https://apibrize.brizindia.com/api/Saloon-service",
+        "  http://127.0.0.1:8000/api/Saloon-service",
   
         {
           headers: { Authorization: `Bearer ${token}` },

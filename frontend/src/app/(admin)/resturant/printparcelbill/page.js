@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getMe } from "../../../components/config";
+import axios from "axios";
+
 
 const ParcelBill = () => {
   const [buyerState, setbuyState] = useState("");
@@ -19,6 +21,30 @@ const ParcelBill = () => {
   const [billData, setBillData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [printStyle, setPrintStyle] = useState("thermal");
+    const [logoUrl, setLogoUrl] = useState("");
+
+
+    const getToken = () => {
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+  };
+
+   useEffect(() => {
+      const fetchLogoUrl = async () => {
+        const token = getToken();
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/masterlogobill",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setLogoUrl(response.data.logo);
+      };
+      fetchLogoUrl();
+    }, []);
+  
   const billRef = useRef();
   const searchParams = useSearchParams();
   const parcel_order_id = searchParams.get("id");
@@ -53,7 +79,7 @@ const ParcelBill = () => {
 
       try {
         const res = await fetch(
-          ` https://apibrize.brizindia.com/api/parcel-order/${parcel_order_id}/generate-bill`,
+          ` http://127.0.0.1:8000/api/parcel-order/${parcel_order_id}/generate-bill`,
           {
             method: "POST",
             headers: {
@@ -262,6 +288,24 @@ const ParcelBill = () => {
         }`}
       >
         {/* Header */}
+        {/* Logo Section */}
+        {logoUrl && (
+          <div
+            className={`logo-container ${
+              printStyle === "thermal" ? "text-center" : "text-left"
+            }`}
+          >
+            <img
+              src={logoUrl}
+              alt="Logo"
+              className={`${
+                printStyle === "thermal"
+                  ? "mx-auto w-[60px] h-auto"
+                  : "w-[120px] h-auto"
+              }`}
+            />
+          </div>
+        )}
         
        <div className="header text-center">
         {/* gst */}

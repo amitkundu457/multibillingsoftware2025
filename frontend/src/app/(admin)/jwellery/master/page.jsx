@@ -139,6 +139,12 @@ const MasterMenu = () => {
             link: `/${productUrl}/accountgroup`,
         },
         {
+            show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
+            name: "Set Message Advance Date",
+            count: 93,
+            link: `/${productUrl}/AdvanceMessageDate`,
+        },
+        {
             show: showMenuIn(["jwellery", "resturant"]),
             name: "Sub Customers ",
             count: 4,

@@ -1190,7 +1190,7 @@ public function getCustomersWithTodayBirthday()
 
 
     $today = Carbon::today()->format('m-d'); // Get today's month and day (MM-DD format)
-    // dd($today);
+     // dd($today);
     $customers = Customer::join('users', 'users.id', '=', 'customers.user_id')
         ->select(
             'users.name',
@@ -1208,6 +1208,8 @@ public function getCustomersWithTodayBirthday()
         ->where('customers.created_by', $customer->id)
         ->whereRaw("DATE_FORMAT(customers.dob, '%m-%d') = ?", [$today]) // Compare month and day
         ->get();
+
+
 
     return response()->json($customers, 200);
 }

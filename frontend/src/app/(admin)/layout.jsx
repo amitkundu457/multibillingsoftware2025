@@ -535,6 +535,11 @@ function AdminLayout({ children }) {
         // },
 
         {
+          label: "Customr Report",
+          href: `/${productUrl}/reports/customerreport`,
+          icon: LiaFileInvoiceDollarSolid,
+        },
+         {
           label: "Product Report",
           href: `/${productUrl}/reports/productwise`,
           icon: AiTwotoneDashboard,

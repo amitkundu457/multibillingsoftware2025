@@ -30,9 +30,9 @@ const MembershipServiceRates = () => {
   const fetchData = async () => {
     try {
       const [serviceRatesRes, groupsRes, serviceGroupsRes] = await Promise.all([
-        axios.get(" https://apibrize.brizindia.com/api/membership-rate"),
-        axios.get(" https://apibrize.brizindia.com/api/membershipidtype"),
-        axios.get(" https://apibrize.brizindia.com/api/membership-groups"),
+        axios.get(" http://127.0.0.1:8000/api/membership-rate"),
+        axios.get(" http://127.0.0.1:8000/api/membershipidtype"),
+        axios.get(" http://127.0.0.1:8000/api/membership-groups"),
       ]);
   
       setServiceRates(serviceRatesRes.data);
@@ -49,7 +49,7 @@ const MembershipServiceRates = () => {
   const fetchPlans = async (memberId) => {
     if (!memberId) return;
     try {
-      const response = await axios.get(`  https://apibrize.brizindia.com/api/membershipid/${memberId}`);
+      const response = await axios.get(`  http://127.0.0.1:8000/api/membershipid/${memberId}`);
       setPlans(response.data);
     } catch (error) {
       console.error("Error fetching membership plans:", error);
@@ -123,9 +123,9 @@ const MembershipServiceRates = () => {
 
     try {
       if (editMode) {
-        await axios.post(`  https://apibrize.brizindia.com/api/membership-service-rate/${formData.id}`, formData);
+        await axios.post(`  http://127.0.0.1:8000/api/membership-service-rate/${formData.id}`, formData);
       } else {
-        await axios.post("  https://apibrize.brizindia.com/api/membership-rate", formData);
+        await axios.post("  http://127.0.0.1:8000/api/membership-rate", formData);
       }
       closeModal();
       fetchData();

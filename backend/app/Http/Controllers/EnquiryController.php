@@ -14,7 +14,10 @@ class EnquiryController extends Controller
     // Get all enquiries
     public function index()
     {
-        return response()->json(Enquiry::all());
+            $customer = JWTAuth::parseToken()->authenticate(); // Authenticate user
+    $enquiries = Enquiry::where('created_by', $customer->id)->get();
+
+        return response()->json($enquiries);
     }
 
     // Get total count of enquiries
@@ -40,7 +43,7 @@ class EnquiryController extends Controller
 //     ]);
 // }
 
-public function getTodayEnquiries() 
+public function getTodayEnquiries()
 {
     $customer = JWTAuth::parseToken()->authenticate(); // Authenticate user
     Log::info('Authenticated Customer:', ['customer' => $customer]);
@@ -62,7 +65,7 @@ public function getTodayEnquiries()
     // Create a new enquiry
 //     public function store(Request $request)
 //     {
-        
+
 // $customer = JWTAuth::parseToken()->authenticate();
 // Log::info('Authenticated Customer:', ['customer' => $customer]);
 
@@ -85,7 +88,7 @@ public function getTodayEnquiries()
 public function store(Request $request)
 {
     $customer = JWTAuth::parseToken()->authenticate();
-    Log::info('Authenticated Customer:', ['customer' => $customer]);
+     Log::info('Authenticated Customer:', ['customer' => $customer]);
 
     $request->validate([
         'name' => 'required|string|max:255',
@@ -101,6 +104,7 @@ public function store(Request $request)
         $request->all(),
         ['created_by' => $customer->id]
     ));
+
 
     return response()->json($enquiry, 201);
 }

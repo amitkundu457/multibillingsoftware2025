@@ -27,9 +27,10 @@ use App\Http\Controllers\Api\KotTableController;
 use App\Http\Controllers\Api\familyBookingController;
 use App\Http\Controllers\Api\ParcelOrderController;
 use App\Http\Controllers\Api\ParcelTypeController;
-
+use App\Http\Controllers\Api\AdvanceMessageDateController;
 use App\Http\Controllers\Api\SmsCredentialController;
 use App\Http\Controllers\Api\FrontendContnetController;
+use App\Http\Controllers\Api\AppointmentSlotController;
 
 
 use App\Http\Controllers\Api\ParcelPaymentController;
@@ -702,6 +703,13 @@ Route::post('/approve/{id}', [UserInfoController::class, 'ApproveStatus']);
 Route::post('/reject/{id}', [UserInfoController::class, 'RejectStatus']);
 
 
+
+Route::get('/appointment-slots', [AppointmentSlotController::class, 'index']);
+Route::post('/appointment-slots', [AppointmentSlotController::class, 'store']);
+Route::put('/appointment-slots/{id}', [AppointmentSlotController::class, 'update']);
+Route::delete('/appointment-slots/{id}', [AppointmentSlotController::class, 'destroy']);
+
+
 //saloon stylist route
 Route::get('/stylists', [StylistController::class, 'index']);
 Route::post('/stylists', [StylistController::class, 'store']);
@@ -709,7 +717,11 @@ Route::put('/stylists/{id}', [StylistController::class, 'update']);
 Route::delete('/stylists/{id}', [StylistController::class, 'destroy']);
 
 
-// Account type
+// set dynamic state date
+Route::get('/sms-advance-date',[AdvanceMessageDateController::class,'index']);
+Route::post('/sms-advance-date',[AdvanceMessageDateController::class,'store']);
+Route::put('/sms-advance-date/{id}',[AdvanceMessageDateController::class,'update']);
+Route::delete('/sms-advance-date/{id}',[AdvanceMessageDateController::class,'destroy']);
 
 
  Route::post('account-types', [AccountTypeController::class, 'store']);

@@ -23,7 +23,7 @@ class BookingController extends Controller
         public function store(Request $request) {
             $validator = Validator::make($request->all(), [
                 'entry_date'     => 'nullable|date',
-                'booking_no'     => 'nullable|unique:bookings',
+                'booking_no'     => 'nullable|',
                 'booking_date'   => 'nullable|date',
                 'booking_time'   => 'nullable|date_format:H:i',
                 'phone'          => 'nullable|string|max:15',
@@ -39,8 +39,8 @@ class BookingController extends Controller
                 'upi_payment'    => 'numeric',
                 'coupon_amount'  => 'numeric',
                 'service'  =>'nullable|array',
-                 'status' => 'required',
-            'sms_credential_id' => 'required',
+            //      'status' => 'required',
+            // 'sms_credential_id' => 'required',
             ]);
 
             if ($validator->fails()) {
@@ -54,7 +54,7 @@ class BookingController extends Controller
         }
 
             $booking = Booking::create($data);
-           $this->sendBillingSms($request->phone,$request->status,$request->sms_credential_id);
+           $this->sendBillingSms($request->phone,"Saloon Booking",1);
 
             return response()->json([
                 'message' => 'Booking created successfully!',

@@ -61,7 +61,7 @@ export default function Reminder_And_FollowUp({ label }) {
     async function fetchCounts() {
       try {
         const response = await axios.get(
-          " https://apibrize.brizindia.com/api/reminder-follow-up/today-counts"
+          " http://127.0.0.1:8000/api/reminder-follow-up/today-counts"
         );
         setCount(response.data);
       } catch (error) {
@@ -88,7 +88,7 @@ export default function Reminder_And_FollowUp({ label }) {
       {/* Counts Section */}
       <div className="mt-2 border-2 border-blue-500 rounded-lg p-5">
         {/* Today Reminder */}
-        <div className="flex justify-between mb-2">
+        {/* <div className="flex justify-between mb-2">
           <Link href={`/${productUrl}/followup`} className="cursor-pointer  ">
             <h3 className="text-gray-600 text- font-bold   hover:text-green-500">Today Reminder</h3>
           <p className="text-blue-600 text-lg font-bold">
@@ -97,12 +97,12 @@ export default function Reminder_And_FollowUp({ label }) {
           
           </Link>
         
-        </div>
+        </div> */}
 
         {/* Today Follow-up */}
         <div className="flex justify-between">
           <Link href={`/${productUrl}/followup/`}>
-           <h3 className="text-purple-600 text-lg font-bold  hover:text-green-500">Today Follow-up</h3>
+           <h3 className="text-purple-600 text-lg font-bold  hover:text-green-500">Today Reminder And  Follow-up</h3>
           <p className="text-teal-600 text-lg font-bold">
           {count.today_follow_ups || 0}
           </p>

@@ -12,16 +12,16 @@ export default function Subtypes() {
   }, []);
 
   const fetchSubtypes = async () => {
-    const response = await axios.get(" https://apibrize.brizindia.com/api/packagesubtypes");
+    const response = await axios.get(" http://127.0.0.1:8000/api/packagesubtypes");
     setSubtypes(response.data);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (editingId) {
-      await axios.put(` https://apibrize.brizindia.com/api/packagesubtypes/${editingId}`, { name });
+      await axios.put(` http://127.0.0.1:8000/api/packagesubtypes/${editingId}`, { name });
     } else {
-      await axios.post(" https://apibrize.brizindia.com/api/packagesubtypes", { name });
+      await axios.post(" http://127.0.0.1:8000/api/packagesubtypes", { name });
     }
     setName("");
     setEditingId(null);
@@ -35,7 +35,7 @@ export default function Subtypes() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this subtype?")) {
-      await axios.delete(` https://apibrize.brizindia.com/api/packagesubtypes/${id}`);
+      await axios.delete(` http://127.0.0.1:8000/api/packagesubtypes/${id}`);
       fetchSubtypes();
     }
   };

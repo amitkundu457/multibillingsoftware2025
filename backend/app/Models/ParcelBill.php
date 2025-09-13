@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ParcelBill extends Model
 {
     //
-     protected $fillable = ['parcel_order_id', 'subtotal', 'gst', 'grand_total','created_by'];
+     protected $fillable = ['parcel_order_id', 'customer_id','subtotal', 'gst', 'grand_total','created_by'];
 
     public function order()
     {

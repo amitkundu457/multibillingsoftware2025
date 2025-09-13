@@ -16,7 +16,7 @@ class SmsSettingController extends Controller
     $validated = $request->validate([
         'description' => 'nullable|string',
         'status' => 'required|string',
-        'sms_credential_id' => 'required|exists:sms_credentials,id',
+        'sms_credential_id' => 'required',
         'template_id' => 'required|string',
     ]);
 
@@ -42,10 +42,10 @@ class SmsSettingController extends Controller
         ]);
     } else {
         $sms = SmsSetting::create([
-            'description' => $validated['description'],
-            'status' => $validated['status'],
-            'sms_credential_id' => $validated['sms_credential_id'],
-            'template_id' => $validated['template_id'],
+            'description' => $validated['description']??"null",
+            'status' => $validated['status']??"null",
+            'sms_credential_id' => $validated['sms_credential_id']??"Null",
+            'template_id' => $validated['template_id']??"null",
             'created_by' => $user->id,
         ]);
     }
@@ -83,6 +83,7 @@ class SmsSettingController extends Controller
 
         $setting->update([
             'description' => $request->description,
+              'template_id' => $request->template_id??"null",
             'status' => $request->status,
         ]);
 
