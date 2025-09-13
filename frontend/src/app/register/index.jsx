@@ -454,7 +454,7 @@ const RegistrationPage = () => {
             </option>
             {distributors.map((category, index) => (
               <option key={index} value={category.user_id}>
-                {category.userdist.name} ({category.phone})
+                {category.userdist.name} 
               </option>
             ))}
           </select>

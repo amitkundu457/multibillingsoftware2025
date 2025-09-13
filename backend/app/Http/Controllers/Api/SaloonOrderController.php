@@ -187,7 +187,7 @@ class SaloonOrderController extends Controller
          }
 
          // Deduct coins
-        $setting = OrderCoinSetting::where('created_by',$user->id)->latest()->first();
+        $setting = OrderCoinSetting::where('created_by',1)->latest()->first();
         $coinToDeduct = $setting?$setting->coins_per_order:0;
         $coinsToDeduct = $coinToDeduct;
         $coinRecords = DB::table('coni_purchases')

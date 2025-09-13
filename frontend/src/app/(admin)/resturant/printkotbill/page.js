@@ -273,6 +273,11 @@ export default function PrintFamilyBillPage() {
           <p className="text-gray-700 text-sm">
             {bill?.client_address?.email || "No Email Provided"}
           </p>
+          <div>
+            <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
+              GST IN: {bill?.client_address?.gst || "GST not provided"}
+            </h1>
+          </div>
           <p className="mt-1">----------------------------</p>
 
           <h2 className="text-base font-semibold"> Bill</h2>
@@ -281,11 +286,7 @@ export default function PrintFamilyBillPage() {
           <p className="text-yellow-600 font-bold">
             Customer Name: {bill.customer_name}
           </p>
-          <div>
-            <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
-              GST IN: {bill?.client_address?.gst || "GST not provided"}
-            </h1>
-          </div>
+          
         </div>
 
         {/* Items */}

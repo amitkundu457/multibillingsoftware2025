@@ -108,12 +108,12 @@ const MasterMenu = () => {
             count: 29,
             link: `/${productUrl}/t&cInvoice`,
         },
-        {
-            show: showMenuIn(["jwellery","saloon","resturant"]),
-            name: "coins per order",
-            count: 14,
-            link: `/${productUrl}/setcoinperorder`,
-        },
+        // {
+        //     show: showMenuIn(["jwellery","saloon","resturant"]),
+        //     name: "coins per order",
+        //     count: 14,
+        //     link: `/${productUrl}/setcoinperorder`,
+        // },
         {
             show: showMenuIn(["jwellery", "resturant"]),
             name: "Taxes",

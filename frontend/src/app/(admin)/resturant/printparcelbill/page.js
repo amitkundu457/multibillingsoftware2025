@@ -73,7 +73,7 @@ const ParcelBill = () => {
     fetchCompanyDetails();
   }, []);
   useEffect(() => {
-    if (!parcel_order_id) return; 
+    if (!parcel_order_id)  window.location.reload(); 
     const fetchBill = async () => {
       const token = getCookie("access_token");
 
@@ -261,7 +261,7 @@ const ParcelBill = () => {
       </div>
     );
 
-  const { bill, customer, user, items } = billData;
+  const { bill, customer, user, items } = billData || {};
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-6 min-h-screen bg-gray-100 p-4">

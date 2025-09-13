@@ -182,12 +182,12 @@ const MasterMenu = () => {
             count: 4,
             link: `/${productUrl}/smscredential`,
         },
-       {
-            show: showMenuIn(["jwellery","saloon","resturant"]),
-            name: "coins per order",
-            count: 14,
-            link: `/${productUrl}/setcoinperorder`,
-        },
+    //    {
+    //         show: showMenuIn(["jwellery","saloon","resturant"]),
+    //         name: "coins per order",
+    //         count: 14,
+    //         link: `/${productUrl}/setcoinperorder`,
+    //     },
         {
             show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
             name: "Taxes",

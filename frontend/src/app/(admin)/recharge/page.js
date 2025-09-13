@@ -609,14 +609,13 @@ const QrImagePreview = () => {
               }
             );
 
-            alert(verifyRes.data.message || "Payment successful!");
+            // alert(verifyRes.data.message || "Payment successful!");
           } catch (error) {
             console.error(
               "❌ Verification Error:",
               error?.response?.data || error.message
             );
-            alert("Payment verification failed.");
-          }
+           }
         },
 
         prefill: {

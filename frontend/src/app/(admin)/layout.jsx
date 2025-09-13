@@ -1167,6 +1167,20 @@ function AdminLayout({ children }) {
               </li>
             )}
 
+            {showMenuIn(["admin"]) && (
+              <li>
+                <Link
+                  href={`/${productUrl}/setcoinperorder`}
+                  className={`flex flex-col items-center gap-1 px-4 text-sm py-2.5 transition duration-300 hover:text-white ${
+                    pathname === `/${productUrl}/coin` ? " text-white" : ""
+                  }`}
+                >
+                  <RiFileList3Fill size={28} />
+                  <span className="font-medium">Coin Per Order</span>
+                </Link>
+              </li>
+            )}
+
             {showMenuIn(["jwellery"]) && (
               <li>
                 <Link

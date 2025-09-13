@@ -24,7 +24,7 @@ export default function AdvanceMessageDate() {
   const fetchData = async () => {
     const token = getCookie("access_token");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/sms-advance-date/", {
+      const res = await fetch("http://127.0.0.1:8000/api/sms-advance-date", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
