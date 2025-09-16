@@ -298,7 +298,7 @@ $client_address = UserInformation::where('user_id', $user->id)->firstOrFail();
     }
 
     // Deduct coins
-        $setting = OrderCoinSetting::where('created_by',1)->latest()->first();
+        $setting = OrderCoinSetting::where('created_by',3)->latest()->first();
         $coinToDeduct = $setting?$setting->coins_per_order:0;
         $coinsToDeduct = $coinToDeduct;
         $coinRecords = DB::table('coni_purchases')

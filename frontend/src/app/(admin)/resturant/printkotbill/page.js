@@ -214,7 +214,18 @@ export default function PrintFamilyBillPage() {
 
   if (!booking_id) return <p>Please provide booking_id.</p>;
   if (loading) return <p>Loading bill for booking #{booking_id}...</p>;
-  if (!bill) return <p>No bill found for booking #{booking_id}.</p>;
+  if (!bill) 
+    {
+      return( <><p>No bill found for booking #{booking_id}.</p>;
+          <button 
+            onClick={window.location.reload}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            Retry
+          </button>
+          </>
+          )
+    }
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-6 min-h-screen bg-gray-100 p-4">

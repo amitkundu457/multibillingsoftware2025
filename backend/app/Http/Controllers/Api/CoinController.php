@@ -375,15 +375,14 @@ class CoinController extends Controller
 
     public function setCoinsPerOrder(Request $request)
     {
-         $customer = JWTAuth::parseToken()->authenticate();
-        $request->validate([
+         $request->validate([
             'coins_per_order' => 'required|integer|min:0',
+            'client_id' => 'required'
         ]);
 
-        // You can choose to allow only one row or version it (latest used)
-         //OrderCoinSetting::truncate(); // optional: ensures only one value is stored
+          //OrderCoinSetting::truncate(); // optional: ensures only one value is stored
         OrderCoinSetting::updateOrCreate(
-             [ 'created_by'=>$customer->id],
+             [ 'created_by'=>$request->client_id],
               [ 'coins_per_order' => $request->coins_per_order]
         );
 
@@ -396,12 +395,12 @@ class CoinController extends Controller
 
  public function getCoinsPerOrder()
 {
-             $customer = JWTAuth::parseToken()->authenticate();
+  $customer = JWTAuth::parseToken()->authenticate();
 
-    $setting = OrderCoinSetting::where('created_by',$customer->id)->first();
+    $setting = OrderCoinSetting::all();
 
     return response()->json([
-        'coins_per_order' => $setting ? (int) $setting->coins_per_order : null,
+       'data' => $setting,
         'message' => $setting ? 'Coins per order fetched successfully.' : 'No setting found.'
     ]);
 }

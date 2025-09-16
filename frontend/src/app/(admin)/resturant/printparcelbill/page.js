@@ -74,7 +74,16 @@ const ParcelBill = () => {
   }, []);
   useEffect(() => {
     if (!parcel_order_id)  window.location.reload(); 
-    const fetchBill = async () => {
+    
+    fetchBill();
+
+   }, [parcel_order_id]);
+
+   const fetchBill = async () => {
+     if (!parcel_order_id) {
+       setLoading(false);
+      return;
+    }
       const token = getCookie("access_token");
 
       try {
@@ -101,9 +110,6 @@ const ParcelBill = () => {
         setLoading(false);
       }
     };
-    fetchBill();
-
-   }, [parcel_order_id]);
   const isSameState = buyerState && sellerState && buyerState === sellerState;
   console.log("isSameState", isSameState);
   const handlePrint = () => {
@@ -254,12 +260,22 @@ const ParcelBill = () => {
   };
 
   if (loading) return <div className="text-center mt-4">Loading bill...</div>;
-  if (!billData)
+   if (!billData) {
     return (
-      <div className="text-center mt-4">
-        No bill found for ID {parcel_order_id}.
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="bg-white p-6 rounded-lg shadow-md text-center">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">No Bill Data</h2>
+          <p className="text-gray-700 mb-4">No bill found for ID {parcel_order_id}.</p>
+          <button 
+            onClick={fetchBill}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
+  }
 
   const { bill, customer, user, items } = billData || {};
 
