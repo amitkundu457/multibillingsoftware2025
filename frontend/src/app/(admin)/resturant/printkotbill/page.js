@@ -37,7 +37,7 @@ export default function PrintFamilyBillPage() {
     const fetchLogoUrl = async () => {
       const token = getToken();
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/masterlogobill",
+        "https://apibrize.brizindia.com/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -72,7 +72,7 @@ export default function PrintFamilyBillPage() {
     if (!cutomerid) return;
 
     axios
-      .get(`http://127.0.0.1:8000/api/customers/get/${cutomerid}`, {
+      .get(`https://apibrize.brizindia.com/api/customers/get/${cutomerid}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,7 +90,7 @@ export default function PrintFamilyBillPage() {
     const token = getCookie("access_token");
     if (booking_id) {
       fetch(
-        `http://127.0.0.1:8000/api/family-booking/${booking_id}/generate-bill`,
+        `https://apibrize.brizindia.com/api/family-booking/${booking_id}/generate-bill`,
         {
           method: "POST",
           headers: {

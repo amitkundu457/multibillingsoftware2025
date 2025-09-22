@@ -149,7 +149,7 @@
 //     }
 
 //     axios
-//       .get(" http://127.0.0.1:8000/api/customerstype", {
+//       .get(" https://apibrize.brizindia.com/api/customerstype", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((res) => {
@@ -160,7 +160,7 @@
 //       });
 
 //     axios
-//       .get(" http://127.0.0.1:8000/api/customersubtypes", {
+//       .get(" https://apibrize.brizindia.com/api/customersubtypes", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((res) => {
@@ -241,7 +241,7 @@
 // if (modalType === "create") {
 //   try {
 //     const res = await axios.post(
-//       " http://127.0.0.1:8000/api/customers",
+//       " https://apibrize.brizindia.com/api/customers",
 //       dataToSend,
 //       config
 //     );
@@ -259,7 +259,7 @@
 // }
 //  else if (modalType === "edit") {
 //         await axios.post(
-//           `  http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+//           `  https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`,
 //           payload,
 //           config
 //         );
@@ -283,7 +283,7 @@
 
 //   const handleSendSms = async () => {
 //     try {
-//       await axios.post(" http://127.0.0.1:8000/api/send-customer-sms", {
+//       await axios.post(" https://apibrize.brizindia.com/api/send-customer-sms", {
 //         phone: newCustomer,
 //         status: "Registered Customer",
 //         sms_credential_id: 1,
@@ -787,7 +787,7 @@ const CustomerModal = ({
     }
 
     axios
-      .get(" http://127.0.0.1:8000/api/customerstype", {
+      .get(" https://apibrize.brizindia.com/api/customerstype", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -798,7 +798,7 @@ const CustomerModal = ({
       });
 
     axios
-      .get(" http://127.0.0.1:8000/api/customersubtypes", {
+      .get(" https://apibrize.brizindia.com/api/customersubtypes", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -879,7 +879,7 @@ const CustomerModal = ({
 if (modalType === "create") {
   try {
     const res = await axios.post(
-      " http://127.0.0.1:8000/api/customers",
+      " https://apibrize.brizindia.com/api/customers",
       dataToSend,
       config
     );
@@ -897,7 +897,7 @@ if (modalType === "create") {
 }
  else if (modalType === "edit") {
         await axios.post(
-          `  http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          `  https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
@@ -921,7 +921,7 @@ if (modalType === "create") {
 
   const handleSendSms = async () => {
     try {
-      await axios.post(" http://127.0.0.1:8000/api/send-customer-sms", {
+      await axios.post(" https://apibrize.brizindia.com/api/send-customer-sms", {
         phone: newCustomer,
         status: "Registered Customer",
         sms_credential_id: 1,

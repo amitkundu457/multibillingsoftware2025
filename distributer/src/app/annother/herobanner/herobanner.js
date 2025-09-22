@@ -62,7 +62,7 @@ export default function HeroSection({ scrollToSection, open, openModal }) {
 
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/formverivy",
+        " https://apibrize.brizindia.com/api/formverivy",
         {
           email,
         }

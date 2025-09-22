@@ -666,7 +666,7 @@ public function storeCheckout(Request $request)
 
 
 
-        
+
 
 
 
@@ -730,7 +730,7 @@ public function storeCheckout(Request $request)
 
             if (!empty($product['product_id']) && isset($product['qty'])) {
                 $productService = ProductService::find($product['product_id']);
-        
+
                 if ($productService) {
                     $newStock = $productService->current_stock - $product['qty'];
                     $productService->current_stock = max(0, $newStock); // Prevent negative stock
@@ -742,7 +742,7 @@ public function storeCheckout(Request $request)
         }
 
 
-       
+
 
         // Store payment methods
         foreach ($validated['paymentMethods'] as $paymentData) {
@@ -755,7 +755,9 @@ public function storeCheckout(Request $request)
             ]);
         }
 
-          $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
+        if(!empty($validated['customer_id'])){
+
+            $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
 
         if($customerId){
         DB::table('customer_last_orders')->updateOrInsert(
@@ -770,6 +772,9 @@ public function storeCheckout(Request $request)
             ]
         );
     }
+
+        }
+
 
 
         DB::commit(); // ✅ Commit transaction
@@ -1078,10 +1083,10 @@ $message = str_replace("\xC2\xA0", ' ', $message);
     // public function updateCheckoutResto(Request $request, $id)
     // {
     //     Log::info('Update Request Data:', $request->all());
-    
+
     //     try {
     //         $customer = JWTAuth::parseToken()->authenticate();
-    
+
     //         // ✅ Keep validation same as store
     //         $validated = $request->validate([
     //             'paymentMethods' => 'required|array',
@@ -1109,10 +1114,10 @@ $message = str_replace("\xC2\xA0", ' ', $message);
     //             'products.*.hsn' => 'nullable',
     //             'products.*.making_gst_percentage' => 'nullable',
     //         ]);
-    
+
     //         // 🔎 Find order
     //         $order = Order::findOrFail($id);
-    
+
     //         // ✅ Update order header (same calc as store)
     //         $order->update([
     //             'gross_total' => $validated['grossTotal'],
@@ -1136,15 +1141,15 @@ $message = str_replace("\xC2\xA0", ' ', $message);
     //             'minAdAmt'=>$request->minAdAmt,
     //             'created_by' => $customer->id, // ✅ keep track of editor
     //         ]);
-    
+
     //         // ✅ Update last_order_at
     //         DB::table('customers')
     //             ->where('user_id', $validated['customer_id'])
     //             ->update(['last_order_at' => now()]);
-    
+
     //         // 🔄 Refresh products
     //         $order->details()->delete();
-           
+
     //         foreach ($validated['products'] as $product) {
     //             $order->details()->create([
     //                 'product_name' => $product['name'],
@@ -1174,7 +1179,7 @@ $message = str_replace("\xC2\xA0", ' ', $message);
     //                 'making_gst_percentage'=>$product['making_gst_percentage'] ?? null,
     //             ]);
     //         }
-    
+
     //         // 🔄 Refresh payments
     //         $order->payments()->delete();
     //         foreach ($validated['paymentMethods'] as $paymentData) {
@@ -1186,13 +1191,13 @@ $message = str_replace("\xC2\xA0", ' ', $message);
     //                 'price' => $paymentData['price'],
     //             ]);
     //         }
-    
+
     //         return response()->json([
     //             'message' => 'Order updated successfully',
     //             'order_id' => $order->id,
     //             'bill_inv' => $order->bill_inv,
     //         ], 200);
-    
+
     //     } catch (\Illuminate\Validation\ValidationException $e) {
     //         Log::error('Validation Error:', ['errors' => $e->errors()]);
     //         return response()->json([
@@ -1365,7 +1370,7 @@ $message = str_replace("\xC2\xA0", ' ', $message);
     }
 }
 
-    
+
 
 
     public function generateNextBillNo()
@@ -2299,10 +2304,10 @@ public function Ordersearch(Request $request)
     }
 
 
-    
 
 
-   
+
+
 
 //     public function stockDetails()
 // {
@@ -2430,7 +2435,7 @@ public function Ordersearch(Request $request)
 
 public function stockDetails()
 {
-  
+
 
 
         try {

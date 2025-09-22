@@ -21,7 +21,7 @@ return [
 
     'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000',)],
 
-    'allowed_origins_patterns' => [' http://127.0.0.1:8000/'],
+    'allowed_origins_patterns' => [' https://apibrize.brizindia.com/'],
 
     'allowed_headers' => ['Authorization', 'Content-Type', 'X-Requested-With'],
 

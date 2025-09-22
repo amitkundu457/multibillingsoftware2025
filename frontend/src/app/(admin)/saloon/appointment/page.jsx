@@ -103,7 +103,7 @@ const AppointmentPage = () => {
   const fetchSlots = async () => {
     try {
       const res = await axios.get(
-        "http://127.0.0.1:8000/api/appointment-slots"
+        "https://apibrize.brizindia.com/api/appointment-slots"
       );
       setSlots(res.data || []);
     } catch (error) {
@@ -119,7 +119,7 @@ const AppointmentPage = () => {
     if (!newSlot) return;
     setLoading(true);
     try {
-      await axios.post("http://127.0.0.1:8000/api/appointment-slots", {
+      await axios.post("https://apibrize.brizindia.com/api/appointment-slots", {
         slot: newSlot,
       });
       setNewSlot("");
@@ -148,7 +148,7 @@ const AppointmentPage = () => {
     }
     try {
       const response = await axios.get(
-        "  http://127.0.0.1:8000/api/appointments",
+        "  https://apibrize.brizindia.com/api/appointments",
 
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -168,7 +168,7 @@ const AppointmentPage = () => {
     }
 
     const response = await axios.get(
-      "  http://127.0.0.1:8000/api/Saloon-service",
+      "  https://apibrize.brizindia.com/api/Saloon-service",
 
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -187,7 +187,7 @@ const AppointmentPage = () => {
     }
 
     const response = await axios.get(
-      "  http://127.0.0.1:8000/api/stylists",
+      "  https://apibrize.brizindia.com/api/stylists",
 
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -209,7 +209,7 @@ const AppointmentPage = () => {
     console.log("payload", formData);
     try {
       await axios.post(
-        "  http://127.0.0.1:8000/api/appointments",
+        "  https://apibrize.brizindia.com/api/appointments",
         formData,
 
         {
@@ -244,7 +244,7 @@ const AppointmentPage = () => {
     console.log("update appoinemtn", formData);
     try {
       await axios.post(
-        `  http://127.0.0.1:8000/api/appointments/${editingAppointmentId}`,
+        `  https://apibrize.brizindia.com/api/appointments/${editingAppointmentId}`,
         formData
       );
       fetchAppointments();
@@ -257,7 +257,7 @@ const AppointmentPage = () => {
   // Delete an appointment
   const handleDeleteAppointment = async (id) => {
     try {
-      await axios.delete(`  http://127.0.0.1:8000/api/appointments/${id}`);
+      await axios.delete(`  https://apibrize.brizindia.com/api/appointments/${id}`);
       fetchAppointments();
     } catch (error) {
       console.error("Error deleting appointment:", error);

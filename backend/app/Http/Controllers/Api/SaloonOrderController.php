@@ -240,7 +240,8 @@ class SaloonOrderController extends Controller
 
             // Return a success response
 
-        $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
+            if(!empty($validated['customer_id'])){
+                $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
 
             if($customerId){
         DB::table('customer_last_orders')->updateOrInsert(
@@ -254,6 +255,9 @@ class SaloonOrderController extends Controller
             ]
         );
     }
+
+            }
+
 
             // event(new OrderPlaced($customerPhone,"saloon billing",1));
            $this->sendBillingSms($customerPhone,"saloon billing",1);

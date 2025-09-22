@@ -29,7 +29,7 @@
 //       return;
 //     }
 //     try {
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/stocks", {
+//       const { data } = await axios.get("https://apibrize.brizindia.com/api/stocks", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setStocks(data?.stock || []);
@@ -45,7 +45,7 @@
 //       return;
 //     }
 //     try {
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/purchase", {
+//       const { data } = await axios.get("https://apibrize.brizindia.com/api/purchase", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setPurchase(data?.purchase || []);
@@ -268,7 +268,7 @@
 //       return;
 //     }
 //     try {
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/stocks", {
+//       const { data } = await axios.get("https://apibrize.brizindia.com/api/stocks", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setStocks(data?.stock || []);
@@ -284,7 +284,7 @@
 //       return;
 //     }
 //     try {
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/purchase", {
+//       const { data } = await axios.get("https://apibrize.brizindia.com/api/purchase", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setPurchase(data?.purchase || []);
@@ -647,7 +647,7 @@ export default function StockList() {
     }
 
     try {
-      const { data } = await axios.get(" http://127.0.0.1:8000/api/stocks", {
+      const { data } = await axios.get(" https://apibrize.brizindia.com/api/stocks", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStocks(data?.stock || []);

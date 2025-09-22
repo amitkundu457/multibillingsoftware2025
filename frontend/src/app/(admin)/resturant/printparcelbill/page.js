@@ -35,7 +35,7 @@ const ParcelBill = () => {
       const fetchLogoUrl = async () => {
         const token = getToken();
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/masterlogobill",
+          "https://apibrize.brizindia.com/api/masterlogobill",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -88,7 +88,7 @@ const ParcelBill = () => {
 
       try {
         const res = await fetch(
-          ` http://127.0.0.1:8000/api/parcel-order/${parcel_order_id}/generate-bill`,
+          ` https://apibrize.brizindia.com/api/parcel-order/${parcel_order_id}/generate-bill`,
           {
             method: "POST",
             headers: {

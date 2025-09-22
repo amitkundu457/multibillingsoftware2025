@@ -50,7 +50,7 @@ export default function Services_And_Complain({ label }) {
     if (!token) return;
 
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/todaydelivery", {
+      const response = await axios.get(" https://apibrize.brizindia.com/api/todaydelivery", {
         headers: { authorization: `Bearer ${token}` },
       });
       setTodayDelivery(response?.data);
@@ -63,7 +63,7 @@ export default function Services_And_Complain({ label }) {
     if (!token) return;
 
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/complain-list", {
+      const response = await axios.get(" https://apibrize.brizindia.com/api/complain-list", {
         headers: { authorization: `Bearer ${token}` },
       });
       setTotalComplain(response?.data);

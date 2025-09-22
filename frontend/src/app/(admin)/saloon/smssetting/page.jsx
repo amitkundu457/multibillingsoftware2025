@@ -49,7 +49,7 @@
        setLoadingCredentials(true);
        const token = getCookie("access_token");
        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-       const res = await axios.get("http://127.0.0.1:8000/api/sms-credentials", { headers });
+       const res = await axios.get("https://apibrize.brizindia.com/api/sms-credentials", { headers });
        setCredentials(res.data || []);
        if (!selectedCredentialId && res.data?.length > 0) {
          setSelectedCredentialId(res.data[0].id);
@@ -76,7 +76,7 @@
        setLoadingMessages(true);
        const token = getCookie("access_token");
        const headers = token ? { Authorization: `Bearer ${token}` } : {};
-       const res = await axios.get("http://127.0.0.1:8000/api/sms-settings", { headers });
+       const res = await axios.get("https://apibrize.brizindia.com/api/sms-settings", { headers });
  
        const fetched = res.data || [];
  
@@ -156,13 +156,13 @@
        if (currentData.id) {
          // Update existing
          res = await axios.put(
-           `http://127.0.0.1:8000/api/sms-settings/${currentData.id}`,
+           `https://apibrize.brizindia.com/api/sms-settings/${currentData.id}`,
            payload,
            { headers }
          );
        } else {
          // Create new
-         res = await axios.post("http://127.0.0.1:8000/api/sms-settings", payload, { headers });
+         res = await axios.post("https://apibrize.brizindia.com/api/sms-settings", payload, { headers });
        }
  
        // extract id (API shape may vary)

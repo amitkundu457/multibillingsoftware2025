@@ -30,7 +30,7 @@
 
 //     setLoading(true);
 //     try {
-//       const response = await axios.post("  http://127.0.0.1:8000/api/send-otp", {
+//       const response = await axios.post("  https://apibrize.brizindia.com/api/send-otp", {
 //         phone,
 //       });
 
@@ -51,7 +51,7 @@
 
 //     setLoading(true);
 //     try {
-//       const response = await axios.post("  http://127.0.0.1:8000/api/verify-otp", {
+//       const response = await axios.post("  https://apibrize.brizindia.com/api/verify-otp", {
 //         phone,
 //         otp,
 //       });
@@ -129,7 +129,7 @@
 //         {/* Right Side - Illustration */}
 //         <div className="w-1/2 flex justify-center items-center p-8">
 //           <img
-//             src="  http://127.0.0.1:8000/undraw_thought-process_pavs.png"
+//             src="  https://apibrize.brizindia.com/undraw_thought-process_pavs.png"
 //             className="w-full"
 //             alt="Illustration"
 //           />
@@ -176,7 +176,7 @@ export default function OtpLogin() {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/send-otp", {
+      const response = await axios.post("https://apibrize.brizindia.com/api/send-otp", {
         phone,
       });
 
@@ -202,7 +202,7 @@ export default function OtpLogin() {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/verify-otp", {
+      const response = await axios.post("https://apibrize.brizindia.com/api/verify-otp", {
         phone,
         otp,
       });

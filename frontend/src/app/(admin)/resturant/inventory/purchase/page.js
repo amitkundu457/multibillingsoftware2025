@@ -72,7 +72,7 @@ function Page() {
 
   const supplierList = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get(" http://127.0.0.1:8000/api/suppliers", {
+    const response = await axios.get(" https://apibrize.brizindia.com/api/suppliers", {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log("response", response?.data?.suppliers);
@@ -82,7 +82,7 @@ function Page() {
   const fetchpurchaseList = async () => {
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/saloon-purchase-returnss",
+        " https://apibrize.brizindia.com/api/saloon-purchase-returnss",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -161,7 +161,7 @@ function Page() {
 
   const fetchSupplierList = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get(" http://127.0.0.1:8000/api/suppliers", {
+    const response = await axios.get(" https://apibrize.brizindia.com/api/suppliers", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setSupplierlist(response?.data?.suppliers || []);
@@ -169,7 +169,7 @@ function Page() {
 
   const handleDeleteAllPurchase = async () => {
     const response = await axios.delete(
-      " http://127.0.0.1:8000/api/delete-all-purchase",
+      " https://apibrize.brizindia.com/api/delete-all-purchase",
       {
         headers: { authorization: `Bearer ${token}` },
       }
@@ -206,7 +206,7 @@ function Page() {
   };
 
   const handleDownloadSample = () => {
-    window.location.href = " http://127.0.0.1:8000/api/download-sample-purchase";
+    window.location.href = " https://apibrize.brizindia.com/api/download-sample-purchase";
   };
 
   const handleFileChange = (e) => {
@@ -245,7 +245,7 @@ function Page() {
       }, 200); // Every 200ms, increase progress by 10% (Total 2s)
 
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/purchase/bulk-upload-csv",
+        " https://apibrize.brizindia.com/api/purchase/bulk-upload-csv",
         fileFormData,
         {
           headers: {
@@ -336,7 +336,7 @@ function Page() {
   const featchProductsList = async () => {
     try {
       const res = await axios.get(
-        " http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+        " https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -444,7 +444,7 @@ function Page() {
       console.log("formData", formData);
 
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/saloon-purchase",
+        " https://apibrize.brizindia.com/api/saloon-purchase",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

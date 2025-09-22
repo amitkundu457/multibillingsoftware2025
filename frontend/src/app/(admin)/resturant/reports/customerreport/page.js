@@ -40,7 +40,7 @@
    const fetchCustomerData = async () => {
      const token = getCookie("access_token"); // Retrieve token
  
-     const response = await axios.get(" http://127.0.0.1:8000/api/customers", {
+     const response = await axios.get(" https://apibrize.brizindia.com/api/customers", {
        headers: {
          Authorization: `Bearer ${token}`,
        },
@@ -56,7 +56,7 @@
  
      try {
        const response = await axios.get(
-         " http://127.0.0.1:8000/api/customerstype",
+         " https://apibrize.brizindia.com/api/customerstype",
          {
            headers: {
              Authorization: `Bearer ${token}`, // ✅ space after 'Bearer'
@@ -75,7 +75,7 @@
  
      try {
        const response = await axios.get(
-         " http://127.0.0.1:8000/api/customersubtypes",
+         " https://apibrize.brizindia.com/api/customersubtypes",
          {
            headers: {
              Authorization: `Bearer ${token}`, // ✅ space after 'Bearer'

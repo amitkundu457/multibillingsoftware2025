@@ -28,7 +28,7 @@
             const token = getCookie("access_token");
   
       try {
-        const res = await axios.get('http://127.0.0.1:8000/api/get-coins-per-order',{
+        const res = await axios.get('https://apibrize.brizindia.com/api/get-coins-per-order',{
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -47,7 +47,7 @@
       setMessage('');
       try {
         await axios.post(
-    "http://127.0.0.1:8000/api/set-coins-per-order",
+    "https://apibrize.brizindia.com/api/set-coins-per-order",
     { coins_per_order: parseInt(coinsPerOrder, 10),
       client_id:clientId
      },

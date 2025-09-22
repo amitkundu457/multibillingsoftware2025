@@ -57,7 +57,7 @@ export default function Home() {
     setLoading(true);
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/stockDetails",
+        " https://apibrize.brizindia.com/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
