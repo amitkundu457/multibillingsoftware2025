@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('b_b_l_cslots', function (Blueprint $table) {
             $table->id();
-            $table->date('slot_date');
-            $table->string('slot_name');
+            // $table->foreignId('template_id')->constrained('reminder_templates')->cascadeOnDelete();
+            $table->string('name')->nullable();
+            $table->json('days')->comment('Array of day numbers in month, e.g. [2,15,20,25]');
+            $table->string('target')->default('lost_customers'); // can add groups later
+            $table->time('send_time')->default('10:00:00'); // time of day to send (HH:MM:SS)
+            $table->boolean('enabled')->default(true);
             $table->timestamps();
         });
     }

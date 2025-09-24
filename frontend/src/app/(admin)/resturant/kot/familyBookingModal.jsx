@@ -129,7 +129,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     const token = getCookie("access_token");
 
     if (isOpen) {
-      fetch(" https://apibrize.brizindia.com/api/kot-tables", {
+      fetch(" http://127.0.0.1:8000/api/kot-tables", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -143,7 +143,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get(" https://apibrize.brizindia.com/api/product-and-service", {
+      .get(" http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -164,7 +164,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       const token = getCookie("access_token");
 
       try {
-        const response = await axios.get(" https://apibrize.brizindia.com/api/type", {
+        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setItemsCategory(response.data);
@@ -185,7 +185,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   const fetchBarCodeData = async () => {
       try {
         const token = getCookie("access_token");
-        const response = await axios.get(" https://apibrize.brizindia.com/api/barcodes", {
+        const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -225,7 +225,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await fetch(
-        " https://apibrize.brizindia.com/api/book-family-tables",
+        " http://127.0.0.1:8000/api/book-family-tables",
         {
           method: "POST",
           headers: {
@@ -325,7 +325,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await axios.post(
-        " https://apibrize.brizindia.com/api/book-family-tables",
+        " http://127.0.0.1:8000/api/book-family-tables",
         payload,
         {
           headers: {
@@ -383,7 +383,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     }
     try {
       const response = await axios.put(
-        " https://apibrize.brizindia.com/api/update-family-tables",
+        " http://127.0.0.1:8000/api/update-family-tables",
         updatePayload
       );
 
@@ -651,7 +651,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={` https://apibrize.brizindia.com/storage/${item.image}`}
+                  src={` http://127.0.0.1:8000/storage/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

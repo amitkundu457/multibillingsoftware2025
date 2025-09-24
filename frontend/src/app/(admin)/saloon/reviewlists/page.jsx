@@ -38,7 +38,7 @@ const ReviewListPage = () => {
 
     try {
       const response = await axios.delete(
-        ` https://apibrize.brizindia.com/api/complain-list/${id}`,
+        ` http://127.0.0.1:8000/api/complain-list/${id}`,
         {
           headers: { authorization: `Bearer ${token}` },
         }
@@ -54,7 +54,7 @@ const ReviewListPage = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        " https://apibrize.brizindia.com/api/complain-list",
+        " http://127.0.0.1:8000/api/complain-list",
         {
           headers: { authorization: `Bearer ${token}` },
         }

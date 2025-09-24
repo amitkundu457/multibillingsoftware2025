@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class BBLCslot extends Model
 {
     protected $fillable = [
-        'slot_date',
-        'slot_name',
+        'name',
+        'days',
+        'target',
+        'send_time',
+        'enabled'
+    ];
+
+    protected $casts = [
+        'days' => 'array',
+        'enabled' => 'boolean'
     ];
 }

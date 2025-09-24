@@ -8,73 +8,50 @@ use App\Models\BblcSlot;
 
 class BBLcController extends Controller
 {
- public function index()
+    public function index()
     {
-        return response()->json(BblcSlot::all());
+        $slots = BBLCSlot::latest()->get();
+        return response()->json($slots);
     }
 
-    
-   public function storeMonthlySlots(Request $request)
-{
-    $request->validate([
-        'month' => 'required|integer|min:1|max:12',
-        'year' => 'required|integer|min:2000',
-        'slot_days' => 'required|array', // e.g., [5,15,25]
-        'notification_days' => 'required|array', // e.g., [10,5]
-    ]);
-
-    $month = $request->month;
-    $year = $request->year;
-    $slot_days = $request->slot_days;
-    $notification_days = $request->notification_days;
-
-    $slots = [];
-
-    foreach ($slot_days as $i => $day) {
-        $slotDate = date('Y-m-d', strtotime("$year-$month-$day"));
-
-        $notifyDates = [];
-        foreach ($notification_days as $index => $daysBefore) {
-            $notifyDates[$index] = date('Y-m-d', strtotime("$slotDate -$daysBefore days"));
-        }
-
-        $slot = BblcSlot::create([
-            'slot_name' => "Slot " . ($i + 1),
-            'slot_date' => $slotDate,
-            'notify_10_days' => $notifyDates[0] ?? null,
-            'notify_5_days' => $notifyDates[1] ?? null,
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'days' => 'required|array',
+            'target' => 'required|string',
+            'send_time' => 'required|date_format:H:i:s',
+            'enabled' => 'boolean'
         ]);
 
-        $slots[] = $slot;
+        $slot = BBLCSlot::create($validated);
+
+        return response()->json(['message' => 'Slot created successfully', 'slot' => $slot]);
     }
 
-    return response()->json($slots, 201);
-}
-
-
-
-    // single slot show
-    public function show($id)
+    public function show(BBLCSlot $bblcslot)
     {
-        $slot = BblcSlot::findOrFail($id);
-        return response()->json($slot);
+        return response()->json($bblcslot);
     }
 
-    // update slot
-    public function update(Request $request, $id)
+    public function update(Request $request, BBLCSlot $bblcslot)
     {
-        $slot = BblcSlot::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'days' => 'sometimes|array',
+            'target' => 'sometimes|string',
+            'send_time' => 'sometimes|date_format:H:i:s',
+            'enabled' => 'sometimes|boolean'
+        ]);
 
-        $slot->update($request->only(['slot_date', 'slot_name']));
+        $bblcslot->update($validated);
 
-        return response()->json($slot);
+        return response()->json(['message' => 'Slot updated successfully', 'slot' => $bblcslot]);
     }
 
-    // delete slot
-    public function destroy($id)
+    public function destroy(BBLCSlot $bblcslot)
     {
-        $slot = BblcSlot::findOrFail($id);
-        $slot->delete();
+        $bblcslot->delete();
 
         return response()->json(['message' => 'Slot deleted successfully']);
     }

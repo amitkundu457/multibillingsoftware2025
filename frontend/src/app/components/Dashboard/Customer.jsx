@@ -36,7 +36,7 @@ export default function Customer({ label }) {
   console.log("pruddcturl2",productUrl);
 
   useEffect(() => {
-    axios.get(" https://apibrize.brizindia.com/api/customer-visit-sources")
+    axios.get(" http://127.0.0.1:8000/api/customer-visit-sources")
       .then((response) => {
         setCustomerCounts(response.data);
       })

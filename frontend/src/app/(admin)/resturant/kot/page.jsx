@@ -105,7 +105,7 @@ const Page = () => {
       const token = getCookie("access_token");
 
       try {
-        const response = await axios.get(" https://apibrize.brizindia.com/api/type", {
+        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setItemsCategory(response.data);
@@ -127,7 +127,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        ` https://apibrize.brizindia.com/api/parcel-order/${parcelOrderId}/grand-total`,
+        ` http://127.0.0.1:8000/api/parcel-order/${parcelOrderId}/grand-total`,
         {
           method: "GET",
           headers: {
@@ -168,7 +168,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        ` https://apibrize.brizindia.com/api/parcel-payments`,
+        ` http://127.0.0.1:8000/api/parcel-payments`,
         {
           method: "POST",
           headers: {
@@ -230,7 +230,7 @@ const Page = () => {
   useEffect(() => {
     if (familyBookingId) {
       fetch(
-        ` https://apibrize.brizindia.com/api/family-booking-grand-total/${familyBookingId}`
+        ` http://127.0.0.1:8000/api/family-booking-grand-total/${familyBookingId}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -269,7 +269,7 @@ const Page = () => {
       };
 
       const response = await axios.post(
-        " https://apibrize.brizindia.com/api/family-booking-payments", // Replace with your real API route
+        " http://127.0.0.1:8000/api/family-booking-payments", // Replace with your real API route
         payload,
         {
           headers: {
@@ -317,7 +317,7 @@ const Page = () => {
     if (!newTableNo.trim()) return;
 
     try {
-      const res = await fetch(" https://apibrize.brizindia.com/api/kot-tables", {
+      const res = await fetch(" http://127.0.0.1:8000/api/kot-tables", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -343,13 +343,13 @@ const Page = () => {
     }
   };
 
-  // Fetch data from API  https://apibrize.brizindia.com/api/product-and-service
+  // Fetch data from API  http://127.0.0.1:8000/api/product-and-service
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      // .get("  https://apibrize.brizindia.com/api/product-services",{headers: {
-      .get("  https://apibrize.brizindia.com/api/product-and-service", {
+      // .get("  http://127.0.0.1:8000/api/product-services",{headers: {
+      .get("  http://127.0.0.1:8000/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -371,7 +371,7 @@ const Page = () => {
     const token = getCookie("access_token");
 
     try {
-      const res = await axios.get(" https://apibrize.brizindia.com/api/kot-tables", {
+      const res = await axios.get(" http://127.0.0.1:8000/api/kot-tables", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -454,7 +454,7 @@ const Page = () => {
 
   //   try {
 
-  //     const response =  await axios.post(' https://apibrize.brizindia.com/api/kot-orders',payload,{
+  //     const response =  await axios.post(' http://127.0.0.1:8000/api/kot-orders',payload,{
   //       headers:{
   //         "Content-Type":"application/json",
   //         Authorization: `Bearer ${token}`,
@@ -486,7 +486,7 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-        " https://apibrize.brizindia.com/api/kot-orders",
+        " http://127.0.0.1:8000/api/kot-orders",
         payload,
         {
           headers: {
@@ -838,7 +838,7 @@ const Page = () => {
               >
                 <p className="text-center font-semibold mb-2">{item.name}</p>
                 <img
-                  src={` https://apibrize.brizindia.com/${item.image}`}
+                  src={` http://127.0.0.1:8000/${item.image}`}
                   alt={item.name}
                   className="w-full h-32 object-cover rounded-lg mb-2"
                 />
