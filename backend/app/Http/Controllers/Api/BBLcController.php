@@ -14,20 +14,35 @@ class BBLcController extends Controller
         return response()->json($slots);
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'days' => 'required|array',
-            'target' => 'required|string',
-            'send_time' => 'required',
-            'enabled' => 'boolean'
+   public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'days' => 'required|array', // ["4","5","6"]
+        'target' => 'required|string',
+        'send_time' => 'required',
+        'enabled' => 'boolean'
+    ]);
+
+    $createdSlots = [];
+
+    foreach ($validated['days'] as $day) {
+        $slot = BBLCSlot::create([
+            'name' => $validated['name'],
+            'days' => [$day], // ekta ekta kore store
+            'target' => $validated['target'],
+            'send_time' => $validated['send_time'],
+            'enabled' => $validated['enabled'] ?? true
         ]);
-
-        $slot = BBLCSlot::create($validated);
-
-        return response()->json(['message' => 'Slot created successfully', 'slot' => $slot]);
+        $createdSlots[] = $slot;
     }
+
+    return response()->json([
+        'message' => 'Slots created successfully',
+        'slots' => $createdSlots
+    ]);
+}
+
 
     public function show(BBLCSlot $bblcslot)
     {

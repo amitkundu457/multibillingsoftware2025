@@ -982,5 +982,5 @@ Route::get('/sms-settings', [SmsSettingController::class, 'index']);
 Route::get('/bblc-slots', [BBLcController::class, 'index']);
 Route::post('/bblc-slots', [BBLcController::class, 'store']);
 Route::get('/bblc-slots/{id}', [BBLcController::class, 'show']);
-Route::put('/bblc-slots/{id}', [BBLcController::class, 'update']);
+Route::post('/bblc-slots/{id}', [BBLcController::class, 'update']);
 Route::delete('/bblc-slots/{id}', [BBLcController::class, 'destroy']);

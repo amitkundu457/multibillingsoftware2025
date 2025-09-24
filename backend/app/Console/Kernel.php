@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
     $schedule->command('queue:work --once')->everyMinute();
      $schedule->command('send:send-birthday-anniversary-wishes')->dailyAt('12:00');
-      $schedule->command('app:check-b-b-l-c')->dailyAt('00:00');
+      $schedule->command('app:check-b-b-l-c')->everyMinute();
       $schedule->command('app:followups-reminders')->dailyAT('00:00');
 
 
