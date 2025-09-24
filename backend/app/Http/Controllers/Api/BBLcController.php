@@ -20,7 +20,7 @@ class BBLcController extends Controller
             'name' => 'required|string|max:255',
             'days' => 'required|array',
             'target' => 'required|string',
-            'send_time' => 'required|date_format:H:i:s',
+            'send_time' => 'required',
             'enabled' => 'boolean'
         ]);
 
@@ -40,7 +40,7 @@ class BBLcController extends Controller
             'name' => 'sometimes|string|max:255',
             'days' => 'sometimes|array',
             'target' => 'sometimes|string',
-            'send_time' => 'sometimes|date_format:H:i:s',
+            'send_time' => 'sometimes',
             'enabled' => 'sometimes|boolean'
         ]);
 
