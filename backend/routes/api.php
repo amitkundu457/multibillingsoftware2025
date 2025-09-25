@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\TaxType;
 use Illuminate\Http\Request;
 use App\Models\UserInformation;
 use App\Models\ProductServiceGroup;
@@ -7,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TaxController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BBLcController;
 use App\Http\Controllers\Api\CoinController;
 use App\Http\Controllers\Api\RateController;
 use App\Http\Controllers\Api\TabsController;
@@ -14,109 +16,108 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\MasterController;
-use App\Http\Controllers\Api\ReportController;
-use App\Http\Controllers\Api\SliderController;
-use App\Http\Controllers\Api\printStatusController;
 use App\Http\Controllers\Api\PurityController;
-use App\Http\Controllers\Api\PackageServiceNameController;
-use App\Http\Controllers\Api\OrderPackageServiceController;
-use App\Http\Controllers\Api\ReminderAndFollowUpController;
-use App\Http\Controllers\Api\BISNumberController;
-use App\Http\Controllers\Api\BillCountController;
-use App\Http\Controllers\Api\KotTableController;
-use App\Http\Controllers\Api\familyBookingController;
-use App\Http\Controllers\Api\ParcelOrderController;
-use App\Http\Controllers\Api\ParcelTypeController;
-use App\Http\Controllers\Api\AdvanceMessageDateController;
-use App\Http\Controllers\Api\SmsCredentialController;
-use App\Http\Controllers\Api\FrontendContnetController;
-use App\Http\Controllers\Api\AppointmentSlotController;
-
-
-use App\Http\Controllers\Api\ParcelPaymentController;
-use App\Http\Controllers\Api\FamilyBookingPaymentController;
-
-
-
-use App\Http\Controllers\Api\SaloonStockController;
-
-
-
-
-
-
+use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\BarcodeController;
+use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\formOtpController;
 use App\Http\Controllers\APi\LoyaltyController;
+use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\StylistController;
 use App\Http\Controllers\MastersBillController;
+
+
 use App\Http\Controllers\StockReturnController;
 use App\Http\Controllers\Api\CustomerController;
+
+
+
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\KarigariController;
-use App\Http\Controllers\Api\KarigarListController;
-use App\Http\Controllers\Api\SmsController;
+ use App\Http\Controllers\Api\SmsController;
 
 
+
+
+
+
+use App\Http\Controllers\Api\KotOrderController;
+use App\Http\Controllers\Api\KotTableController;
 use App\Http\Controllers\Api\PurchaseController;
-use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\SolutionController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UserInfoController;
+use App\Http\Controllers\Api\BillCountController;
+use App\Http\Controllers\Api\BISNumberController;
 use App\Http\Controllers\Api\EcosystemController;
+use App\Http\Controllers\Api\MembershipController;
+use App\Http\Controllers\Api\ParcelTypeController;
 use App\Http\Controllers\Api\RateMasterController;
-use App\Http\Controllers\Api\AppointmentController;
-use App\Http\Controllers\Api\DistrubuterController;
-use App\Http\Controllers\Api\SaleProductController;
-use App\Http\Controllers\Api\SalesAssignController;
-use App\Http\Controllers\Api\AccountGroupController;
-use App\Http\Controllers\Api\AccountMasterController;
-use App\Http\Controllers\Api\MasterSettingController;
-use App\Http\Controllers\Api\ProductLoyaltyController;
-use App\Http\Controllers\Api\PurchaseReturnController;
-use App\Http\Controllers\Api\SalesReturnController;
-use App\Http\Controllers\Api\KotOrderController;
-
-use App\Http\Controllers\Api\selectedProductController;
-use App\Http\Controllers\Api\redeemPointSetupController;
-use App\Http\Controllers\Api\ProductAndServiceController;
-use App\Http\Controllers\Api\RoleAndPermissionController;
-use App\Http\Controllers\Api\SaloonOrderController;
-
-
-
-
-
-
-
-use App\Http\Controllers\Api\TermsAndConditionController;
-use App\Http\Controllers\Api\AccountTypeController;
-
-
-use App\Http\Controllers\Api\StylistController;
-
-
 use App\Http\Controllers\Api\SmsSettingController;
 
+use App\Http\Controllers\MembershipSaleController;
+use App\Http\Controllers\Api\AccountTypeController;
+use App\Http\Controllers\Api\AppointmentController;
+use App\Http\Controllers\Api\DistrubuterController;
+use App\Http\Controllers\Api\KarigarListController;
+use App\Http\Controllers\Api\ParcelOrderController;
+use App\Http\Controllers\Api\printStatusController;
+use App\Http\Controllers\Api\SaleProductController;
+use App\Http\Controllers\Api\SalesAssignController;
+use App\Http\Controllers\Api\SalesReturnController;
+use App\Http\Controllers\Api\SaloonOrderController;
+use App\Http\Controllers\Api\SaloonStockController;
+use App\Http\Controllers\Api\AccountGroupController;
+use App\Http\Controllers\Api\ReminderSlotController;
+use App\Http\Controllers\Api\AccountMasterController;
+use App\Http\Controllers\Api\familyBookingController;
+use App\Http\Controllers\Api\MasterSettingController;
+use App\Http\Controllers\Api\PackageAssignController;
+
+use App\Http\Controllers\Api\ParcelPaymentController;
+use App\Http\Controllers\Api\SmsCredentialController;
+use App\Http\Controllers\Api\ProductLoyaltyController;
+use App\Http\Controllers\Api\PurchaseReturnController;
+use App\Http\Controllers\Api\AppointmentSlotController;
 
 
 
 
 
+
+
+use App\Http\Controllers\Api\FrontendContnetController;
+use App\Http\Controllers\Api\selectedProductController;
+
+
+use App\Http\Controllers\Api\redeemPointSetupController;
+
+
+use App\Http\Controllers\Api\ProductAndServiceController;
+
+
+
+
+
+
+use App\Http\Controllers\Api\RoleAndPermissionController;
+use App\Http\Controllers\Api\TermsAndConditionController;
+use App\Http\Controllers\Api\AdvanceMessageDateController;
+use App\Http\Controllers\Api\PackageServiceNameController;
 use App\Http\Controllers\Api\PRoductserviceTypeController;
 use App\Http\Controllers\Api\StockReturnPaymentController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Api\CustomerRedeemPointController;
-use App\Http\Controllers\Api\MembershipController;
-use App\Http\Controllers\Api\PackageAssignController;
-use App\Http\Controllers\Api\PackageController;
+use App\Http\Controllers\Api\OrderPackageServiceController;
 use App\Http\Controllers\Api\ProductServiceGroupController;
-use App\Http\Controllers\Api\ReviewController;
-use App\Http\Controllers\MembershipSaleController;
-use App\Models\TaxType;
+use App\Http\Controllers\Api\ReminderAndFollowUpController;
+use App\Http\Controllers\Api\FamilyBookingPaymentController;
 
 // Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 //     return $request->user();
@@ -979,3 +980,30 @@ Route::get('/sms-settings', [SmsSettingController::class, 'index']);
     Route::post('/sms-settings', [SmsSettingController::class, 'store']);
     Route::put('/sms-settings/{id}', [SmsSettingController::class, 'update']);
     Route::delete('/sms-settings/{id}', [SmsSettingController::class, 'destroy']);
+
+
+
+Route::get('/bblc-slots', [BBLcController::class, 'index']);
+Route::post('/bblc-slots', [BBLcController::class, 'store']);
+Route::get('/bblc-slots/{id}', [BBLcController::class, 'show']);
+Route::post('/bblc-slots/{id}', [BBLcController::class, 'update']);
+Route::delete('/bblc-slots/{id}', [BBLcController::class, 'destroy']);
+
+
+
+
+// Get all reminders
+Route::get('reminders', [ReminderSlotController::class, 'index']);
+
+// Create a new reminder
+Route::post('reminders', [ReminderSlotController::class, 'store']);
+
+// Get a single reminder
+Route::get('reminders/{reminder}', [ReminderSlotController::class, 'show']);
+
+// Update a reminder
+Route::post('reminders/{reminder}', [ReminderSlotController::class, 'update']);
+Route::patch('reminders/{reminder}', [ReminderSlotController::class, 'update']);
+
+// Delete a reminder
+Route::delete('reminders/{reminder}', [ReminderSlotController::class, 'destroy']);
