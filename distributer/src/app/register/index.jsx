@@ -170,7 +170,7 @@ const RegistrationPage = () => {
 
       // Send the data to the Laravel backend
       axios
-        .post(" https://apibrize.brizindia.com/api/user-infos", dataToSend, {
+        .post(" http://127.0.0.1:8000/api/user-infos", dataToSend, {
           headers: {
             "Content-Type": "application/json",
           },

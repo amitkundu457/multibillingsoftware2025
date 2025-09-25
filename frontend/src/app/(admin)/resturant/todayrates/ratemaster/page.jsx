@@ -50,7 +50,7 @@ import axios from 'axios';
           notifyTokenMissing();
           return;
         }
-        axios.post('  https://apibrize.brizindia.com/api/ratemaster', data,
+        axios.post('  http://127.0.0.1:8000/api/ratemaster', data,
             {
                 headers: { Authorization: `Bearer ${token}` },
               }

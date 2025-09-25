@@ -25,7 +25,7 @@ export default function Employees() {
   }, []);
 
   const fetchEmployees = async () => {
-    const res = await axios.get(" https://apibrize.brizindia.com/api/employees");
+    const res = await axios.get(" http://127.0.0.1:8000/api/employees");
     setEmployees(res.data.employees);
   };
 
@@ -33,12 +33,12 @@ export default function Employees() {
     if (currentEmployee) {
       // Update existing employee
       await axios.post(
-        ` https://apibrize.brizindia.com/api/employees/${currentEmployee.id}`,
+        ` http://127.0.0.1:8000/api/employees/${currentEmployee.id}`,
         data
       );
     } else {
       // Create new employee
-      await axios.post(" https://apibrize.brizindia.com/api/employees", data);
+      await axios.post(" http://127.0.0.1:8000/api/employees", data);
     }
     setModalOpen(false);
     setCurrentEmployee(null);
@@ -64,7 +64,7 @@ export default function Employees() {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(` https://apibrize.brizindia.com/api/employees/delete/${id}`);
+    await axios.delete(` http://127.0.0.1:8000/api/employees/delete/${id}`);
     fetchEmployees();
   };
 

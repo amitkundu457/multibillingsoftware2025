@@ -39,7 +39,7 @@ const BillReport = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          " https://apibrize.brizindia.com/api/billingPurchase",
+          " http://127.0.0.1:8000/api/billingPurchase",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

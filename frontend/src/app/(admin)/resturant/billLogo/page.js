@@ -37,7 +37,7 @@ const ImageUploadUpdate = () => {
 
       try {
         const response = await axios.get(
-          "  https://apibrize.brizindia.com/api/masterlogobill",
+          "  http://127.0.0.1:8000/api/masterlogobill",
 
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -83,7 +83,7 @@ const ImageUploadUpdate = () => {
       console.log("Uploading file:", fileToUpload);
 
       const response = await axios.post(
-        "  https://apibrize.brizindia.com/api/masterlogobill",
+        "  http://127.0.0.1:8000/api/masterlogobill",
         formData,
 
         {
@@ -120,7 +120,7 @@ const ImageUploadUpdate = () => {
     const fetchBis = async () => {
       try {
         const res = await axios.get(
-          " https://apibrize.brizindia.com/api/bis-number-get",
+          " http://127.0.0.1:8000/api/bis-number-get",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -148,7 +148,7 @@ const ImageUploadUpdate = () => {
 
     try {
       const response = await axios.post(
-        " https://apibrize.brizindia.com/api/bis-number-store",
+        " http://127.0.0.1:8000/api/bis-number-store",
         {
           bis_number: bisNumber,
         },

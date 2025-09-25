@@ -58,6 +58,8 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\KarigariController;
 use App\Http\Controllers\Api\KarigarListController;
+use App\Http\Controllers\Api\SmsController;
+
 
 use App\Http\Controllers\Api\PurchaseController;
 use App\Http\Controllers\Api\BookingController;
@@ -338,6 +340,7 @@ Route::get('/get-coins-per-order', [CoinController::class, 'getCoinsPerOrder']);
 Route::post('/bis-number-store', [BISNumberController::class, 'store']);
 Route::get('/bis-number-get', [BISNumberController::class, 'index']);
 
+Route::post('/bulk-sms', [SmsController::class, 'BulkSms']);
 
 
 
@@ -636,11 +639,11 @@ Route::post('/saloon-purchase-return', [SalesReturnController::class, 'SaloonPur
 Route::get('/saloon-purchase-returns', [SalesReturnController::class, 'saloonPurchaseReturnIndex']);
 
 Route::get('/saloon-purchase-all', [SalesReturnController::class, 'saloonPurchaseIndex']);
-//sallon seles return 
+//sallon seles return
 Route::post('/saloon-sale-returns',[SalesReturnController::class,'Saloonstores']);
 Route::get('/saloon-sales-returns',[SalesReturnController::class,'saloonSalesReturnIndex']);
 
-//jwel return 
+//jwel return
 Route::post('/jwel-sale-returns',[SalesReturnController::class,'jewlstores']);
 Route::get('/jwel-sales-returns',[SalesReturnController::class,'jwelSalesReturnIndex']);
 //purity

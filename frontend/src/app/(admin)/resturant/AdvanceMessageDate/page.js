@@ -24,7 +24,7 @@ export default function AdvanceMessageDate() {
   const fetchData = async () => {
     const token = getCookie("access_token");
     try {
-      const res = await fetch("https://apibrize.brizindia.com/api/sms-advance-date", {
+      const res = await fetch("http://127.0.0.1:8000/api/sms-advance-date", {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
@@ -49,8 +49,8 @@ export default function AdvanceMessageDate() {
     e.preventDefault();
 
     const url = editingId
-      ? `https://apibrize.brizindia.com/api/sms-advance-date/${editingId}`
-      : "https://apibrize.brizindia.com/api/sms-advance-date";
+      ? `http://127.0.0.1:8000/api/sms-advance-date/${editingId}`
+      : "http://127.0.0.1:8000/api/sms-advance-date";
     const method = editingId ? "PUT" : "POST";
 
     try {
@@ -90,7 +90,7 @@ export default function AdvanceMessageDate() {
      if (!confirm("Are you sure?")) return;
 
     try {
-      const res = await fetch(`https://apibrize.brizindia.com/api/sms-advance-date/${id}`, {
+      const res = await fetch(`http://127.0.0.1:8000/api/sms-advance-date/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
