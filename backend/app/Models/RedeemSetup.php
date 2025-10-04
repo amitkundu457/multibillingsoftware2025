@@ -8,11 +8,9 @@ class RedeemSetup extends Model
 {
     //
     protected $fillable = [
-        'redeem_points',
-        'redeem_point_value_ofEach_point',
-        'max_redeem',
-        'min_invcValue_needed_toStartRedemp',
-        'loyalty_id	',
+        'points',
+        'rupees',
+
     ];
 
     public function loyalty()

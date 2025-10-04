@@ -127,7 +127,7 @@ const MasterMenu = () => {
             link: `/${productUrl}/gst`,
         },
         {
-            show: showMenuIn(["jwellery", "resturant"]),
+            show: showMenuIn(["saloon", "resturant"]),
             name: "BULK SMS",
             count: 4,
             link: `/${productUrl}/bulksms`,

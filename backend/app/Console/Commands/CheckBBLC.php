@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
  use App\Models\SmsSetting;
   use App\Models\CustomerLastOrder;
+use Illuminate\Support\Facades\Log; // <-- add this
 
 use App\Models\SmsCredential;
 use App\Models\Customer;
@@ -44,23 +45,29 @@ class CheckBBLC extends Command
     $slots = BBLCSlot::where('enabled', true)->get();
 
     foreach ($slots as $slot) {
-        $now = now();
+         $now = now();
+ 
 
-        // ✅ Check if current time matches slot send_time (hour:minute)
-        if ($now->format('H:i') === Carbon::parse($slot->send_time)->format('H:i')) {
-            
+
+        if ($now->format('H:i') == Carbon::parse($slot->send_time)->format('H:i')) {
+
             // ✅ Loop all customers
             $customers = CustomerLastOrder::join('customers', 'customers.id', '=', 'customer_last_orders.customer_id')
                 ->select('customers.phone', 'customer_last_orders.*')
                 ->get();
 
+
             foreach ($customers as $customer) {
-                $daysDiff = Carbon::parse($customer->last_order_date)->diffInDays($now);
+                // $daysDiff = Carbon::parse($customer->last_order_date)->diffInDays($now);
+                $daysDiff = Carbon::parse($customer->last_order_date)->startOfDay()->diffInDays($now->startOfDay());
+
+
 
                 // ✅ Check if today's day matches slot days
-                if (in_array($daysDiff, $slot->days)) {
-                    $status = strtoupper($slot->target);
+                if ($daysDiff==intVal($slot->days)) {
+                     $status = "BBLC";
                     $sms_credential_id = 1;
+                    $this->info("days match");
 
                     $credential = SmsCredential::find($sms_credential_id);
                     if (!$credential) {
@@ -75,6 +82,7 @@ class CheckBBLC extends Command
                         ->value('description');
 
                     $message = str_replace("\xC2\xA0", ' ', $message);
+                     Log::info("message not found");
 
                     if (!$message) {
                         \Log::error("message not found");
@@ -84,6 +92,11 @@ class CheckBBLC extends Command
                     // ✅ Send SMS
                     $this->smsService->sendBillingSms($credential, $customer->phone, $message, $status);
                     $this->info("Message sent to ({$customer->phone}) for {$customer->vendor_type}");
+                }
+                else{
+                    Log::info($daysDiff);
+                    $this->info("DaysDiff: {$daysDiff}, Phone: {$slot->days}");
+
                 }
             }
         }

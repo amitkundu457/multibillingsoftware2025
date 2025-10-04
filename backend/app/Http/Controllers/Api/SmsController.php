@@ -18,7 +18,7 @@ class SmsController extends Controller
     public function BulkSms(Request $request)
 {
      $user = JwtAuth::parseToken()->authenticate();
-     Log::info($user->id);
+    //  dd($user->id);
 
      $validated = $request->validate([
         'customerType_id' => 'nullable',
@@ -33,11 +33,10 @@ class SmsController extends Controller
             $q->where('customer_sub_type', $subTypeId);
         })
         ->where('created_by',$user->id)
-        ->pluck('phone')
+        ->pluck('id')
         ->toArray();
             Log::info('Bulk SMS Customers: ' . json_encode($customers));
 
- 
 
          SendBulkSmsJob::dispatch($customers);
 

@@ -37,10 +37,11 @@ class LoyaltyController extends Controller
     $data = $request->validate([
         'loyalty_balance' => '|integer',
         'min_loyalty_required' => '|integer',
-        'min_invoice_bill_to_get_point' => '|numeric',
-        'max_loyalty_redeemable' => '|integer',
+        // 'min_invoice_bill_to_get_point' => '|numeric',
+        // 'max_loyalty_redeemable' => '|integer',
+        'min_bill_to_redeem'  =>'integer',
         'set_loyalty_points'=> '|integer',
-        'expiry' => '|date',
+        // 'expiry' => '|date',
     ]);
 
     // Create a new loyalty record
@@ -78,11 +79,13 @@ class LoyaltyController extends Controller
         $data = $request->validate([
             'loyalty_balance' => 'integer',
             'min_loyalty_required' => 'integer',
-            'min_invoice_bill_to_get_point' => 'numeric',
-            'max_loyalty_redeemable' => 'integer',
+            // 'min_invoice_bill_to_get_point' => 'numeric',
+            // 'max_loyalty_redeemable' => 'integer',
             'set_loyalty_points'=> '|integer',
+            'min_bill_to_redeem'  =>'integer',
 
-            'expiry' => 'date'
+
+            // 'expiry' => 'date'
         ]);
 
         $loyalty->update($data);
