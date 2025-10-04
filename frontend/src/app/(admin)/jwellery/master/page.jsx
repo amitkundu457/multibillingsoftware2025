@@ -120,6 +120,12 @@ const MasterMenu = () => {
             count: 4,
             link: `/${productUrl}/gst`,
         },
+        {
+            show: showMenuIn(["jwellery", "resturant"]),
+            name: "BULK SMS",
+            count: 4,
+            link: `/${productUrl}/bulksms`,
+        },
         //  {
         //     show: showMenuIn(["jwellery", "resturant"]),
         //     name: "Customer",

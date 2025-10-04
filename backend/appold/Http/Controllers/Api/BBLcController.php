@@ -18,28 +18,25 @@ class BBLcController extends Controller
 {
     $validated = $request->validate([
         'name' => 'required|string|max:255',
-        'days' => 'required|array', // ["4","5","6"]
+        'days' => 'required|string', // ["4","5","6"]
         'target' => 'required|string',
         'send_time' => 'required',
         'enabled' => 'boolean'
     ]);
 
-    $createdSlots = [];
 
-    foreach ($validated['days'] as $day) {
-        $slot = BBLCSlot::create([
+         $slot = BBLCSlot::create([
             'name' => $validated['name'],
-            'days' => [$day], // ekta ekta kore store
+            'days' => $validated['days'], // ekta ekta kore store
             'target' => $validated['target'],
             'send_time' => $validated['send_time'],
-            'enabled' => $validated['enabled'] ?? true
+            'enabled' => $validated['enabled'] ?? false
         ]);
-        $createdSlots[] = $slot;
-    }
+
 
     return response()->json([
         'message' => 'Slots created successfully',
-        'slots' => $createdSlots
+        'slots' => $slot
     ]);
 }
 
@@ -64,9 +61,11 @@ class BBLcController extends Controller
         return response()->json(['message' => 'Slot updated successfully', 'slot' => $bblcslot]);
     }
 
-    public function destroy(BBLCSlot $bblcslot)
+    public function destroy(BBLCSlot $bblcslot,$id)
     {
-        $bblcslot->delete();
+         $slot = BBLCSlot::findOrFail($id);
+         $slot->delete();
+
 
         return response()->json(['message' => 'Slot deleted successfully']);
     }

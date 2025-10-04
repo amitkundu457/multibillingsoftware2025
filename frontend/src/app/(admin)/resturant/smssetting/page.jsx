@@ -21,6 +21,7 @@ const categories = [
   "parcel billing",
   "Registered Customer",
   "follow-Up_Reminder",
+  "BULK_SMS"
 ];
 
 const makeEmptyMessages = () =>
