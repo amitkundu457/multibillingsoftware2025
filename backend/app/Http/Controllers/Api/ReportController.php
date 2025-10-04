@@ -113,11 +113,11 @@ class ReportController extends Controller
 
 
 
-public function billingReportOnPurchase()
+public function billingReportOnPurchase(Request $request)
 {
     $customer = JWTAuth::parseToken()->authenticate();
 
-    return Order::join('order_details', 'order_details.order_id', '=', 'orders.id')
+    $query = Order::join('order_details', 'order_details.order_id', '=', 'orders.id')
         ->join('users', 'users.id', '=', 'orders.customer_id')
         ->join('customers', 'users.id', '=', 'customers.user_id')
         ->join('product_services', 'product_services.id', '=', 'order_details.product_id')
@@ -126,18 +126,34 @@ public function billingReportOnPurchase()
             'orders.date as bill_date',
             'users.name as customer_name',
             'customers.phone as customer_phone',
-            // 'orders.order_slip',
-            DB::raw('MAX(orders.order_slip) as order_slip'), // ✅ fix
-            DB::raw('SUM(orders.bill_inv) as bill_inv'), // ✅ fix
+            DB::raw('MAX(orders.order_slip) as order_slip'),
+            DB::raw('SUM(orders.bill_inv) as bill_inv'),
             DB::raw('SUM(order_details.qty) as quantity'),
             DB::raw('SUM(orders.total_price) as total_price'),
             DB::raw('MIN(orders.created_at) as order_date'),
             DB::raw('MAX(orders.id) as pdf_id')
         )
-        ->where('product_services.created_by', $customer->id)
-        ->groupBy('orders.billno', 'orders.date', 'users.name', 'customers.phone')
-        ->get();
+        ->where('product_services.created_by', $customer->id);
+
+    // ✅ Apply filters
+    if ($request->has('start_date') && $request->has('end_date')) {
+        $query->whereBetween('orders.date', [$request->start_date, $request->end_date]);
+    }
+
+    if ($request->has('customer_phone') && !empty($request->customer_phone)) {
+        $query->where('customers.phone', $request->customer_phone);
+    }
+
+    if ($request->has('bill_no') && !empty($request->bill_no)) {
+        $query->where('orders.billno', $request->bill_no);
+    }
+
+    $reports = $query->groupBy('orders.billno', 'orders.date', 'users.name', 'customers.phone')
+                     ->get();
+
+    return response()->json($reports);
 }
+
 
 
 // public function billingReportOnPurchase()

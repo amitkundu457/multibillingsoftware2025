@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Models\Product;
+use Illuminate\Http\Request;
+
+class ProductController extends Controller
+{
+    public function index()
+    {
+        $products = Product::all();
+        return response()->json($products);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'image' => 'required|file|mimes:jpg,jpeg,png,gif|max:2048', // Ensure it's a valid file
+            'description' => 'required|string',
+        ]);
+
+        // Handle the image upload
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = 'products/'; // Directory under public
+            $file->move(public_path($filePath), $fileName); // Save to public/products directory
+
+            // Add the image path to validated data
+            $validated['image'] = $filePath . $fileName;
+        }
+
+        // Create the product with the validated data
+        $product = Product::create($validated);
+
+        return response()->json(['message' => 'Product created successfully', 'product' => $product], 201);
+    }
+
+
+    public function update(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'image' => 'sometimes|file|mimes:jpg,jpeg,png,gif|max:2048', // Validate only if an image is provided
+            'description' => 'sometimes|string',
+        ]);
+
+        // Handle the image upload
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = 'products/'; // Directory under public
+            $file->move(public_path($filePath), $fileName); // Save to public/products directory
+
+            // Optionally delete the old image if needed
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+
+            // Add the new image path to validated data
+            $validated['image'] = $filePath . $fileName;
+        }
+
+        // Update the product with validated data
+        $product->update($validated);
+
+        return response()->json(['message' => 'Product updated successfully', 'product' => $product]);
+    }
+
+
+    public function show(Product $product)
+    {
+        return response()->json($product);
+    }
+}

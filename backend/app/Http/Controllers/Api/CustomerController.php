@@ -116,15 +116,24 @@ class CustomerController extends Controller
 
 
 
-public function index()
+public function index(Request $request)
 {
     $customer = JWTAuth::parseToken()->authenticate();
 
+    // Optional: start and end date from query
+    $start = $request->query('start_date') 
+                ? Carbon::parse($request->query('start_date'))->startOfDay() 
+                : Carbon::now()->subDays(30)->startOfDay();
+    $end = $request->query('end_date') 
+                ? Carbon::parse($request->query('end_date'))->endOfDay() 
+                : Carbon::now()->endOfDay();
+
     $customers = Customer::join('users', 'users.id', '=', 'customers.user_id')
-        ->leftJoin('orders', function ($join) {
+        ->leftJoin('orders', function ($join) use ($start, $end) {
             $join->on('orders.customer_id', '=', 'customers.user_id')
                  ->where('orders.order_slip', 0)
-                 ->where('orders.bill_inv', 0);
+                 ->where('orders.bill_inv', 0)
+                 ->whereBetween('orders.created_at', [$start, $end]);
         })
         ->where('customers.created_by', $customer->id)
         ->groupBy(
@@ -149,7 +158,6 @@ public function index()
         )
         ->select(
             'users.name as customer_name',
-            // 'users.id as user_id',
             'users.id',
             'users.name',
             'customers.dob',
@@ -177,7 +185,6 @@ public function index()
 
     return response()->json($customers, 200);
 }
-
 
 
 

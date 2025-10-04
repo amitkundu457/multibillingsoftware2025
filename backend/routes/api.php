@@ -39,7 +39,7 @@ use App\Http\Controllers\Api\FamilyBookingPaymentController;
 
 
 use App\Http\Controllers\Api\SaloonStockController;
-use App\Http\Controllers\Api\BBLcController;
+
 
 
 
@@ -976,11 +976,3 @@ Route::get('/sms-settings', [SmsSettingController::class, 'index']);
     Route::post('/sms-settings', [SmsSettingController::class, 'store']);
     Route::put('/sms-settings/{id}', [SmsSettingController::class, 'update']);
     Route::delete('/sms-settings/{id}', [SmsSettingController::class, 'destroy']);
-
-
-
-Route::get('/bblc-slots', [BBLcController::class, 'index']);
-Route::post('/bblc-slots', [BBLcController::class, 'store']);
-Route::get('/bblc-slots/{id}', [BBLcController::class, 'show']);
-Route::post('/bblc-slots/{id}', [BBLcController::class, 'update']);
-Route::delete('/bblc-slots/{id}', [BBLcController::class, 'destroy']);
