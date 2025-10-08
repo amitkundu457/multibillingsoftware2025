@@ -14,3 +14,199 @@
 [stacktrace]
 #0 {main}
 "} 
+[2025-09-20 22:26:27] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:26:27] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:26:27] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:26:29] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php:226)
+[stacktrace]
+#0 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(153): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(88): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(182): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(1094): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(193): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(198): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 D:\\ml\\multibillingsoftware2025\\backend\\artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#12 {main}
+"} 
+[2025-09-20 22:26:29] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:26:39] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php:226)
+[stacktrace]
+#0 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(153): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(88): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(182): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(1094): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(193): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(198): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 D:\\ml\\multibillingsoftware2025\\backend\\artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#12 {main}
+"} 
+[2025-09-20 22:26:49] local.ERROR: The "--columns" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--columns\" option does not exist. at D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php:226)
+[stacktrace]
+#0 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(153): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('columns', 'uri,name,action...')
+#1 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(88): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--columns=uri,n...')
+#2 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--columns=uri,n...', true)
+#3 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Input\\Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Command\\Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(182): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(1094): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\RouteListCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\symfony\\console\\Application.php(193): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(198): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 D:\\ml\\multibillingsoftware2025\\backend\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1205): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 D:\\ml\\multibillingsoftware2025\\backend\\artisan(13): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#12 {main}
+"} 
+[2025-09-20 22:27:28] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:28:27] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:29:27] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:30:28] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:31:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:32:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:33:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:34:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:35:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:36:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:37:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:38:23] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:39:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:40:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:41:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:42:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:43:24] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:44:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:45:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:46:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:47:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:48:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:49:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:50:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:51:22] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:52:21] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:53:21] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:54:21] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:55:21] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:56:21] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:57:21] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:58:21] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2025-09-20 22:59:21] local.ERROR: Cannot declare class App\Models\Customer, because the name is already in use {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot declare class App\\Models\\Customer, because the name is already in use at D:\\ml\\multibillingsoftware2025\\backend\\app\\Models\\Customer1.php:7)
+[stacktrace]
+#0 {main}
+"} 
