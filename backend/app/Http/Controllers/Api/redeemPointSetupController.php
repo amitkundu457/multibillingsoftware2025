@@ -20,11 +20,9 @@ class redeemPointSetupController extends Controller
 
     public function store(Request $request){
         $request->validate([
-            'redeem_points' => 'required|integer',
-            'redeem_point_value_ofEach_point' => 'required|integer',
-            'max_redeem' => 'required|integer',
-            'min_invcValue_needed_toStartRedemp' => 'required|integer',
-            'loyalty_id' => 'required|exists:loyalties,id',
+            'points' => 'required|integer',
+            'rupees' => 'required|integer',
+
         ]);
 
         $redeem = RedeemSetup::create($request->all());

@@ -560,14 +560,14 @@ public function getTodayOrders()
 
 public function storeCheckout(Request $request)
 {
-    Log::info('Received Request Data:', $request->all());
+     Log::info('Received Request Data:', $request->all());
 
     try {
         DB::beginTransaction(); // ✅ Begin DB transaction
 
         // Authenticate the customer
         $customer = JWTAuth::parseToken()->authenticate();
-        Log::info('Authenticated Customer:', ['customer' => $customer]);
+         Log::info('Authenticated Customer:', ['customer' => $customer]);
 
         // Validate request
         $validated = $request->validate([
@@ -597,7 +597,9 @@ public function storeCheckout(Request $request)
             'products.making_gst_percentage' => 'nullable',
            'phone_no' => 'nullable',
             'status' => 'required',
-            'sms_credential_id' => 'required',
+            'sms_credential_id' => 'nullable',
+            'finalAmount' => 'nullable',
+
 
         ]);
 
@@ -614,7 +616,7 @@ public function storeCheckout(Request $request)
         }
 
         // Deduct coins
-        $setting = OrderCoinSetting::where('created_by',$customer->id)->latest()->first();
+        $setting = OrderCoinSetting::where('created_by',1)->latest()->first();
         $coinToDeduct = $setting?$setting->coins_per_order:0;
         $coinsToDeduct = $coinToDeduct;
         $coinRecords = DB::table('coni_purchases')
@@ -639,13 +641,22 @@ public function storeCheckout(Request $request)
         // ✅ Fetch bill count
         $billCount = DB::table('bill_counts')->where('created_by', $customer->id)->first();
         $currentBillCount = $billCount ? $billCount->bill_count + 1 : 1;
+        
+        if ($request->has('finalAmount')) {
+    // ✅ Flutter / Mobile থেকে আসছে
+    $totalPrice = $request->finalAmount;
+} else {
+    // ✅ Web থেকে আসছে
+    $totalPrice = $validated['grossTotal'] - $validated['discountTotal'] 
+                + $request->totalTax + $request->additionRs;
+}
 
         // ✅ Create the order
         $order = Order::create([
             'billno' => 'BN' . time() . rand(100, 999),
             'gross_total' => $validated['grossTotal'],
             'discount' => $validated['discountTotal'],
-            'total_price' => $validated['grossTotal'] - $validated['discountTotal'] + $request->totalTax + $request->additionRs,
+            'total_price' => $totalPrice,
             'customer_id' => $validated['customer_id'] ?? null,
             'created_by' => $customer->id,
             'bill_inv' => $request->bill_inv,
@@ -699,10 +710,10 @@ public function storeCheckout(Request $request)
                 'product_code' => $product['code'],
                 'gross_weight' => $product['grossWeight'],
                 'net_weight' => $product['netWeight'],
-                'making' => $product['making'],
-                'makingInRs'=> $product['makingInRs'],
+                'making' => $product['making'] ?? null,
+                'makingInRs'=> $product['makingInRs'] ?? null,
                 'rate' => $product['rate'],
-                'tax_rate' => $product['tax_rate'],
+                'tax_rate' => $product['tax_rate']?? null,
                 'pro_total' => number_format((float) $product['pro_total'], 2, '.', ''),
                 'stone_weight' => $product['stoneWeight'] ?? null,
                 'stone_value' => $product['stoneValue'] ?? null,
@@ -736,7 +747,7 @@ public function storeCheckout(Request $request)
                     $productService->current_stock = max(0, $newStock); // Prevent negative stock
                     $productService->save();
                 } else {
-                    Log::warning('ProductService not found for product_id: ' . $product['product_id']);
+                    // Log::warning('ProductService not found for product_id: ' . $product['product_id']);
                 }
             }
         }
@@ -755,7 +766,9 @@ public function storeCheckout(Request $request)
             ]);
         }
 
-          $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
+          if(!empty($validated['customer_id'])){
+
+            $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
 
         if($customerId){
         DB::table('customer_last_orders')->updateOrInsert(
@@ -771,6 +784,8 @@ public function storeCheckout(Request $request)
         );
     }
 
+        }
+
 
         DB::commit(); // ✅ Commit transaction
        $this->sendBillingSms($request->phone_no,$request->status,$request->sms_credential_id);
@@ -783,7 +798,7 @@ public function storeCheckout(Request $request)
 
     } catch (\Illuminate\Validation\ValidationException $e) {
         DB::rollBack();
-        Log::error('Validation Error:', ['errors' => $e->errors()]);
+        // Log::error('Validation Error:', ['errors' => $e->errors()]);
         return response()->json([
             'message' => 'Validation failed',
             'errors' => $e->errors(),
@@ -791,7 +806,7 @@ public function storeCheckout(Request $request)
 
     } catch (\Exception $e) {
         DB::rollBack();
-        Log::error('Error in Checkout:', ['message' => $e->getMessage()]);
+        // Log::error('Error in Checkout:', ['message' => $e->getMessage()]);
         return response()->json([
             'message' => 'An error occurred while placing the order',
             'error' => $e->getMessage(),

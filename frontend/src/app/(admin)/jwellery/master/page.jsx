@@ -108,17 +108,23 @@ const MasterMenu = () => {
             count: 29,
             link: `/${productUrl}/t&cInvoice`,
         },
-        {
-            show: showMenuIn(["jwellery","saloon","resturant"]),
-            name: "coins per order",
-            count: 14,
-            link: `/${productUrl}/setcoinperorder`,
-        },
+        // {
+        //     show: showMenuIn(["jwellery","saloon","resturant"]),
+        //     name: "coins per order",
+        //     count: 14,
+        //     link: `/${productUrl}/setcoinperorder`,
+        // },
         {
             show: showMenuIn(["jwellery", "resturant"]),
             name: "Taxes",
             count: 4,
             link: `/${productUrl}/gst`,
+        },
+        {
+            show: showMenuIn(["jwellery", "resturant"]),
+            name: "BULK SMS",
+            count: 4,
+            link: `/${productUrl}/bulksms`,
         },
         //  {
         //     show: showMenuIn(["jwellery", "resturant"]),

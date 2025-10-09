@@ -1156,7 +1156,7 @@ console.log("ratetoal",rateTotal);
       
   };
   // const handleSendSms = async () => {
-  //   try {
+  //   try { 
   //     await axios.post(" http://127.0.0.1:8000/api/send-jwel-billing-sms", {
   //       phone_no:phoneNumber?? "",
   //        status: "jwellery billing",

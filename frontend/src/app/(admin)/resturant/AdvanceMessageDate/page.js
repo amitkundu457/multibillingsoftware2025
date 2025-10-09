@@ -50,7 +50,7 @@ export default function AdvanceMessageDate() {
 
     const url = editingId
       ? `http://127.0.0.1:8000/api/sms-advance-date/${editingId}`
-      : "http://127.0.0.1:8000/api/sms-advance-date/";
+      : "http://127.0.0.1:8000/api/sms-advance-date";
     const method = editingId ? "PUT" : "POST";
 
     try {

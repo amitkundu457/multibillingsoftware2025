@@ -182,17 +182,23 @@ const MasterMenu = () => {
             count: 4,
             link: `/${productUrl}/smscredential`,
         },
-       {
-            show: showMenuIn(["jwellery","saloon","resturant"]),
-            name: "coins per order",
-            count: 14,
-            link: `/${productUrl}/setcoinperorder`,
-        },
+    //    {
+    //         show: showMenuIn(["jwellery","saloon","resturant"]),
+    //         name: "coins per order",
+    //         count: 14,
+    //         link: `/${productUrl}/setcoinperorder`,
+    //     },
         {
             show: showMenuIn(["jwellery", "resturant" ,"saloon"]),
             name: "Taxes",
             count: 4,
             link: `/${productUrl}/gst`,
+        },
+        {
+            show: showMenuIn(["jwellery", "resturant"]),
+            name: "BULK SMS",
+            count: 4,
+            link: `/${productUrl}/bulksms`,
         },
         //  {
         //     show: showMenuIn(["jwellery", "resturant"]),

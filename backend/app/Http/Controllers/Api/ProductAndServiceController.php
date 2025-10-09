@@ -55,6 +55,7 @@ class ProductAndServiceController extends Controller
             'product_services.pro_ser_type',
             'product_services.expires',
             'product_services.current_stock',
+            'product_services.created_at',
             \DB::raw('SUM(stocks.quantity) as total_quantity')
         )
         ->where('product_services.created_by', $customer->id)
@@ -73,7 +74,8 @@ class ProductAndServiceController extends Controller
             'product_services.brand',
             'product_services.description',
             'product_services.pro_ser_type',
-            'product_services.expires'
+            'product_services.expires',
+             'product_services.created_at'
         )
         ->get();
 

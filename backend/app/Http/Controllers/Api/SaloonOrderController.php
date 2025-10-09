@@ -42,7 +42,7 @@ class SaloonOrderController extends Controller
                 'paymentMethods' => 'required|array',
                 'products' => 'required',
                 'products.*.name' => 'required',
-                'products.*.code' => 'nullable',
+                // 'products.*.code' => 'nullable',
                 'products.*.qty' => 'nullable',
                 'products.*.tax_rate' => 'nullable',
 
@@ -160,7 +160,7 @@ class SaloonOrderController extends Controller
 
                 $order->saloonDetails()->create([
                     'product_name' => $product['name'],
-                    'product_code' => $product['code'],
+                    // 'product_code' => $product['code'],
                     'qty' => $product['qty'],
                     'rate' => $product['rate'],
 
@@ -187,7 +187,7 @@ class SaloonOrderController extends Controller
          }
 
          // Deduct coins
-        $setting = OrderCoinSetting::where('created_by',$user->id)->latest()->first();
+        $setting = OrderCoinSetting::where('created_by',2)->latest()->first();
         $coinToDeduct = $setting?$setting->coins_per_order:0;
         $coinsToDeduct = $coinToDeduct;
         $coinRecords = DB::table('coni_purchases')
@@ -240,7 +240,9 @@ class SaloonOrderController extends Controller
 
             // Return a success response
 
-        $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
+         
+            if(!empty($validated['customer_id'])){
+                $customerId =     Customer::where('user_id',$validated['customer_id'])->first();
 
             if($customerId){
         DB::table('customer_last_orders')->updateOrInsert(
@@ -254,6 +256,8 @@ class SaloonOrderController extends Controller
             ]
         );
     }
+
+            }
 
             // event(new OrderPlaced($customerPhone,"saloon billing",1));
            $this->sendBillingSms($customerPhone,"saloon billing",1);

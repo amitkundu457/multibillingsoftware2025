@@ -52,7 +52,9 @@ export default function PrintFamilyBillPage() {
       try {
         const response = await getMe();
         if (response && response.data) {
-          setCompanyName(response.data);
+          setCompanyName(response?.data?.user_information
+            );
+          console.log("Company Info:", response.data);
           setSellerState(
             response?.data?.user?.information?.state?.trim().toLowerCase() || ""
           );
@@ -214,7 +216,18 @@ export default function PrintFamilyBillPage() {
 
   if (!booking_id) return <p>Please provide booking_id.</p>;
   if (loading) return <p>Loading bill for booking #{booking_id}...</p>;
-  if (!bill) return <p>No bill found for booking #{booking_id}.</p>;
+  if (!bill) 
+    {
+      return( <><p>No bill found for booking #{booking_id}.</p>;
+          <button 
+            onClick={window.location.reload}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            Retry
+          </button>
+          </>
+          )
+    }
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-6 min-h-screen bg-gray-100 p-4">
@@ -265,14 +278,25 @@ export default function PrintFamilyBillPage() {
             🌟 {bill?.created_by?.name || "Unknown Creator"} 🌟
           </h1>
           <p>
-            {bill?.client_address?.address_1 ||
+            {/* {bill?.client_address?.address_1 ||
               bill.client_address?.address_2 ||
-              "NA"}
+              "NA"} */}
+              {companyName?.address_1 || "-"}
           </p>
-          <p>Phone: {bill?.client_address?.mobile_number ?? "N/A"}</p>
+          {/* <p>Phone: {bill?.client_address?.mobile_number ?? "N/A"}</p> */}
+          <p>Phone: {companyName?.mobile_number ?? "-"}</p>
           <p className="text-gray-700 text-sm">
-            {bill?.client_address?.email || "No Email Provided"}
+            {/* {bill?.client_address?.email || "No Email Provided"} */}
+            {companyName?.email || "No Email Provided"}
           </p>
+          <div>
+            {/* <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
+              GST IN: {bill?.client_address?.gst || {companyName?.gst}}
+            </h1> */}
+             <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
+              GST NO: {companyName?.gst || "Not Provided"} 
+            </h1>
+          </div>
           <p className="mt-1">----------------------------</p>
 
           <h2 className="text-base font-semibold"> Bill</h2>
@@ -281,11 +305,7 @@ export default function PrintFamilyBillPage() {
           <p className="text-yellow-600 font-bold">
             Customer Name: {bill.customer_name}
           </p>
-          <div>
-            <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
-              GST IN: {bill?.client_address?.gst || "GST not provided"}
-            </h1>
-          </div>
+          
         </div>
 
         {/* Items */}

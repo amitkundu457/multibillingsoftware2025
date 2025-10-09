@@ -191,6 +191,9 @@ const Page = () => {
       const result = await response.json();
 
       if (response.status == 200) {
+        setParcelOrderId(""); // Clear parcel order ID
+      setPaymentInputs([]); // Clear payment inputs
+      setParcelOrderDetails(null); // Clear order details
         GenerateParcelBillFunction();
         setIsParcelBillModalOpen(false);
         // Optionally reset state
@@ -277,11 +280,12 @@ const Page = () => {
 
       console.log("Payment stored:", response.data);
       alert("Payment saved successfully!");
-      setfamilyBookingId(0);
-      GenerateBillFunction();
+      setfamilyBookingId(""); // Reset family booking ID
+    setPaymentInputsOfFamily([]); // Reset payment inputs
+    setGrandTotalOfFamily(0); // Reset grand total
+       GenerateBillFunction();
       setIsBillModalOpen(false); // close modal
-      setPaymentInputsOfFamily([]); // reset
-    } catch (error) {
+     } catch (error) {
       console.error(
         "Error saving payment:",
         error.response?.data || error.message
@@ -604,6 +608,8 @@ const Page = () => {
   const closeParcelModal = () => {
     setIsParcelBillModalOpen(false);
     setParcelOrderId("");
+   setPaymentInputs([]); // Reset payment inputs
+  setParcelOrderDetails(null); // Reset order details
   };
 
   return (
@@ -992,7 +998,6 @@ const Page = () => {
                   setIsBillModalOpen(false);
                   setfamilyBookingId(""); // reset booking id
                   setGrandTotalOfFamily(0); // reset grand total
-                  setRemainingOfFamily(0); // reset remaining
                   setPaymentInputsOfFamily([]); // reset payment inputs
                 }}
                 className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"

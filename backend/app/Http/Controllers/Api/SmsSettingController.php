@@ -23,6 +23,7 @@ class SmsSettingController extends Controller
     // Find existing setting for this vendor + status
     $sms = SmsSetting::where('status', $validated['status'])
         ->where('sms_credential_id', $validated['sms_credential_id'])
+        ->where('created_by',$user->id)
         ->first();
 
     if (empty($validated['description'])) {
@@ -62,7 +63,10 @@ class SmsSettingController extends Controller
     // READ (optional: list by type/status)
    public function index(Request $request)
 {
+        $user = JWTAuth::parseToken()->authenticate();
+
     $query = SmsSetting::query();
+    $query->where('created_by',$user->id);
 
     if ($request->has('status')) {
         $query->where('status', $request->status);

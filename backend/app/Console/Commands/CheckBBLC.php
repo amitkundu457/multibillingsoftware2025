@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
  use App\Models\SmsSetting;
   use App\Models\CustomerLastOrder;
+use Illuminate\Support\Facades\Log; // <-- add this
 
 use App\Models\SmsCredential;
 use App\Models\Customer;
@@ -40,58 +41,50 @@ class CheckBBLC extends Command
     public function handle()
     {
 
-
-         $customers = CustomerLastOrder::join('customers', 'customers.id', '=', 'customer_last_orders.customer_id')
-            ->select( 'customers.phone', 'customer_last_orders.*')
-            ->get();
-
-        $status = "BBLC";
-
-         $sms_credential_id = 1;
+    foreach ($slots as $slot) {
+         $now = now();
+ 
 
 
+        if ($now->format('H:i') == Carbon::parse($slot->send_time)->format('H:i')) {
+
+            // ✅ Loop all customers
+            $customers = CustomerLastOrder::join('customers', 'customers.id', '=', 'customer_last_orders.customer_id')
+                ->select('customers.phone', 'customer_last_orders.*')
+                ->get();
 
 
-
-      // 🔍 Get SMS credential details
-    $credential = SmsCredential::find($sms_credential_id);
-
-    if (!$credential) {
-        \Log::error("credential not found".$credential);
-     }
-
-        foreach ($customers as $customer) {
+            foreach ($customers as $customer) {
+                // $daysDiff = Carbon::parse($customer->last_order_date)->diffInDays($now);
+                $daysDiff = Carbon::parse($customer->last_order_date)->startOfDay()->diffInDays($now->startOfDay());
 
 
 
-
-            if (Carbon::parse($customer->last_order_date)->diffInDays(now()) >= 30) {
-
-
-                $message = DB::table('sms_settings')
-                  ->where('status', 'BBLC')
-                  ->where('sms_credential_id', 1)
-                  ->where('created_by', $customer->created_by)->value('description');
+                // ✅ Check if today's day matches slot days
+                if ($daysDiff==intVal($slot->days)) {
+                     $status = "BBLC";
+                    $sms_credential_id = 1;
+                    $this->info("days match");
 
 
-          $message = str_replace("\xC2\xA0", ' ', $message);
+
+                    $message = str_replace("\xC2\xA0", ' ', $message);
+                     Log::info("message not found");
 
 
-       if (!$message) {
-        \Log::error("message not found".$message);
-        }
+                    // ✅ Send SMS
+                    $this->smsService->sendBillingSms($credential, $customer->phone, $message, $status);
+                    $this->info("Message sent to ({$customer->phone}) for {$customer->vendor_type}");
+                }
+                else{
+                    Log::info($daysDiff);
+                    $this->info("DaysDiff: {$daysDiff}, Phone: {$slot->days}");
 
-
-                if($message) {
-              $this->smsService->sendBillingSms($credential,$customer->phone,$message,$status);
-
-            $this->info("Message sent to  ({$customer->phone}) for {$customer->vendor_type}");
-        }
-
-
+                }
             }
         }
     }
 
 
+}
 }

@@ -21,7 +21,8 @@
     "Saloon Booking",
     "saloon billing",
     "Registered Customer",
-    "follow-Up_Reminder"
+    "follow-Up_Reminder",
+    "BULK_SMS"
   ];
  
  const makeEmptyMessages = () =>
