@@ -1,9 +1,9 @@
- "use client";
+"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { displayCoin } from "../config";
 import RechargeUI from "../../(admin)/recharge/page";
-import axios from 'axios';
+import axios from "axios";
 import useSWR from "swr";
 import { useCookies } from "react-cookie";
 import { LuLogOut } from "react-icons/lu";
@@ -13,7 +13,6 @@ import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 
 export default function BalanceCard({ label }) {
-
   const [itemcoin, setItemscoin] = useState(0); // State for coin balance
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null);
@@ -21,9 +20,9 @@ export default function BalanceCard({ label }) {
   const [rechargeModel, setRechargeModel] = useState(false); // Modal for recharge UI
   const [totalOrder, setTotalOrder] = useState(0);
   const [thisMonthOrder, setThisMonthOrder] = useState(0);
-  const [lastRecharge,setLastRecharge] = useState(null);
+  const [lastRecharge, setLastRecharge] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies();
-    const [isLogoutModel, setIsLogoutModel] = useState(false);
+  const [isLogoutModel, setIsLogoutModel] = useState(false);
 
   //add for dynamic url
   const {
@@ -37,7 +36,6 @@ export default function BalanceCard({ label }) {
     return res.data;
   });
 
-  
   const roleToUrlMap = {
     admin: "admin",
     jwellery: "jwellery",
@@ -47,12 +45,7 @@ export default function BalanceCard({ label }) {
   };
 
   const productUrl = roleToUrlMap[!isLoading && user?.roles?.[0]?.name] || "";
-  console.log("pruddcturl2",productUrl);
-
-
-
-
-
+  console.log("pruddcturl2", productUrl);
 
   const getToken = () => {
     const cookie = document.cookie
@@ -69,11 +62,6 @@ export default function BalanceCard({ label }) {
     }
   };
 
-
-
-
-
-
   const fetchItemsCoin = async () => {
     try {
       setLoading(true);
@@ -81,7 +69,6 @@ export default function BalanceCard({ label }) {
       console.log(response.data.total_coins);
       setItemscoin(response.data.total_coins);
       setLastRecharge(response.data.last_recharge_date);
-
 
       if (response.data.total_coins === 0) {
         setIsModalOpen(true); // Open balance warning modal
@@ -94,35 +81,33 @@ export default function BalanceCard({ label }) {
   };
 
   // const fetchOrderCount = async () =>{
-  //  const response = await axios.get(' http://127.0.0.1:8000/api/order');
+  //  const response = await axios.get(' https://apibrize.brizindia.com/api/order');
   //  setTotalOrder(response.data.total_orders);
   //  setThisMonthOrder(response.data.this_month_orders);
 
   // }
   // orderinvoice
 
-  const fetchOrderCount = async () =>{
+  const fetchOrderCount = async () => {
     const token = getToken();
     if (!token) {
       notifyTokenMissing();
       return;
     }
-    const response = await axios.get(' http://127.0.0.1:8000/api/orderinvoice',
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/orderinvoice",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
     setTotalOrder(response.data.total_orders);
     setThisMonthOrder(response.data.this_month_orders);
- 
-   }
-  
-
+  };
 
   useEffect(() => {
     fetchItemsCoin(); // Fetch coins when the component is mounted
     fetchOrderCount();
-   }, []);
+  }, []);
 
   // Handle the "Recharge" button click
   const handleRechargeClick = () => {
@@ -140,18 +125,23 @@ export default function BalanceCard({ label }) {
   };
 
   return (
-    <div className={`relative p-4 bg-white shadow-md rounded-lg border border-gray-200 ${itemcoin === 0 ? "pointer-events-none opacity-50" : ""}`}>
-      
+    <div
+      className={`relative p-4 bg-white shadow-md rounded-lg border border-gray-200 ${
+        itemcoin === 0 ? "pointer-events-none opacity-50" : ""
+      }`}
+    >
       {/* Modal for Recharge Alert */}
-      <Modal 
-        open={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        center 
-        showCloseIcon={false} 
+      <Modal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        center
+        showCloseIcon={false}
         closeOnOverlayClick={false} // Prevent modal from closing when clicking outside
       >
         <h2 className="text-xl font-semibold text-red-600">Low Balance!</h2>
-        <p className="text-gray-700">You have 0 coins. Please recharge to continue.</p>
+        <p className="text-gray-700">
+          You have 0 coins. Please recharge to continue.
+        </p>
         <div className="mt-4 flex justify-between">
           <button
             onClick={handleRechargeClick}
@@ -159,17 +149,18 @@ export default function BalanceCard({ label }) {
           >
             Recharge
           </button>
-           <button
-                  onClick={handleLogoutClick}
-                  className="text-3xl text-gray-600 hover:text-red-500 transition duration-300"
-                >
-                  <LuLogOut />
-                </button>
+          <button
+            onClick={handleLogoutClick}
+            className="text-3xl text-gray-600 hover:text-red-500 transition duration-300"
+          >
+            <LuLogOut />
+          </button>
         </div>
-         <div>
-               
-                 {isLogoutModel && <LogoutModel onClose={() => setIsLogoutModel(false)} />}
-              </div> 
+        <div>
+          {isLogoutModel && (
+            <LogoutModel onClose={() => setIsLogoutModel(false)} />
+          )}
+        </div>
       </Modal>
 
       {/* Modal for Recharge UI */}
@@ -186,42 +177,51 @@ export default function BalanceCard({ label }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div className="text-yellow-500 text-2xl">💰</div>
-          <h2 className="text-lg font-semibold ml-2">{label ? label : "Balance"}</h2>
+          <h2 className="text-lg font-semibold ml-2">
+            {label ? label : "Balance"}
+          </h2>
         </div>
         <div className="flex space-x-2">
           <div className="text-orange-600 text-3xl font-bold">
             {loading ? "Loading..." : itemcoin}
-            <Link 
-          href="/recharge" 
-          className="bg-blue-600 p-2 rounded text-white"
-        >
-          Recharge
-        </Link>
-        
+            <Link
+              href="/recharge"
+              className="bg-blue-600 p-2 rounded text-white"
+            >
+              Recharge
+            </Link>
           </div>
         </div>
       </div>
-{/* ///jwellery/reports/billwise/ */}
+      {/* ///jwellery/reports/billwise/ */}
       <div className="mt-2 grid grid-cols-3 gap-4 border-2 border-blue-500 rounded-lg p-10">
         <div>
-         <a href={`/${productUrl}/reports/billreport`} className="cursor-pointer  " >
-         <h3 className="text-sm text-gray-500 hover:text-green-700">Total Invoice</h3>
-         <p className="text-purple-600 text-lg font-bold ">{totalOrder}</p>
-         </a>
+          <a
+            href={`/${productUrl}/reports/billreport`}
+            className="cursor-pointer  "
+          >
+            <h3 className="text-sm text-gray-500 hover:text-green-700">
+              Total Invoice
+            </h3>
+            <p className="text-purple-600 text-lg font-bold ">{totalOrder}</p>
+          </a>
         </div>
         <div>
-        <a href={`/${productUrl}/reports/billreport`} className="cursor-pointer  " >
-        <h3 className="text-sm text-gray-500 hover:text-green-700">This Month</h3>
-          <p className="text-blue-600 text-lg font-bold">{thisMonthOrder}</p>
-        </a>
-          
+          <a
+            href={`/${productUrl}/reports/billreport`}
+            className="cursor-pointer  "
+          >
+            <h3 className="text-sm text-gray-500 hover:text-green-700">
+              This Month
+            </h3>
+            <p className="text-blue-600 text-lg font-bold">{thisMonthOrder}</p>
+          </a>
         </div>
         <div>
           <h3 className="text-sm text-gray-500">Last Recharge Date</h3>
           <p className="text-teal-600 text-lg font-bold">{lastRecharge}</p>
         </div>
       </div>
-      
     </div>
   );
 }

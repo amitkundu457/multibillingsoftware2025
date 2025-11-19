@@ -1,17 +1,17 @@
- 'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
 const Loyalty = () => {
   const [loyalty, setLoyalty] = useState([]);
-  
+
   // Modals
   const [isLoyaltyModalOpen, setIsLoyaltyModalOpen] = useState(false);
   const [isRedeemModalOpen, setIsRedeemModalOpen] = useState(false);
-  
+
   const [isEditMode, setIsEditMode] = useState(false);
-  const [modalData, setModalData] = useState({ 
+  const [modalData, setModalData] = useState({
     loyalty_balance: "",
     set_loyalty_points: "",
     min_loyalty_required: "",
@@ -25,7 +25,9 @@ const Loyalty = () => {
   // Fetch loyalty data
   const fetchLoyalty = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/loyalty/");
+      const response = await axios.get(
+        "https://apibrize.brizindia.com/api/loyalty/"
+      );
       setLoyalty(response.data);
     } catch (error) {
       console.error("Error fetching loyalty:", error);
@@ -47,9 +49,15 @@ const Loyalty = () => {
   const handleSaveLoyalty = async () => {
     try {
       if (isEditMode) {
-        await axios.post(`http://127.0.0.1:8000/api/loyalty/${modalData.id}`, modalData);
+        await axios.post(
+          `https://apibrize.brizindia.com/api/loyalty/${modalData.id}`,
+          modalData
+        );
       } else {
-        await axios.post("http://127.0.0.1:8000/api/loyalty/", modalData);
+        await axios.post(
+          "https://apibrize.brizindia.com/api/loyalty/",
+          modalData
+        );
       }
       fetchLoyalty();
       setIsLoyaltyModalOpen(false);
@@ -61,7 +69,7 @@ const Loyalty = () => {
   // Delete Loyalty
   const handleDeleteLoyalty = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/loyalty/${id}`);
+      await axios.delete(`https://apibrize.brizindia.com/api/loyalty/${id}`);
       fetchLoyalty();
     } catch (error) {
       console.error("Error deleting loyalty:", error);
@@ -72,7 +80,10 @@ const Loyalty = () => {
   const handleRedeemSubmit = async () => {
     const data = { points: redeemPoints, rupees: redeemValue };
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/redeem-setup", data);
+      const response = await axios.post(
+        "https://apibrize.brizindia.com/api/redeem-setup",
+        data
+      );
       if (response.status === 201) {
         alert("Redeem setup saved successfully!");
         setRedeemPoints("");
@@ -144,7 +155,9 @@ const Loyalty = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="text-center py-4">No loyalty available</td>
+              <td colSpan="5" className="text-center py-4">
+                No loyalty available
+              </td>
             </tr>
           )}
         </tbody>
@@ -154,13 +167,20 @@ const Loyalty = () => {
       {isLoyaltyModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">{isEditMode ? "Edit Loyalty" : "Add Loyalty"}</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {isEditMode ? "Edit Loyalty" : "Add Loyalty"}
+            </h2>
             <div className="mb-4">
               <label>Loyalty amount:</label>
               <input
                 type="number"
                 value={modalData.loyalty_balance}
-                onChange={(e) => setModalData({ ...modalData, loyalty_balance: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    loyalty_balance: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border rounded"
               />
             </div>
@@ -169,7 +189,12 @@ const Loyalty = () => {
               <input
                 type="number"
                 value={modalData.set_loyalty_points}
-                onChange={(e) => setModalData({ ...modalData, set_loyalty_points: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    set_loyalty_points: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border rounded"
               />
             </div>
@@ -178,7 +203,12 @@ const Loyalty = () => {
               <input
                 type="number"
                 value={modalData.min_loyalty_required}
-                onChange={(e) => setModalData({ ...modalData, min_loyalty_required: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    min_loyalty_required: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border rounded"
               />
             </div>
@@ -187,15 +217,26 @@ const Loyalty = () => {
               <input
                 type="number"
                 value={modalData.min_bill_to_redeem}
-                onChange={(e) => setModalData({ ...modalData, min_bill_to_redeem: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    min_bill_to_redeem: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border rounded"
               />
             </div>
             <div className="flex justify-between mt-4">
-              <button onClick={handleSaveLoyalty} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+              <button
+                onClick={handleSaveLoyalty}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
                 Save Loyalty
               </button>
-              <button onClick={() => setIsLoyaltyModalOpen(false)} className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
+              <button
+                onClick={() => setIsLoyaltyModalOpen(false)}
+                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+              >
                 Close
               </button>
             </div>
@@ -209,7 +250,9 @@ const Loyalty = () => {
           <div className="bg-white p-6 rounded-lg w-96">
             <h2 className="text-xl font-semibold mb-4">Redeem Setup</h2>
             <div className="flex items-center justify-between gap-2 mb-4">
-              <label className="font-medium text-gray-600 w-1/2">Redemption Value</label>
+              <label className="font-medium text-gray-600 w-1/2">
+                Redemption Value
+              </label>
               <input
                 type="number"
                 placeholder="point"

@@ -1,6 +1,3 @@
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -8,14 +5,13 @@ import Script from "next/script";
 import { getCoin } from "../../components/config";
 import toast from "react-hot-toast";
 
-
 const QrImagePreview = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [customer, setCustomer] = useState({});
-    const [rechargeOptions, setRechargeOptions] = useState([]);
+  const [rechargeOptions, setRechargeOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("online"); // Default to 'online'
   const [loading, setLoading] = useState(false);
@@ -31,7 +27,7 @@ const QrImagePreview = () => {
   };
 
   //fetch recharge  options
-    useEffect(() => {
+  useEffect(() => {
     const fetchRechargeOptions = async () => {
       try {
         const response = await getCoin();
@@ -49,13 +45,12 @@ const QrImagePreview = () => {
     fetchRechargeOptions();
   }, []);
 
-
   // Handle option selection
   const handleOptionClick = (option) => {
     setSelectedOption(option); // Update selected option
   };
 
-   // Handle form submission
+  // Handle form submission
   const handleSubmit = async () => {
     if (!selectedOption) {
       alert("Please select a recharge option first!");
@@ -91,7 +86,7 @@ const QrImagePreview = () => {
 
       // Add the token to the request headers
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/coinpurchase", // Laravel API endpoint
+        " https://apibrize.brizindia.com/api/coinpurchase", // Laravel API endpoint
         payload,
         {
           headers: {
@@ -117,7 +112,7 @@ const QrImagePreview = () => {
       try {
         const token = getCookie("access_token");
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/auth/agme",
+          " https://apibrize.brizindia.com/api/auth/agme",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -135,7 +130,7 @@ const QrImagePreview = () => {
   // ✅ Fetch QR image
   useEffect(() => {
     axios
-      .get(" http://127.0.0.1:8000/api/qr/upload")
+      .get(" https://apibrize.brizindia.com/api/qr/upload")
       .then((res) => {
         if (res.data?.data?.cover) {
           setImageUrl(res.data.data.cover);
@@ -158,16 +153,14 @@ const QrImagePreview = () => {
     setIsLoading(true);
 
     try {
-      
-       const  coins= selectedOption.name;
-        const amount= selectedOption.amount;
-     
+      const coins = selectedOption.name;
+      const amount = selectedOption.amount;
 
       const { data } = await axios.post(
-        " http://127.0.0.1:8000/api/razorpay/create-order",
+        " https://apibrize.brizindia.com/api/razorpay/create-order",
         {
-         coins,
-         amount
+          coins,
+          amount,
         },
         {
           headers: {
@@ -201,7 +194,7 @@ const QrImagePreview = () => {
         handler: async function (response) {
           try {
             const verifyRes = await axios.post(
-              " http://127.0.0.1:8000/api/razorpay/verify-payment",
+              " https://apibrize.brizindia.com/api/razorpay/verify-payment",
               {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_order_id: response.razorpay_order_id,
@@ -222,7 +215,7 @@ const QrImagePreview = () => {
               "❌ Verification Error:",
               error?.response?.data || error.message
             );
-           }
+          }
         },
 
         prefill: {
@@ -250,54 +243,53 @@ const QrImagePreview = () => {
 
   return (
     <>
-      
       <div className="p-6 mx-auto bg-white shadow-lg rounded-lg">
-      {/* Header */}
-      {/* <div className="text-lg font-semibold text-gray-700 mb-4">
+        {/* Header */}
+        {/* <div className="text-lg font-semibold text-gray-700 mb-4">
         Recharge:{" "}
         <span className="text-red-500">
           Save around 25% with a lower third-party service fee.
         </span>
       </div> */}
 
-      {/* Recharge Options */}
-      <div className="grid grid-cols-5 gap-4 mb-6">
-        {rechargeOptions.map((option, index) => (
-          <div
-            key={index}
-            onClick={() => handleOptionClick(option)}
-            className={`border rounded-lg p-4 text-center cursor-pointer ${
-              selectedOption && selectedOption.id === option.id
-                ? "border-yellow-400 bg-yellow-100"
-                : "border-gray-300"
-            }`}
-          >
-            <div className="text-2xl font-bold text-yellow-500">
-              {option.name}
+        {/* Recharge Options */}
+        <div className="grid grid-cols-5 gap-4 mb-6">
+          {rechargeOptions.map((option, index) => (
+            <div
+              key={index}
+              onClick={() => handleOptionClick(option)}
+              className={`border rounded-lg p-4 text-center cursor-pointer ${
+                selectedOption && selectedOption.id === option.id
+                  ? "border-yellow-400 bg-yellow-100"
+                  : "border-gray-300"
+              }`}
+            >
+              <div className="text-2xl font-bold text-yellow-500">
+                {option.name}
+              </div>
+              <div className="text-sm text-gray-500">{option.amount}</div>
             </div>
-            <div className="text-sm text-gray-500">${option.amount}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {/* Payment Method */}
-      <div className="mb-6">
-        <label className="block text-gray-700 font-medium mb-2">
-          Select Payment Method
-        </label>
-        <div className="flex items-center space-x-4">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="paymentMethod"
-              value="online"
-              checked={paymentMethod === "online"}
-              onChange={() => setPaymentMethod("online")}
-              className="mr-2"
-            />
-            Online
+        {/* Payment Method */}
+        <div className="mb-6">
+          <label className="block text-gray-700 font-medium mb-2">
+            Select Payment Method
           </label>
-          {/* <label className="flex items-center">
+          <div className="flex items-center space-x-4">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="online"
+                checked={paymentMethod === "online"}
+                onChange={() => setPaymentMethod("online")}
+                className="mr-2"
+              />
+              Online
+            </label>
+            {/* <label className="flex items-center">
             <input
               type="radio"
               name="paymentMethod"
@@ -308,36 +300,35 @@ const QrImagePreview = () => {
             />
             Cash
           </label> */}
+          </div>
+        </div>
+
+        {/* Total Amount and Submit */}
+        <div className="flex justify-between items-center">
+          <div className="text-lg font-medium">
+            Total: {selectedOption ? selectedOption.amount : "0.00"}
+          </div>
+          {paymentMethod === "online" ? (
+            <button
+              onClick={handlePayment}
+              disabled={isLoading}
+              className="mt-6 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+            >
+              {isLoading ? "Processing..." : "Pay with Razorpay"}
+            </button>
+          ) : (
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className={`${
+                loading ? "bg-gray-500" : "bg-green-500 hover:bg-green-600"
+              } text-white py-2 px-6 rounded-lg`}
+            >
+              {loading ? "Processing..." : "Submit Payment"}
+            </button>
+          )}
         </div>
       </div>
-
-      {/* Total Amount and Submit */}
-      <div className="flex justify-between items-center">
-        <div className="text-lg font-medium">
-          Total: ${selectedOption ? selectedOption.amount : "0.00"}
-        </div>
-       {paymentMethod === "online" ? (
-  <button
-    onClick={handlePayment}
-    disabled={isLoading}
-    className="mt-6 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
-  >
-    {isLoading ? "Processing..." : "Pay with Razorpay"}
-  </button>
-) : (
-  <button
-    onClick={handleSubmit}
-    disabled={loading}
-    className={`${
-      loading ? "bg-gray-500" : "bg-green-500 hover:bg-green-600"
-    } text-white py-2 px-6 rounded-lg`}
-  >
-    {loading ? "Processing..." : "Submit Payment"}
-  </button>
-)}
-
-      </div>
-    </div>
       <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded text-center">
         <h2 className="text-lg font-bold mb-4">QR Code</h2>
 

@@ -1,4 +1,4 @@
- 'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 
 const SupplierPage = () => {
@@ -17,8 +17,6 @@ const SupplierPage = () => {
     fetchSuppliers();
   }, []);
 
-
-
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -34,15 +32,6 @@ const SupplierPage = () => {
     }
   };
 
-
-
-
-
-
-
-
-
-
   // const fetchSuppliers = async () => {
   //   const token = getToken();
   //   if (!token) {
@@ -50,7 +39,7 @@ const SupplierPage = () => {
   //     return;
   //   }
   //   try {
-  //     const response = await fetch("  http://127.0.0.1:8000/api/suppliers",
+  //     const response = await fetch("  https://apibrize.brizindia.com/api/suppliers",
   //       {
   //         headers: { Authorization: `Bearer ${token}` },
   //       }
@@ -69,16 +58,19 @@ const SupplierPage = () => {
       return;
     }
     try {
-      const response = await fetch(" http://127.0.0.1:8000/api/suppliers", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await fetch(
+        " https://apibrize.brizindia.com/api/suppliers",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const data = await response.json();
       setSuppliers(data.suppliers);
     } catch (error) {
       console.error("Error fetching suppliers:", error);
     }
   };
-  
+
   // Create supplier
   // const createSupplier = async () => {
   //   const supplierData = {
@@ -96,7 +88,7 @@ const SupplierPage = () => {
   //     notifyTokenMissing();
   //     return;
   //   }
-  //     const response = await fetch("  http://127.0.0.1:8000/api/suppliers", {
+  //     const response = await fetch("  https://apibrize.brizindia.com/api/suppliers", {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
@@ -122,23 +114,26 @@ const SupplierPage = () => {
       city: city,
       pincode: pincode,
     };
-  
+
     try {
       const token = getToken();
       if (!token) {
         notifyTokenMissing();
         return;
       }
-  
-      const response = await fetch(" http://127.0.0.1:8000/api/suppliers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ Combined header
-        },
-        body: JSON.stringify(supplierData),
-      });
-  
+
+      const response = await fetch(
+        " https://apibrize.brizindia.com/api/suppliers",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ Combined header
+          },
+          body: JSON.stringify(supplierData),
+        }
+      );
+
       const data = await response.json();
       setSuppliers((prevSuppliers) => [...prevSuppliers, data.supplier]);
       closeModal();
@@ -146,7 +141,6 @@ const SupplierPage = () => {
       console.error("Error creating supplier:", error);
     }
   };
-  
 
   // Update supplier
   const updateSupplier = async () => {
@@ -161,7 +155,7 @@ const SupplierPage = () => {
 
     try {
       const response = await fetch(
-        `  http://127.0.0.1:8000/api/suppliers/${currentSupplierId}`,
+        `  https://apibrize.brizindia.com/api/suppliers/${currentSupplierId}`,
         {
           method: "PUT",
           headers: {
@@ -185,7 +179,7 @@ const SupplierPage = () => {
   // Delete supplier
   const deleteSupplier = async (id) => {
     try {
-      await fetch(`  http://127.0.0.1:8000/api/suppliers/${id}`, {
+      await fetch(`  https://apibrize.brizindia.com/api/suppliers/${id}`, {
         method: "DELETE",
       });
       setSuppliers(suppliers.filter((supplier) => supplier.id !== id));
@@ -248,12 +242,24 @@ const SupplierPage = () => {
           <tbody>
             {suppliers.map((supplier) => (
               <tr key={supplier.id}>
-                <td className="px-4 py-2 border border-gray-300">{supplier.name}</td>
-                <td className="px-4 py-2 border border-gray-300">{supplier.phone_number}</td>
-                <td className="px-4 py-2 border border-gray-300">{supplier.address}</td>
-                <td className="px-4 py-2 border border-gray-300">{supplier.state}</td>
-                <td className="px-4 py-2 border border-gray-300">{supplier.city}</td>
-                <td className="px-4 py-2 border border-gray-300">{supplier.pincode}</td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {supplier.name}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {supplier.phone_number}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {supplier.address}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {supplier.state}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {supplier.city}
+                </td>
+                <td className="px-4 py-2 border border-gray-300">
+                  {supplier.pincode}
+                </td>
                 <td className="px-4 py-2 border border-gray-300">
                   <button
                     onClick={() => openModal(supplier)}

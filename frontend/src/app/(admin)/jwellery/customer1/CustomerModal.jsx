@@ -116,7 +116,7 @@ const CustomerModal = ({
     }
 
     axios
-      .get(" http://127.0.0.1:8000/api/customerstype", {
+      .get(" https://apibrize.brizindia.com/api/customerstype", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -127,7 +127,7 @@ const CustomerModal = ({
       });
 
     axios
-      .get(" http://127.0.0.1:8000/api/customersubtypes", {
+      .get(" https://apibrize.brizindia.com/api/customersubtypes", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -158,7 +158,7 @@ const CustomerModal = ({
 
   // //CustomersubType Handler
   // const handlerCustomberSubType = async () => {
-  //   const response = await axios.get("  http://127.0.0.1:8000/api/customersubtypes");
+  //   const response = await axios.get("  https://apibrize.brizindia.com/api/customersubtypes");
   //   setCustomerSubTypeData(response.data);
 
   //   console.log("customerSubType", data);
@@ -166,7 +166,7 @@ const CustomerModal = ({
 
   // //CustomerType Handler
   // const handlerCustomberType = async () => {
-  //   const response = await axios.get("  http://127.0.0.1:8000/api/customerstype");
+  //   const response = await axios.get("  https://apibrize.brizindia.com/api/customerstype");
   //   setCustomerTypeData(response?.data?.data)
   //   console.log("customerType", data);
   // };
@@ -203,14 +203,14 @@ const CustomerModal = ({
 
       if (modalType === "create") {
         await axios.post(
-          "  http://127.0.0.1:8000/api/customers",
+          "  https://apibrize.brizindia.com/api/customers",
           payload,
           config
         );
         notyf.success("Customer created successfully!");
       } else if (modalType === "edit") {
         await axios.post(
-          `  http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          `  https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
@@ -221,12 +221,13 @@ const CustomerModal = ({
       setLoading(false);
     } catch (error) {
       if (error.response) {
-        const message = error.response.data.message || "This number already exists.";
+        const message =
+          error.response.data.message || "This number already exists.";
         toast.error(message);
       } else {
         toast.error("An unexpected error occurred.");
       }
-      
+
       setLoading(false);
     }
   };
@@ -356,9 +357,8 @@ const CustomerModal = ({
                 {...register("customerEnquiry")}
                 className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                 <option value="customer">Customer</option>
+                <option value="customer">Customer</option>
                 <option value="prospective">Prospect</option>
-               
               </select>
             </div>
           </div>
@@ -605,14 +605,14 @@ export default CustomerModal;
 //     }
 
 //     axios
-//       .get(" http://127.0.0.1:8000/api/customerstype", {
+//       .get(" https://apibrize.brizindia.com/api/customerstype", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((res) => setCustomerTypeData(res.data.data))
 //       .catch(() => alert("Failed to fetch customer types"));
 
 //     axios
-//       .get(" http://127.0.0.1:8000/api/customersubtypes", {
+//       .get(" https://apibrize.brizindia.com/api/customersubtypes", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((res) => setCustomerSubTypeData(res.data))
@@ -646,11 +646,11 @@ export default CustomerModal;
 //       };
 
 //       if (modalType === "create") {
-//         await axios.post(" http://127.0.0.1:8000/api/customers", payload, config);
+//         await axios.post(" https://apibrize.brizindia.com/api/customers", payload, config);
 //         notyf.success("Customer created successfully!");
 //       } else if (modalType === "edit") {
 //         await axios.put(
-//           ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+//           ` https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`,
 //           payload,
 //           config
 //         );

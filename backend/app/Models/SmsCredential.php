@@ -17,7 +17,8 @@ class SmsCredential extends Model
         'sms_username',
         'sms_password',
         'sms_sender',
-        'sms_entity_id'
+        'sms_entity_id',
+        'created_by'
     ];
 
     public function smsSettings()

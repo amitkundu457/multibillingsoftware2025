@@ -41,9 +41,12 @@ export default function KarigarEntry() {
 
   const fetchKarigars = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/karigar-list", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/karigar-list",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setKarigars(response.data);
     } catch (error) {
       console.error("Error fetching karigars:", error);
@@ -56,7 +59,7 @@ export default function KarigarEntry() {
     if (editingKarigar) {
       try {
         const response = await axios.post(
-          ` http://127.0.0.1:8000/api/karigar-list/${editingKarigar.id}`,
+          ` https://apibrize.brizindia.com/api/karigar-list/${editingKarigar.id}`,
           data,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -75,9 +78,13 @@ export default function KarigarEntry() {
       }
     } else {
       try {
-        const response = await axios.post(" http://127.0.0.1:8000/api/karigar-list", data, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.post(
+          " https://apibrize.brizindia.com/api/karigar-list",
+          data,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setKarigars((prev) => [...prev, response.data]);
         fetchKarigars();
         reset();
@@ -97,9 +104,12 @@ export default function KarigarEntry() {
   const handleDelete = async (id) => {
     if (!token) return;
     try {
-      const response = await axios.delete(` http://127.0.0.1:8000/api/karigar-list/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.delete(
+        ` https://apibrize.brizindia.com/api/karigar-list/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (response.status === 200) {
         setKarigars((prev) => prev.filter((k) => k.id !== id));
         fetchKarigars();
@@ -119,7 +129,9 @@ export default function KarigarEntry() {
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
             <input
               type="text"
               {...register("name")}
@@ -140,7 +152,9 @@ export default function KarigarEntry() {
       <div className="w-2/3 p-6 bg-white overflow-y-auto">
         <h2 className="text-2xl font-semibold mb-4">Karigars</h2>
         {karigars.length === 0 ? (
-          <p className="text-gray-500 text-lg text-center py-10">Karigar list is empty.</p>
+          <p className="text-gray-500 text-lg text-center py-10">
+            Karigar list is empty.
+          </p>
         ) : (
           <ul>
             {karigars.map((karigar) => (

@@ -33,11 +33,14 @@ const PaymentSummaryCards = () => {
 
     try {
       setLoading(true);
-      const res = await axios.get(" http://127.0.0.1:8000/api/all-payments", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/all-payments",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setAllPayments(res.data.data);
       filterAndSummarize(res.data.data, fromDate, toDate); // initial filter
@@ -59,10 +62,7 @@ const PaymentSummaryCards = () => {
 
     const filtered = data.filter((item) => {
       const date = item.created_at.split("T")[0];
-      return (
-        (!from || date >= from) &&
-        (!to || date <= to)
-      );
+      return (!from || date >= from) && (!to || date <= to);
     });
 
     filtered.forEach((item) => {
@@ -89,13 +89,12 @@ const PaymentSummaryCards = () => {
 
   const paymentTypes = ["cash", "upi", "card", "advance", "others"];
   const cardColors = {
-  cash: "bg-gradient-to-r from-green-400 to-green-600 text-white",
-  upi: "bg-gradient-to-r from-indigo-400 to-indigo-600 text-white",
-  card: "bg-gradient-to-r from-pink-400 to-pink-600 text-white",
-  advance: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white",
-  others: "bg-gradient-to-r from-gray-400 to-gray-600 text-white",
-};
-
+    cash: "bg-gradient-to-r from-green-400 to-green-600 text-white",
+    upi: "bg-gradient-to-r from-indigo-400 to-indigo-600 text-white",
+    card: "bg-gradient-to-r from-pink-400 to-pink-600 text-white",
+    advance: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white",
+    others: "bg-gradient-to-r from-gray-400 to-gray-600 text-white",
+  };
 
   return (
     <div className="p-4 max-w-4xl mx-auto">
@@ -125,20 +124,21 @@ const PaymentSummaryCards = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-  {paymentTypes.map((type) => (
-    <div
-      key={type}
-      className={`p-5 shadow-xl rounded-2xl transform transition hover:scale-105 duration-300 ${cardColors[type]}`}
-    >
-      <h3 className="text-lg font-bold capitalize tracking-wide">{type}</h3>
-      <p className="text-2xl font-extrabold mt-2">
-        ₹{summary[type]?.toFixed(2) || "0.00"}
-      </p>
-    </div>
-  ))}
-</div>
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {paymentTypes.map((type) => (
+            <div
+              key={type}
+              className={`p-5 shadow-xl rounded-2xl transform transition hover:scale-105 duration-300 ${cardColors[type]}`}
+            >
+              <h3 className="text-lg font-bold capitalize tracking-wide">
+                {type}
+              </h3>
+              <p className="text-2xl font-extrabold mt-2">
+                ₹{summary[type]?.toFixed(2) || "0.00"}
+              </p>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

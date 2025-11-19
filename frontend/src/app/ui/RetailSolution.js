@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { getSolutions } from "../components/config"; // Replace with your API call
 import "aos/dist/aos.css"; // Import AOS styles
 import AOS from "aos"; //
-export const baseImageURL = "  http://127.0.0.1:8000/";
+export const baseImageURL = "  https://apibrize.brizindia.com/";
 
 export default function ReSolution() {
   const [solutions, setSolutions] = useState([]);
@@ -49,7 +49,9 @@ export default function ReSolution() {
         </div>
 
         {solutions.map((solution) => {
-          const imageUrl = `${baseImageURL}${solution.image || "default-image.jpg"}`;
+          const imageUrl = `${baseImageURL}${
+            solution.image || "default-image.jpg"
+          }`;
           return (
             <div
               key={solution.id}

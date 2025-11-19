@@ -15,7 +15,7 @@ export default function Home({ type = "help Center" }) {
 
   useEffect(() => {
     axios
-      .get(` http://127.0.0.1:8000/api/frontend-settings/${type}`)
+      .get(` https://apibrize.brizindia.com/api/frontend-settings/${type}`)
       .then((res) => {
         setContent(res.data.description);
         setLoading(false);
@@ -44,8 +44,8 @@ export default function Home({ type = "help Center" }) {
             Home / {type}
           </p> */}
           <p className="text-base md:text-lg font-medium text-white/80 mt-2">
-  {`Home / ${type}`}
-</p>
+            {`Home / ${type}`}
+          </p>
         </div>
       </div>
 

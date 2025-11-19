@@ -259,9 +259,12 @@ export default function InvoicePage() {
     }
 
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/type", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/type",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setCategory(response.data);
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -288,7 +291,7 @@ export default function InvoicePage() {
 
   useEffect(() => {
     axios
-      .get("  http://127.0.0.1:8000/api/redeem-setup")
+      .get("  https://apibrize.brizindia.com/api/redeem-setup")
       .then((response) => {
         if (response.data.length > 0) {
           setLoyaltyData(response.data[0]); // Assuming you only need the first item
@@ -324,7 +327,7 @@ export default function InvoicePage() {
     if (customerDetails.id) {
       axios
         .get(
-          `  http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
+          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -383,12 +386,14 @@ export default function InvoicePage() {
   };
 
   // const fetchEmployees = async () => {
-  //   const res = await axios.get("  http://127.0.0.1:8000/api/employees");
+  //   const res = await axios.get("  https://apibrize.brizindia.com/api/employees");
   //   setSalesperson(res.data.employees);
   // };
 
   const fetchStylist = async () => {
-    const res = await axios.get("  http://127.0.0.1:8000/api/stylists");
+    const res = await axios.get(
+      "  https://apibrize.brizindia.com/api/stylists"
+    );
     setStylist(res.data);
   };
 
@@ -632,7 +637,7 @@ export default function InvoicePage() {
     console.log(payload);
     try {
       const response = await axios.post(
-        "  http://127.0.0.1:8000/api/order",
+        "  https://apibrize.brizindia.com/api/order",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -700,7 +705,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.put(
-        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -724,7 +729,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.post(
-        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -1007,34 +1012,33 @@ export default function InvoicePage() {
               />
             </div>
             <div className="flex gap-4">
-  {/* Product Checkbox - Orange */}
-  <label className="flex items-center space-x-2">
-    <input
-      type="checkbox"
-      className="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
-    />
-    <span className="text-orange-600 font-medium">Product</span>
-  </label>
+              {/* Product Checkbox - Orange */}
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                />
+                <span className="text-orange-600 font-medium">Product</span>
+              </label>
 
-  {/* Membership Checkbox - Blue */}
-  <label className="flex items-center space-x-2">
-    <input
-      type="checkbox"
-      className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
-    />
-    <span className="text-blue-600 font-medium">Membership</span>
-  </label>
+              {/* Membership Checkbox - Blue */}
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-blue-600 font-medium">Membership</span>
+              </label>
 
-  {/* Package Checkbox - Green */}
-  <label className="flex items-center space-x-2">
-    <input
-      type="checkbox"
-      className="w-5 h-5 text-green-500 border-gray-300 rounded focus:ring-green-500"
-    />
-    <span className="text-green-600 font-medium">Package</span>
-  </label>
-</div>
-
+              {/* Package Checkbox - Green */}
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="w-5 h-5 text-green-500 border-gray-300 rounded focus:ring-green-500"
+                />
+                <span className="text-green-600 font-medium">Package</span>
+              </label>
+            </div>
 
             {/* Barcode Toggle */}
             <div className="flex items-center space-x-2">

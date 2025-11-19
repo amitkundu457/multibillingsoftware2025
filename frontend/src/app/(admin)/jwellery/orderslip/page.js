@@ -222,7 +222,7 @@
 //   const fetchBarCodeData = async () => {
 //     try {
 //       const token = getCookie("access_token");
-//       const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
+//       const response = await axios.get(" https://apibrize.brizindia.com/api/barcodes", {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //         },
@@ -459,7 +459,7 @@
 //     console.log(payload);
 //     try {
 //       const response = await axios.post(
-//         "  http://127.0.0.1:8000/api/order-slip",
+//         "  https://apibrize.brizindia.com/api/order-slip",
 //         payload,
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
@@ -507,9 +507,9 @@
 //   };
 
 //   return (
-//     <div className="flex flex-col  h-full absolute top-0 right-0 bottom-0 left-0 bg-white overflow-auto">
-//       <div className="bg-green-700 text-center p-3 text-white"> Order</div>
-//       <div className="bg-white  p-3 black shadow flex justify-between space-x-2 ">
+//     <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col h-full overflow-auto bg-white">
+//       <div className="p-3 text-center text-white bg-green-700"> Order</div>
+//       <div className="flex justify-between p-3 space-x-2 bg-white shadow black ">
 //         <div className="flex space-x-4">
 //           <div
 //             onClick={() => {
@@ -534,17 +534,17 @@
 
 //       <main className="flex flex-1">
 //         <div className="">
-//           <div className="flex flex-wrap items-center gap-4 bg-white p-4 border rounded">
+//           <div className="flex flex-wrap items-center gap-4 p-4 bg-white border rounded">
 //             {/* Bill Number */}
 //             <input
 //               type="text"
 //               placeholder="Bill No"
 //               value={billNo}
-//               className="border rounded px-4 py-2"
+//               className="px-4 py-2 border rounded"
 //             />
 
 //             {/* Date Picker */}
-//             <div className="flex items-center border rounded px-4 py-2">
+//             <div className="flex items-center px-4 py-2 border rounded">
 //               <input
 //                 type="date"
 //                 name="date"
@@ -558,7 +558,7 @@
 //             </div>
 
 //             {/* Category Dropdown */}
-//             <select className="border rounded px-4 py-2">
+//             <select className="px-4 py-2 border rounded">
 //               <option>Select Category</option>
 //               {/* Other options */}
 //               {company.map((categry) => (
@@ -574,7 +574,7 @@
 //               <input
 //                 type="text"
 //                 placeholder="Search Item"
-//                 className="border rounded px-4 py-2 ml-2"
+//                 className="px-4 py-2 ml-2 border rounded"
 //               />
 //             </div>
 
@@ -592,16 +592,16 @@
 //               </label>
 //             </div>
 //             <span>
-//               <span className="text-blue-950 text-lg font-bold">
+//               <span className="text-lg font-bold text-blue-950">
 //                 {" "}
 //                 Total Coin
 //               </span>
 //               :{" "}
-//               <span className="text-orange-900 text-lg font-bold">{coin}</span>
+//               <span className="text-lg font-bold text-orange-900">{coin}</span>
 //             </span>
 //           </div>
 
-//           <div className="flex-1 grid grid-cols-7 gap-4 p-4 overflow-y-auto">
+//           <div className="grid flex-1 grid-cols-7 gap-4 p-4 overflow-y-auto">
 //             {items.map((item) => (
 //               <div
 //                 key={item.code}
@@ -611,7 +611,7 @@
 //                 <p className="mt-2 text-sm font-bold">
 //                   {item.name || "No Type"}
 //                 </p>
-//                 <div className=" w-full h-32 flex items-center justify-center text-gray-500">
+//                 <div className="flex items-center justify-center w-full h-32 text-gray-500 ">
 //                   {item.image ? (
 //                     <img
 //                       src={`${baseImageURL}/storage/${item.image}`}
@@ -632,10 +632,10 @@
 //         </div>
 
 //         {/* Right Sidebar */}
-//         <aside className="w-1/4 bg-gray-100 p-4 relative h-full">
+//         <aside className="relative w-1/4 h-full p-4 bg-gray-100">
 //           <div className="mb-16 overflow-y-auto h-[20rem]">
 //             {addedProducts.map((product, index) => (
-//               <div key={index} className="border p-2 rounded mb-2">
+//               <div key={index} className="p-2 mb-2 border rounded">
 //                 <p className="font-bold">{product.name}</p>
 //                 {/*<p>Code: {product.code}</p>*/}
 //                 {/*<p className="text-sm">Gross Wgt: {product.grossWeight}</p>*/}
@@ -679,7 +679,7 @@
 //             {/*    <p>₹{makingtotal}</p>*/}
 //             {/*</div>*/}
 //             <button
-//               className="w-full bg-green-500 text-white p-2 rounded mt-4"
+//               className="w-full p-2 mt-4 text-white bg-green-500 rounded"
 //               onClick={openCheckout}
 //             >
 //               Checkout
@@ -699,7 +699,7 @@
 //         //         <input
 //         //           name="grossWeight"
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -707,7 +707,7 @@
 //         //         <input
 //         //           name="netWeight"
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -716,7 +716,7 @@
 //         //           name="rate"
 //         //           value={selectedItem.rate}
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -725,7 +725,7 @@
 //         //           name="pcs"
 //         //           type="number"
 //         //           defaultValue={1}
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -733,7 +733,7 @@
 //         //         <input
 //         //           name="making"
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //         <span>making : {makingtotal}</span>
 //         //       </div>
@@ -742,7 +742,7 @@
 //         //         <input
 //         //           name="discountPercent"
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -750,7 +750,7 @@
 //         //         <input
 //         //           name="diamondWeight"
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -758,7 +758,7 @@
 //         //         <input
 //         //           name="diamondValue"
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -766,7 +766,7 @@
 //         //         <input
 //         //           name="stoneWeight"
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -774,7 +774,7 @@
 //         //         <input
 //         //           name="stoneValue"
 //         //           type="number"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -782,7 +782,7 @@
 //         //         <input
 //         //           name="huid"
 //         //           type="text"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //       <div>
@@ -790,13 +790,13 @@
 //         //         <input
 //         //           name="hallmark"
 //         //           type="text"
-//         //           className="w-full p-2 rounded border"
+//         //           className="w-full p-2 border rounded"
 //         //         />
 //         //       </div>
 //         //     </div>
 //         //     <button
 //         //       type="submit"
-//         //       className="w-full bg-green-500 text-white p-2 rounded mt-4"
+//         //       className="w-full p-2 mt-4 text-white bg-green-500 rounded"
 //         //     >
 //         //       Add Product
 //         //     </button>
@@ -814,13 +814,13 @@
 //                         value={barcode}
 //                         onChange={(e) => setBarcode(e.target.value)}
 //                         placeholder="Enter Barcode number"
-//                         className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+//                         className="w-full p-2 bg-red-100 border border-red-500 rounded outline-none focus:border-red-700"
 //                     />
 
 //                     <button
 //                         type="button"
 //                         onClick={handleSearchBarCode}
-//                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+//                         className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
 //                     >
 //                         Search
 //                     </button>
@@ -841,7 +841,7 @@
 //                     })
 //                   }
 //                   readOnly={!isEditable}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -850,7 +850,7 @@
 //                   name="netWeight"
 //                   type="number"
 //                   value={productDetails.netWeight}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                   onChange={(e) => {
 //                     const newNetWeight = Number(e.target.value) || 0;
 //                     setNtWt(newNetWeight);
@@ -875,7 +875,7 @@
 //                   name="rate"
 //                   value={selectedItem.rate}
 //                   type="number"
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -885,7 +885,7 @@
 //                   type="number"
 //                   defaultValue={0}
 //                   value={productDetails.pcs}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                   onChange={(e) => {
 //                     const newPcs = Number(e.target.value) || 0;
 //                     setPcs(newPcs);
@@ -916,7 +916,7 @@
 //                   updateTotal(newGrm, making,netWt,pcss);
 //                 }}
 //                 // defaultValue={}
-//                 className="w-full p-2 rounded border"
+//                 className="w-full p-2 border rounded"
 //               />
 //             </div> */}
 
@@ -927,7 +927,7 @@
 //                 type="number"
 //                 value={total}
 //                 readOnly
-//                 className="border rounded p-2 w-full bg-gray-100 font-bold"
+//                 className="w-full p-2 font-bold bg-gray-100 border rounded"
 //               />
 //             </div> */}
 //               <div>
@@ -936,7 +936,7 @@
 //                   name="making"
 //                   type="number"
 //                   value={productDetails.making}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                   onChange={(e) => {
 //                     const newMaking = Number(e.target.value);
 
@@ -981,7 +981,7 @@
 //                       makingInRs: e.target.value,
 //                     });
 //                   }}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -989,7 +989,7 @@
 //                 <input
 //                   name="discountPercent"
 //                   type="number"
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -998,7 +998,7 @@
 //                   name="diamondWeight"
 //                   value={productDetails.diamondDetails}
 //                   type="number"
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -1007,7 +1007,7 @@
 //                   name="diamondValue"
 //                   value={productDetails.diamondValue}
 //                   type="number"
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -1016,7 +1016,7 @@
 //                   name="stoneWeight"
 //                   type="number"
 //                   value={productDetails.stoneDetails}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -1025,7 +1025,7 @@
 //                   name="stoneValue"
 //                   value={productDetails.stoneValue}
 //                   type="number"
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -1034,7 +1034,7 @@
 //                   name="huid"
 //                   type="text"
 //                   value={productDetails.huid}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -1043,7 +1043,7 @@
 //                   name="hallmark"
 //                   value={productDetails.hallmark}
 //                   type="text"
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -1064,7 +1064,7 @@
 //                       wastageCharges
 //                     );
 //                   }}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 //               <div>
@@ -1085,7 +1085,7 @@
 //                       newWastageCharge
 //                     );
 //                   }}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 
@@ -1108,7 +1108,7 @@
 //                       newOtherCharges
 //                     );
 //                   }}
-//                   className="w-full p-2 rounded border"
+//                   className="w-full p-2 border rounded"
 //                 />
 //               </div>
 
@@ -1120,13 +1120,13 @@
 //           value={total}
 
 //           readOnly
-//           className="border rounded p-2 w-full bg-gray-100 font-bold"
+//           className="w-full p-2 font-bold bg-gray-100 border rounded"
 //         />
 //       </div> */}
 //             </div>
 //             <button
 //               type="submit"
-//               className="w-full bg-green-500 text-white p-2 rounded mt-4"
+//               className="w-full p-2 mt-4 text-white bg-green-500 rounded"
 //             >
 //               Add Product
 //             </button>
@@ -1148,9 +1148,9 @@
 //           {modalStep === 1 && (
 //             <>
 //               <h2 className="text-lg font-bold">Customer Details</h2>
-//               <div className="flex flex-col justify-center items-center">
+//               <div className="flex flex-col items-center justify-center">
 //                 <form
-//                   className="w-full space-y-4 p-4 bg-white shadow-md rounded-md"
+//                   className="w-full p-4 space-y-4 bg-white rounded-md shadow-md"
 //                   onSubmit={handleNextStep}
 //                 >
 //                   {/* Phone No Input */}
@@ -1160,12 +1160,12 @@
 //                       value={phoneNumber}
 //                       onChange={(e) => setPhoneNumber(e.target.value)}
 //                       placeholder="Type phone then press enter"
-//                       className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+//                       className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
 //                     />
 //                     <button
 //                       type="button"
 //                       onClick={handleSearch}
-//                       className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
+//                       className="p-2 text-white bg-green-500 rounded-full shadow-md hover:bg-green-600"
 //                     >
 //                       <IoIosSearch />
 //                     </button>
@@ -1174,7 +1174,7 @@
 //                     <button
 //                       type="button"
 //                       onClick={handleOpenCreateModal}
-//                       className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
+//                       className="p-2 text-white bg-green-500 rounded-full shadow-md hover:bg-green-600"
 //                     >
 //                       <FaPlus />
 //                     </button>
@@ -1192,7 +1192,7 @@
 //                         }))
 //                       }
 //                       placeholder="Customer Name"
-//                       className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+//                       className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
 //                     />
 
 //                     <input
@@ -1205,7 +1205,7 @@
 //                         }))
 //                       }
 //                       placeholder="Customer Name"
-//                       className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+//                       className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
 //                     />
 //                   </div>
 
@@ -1219,7 +1219,7 @@
 //                       }))
 //                     }
 //                     placeholder="Address"
-//                     className="w-full border border-green-500 rounded-md p-2 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+//                     className="w-full p-2 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
 //                     rows="2"
 //                   ></textarea>
 
@@ -1235,7 +1235,7 @@
 //                         }))
 //                       }
 //                       placeholder="GSTIN"
-//                       className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+//                       className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
 //                     />
 //                   </div>
 
@@ -1244,13 +1244,13 @@
 //                     <button
 //                       type="button"
 //                       onClick={closeCheckout}
-//                       className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+//                       className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
 //                     >
 //                       Cancel
 //                     </button>
 //                     <button
 //                       type="submit"
-//                       className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+//                       className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
 //                     >
 //                       Next
 //                     </button>
@@ -1262,8 +1262,8 @@
 //           {modalStep === 2 && (
 //             <>
 //               <div className="p-4 bg-white rounded shadow">
-//                 <h2 className="text-xl font-bold mb-4">Bill Amount</h2>
-//                 <p className="text-green-500 text-2xl font-bold mb-4">₹{gto}</p>
+//                 <h2 className="mb-4 text-xl font-bold">Bill Amount</h2>
+//                 <p className="mb-4 text-2xl font-bold text-green-500">₹{gto}</p>
 
 //                 <div className="space-y-4">
 //                   <div>
@@ -1295,7 +1295,7 @@
 //                         type="number"
 //                         value={cashAmount}
 //                         onChange={(e) => setCashAmount(Number(e.target.value))}
-//                         className="w-full p-2 rounded border"
+//                         className="w-full p-2 border rounded"
 //                       />
 //                     </div>
 //                   )}
@@ -1312,7 +1312,7 @@
 //                             cardAmount: Number(e.target.value),
 //                           }))
 //                         }
-//                         className="w-full p-2 rounded border"
+//                         className="w-full p-2 border rounded"
 //                       />
 //                       <label>Card Service Charge</label>
 //                       <input
@@ -1324,7 +1324,7 @@
 //                             serviceCharge: Number(e.target.value),
 //                           }))
 //                         }
-//                         className="w-full p-2 rounded border mt-2"
+//                         className="w-full p-2 mt-2 border rounded"
 //                       />
 //                     </div>
 //                   )}
@@ -1336,7 +1336,7 @@
 //                         type="number"
 //                         value={upiAmount}
 //                         onChange={(e) => setUpiAmount(Number(e.target.value))}
-//                         className="w-full p-2 rounded border"
+//                         className="w-full p-2 border rounded"
 //                       />
 //                     </div>
 //                   )}
@@ -1350,7 +1350,7 @@
 //                         onChange={(e) =>
 //                           setAdjustAmount(Number(e.target.value))
 //                         }
-//                         className="w-full p-2 rounded border"
+//                         className="w-full p-2 border rounded"
 //                       />
 //                     </div>
 //                   )}
@@ -1364,23 +1364,23 @@
 //                         onChange={(e) =>
 //                           setAdvanceAmount(Number(e.target.value))
 //                         }
-//                         className="w-full p-2 rounded border"
+//                         className="w-full p-2 border rounded"
 //                       />
 //                     </div>
 //                   )}
 
 //                   <div>
-//                     <p className="text-red-500 font-bold">
+//                     <p className="font-bold text-red-500">
 //                       Remaining Amount: ₹{remainingAmount}
 //                     </p>
 //                   </div>
 
-//                   <div className="flex space-x-4 mt-4">
-//                     <button className="w-1/2 bg-gray-500 text-white p-2 rounded">
+//                   <div className="flex mt-4 space-x-4">
+//                     <button className="w-1/2 p-2 text-white bg-gray-500 rounded">
 //                       Back
 //                     </button>
 //                     <button
-//                       className="w-1/2 bg-green-500 text-white p-2 rounded"
+//                       className="w-1/2 p-2 text-white bg-green-500 rounded"
 //                       onClick={handleCheckoutSubmit}
 //                     >
 //                       Checkout
@@ -1815,11 +1815,14 @@ export default function InvoicePage() {
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/barcodes",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setAllProducts(response.data);
       return response.data; // Return the fetched data
@@ -1827,15 +1830,18 @@ export default function InvoicePage() {
       console.error("Error fetching barcode data:", error);
     }
   };
-//new this api
+  //new this api
   const OrderCounts = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get(" http://127.0.0.1:8000/api/orderCount", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/orderCount",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setOrderCount(response?.data?.total);
       console.log("ordercount", response);
@@ -1864,7 +1870,7 @@ export default function InvoicePage() {
       console.log("token", token);
 
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/stockDetails",
+        " https://apibrize.brizindia.com/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -1887,7 +1893,7 @@ export default function InvoicePage() {
 
   useEffect(() => {
     axios
-      .get("  http://127.0.0.1:8000/api/redeem-setup")
+      .get("  https://apibrize.brizindia.com/api/redeem-setup")
       .then((response) => {
         if (response.data.length > 0) {
           setLoyaltyData(response.data[0]); // Assuming you only need the first item
@@ -1916,11 +1922,11 @@ export default function InvoicePage() {
       alert("Customer not found");
     }
   };
-//no use of this function
+  //no use of this function
   const handleSearchOrder = async () => {
     try {
       const data = await axios.get(
-        ` http://127.0.0.1:8000/api/orders/search?billno=${orderSearchId}`
+        ` https://apibrize.brizindia.com/api/orders/search?billno=${orderSearchId}`
       );
       console.log("orderDetails", data);
       // setOrderDetails({
@@ -1940,7 +1946,7 @@ export default function InvoicePage() {
     if (customerDetails.id) {
       axios
         .get(
-          `  http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
+          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -2003,9 +2009,12 @@ export default function InvoicePage() {
 
   const fetchEmployees = async () => {
     const token = getCookie("access_token");
-    const res = await axios.get("  http://127.0.0.1:8000/api/employees", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await axios.get(
+      "  https://apibrize.brizindia.com/api/employees",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     setSalesperson(res.data.employees);
   };
 
@@ -2041,7 +2050,7 @@ export default function InvoicePage() {
     console.log("taxSelected", selectTax);
     if (matchingProduct?.available_quantity === null) {
       toast.error("Please create the stock this Product...");
-    // } else if (matchingProduct?.available_quantity >= 0) {
+      // } else if (matchingProduct?.available_quantity >= 0) {
     } else if (matchingProduct) {
       setSelectedItem(item);
       setIsOpen(true);
@@ -2187,11 +2196,9 @@ export default function InvoicePage() {
 
       const RateTotal =
         product.rate * product.netWeight * product.pcs +
-      
         wastageValue +
         hallmarkCharge +
         otherCharge +
-      
         totalMakingChargeInRsPercentage +
         totalGstOnMakingCharge;
 
@@ -2253,8 +2260,7 @@ export default function InvoicePage() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-
-  //new and different this function 
+  //new and different this function
 
   const handleCheckoutSubmit = async () => {
     const token = getCookie("access_token");
@@ -2284,7 +2290,6 @@ export default function InvoicePage() {
       others: { otherAmount },
       adjust: { adjustAmount },
       advance: { advanceAmount },
-     
     };
     const paymentMethods = Object.keys(paymentDetails).map((method) => ({
       payment_method: method,
@@ -2295,7 +2300,6 @@ export default function InvoicePage() {
         paymentDetails[method].otherAmount ||
         paymentDetails[method].adjustAmount ||
         paymentDetails[method].advanceAmount ||
-       
         0,
     }));
     console.log(paymentDetails);
@@ -2378,7 +2382,7 @@ export default function InvoicePage() {
     console.log("payload", payload);
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/order-slip",
+        " https://apibrize.brizindia.com/api/order-slip",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -2466,7 +2470,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.put(
-        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -2490,7 +2494,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.post(
-        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -2534,19 +2538,19 @@ export default function InvoicePage() {
   };
 
   return (
-    <div className="flex flex-col h-full absolute top-0 overflow-auto  right-0 bottom-0 left-0 bg-white">
-      <div className="bg-green-700 text-center p-3 text-white">Order Slip</div>
-      <div className="bg-white-700 text-white p-2 flex justify-between items-center">
+    <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col h-full overflow-auto bg-white">
+      <div className="p-3 text-center text-white bg-green-700">Order Slip</div>
+      <div className="flex items-center justify-between p-2 text-white bg-white-700">
         {/* Left Section */}
         <div className="flex items-center space-x-2">
-          <button className="text-white text-lg">
+          <button className="text-lg text-white">
             <span>&larr;</span>
           </button>
           {/* <span className="text-lg font-semibold">Invoice</span> */}
         </div>
 
         {/* Middle Section */}
-        <div className="bg-white p-3 shadow flex space-x-4 items-center text-black rounded-md">
+        <div className="flex items-center p-3 space-x-4 text-black bg-white rounded-md shadow">
           <Link
             href="/dashboard"
             className="flex flex-col items-center text-blue-600"
@@ -2582,7 +2586,7 @@ export default function InvoicePage() {
 
         {/* Right Section */}
         <div className="flex items-center space-x-2">
-          <div className="text-white text-sm">
+          <div className="text-sm text-white">
             {/* <div>
               Line: <span className="font-semibold">0</span>
             </div> */}
@@ -2591,13 +2595,13 @@ export default function InvoicePage() {
             </div> */}
           </div>
           <button
-            className="bg-green-500 text-white px-4 py-1 rounded flex items-center space-x-1 hidden"
+            className="flex items-center hidden px-4 py-1 space-x-1 text-white bg-green-500 rounded"
             onClick={() => setDiscModalOpen(true)}
           >
             % Disc
           </button>
           <button
-            className="text-black hidden"
+            className="hidden text-black"
             onClick={() => setConfirmModalOpen(true)}
           >
             <AiOutlineClose size={20} />
@@ -2611,47 +2615,47 @@ export default function InvoicePage() {
             onClick={() => setDiscModalOpen(false)}
           >
             <div
-              className="bg-white p-4 rounded shadow-lg w-96 text-black"
+              className="p-4 text-black bg-white rounded shadow-lg w-96"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="bg-green-600 text-white p-2 text-center">
+              <h2 className="p-2 text-center text-white bg-green-600">
                 Additional Disc / Addon
               </h2>
               <div className="p-4">
                 <label>Disc%</label>
                 <input
                   type="number"
-                  className="w-full border p-2 rounded mb-2"
+                  className="w-full p-2 mb-2 border rounded"
                   value={discountPercent}
                   onChange={(e) => setDiscountPercent(Number(e.target.value))}
                 />
                 <label>Disc (Rs)</label>
                 <input
                   type="number"
-                  className="w-full border p-2 rounded mb-2"
+                  className="w-full p-2 mb-2 border rounded"
                   value={discountRs}
                   onChange={(e) => setDiscountRs(Number(e.target.value))}
                 />
                 <label>Addition (Rs)</label>
                 <input
                   type="number"
-                  className="w-full border p-2 rounded mb-2"
+                  className="w-full p-2 mb-2 border rounded"
                   value={addition}
                   onChange={(e) => setAddition(Number(e.target.value))}
                 />
 
                 {/* <label>Addition Detail</label>
-                <textarea className="w-full border p-2 rounded mb-4"></textarea> */}
+                <textarea className="w-full p-2 mb-4 border rounded"></textarea> */}
 
                 <label>Addition Detail</label>
                 <textarea
-                  className="w-full border p-2 rounded mb-4"
+                  className="w-full p-2 mb-4 border rounded"
                   value={additionDetail}
                   onChange={(e) => setAdditionDetail(e.target.value)}
                 />
 
                 <button
-                  className="bg-green-500 text-white px-4 py-2 rounded w-full"
+                  className="w-full px-4 py-2 text-white bg-green-500 rounded"
                   // onClick={() => {
                   //   let percentDiscount = (grossTotal * discountPercent) / 100;
                   //   let totalDiscount = percentDiscount + discountRs - addition;
@@ -2676,18 +2680,18 @@ export default function InvoicePage() {
             onClick={() => setConfirmModalOpen(false)}
           >
             <div
-              className="bg-white p-4 rounded shadow-lg w-80 text-center text-black"
+              className="p-4 text-center text-black bg-white rounded shadow-lg w-80"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-lg font-semibold mb-4">Are you sure?</h2>
+              <h2 className="mb-4 text-lg font-semibold">Are you sure?</h2>
               <div className="flex justify-center space-x-4">
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  className="px-4 py-2 text-white bg-red-500 rounded"
                   onClick={() => setConfirmModalOpen(false)}
                 >
                   Cancel
                 </button>
-                <button className="bg-green-500 text-white px-4 py-2 rounded">
+                <button className="px-4 py-2 text-white bg-green-500 rounded">
                   Confirm
                 </button>
               </div>
@@ -2698,11 +2702,11 @@ export default function InvoicePage() {
 
       <main className="flex flex-1">
         <div className="">
-          <div className="flex flex-wrap items-center gap-4 bg-white p-4 border rounded ">
+          <div className="flex flex-wrap items-center gap-4 p-4 bg-white border rounded ">
             {/* hidden it for order-slip */}
             <select
               name="salesman_id"
-              className="border rounded px-4 py-2 hidden"
+              className="hidden px-4 py-2 border rounded"
               onChange={(e) => setSalesmanId(e.target.value)}
             >
               <option>Select salesman</option>
@@ -2716,7 +2720,7 @@ export default function InvoicePage() {
             {/* hidden it for order-slip */}
             <select
               name="bill_inv"
-              className="border rounded px-4 py-2 hidden"
+              className="hidden px-4 py-2 border rounded"
               onChange={(e) => setbillinv(e.target.value)}
             >
               <option value="0"> TAX INVOICE</option>
@@ -2728,15 +2732,15 @@ export default function InvoicePage() {
               type="text"
               placeholder="Bill No"
               value={billNo}
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
             /> */}
 
-            <div className="border border-black  rounded px-4 py-2 ml-2">
+            <div className="px-4 py-2 ml-2 border border-black rounded">
               <label>ORD/{orderCount + 1}</label>
             </div>
 
             {/* Date Picker */}
-            <div className="flex items-center  rounded px-4 py-2">
+            <div className="flex items-center px-4 py-2 rounded">
               <input
                 type="date"
                 name="date"
@@ -2756,7 +2760,7 @@ export default function InvoicePage() {
               name="caregory"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
             >
               <option value="">Select Category</option>
               {company.map((categry) => (
@@ -2772,7 +2776,7 @@ export default function InvoicePage() {
               <input
                 type="text"
                 placeholder="Search Item"
-                className="border rounded px-4 py-2 ml-2"
+                className="px-4 py-2 ml-2 border rounded"
               />
             </div>
 
@@ -2790,17 +2794,17 @@ export default function InvoicePage() {
               </label>
             </div>
             <span>
-              <span className="text-blue-950 text-lg font-bold">
+              <span className="text-lg font-bold text-blue-950">
                 {" "}
                 Total Coin
               </span>
               :{" "}
-              <span className="text-orange-900 text-lg font-bold">{coin}</span>
+              <span className="text-lg font-bold text-orange-900">{coin}</span>
             </span>
           </div>
 
           {/* //fetch product and  */}
-          <div className="flex-1 grid grid-cols-7 gap-4 p-4 overflow-y-auto">
+          <div className="grid flex-1 grid-cols-7 gap-4 p-4 overflow-y-auto">
             {filteredItems.length > 0 ? (
               filteredItems.map((item) => (
                 // <div
@@ -2812,7 +2816,7 @@ export default function InvoicePage() {
                 //     {item.name || "No Type"}
                 //   </p>
 
-                //   <div className="w-full h-32 flex items-center justify-center text-gray-500">
+                //   <div className="flex items-center justify-center w-full h-32 text-gray-500">
                 //     {item.image ? (
                 //       <img
                 //         src={`${baseImageURL}/storage/${item.image}`}
@@ -2828,32 +2832,34 @@ export default function InvoicePage() {
                 //   <p className="text-gray-600">₹{item.tax_rate || 0}</p>
                 // </div>
                 <div
-    key={item.code}
-    className="border border-blue-500 h-[200px] rounded-lg p-2 flex flex-col items-center text-center cursor-pointer overflow-hidden"
-    onClick={() => openModal(item)}
-  >
-    {/* Image */}
-    <div className="w-full flex justify-center items-center h-[80px]">
-      {item.image ? (
-        <img
-          src={`${baseImageURL}/storage/${item.image}`}
-          alt={item.code}
-          className="h-full object-contain"
-        />
-      ) : (
-        <span className="text-gray-400 text-sm">No Image</span>
-      )}
-    </div>
+                  key={item.code}
+                  className="border border-blue-500 h-[200px] rounded-lg p-2 flex flex-col items-center text-center cursor-pointer overflow-hidden"
+                  onClick={() => openModal(item)}
+                >
+                  {/* Image */}
+                  <div className="w-full flex justify-center items-center h-[80px]">
+                    {item.image ? (
+                      <img
+                        src={`${baseImageURL}/storage/${item.image}`}
+                        alt={item.code}
+                        className="object-contain h-full"
+                      />
+                    ) : (
+                      <span className="text-sm text-gray-400">No Image</span>
+                    )}
+                  </div>
 
-    {/* Name */}
-    <p className="mt-1 text-sm font-semibold truncate w-full">{item.name || "No Type"}</p>
+                  {/* Name */}
+                  <p className="w-full mt-1 text-sm font-semibold truncate">
+                    {item.name || "No Type"}
+                  </p>
 
-    {/* Rate and Tax */}
-    <div className="mt-1 text-xs text-gray-600 space-y-0.5">
-      <p>₹{item.rate || 0}</p>
-      <p>₹{item.tax_rate || 0}</p>
-    </div>
-  </div>
+                  {/* Rate and Tax */}
+                  <div className="mt-1 text-xs text-gray-600 space-y-0.5">
+                    <p>₹{item.rate || 0}</p>
+                    <p>₹{item.tax_rate || 0}</p>
+                  </div>
+                </div>
               ))
             ) : (
               <p>No products found for this category</p>
@@ -2862,10 +2868,10 @@ export default function InvoicePage() {
         </div>
 
         {/* Right Sidebar */}
-        <aside className="w-1/4 bg-gray-100 p-4 relative h-full">
+        <aside className="relative w-1/4 h-full p-4 bg-gray-100">
           <div className="mb-16 overflow-y-auto h-[20rem]">
             {addedProducts?.map((product, index) => (
-              <div key={index} className="border p-2 rounded mb-2">
+              <div key={index} className="p-2 mb-2 border rounded">
                 {product.name && <p className="font-bold">{product.name}</p>}
 
                 {product.description && (
@@ -3017,7 +3023,7 @@ export default function InvoicePage() {
             {/*    <p>₹{makingtotal}</p>*/}
             {/*</div>*/}
             <button
-              className="w-full bg-green-500 text-white p-4 rounded mt-4 text-xl font-semibold"
+              className="w-full p-4 mt-4 text-xl font-semibold text-white bg-green-500 rounded"
               onClick={openCheckout}
             >
               Checkout
@@ -3039,13 +3045,13 @@ export default function InvoicePage() {
                   value={barcode}
                   onChange={(e) => setBarcode(e.target.value)}
                   placeholder="Enter Barcode number"
-                  className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+                  className="w-full p-2 bg-red-100 border border-red-500 rounded outline-none focus:border-red-700"
                 />
 
                 <button
                   type="button"
                   onClick={handleSearchBarCode}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
                 >
                   Search
                 </button>
@@ -3069,7 +3075,7 @@ export default function InvoicePage() {
                     })
                   }
                   readOnly={!isEditable}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
 
                 <input
@@ -3090,7 +3096,7 @@ export default function InvoicePage() {
                     }
                   }}
                   readOnly={!isEditable}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
                 {/* product id pass(dont touch below) */}
 
@@ -3105,7 +3111,7 @@ export default function InvoicePage() {
                     })
                   }
                   readOnly={!isEditable}
-                  className="w-full p-2 rounded border hidden"
+                  className="hidden w-full p-2 border rounded"
                 />
 
                 {/* add quntiy */}
@@ -3122,7 +3128,7 @@ export default function InvoicePage() {
                   }
                   // readOnly={!isEditable}
 
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
               </div>
               <div>
@@ -3132,7 +3138,7 @@ export default function InvoicePage() {
                   type="number"
                   // readOnly
                   value={productDetails.netWeight}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onChange={(e) => {
                     const newNetWeight = Number(e.target.value) || 0;
                     setNtWt(newNetWeight);
@@ -3157,7 +3163,7 @@ export default function InvoicePage() {
                   name="rate"
                   value={selectedItem.rate}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -3168,7 +3174,7 @@ export default function InvoicePage() {
                   onWheel={(e) => e.target.blur()}
                   defaultValue={0}
                   value={productDetails.pcs}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onChange={(e) => {
                     const newPcs = Number(e.target.value) || 0;
                     setPcs(newPcs);
@@ -3196,7 +3202,7 @@ export default function InvoicePage() {
                   onWheel={(e) => e.target.blur()}
                   defaultValue={0}
                   value={productDetails.description}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   placeholder="Product Description"
                   onChange={(e) => {
                     // const newPcs = Number(e.target.value) || 0;
@@ -3222,7 +3228,7 @@ export default function InvoicePage() {
                     updateTotal(newGrm, making,netWt,pcss);
                   }}
                   // defaultValue={}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div> */}
 
@@ -3233,7 +3239,7 @@ export default function InvoicePage() {
                   type="number"
                   value={total}
                   readOnly
-                  className="border rounded p-2 w-full bg-gray-100 font-bold"
+                  className="w-full p-2 font-bold bg-gray-100 border rounded"
                 />
               </div> */}
               <div>
@@ -3242,7 +3248,7 @@ export default function InvoicePage() {
                   name="making"
                   type="number"
                   value={productDetails.making}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onWheel={(e) => e.target.blur()}
                   onChange={(e) => {
                     const newMaking = Number(e.target.value);
@@ -3288,7 +3294,7 @@ export default function InvoicePage() {
                       makingInRs: e.target.value,
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
 
@@ -3298,7 +3304,7 @@ export default function InvoicePage() {
                   name="making"
                   type="number"
                   value={productDetails.making}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onChange={(e) => {
                     const newMaking = Number(e.target.value);
 
@@ -3351,7 +3357,7 @@ export default function InvoicePage() {
 
                     setMaking(0); // clear % value
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div> */}
 
@@ -3361,7 +3367,7 @@ export default function InvoicePage() {
                   name="making_dsc"
                   type="number"
                   value={productDetails.making_dsc}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onWheel={(e) => e.target.blur()}
                   onChange={(e) => {
                     setProductDetails({
@@ -3378,7 +3384,7 @@ export default function InvoicePage() {
                   name="making_gst_percentage"
                   type="number"
                   value={productDetails.making_gst_percentage}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onWheel={(e) => e.target.blur()}
                   onChange={(e) => {
                     setProductDetails({
@@ -3394,7 +3400,7 @@ export default function InvoicePage() {
                   name="diamondWeight"
                   value={productDetails.diamondDetails}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="diamondWeight"
@@ -3407,7 +3413,7 @@ export default function InvoicePage() {
                       diamondDetails: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -3416,7 +3422,7 @@ export default function InvoicePage() {
                   name="diamondValue"
                   value={productDetails.diamondValue}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="diamondValue"
@@ -3429,7 +3435,7 @@ export default function InvoicePage() {
                       diamondValue: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -3438,7 +3444,7 @@ export default function InvoicePage() {
                   name="stoneWeight"
                   type="number"
                   value={productDetails.stoneDetails}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="stoneWeight"
@@ -3451,7 +3457,7 @@ export default function InvoicePage() {
                       stoneDetails: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -3460,7 +3466,7 @@ export default function InvoicePage() {
                   name="stoneValue"
                   value={productDetails.stoneValue}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
 
                 <input
@@ -3474,7 +3480,7 @@ export default function InvoicePage() {
                       stoneValue: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -3483,7 +3489,7 @@ export default function InvoicePage() {
                   name="huid"
                   type="text"
                   value={productDetails.huid}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
 
                 <input
@@ -3496,7 +3502,7 @@ export default function InvoicePage() {
                       huid: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -3505,7 +3511,7 @@ export default function InvoicePage() {
                   name="hallmark"
                   value={productDetails.hallmark}
                   type="text"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="hallmark"
@@ -3517,7 +3523,7 @@ export default function InvoicePage() {
                       hallmark: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -3543,7 +3549,7 @@ export default function InvoicePage() {
                       hallmarkCharge: e.target.value, // ✅ update the input value in state
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -3564,7 +3570,7 @@ export default function InvoicePage() {
                       newWastageCharge
                     );
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="wastageCharge"
@@ -3587,7 +3593,7 @@ export default function InvoicePage() {
                       wastageCharge: e.target.value, // ✅ keeps input editable
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
 
@@ -3610,7 +3616,7 @@ export default function InvoicePage() {
                       newOtherCharges
                     );
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 {/* <input
                   name="otherCharge"
@@ -3633,7 +3639,7 @@ export default function InvoicePage() {
                       otherCharge: e.target.value, // ✅ Keep the input value updated
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
 
                 <input
@@ -3658,7 +3664,7 @@ export default function InvoicePage() {
                       otherCharge: newOtherCharges, // store as number for consistency
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
 
@@ -3670,13 +3676,13 @@ export default function InvoicePage() {
             value={total}
            
             readOnly
-            className="border rounded p-2 w-full bg-gray-100 font-bold"
+            className="w-full p-2 font-bold bg-gray-100 border rounded"
           />
         </div> */}
             </div>
             <button
               type="submit"
-              className="w-full bg-green-500 text-white p-2 rounded mt-4"
+              className="w-full p-2 mt-4 text-white bg-green-500 rounded"
             >
               Add Product
             </button>
@@ -3698,9 +3704,9 @@ export default function InvoicePage() {
           {modalStep === 1 && (
             <>
               <h2 className="text-lg font-bold">Customer Details</h2>
-              <div className="flex flex-col justify-center items-center">
+              <div className="flex flex-col items-center justify-center">
                 <form
-                  className="w-full space-y-4 p-4 bg-white shadow-md rounded-md"
+                  className="w-full p-4 space-y-4 bg-white rounded-md shadow-md"
                   onSubmit={handleNextStep}
                 >
                   {/* Phone No Input */}
@@ -3710,12 +3716,12 @@ export default function InvoicePage() {
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       placeholder="Type phone then press enter"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
                     />
                     <button
                       type="button"
                       onClick={handleSearch}
-                      className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
+                      className="p-2 text-white bg-green-500 rounded-full shadow-md hover:bg-green-600"
                     >
                       <IoIosSearch />
                     </button>
@@ -3724,11 +3730,10 @@ export default function InvoicePage() {
                     <button
                       type="button"
                       onClick={handleOpenModal}
-                      className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
+                      className="p-2 text-white bg-green-500 rounded-full shadow-md hover:bg-green-600"
                     >
                       <FaPlus />
                     </button>
-                
                   </div>
 
                   {/* Customer Name */}
@@ -3743,7 +3748,7 @@ export default function InvoicePage() {
                         }))
                       }
                       placeholder="Customer Name"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
                     />
 
                     <input
@@ -3756,7 +3761,7 @@ export default function InvoicePage() {
                         }))
                       }
                       placeholder="Customer ID"
-                      className="flex-1 hidden border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      className="flex-1 hidden p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
                     />
                   </div>
 
@@ -3770,7 +3775,7 @@ export default function InvoicePage() {
                       }))
                     }
                     placeholder="Address"
-                    className="w-full border border-green-500 rounded-md p-2 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                    className="w-full p-2 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
                     rows="2"
                   ></textarea>
 
@@ -3786,7 +3791,7 @@ export default function InvoicePage() {
                         }))
                       }
                       placeholder="GSTIN"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
                     />
                   </div>
 
@@ -3795,13 +3800,13 @@ export default function InvoicePage() {
                     <button
                       type="button"
                       onClick={closeCheckout}
-                      className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+                      className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+                      className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
                     >
                       Next
                     </button>
@@ -3813,11 +3818,11 @@ export default function InvoicePage() {
           {modalStep === 2 && (
             <>
               <div className="p-4 bg-white rounded shadow">
-                <h2 className="text-xl font-bold mb-4">Bill Amount</h2>
-                <p className="text-green-500 text-2xl font-bold mb-4">₹{gto}</p>
-                <div className="bg-white shadow-md rounded-lg p-6">
+                <h2 className="mb-4 text-xl font-bold">Bill Amount</h2>
+                <p className="mb-4 text-2xl font-bold text-green-500">₹{gto}</p>
+                <div className="p-6 bg-white rounded-lg shadow-md">
                   {/* Available Loyalty Points */}
-                  <div className="flex justify-between items-center border-b pb-3 mb-3 hidden">
+                  <div className="flex items-center justify-between hidden pb-3 mb-3 border-b">
                     <h1 className="text-lg font-semibold text-gray-700">
                       Available Loyalty Points:
                     </h1>
@@ -3830,7 +3835,7 @@ export default function InvoicePage() {
 
                   {/* Loyalty Discount Section */}
                   {/* {gto >= loyaltyData.min_invcValue_needed_toStartRedemp ? (
-                    <div className=" hidden flex justify-between items-center border-b pb-3 mb-3">
+                    <div className="flex items-center justify-between hidden pb-3 mb-3 border-b ">
                       <h1 className="text-lg font-semibold text-gray-700">
                         Loyalty Discount Applied:
                       </h1>
@@ -3839,7 +3844,7 @@ export default function InvoicePage() {
                       </p>
                     </div>
                   ) : (
-                    <p className="text-red-500 text-sm font-medium bg-red-100 p-2 rounded-md text-center">
+                    <p className="p-2 text-sm font-medium text-center text-red-500 bg-red-100 rounded-md">
                       Spend ₹
                       {loyaltyData.min_invcValue_needed_toStartRedemp - gto}{" "}
                       more to start redeeming points!
@@ -3847,7 +3852,7 @@ export default function InvoicePage() {
                   )} */}
 
                   {/* Final Payable Amount */}
-                  <div className="flex justify-between items-center mt-4">
+                  <div className="flex items-center justify-between mt-4">
                     <h1 className="text-lg font-semibold text-gray-700">
                       Final Payable Amount:
                     </h1>
@@ -3882,21 +3887,19 @@ export default function InvoicePage() {
                     </div> */}
 
                     <div className="flex space-x-2">
-                      {["adjust", "advance"].map(
-                        (method) => (
-                          <button
-                            key={method}
-                            className={`p-2 rounded ${
-                              paymentMethod === method
-                                ? "bg-orange-500 text-white"
-                                : "bg-gray-200"
-                            }`}
-                            onClick={() => handlePaymentMethodSelect(method)}
-                          >
-                            {method.charAt(0).toUpperCase() + method.slice(1)}
-                          </button>
-                        )
-                      )}
+                      {["adjust", "advance"].map((method) => (
+                        <button
+                          key={method}
+                          className={`p-2 rounded ${
+                            paymentMethod === method
+                              ? "bg-orange-500 text-white"
+                              : "bg-gray-200"
+                          }`}
+                          onClick={() => handlePaymentMethodSelect(method)}
+                        >
+                          {method.charAt(0).toUpperCase() + method.slice(1)}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
@@ -3909,7 +3912,7 @@ export default function InvoicePage() {
                         onWheel={(e) => e.target.blur()}
                         value={cashAmount}
                         onChange={(e) => setCashAmount(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -3927,7 +3930,7 @@ export default function InvoicePage() {
                             cardAmount: Number(e.target.value),
                           }))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                       <label>Card Service Charge</label>
                       <input
@@ -3940,7 +3943,7 @@ export default function InvoicePage() {
                             serviceCharge: Number(e.target.value),
                           }))
                         }
-                        className="w-full p-2 rounded border mt-2"
+                        className="w-full p-2 mt-2 border rounded"
                       />
                     </div>
                   )}
@@ -3953,7 +3956,7 @@ export default function InvoicePage() {
                         onWheel={(e) => e.target.blur()}
                         value={upiAmount}
                         onChange={(e) => setUpiAmount(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -3966,7 +3969,7 @@ export default function InvoicePage() {
                         onWheel={(e) => e.target.blur()}
                         value={otherAmount}
                         onChange={(e) => setOtherAmount(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )} */}
@@ -3980,7 +3983,7 @@ export default function InvoicePage() {
                         onChange={(e) =>
                           setAdvanceAmount(Number(e.target.value))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )} */}
@@ -3994,7 +3997,7 @@ export default function InvoicePage() {
                         onChange={(e) =>
                           setAdjustAmount(Number(e.target.value))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -4010,7 +4013,7 @@ export default function InvoicePage() {
                         onChange={(e) =>
                           setAdvanceAmount(Number(e.target.value))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -4020,19 +4023,19 @@ export default function InvoicePage() {
                     <input
                       type="number"
                       value={depositeMaterial}
-                       onWheel={(e) => e.target.blur()}
+                      onWheel={(e) => e.target.blur()}
                       onChange={(e) =>
                         setDeposteMaterial(Number(e.target.value))
                       }
-                      className="w-full p-2 rounded border"
+                      className="w-full p-2 border rounded"
                     />
                   </div>
 
                   <div>
-                    {/* <p className="text-red-500 font-bold">
+                    {/* <p className="font-bold text-red-500">
                       Remaining Amount: ₹{remainingAmount}
                     </p> */}
-                    <p className="text-red-500 font-bold">
+                    <p className="font-bold text-red-500">
                       Remaining Amount: ₹{Number(remainingAmount).toFixed(3)}
                     </p>
                   </div>
@@ -4050,17 +4053,17 @@ export default function InvoicePage() {
                     <p>advanceAmount: ₹{advanceAmount}</p>
                   </div> */}
 
-                  <div className="flex space-x-4 mt-4">
+                  <div className="flex mt-4 space-x-4">
                     <button
                       onClick={() => {
                         setModalStep(1);
                       }}
-                      className="w-1/2 bg-gray-500 text-white p-2 rounded"
+                      className="w-1/2 p-2 text-white bg-gray-500 rounded"
                     >
                       Back
                     </button>
                     <button
-                      className="w-1/2 bg-green-500 text-white p-2 rounded"
+                      className="w-1/2 p-2 text-white bg-green-500 rounded"
                       onClick={handleCheckoutSubmit}
                     >
                       Checkout

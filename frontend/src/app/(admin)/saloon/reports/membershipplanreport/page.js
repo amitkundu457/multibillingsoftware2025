@@ -16,7 +16,7 @@ export default function MembershipReport() {
       try {
         const token = getToken();
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/membership-plan-report",
+          " https://apibrize.brizindia.com/api/membership-plan-report",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -32,10 +32,6 @@ export default function MembershipReport() {
     fetchReport();
   }, []);
 
- 
-  
-
-  
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
@@ -53,7 +49,7 @@ export default function MembershipReport() {
               <th className="p-4 font-semibold text-center">
                 Total Revenue (₹)
               </th>
-             </tr>
+            </tr>
           </thead>
           <tbody>
             {report.map((row, index) => (
@@ -72,9 +68,6 @@ export default function MembershipReport() {
                 <td className="p-4 font-semibold">
                   ₹{row.total_revenue.toLocaleString()}
                 </td>
-
- 
-      
               </tr>
             ))}
           </tbody>

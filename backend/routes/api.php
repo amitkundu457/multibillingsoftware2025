@@ -264,7 +264,7 @@ Route::post('/distrubuters', [DistrubuterController::class, 'store']);
 Route::get('/distrubuters/{id}', [DistrubuterController::class, 'show']);
 Route::post('/distrubuters/{id}', [DistrubuterController::class, 'update']);
 Route::delete('/distrubuters/{id}', [DistrubuterController::class, 'destroy']);
-
+Route::get('/customers/all', action: [CustomerController::class, 'customerList']); // Fetch all customers
 
 Route::get('/customers', action: [CustomerController::class, 'index']); // Fetch all customers
 Route::post('/customers', [CustomerController::class, 'store']); // Create a customer

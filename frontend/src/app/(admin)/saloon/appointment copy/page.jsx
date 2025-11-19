@@ -1,4 +1,4 @@
- 'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa";
@@ -10,12 +10,12 @@ const AppointmentPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const [formData, setFormData] = useState({
-    appointment_date: '',
-    appointment_time: '',
-    name: '',
-    phone: '',
-    service: '',
-    gender: ''
+    appointment_date: "",
+    appointment_time: "",
+    name: "",
+    phone: "",
+    service: "",
+    gender: "",
   });
   const [editingAppointmentId, setEditingAppointmentId] = useState(null);
 
@@ -25,33 +25,38 @@ const AppointmentPage = () => {
     setIsModalOpen(false);
     setEditingAppointmentId(null);
     setFormData({
-      appointment_date: '',
-      appointment_time: '',
-      name: '',
-      phone: '',
-      service: '',
-      gender: ''
+      appointment_date: "",
+      appointment_time: "",
+      name: "",
+      phone: "",
+      service: "",
+      gender: "",
     });
   };
 
   // Fetch appointments from the API
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('  http://127.0.0.1:8000/api/appointments');
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/appointments"
+      );
       setAppointments(response.data.appointments);
     } catch (error) {
-      console.error('Error fetching appointments:', error);
+      console.error("Error fetching appointments:", error);
     }
   };
 
   // Create new appointment
   const handleCreateAppointment = async () => {
     try {
-      await axios.post('  http://127.0.0.1:8000/api/appointments', formData);
+      await axios.post(
+        "  https://apibrize.brizindia.com/api/appointments",
+        formData
+      );
       fetchAppointments();
       closeModal();
     } catch (error) {
-      console.error('Error creating appointment:', error);
+      console.error("Error creating appointment:", error);
     }
   };
 
@@ -63,7 +68,7 @@ const AppointmentPage = () => {
       name: appointment.name,
       phone: appointment.phone,
       service: appointment.service,
-      gender: appointment.gender
+      gender: appointment.gender,
     });
     setEditingAppointmentId(appointment.id);
     openModal();
@@ -72,21 +77,26 @@ const AppointmentPage = () => {
   // Update an existing appointment
   const handleUpdateAppointment = async () => {
     try {
-      await axios.post(`  http://127.0.0.1:8000/api/appointments/${editingAppointmentId}`, formData);
+      await axios.post(
+        `  https://apibrize.brizindia.com/api/appointments/${editingAppointmentId}`,
+        formData
+      );
       fetchAppointments();
       closeModal();
     } catch (error) {
-      console.error('Error updating appointment:', error);
+      console.error("Error updating appointment:", error);
     }
   };
 
   // Delete an appointment
   const handleDeleteAppointment = async (id) => {
     try {
-      await axios.delete(`  http://127.0.0.1:8000/api/appointments/${id}`);
+      await axios.delete(
+        `  https://apibrize.brizindia.com/api/appointments/${id}`
+      );
       fetchAppointments();
     } catch (error) {
-      console.error('Error deleting appointment:', error);
+      console.error("Error deleting appointment:", error);
     }
   };
 
@@ -94,7 +104,7 @@ const AppointmentPage = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -172,15 +182,37 @@ const AppointmentPage = () => {
           <tbody>
             {appointments.map((appointment) => (
               <tr key={appointment.id} className="border-t">
-                <td className="px-4 py-2 text-sm text-gray-800">{appointment.appointment_date}</td>
-                <td className="px-4 py-2 text-sm text-gray-800">{appointment.appointment_time}</td>
-                <td className="px-4 py-2 text-sm text-gray-800">{appointment.name}</td>
-                <td className="px-4 py-2 text-sm text-gray-800">{appointment.phone}</td>
-                <td className="px-4 py-2 text-sm text-gray-800">{appointment.service}</td>
-                <td className="px-4 py-2 text-sm text-gray-800">{appointment.gender}</td>
                 <td className="px-4 py-2 text-sm text-gray-800">
-                  <button onClick={() => handleEditAppointment(appointment)} className="text-blue-500">Edit</button>
-                  <button onClick={() => handleDeleteAppointment(appointment.id)} className="text-red-500 ml-2">Delete</button>
+                  {appointment.appointment_date}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {appointment.appointment_time}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {appointment.name}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {appointment.phone}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {appointment.service}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {appointment.gender}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  <button
+                    onClick={() => handleEditAppointment(appointment)}
+                    className="text-blue-500"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteAppointment(appointment.id)}
+                    className="text-red-500 ml-2"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
@@ -191,11 +223,15 @@ const AppointmentPage = () => {
       {/* Modal for Create / Edit Appointment */}
       <Modal open={isModalOpen} onClose={closeModal} center>
         <div className="w-96">
-          <h2 className="text-2xl font-semibold mb-4">{editingAppointmentId ? 'Edit Appointment' : 'Add Appointment'}</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            {editingAppointmentId ? "Edit Appointment" : "Add Appointment"}
+          </h2>
           <form onSubmit={handleSubmit}>
             {/* Form fields */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Appointment Date</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Appointment Date
+              </label>
               <input
                 type="date"
                 name="appointment_date"
@@ -206,7 +242,9 @@ const AppointmentPage = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Time</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Time
+              </label>
               <input
                 type="time"
                 name="appointment_time"
@@ -217,7 +255,9 @@ const AppointmentPage = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Name</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Name
+              </label>
               <input
                 type="text"
                 name="name"
@@ -228,7 +268,9 @@ const AppointmentPage = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Phone</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Phone
+              </label>
               <input
                 type="tel"
                 name="phone"
@@ -239,7 +281,9 @@ const AppointmentPage = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Service</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Service
+              </label>
               <input
                 type="text"
                 name="service"
@@ -250,7 +294,9 @@ const AppointmentPage = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Gender</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Gender
+              </label>
               <select
                 name="gender"
                 value={formData.gender}
@@ -265,8 +311,11 @@ const AppointmentPage = () => {
             </div>
 
             <div className="flex justify-end">
-              <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none">
-                {editingAppointmentId ? 'Update' : 'Add'} Appointment
+              <button
+                type="submit"
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none"
+              >
+                {editingAppointmentId ? "Update" : "Add"} Appointment
               </button>
             </div>
           </form>

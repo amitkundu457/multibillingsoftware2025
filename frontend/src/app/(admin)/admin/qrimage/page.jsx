@@ -20,7 +20,7 @@
 //     }
 //   };
 
-//   //token 
+//   //token
 //   const getToken = () => {
 //     const cookie = document.cookie
 //       .split("; ")
@@ -36,13 +36,8 @@
 //     }
 //   };
 
-
-
-
-
-
 //   const handleUpload = async () => {
-    
+
 // const token = getToken();
 // if (!token) {
 //   notifyTokenMissing();
@@ -57,7 +52,7 @@
 
 //     try {
 //       const res = await axios.post(
-//         ' http://127.0.0.1:8000/api/qr/upload', // Replace with your API endpoint
+//         ' https://apibrize.brizindia.com/api/qr/upload', // Replace with your API endpoint
 //         formData,
 //         {
 //           headers: {
@@ -115,32 +110,32 @@
 //   );
 // }
 
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function CoverUpload() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploadUrl, setUploadUrl] = useState(null);
   const [existingUrl, setExistingUrl] = useState(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Get token from cookies
   const getToken = () => {
     const cookie = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('access_token='));
-    return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
   };
 
   const notifyTokenMissing = () => {
-    if (typeof window !== 'undefined' && window.notyf) {
-      window.notyf.error('Authentication token not found!');
+    if (typeof window !== "undefined" && window.notyf) {
+      window.notyf.error("Authentication token not found!");
     } else {
-      console.error('Authentication token not found!');
+      console.error("Authentication token not found!");
     }
   };
 
@@ -154,17 +149,18 @@ export default function CoverUpload() {
 
     const fetchExistingImage = async () => {
       try {
-        const res = await axios.get(' http://127.0.0.1:8000/api/qr/upload',
+        const res = await axios.get(
+          " https://apibrize.brizindia.com/api/qr/upload",
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${token}`,
             },
           }
         );
         setExistingUrl(res.data.data?.cover || null);
       } catch (err) {
-        console.warn('No existing QR image found.');
+        console.warn("No existing QR image found.");
       }
     };
 
@@ -186,18 +182,18 @@ export default function CoverUpload() {
 
     if (!file) return;
     setLoading(true);
-    setMessage('');
+    setMessage("");
 
     const formData = new FormData();
-    formData.append('cover', file);
+    formData.append("cover", file);
 
     try {
       const res = await axios.post(
-        ' http://127.0.0.1:8000/api/qr/upload',
+        " https://apibrize.brizindia.com/api/qr/upload",
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         }
@@ -206,11 +202,11 @@ export default function CoverUpload() {
       const uploaded = res.data.data.cover;
       setUploadUrl(uploaded);
       setExistingUrl(uploaded); // also update existing
-      setMessage(res.data.message || 'Upload successful!');
+      setMessage(res.data.message || "Upload successful!");
       setFile(null);
       setPreview(null);
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Upload failed');
+      setMessage(err.response?.data?.message || "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -230,7 +226,11 @@ export default function CoverUpload() {
       {preview && (
         <div>
           <p className="text-sm text-gray-500 mb-1">Preview:</p>
-          <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded border" />
+          <img
+            src={preview}
+            alt="Preview"
+            className="w-full h-48 object-cover rounded border"
+          />
         </div>
       )}
 
@@ -239,7 +239,7 @@ export default function CoverUpload() {
         disabled={loading || !file}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:bg-gray-400"
       >
-        {loading ? 'Uploading...' : 'Upload'}
+        {loading ? "Uploading..." : "Upload"}
       </button>
 
       {message && (
@@ -248,8 +248,14 @@ export default function CoverUpload() {
 
       {existingUrl && (
         <div className="mt-4">
-          <p className="text-sm text-gray-500 mb-1">Latest Uploaded QR Image:</p>
-          <img src={existingUrl} alt="Current QR" className="w-full h-48 object-cover rounded border" />
+          <p className="text-sm text-gray-500 mb-1">
+            Latest Uploaded QR Image:
+          </p>
+          <img
+            src={existingUrl}
+            alt="Current QR"
+            className="w-full h-48 object-cover rounded border"
+          />
         </div>
       )}
     </div>

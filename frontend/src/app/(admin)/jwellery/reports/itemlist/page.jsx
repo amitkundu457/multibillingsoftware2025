@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import { FaFilePdf } from "react-icons/fa6";
 import { BsFiletypeXls } from "react-icons/bs";
@@ -8,12 +8,14 @@ import axios from "axios";
 const Page = () => {
   const [items, setItems] = useState([]);
   const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
- 
+  const [endDate, setEndDate] = useState("");
+
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get("  http://127.0.0.1:8000/api/item-list-report");
+        const response = await axios.get(
+          "  https://apibrize.brizindia.com/api/item-list-report"
+        );
         console.log("Fetched Data:", response.data);
         setItems(response.data);
       } catch (error) {
@@ -25,7 +27,7 @@ const Page = () => {
   }, []);
   const handleDownloadPDF = async (type) => {
     try {
-      const url = `  http://127.0.0.1:8000/api/item-list-forreport?format=${type}&start_date=${startDate}&end_date=${endDate}`;
+      const url = `  https://apibrize.brizindia.com/api/item-list-forreport?format=${type}&start_date=${startDate}&end_date=${endDate}`;
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -61,23 +63,23 @@ const Page = () => {
         <div>
           <h1 className="font-bold text-2xl text-gray-800">Item List</h1>
         </div>
-         <div>
-                        <button
-                          onClick={() => handleDownloadPDF("pdf")}
-                          className="mr-5 text-4xl text-red-500 hover:scale-110 transition"
-                        >
-                          <FaFilePdf />
-                        </button>
-                        <button
-                          onClick={() => handleDownloadPDF("xlsx")}
-                          className="mr-5 text-4xl text-green-500 hover:scale-110 transition"
-                        >
-                          <BsFiletypeXls />
-                        </button>
-                        <button className="mr-2 text-4xl text-blue-400 hover:scale-110 transition">
-                          <BiSolidPrinter />
-                        </button>
-                      </div>
+        <div>
+          <button
+            onClick={() => handleDownloadPDF("pdf")}
+            className="mr-5 text-4xl text-red-500 hover:scale-110 transition"
+          >
+            <FaFilePdf />
+          </button>
+          <button
+            onClick={() => handleDownloadPDF("xlsx")}
+            className="mr-5 text-4xl text-green-500 hover:scale-110 transition"
+          >
+            <BsFiletypeXls />
+          </button>
+          <button className="mr-2 text-4xl text-blue-400 hover:scale-110 transition">
+            <BiSolidPrinter />
+          </button>
+        </div>
       </div>
 
       {/* Search Section */}
@@ -134,7 +136,7 @@ const Page = () => {
                 <td className="border px-4 py-2">{item.rate}</td>
                 {/* <td className="border px-4 py-2">
                   <img
-                    src={`  http://127.0.0.1:8000/${item.image}`}
+                    src={`  https://apibrize.brizindia.com/${item.image}`}
                     alt={item.name}
                     className="w-16 h-16 object-cover rounded"
                   />

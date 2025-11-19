@@ -25,7 +25,7 @@ function Page() {
 
   const [billAmount, setBillAmount] = useState(0);
   const [modal, setModal] = useState(false);
-  const[supplierlist, setSupplierlist] = useState([]);
+  const [supplierlist, setSupplierlist] = useState([]);
 
   const [file, setFile] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -47,16 +47,9 @@ function Page() {
     }
   };
 
-
-
-
-
-
-
-
   const handleDeleteAllPurchase = async () => {
     const response = await axios.delete(
-      " http://127.0.0.1:8000/api/delete-all-purchase"
+      " https://apibrize.brizindia.com/api/delete-all-purchase"
     );
     if (response.status === 200) {
       alert(response.data.message); // Show success message
@@ -73,7 +66,8 @@ function Page() {
       notifyTokenMissing();
       return;
     }
-    const response = await axios.get(" http://127.0.0.1:8000/api/suppliers",
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/suppliers",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -87,7 +81,8 @@ function Page() {
   }, []);
 
   const handleDownloadSample = () => {
-    window.location.href = " http://127.0.0.1:8000/api/download-sample-purchase";
+    window.location.href =
+      " https://apibrize.brizindia.com/api/download-sample-purchase";
   };
 
   const handleFileChange = (e) => {
@@ -112,7 +107,7 @@ function Page() {
       // Log FormData
 
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/upload/purchase",
+        " https://apibrize.brizindia.com/api/upload/purchase",
         fileFormData
       );
       alert(response.data.message);

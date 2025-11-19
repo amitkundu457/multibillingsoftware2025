@@ -1,4 +1,3 @@
-
 //this foe saloon
 
 // "use client";
@@ -36,7 +35,7 @@
 //     }
 //     try {
 //       const response = await axios.get(
-//         " http://127.0.0.1:8000/api/cover/upload",
+//         " https://apibrize.brizindia.com/api/cover/upload",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -76,7 +75,7 @@
 //       }
 //       try {
 //         const response = await axios.get(
-//           " http://127.0.0.1:8000/api/masterlogobill",
+//           " https://apibrize.brizindia.com/api/masterlogobill",
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -118,16 +117,14 @@
 
 //         {/* )
 //       } */}
-      
+
 //       {/* Top Section */}
 //       <div className="border border-black w-full p-4 flex items-start">
 //         {/* Left Section */}
 
 //         <div className="w-2/3 pr-4 border-r border-black">
 //           {/* Header Section */}
-          
 
-         
 //           <div className="mt-4">
 //             {/* Address Section */}
 //             <div>
@@ -172,8 +169,6 @@
 //             <span className="text-gray-900">{data?.billno || "-"}</span>
 //           </div>
 
-        
-
 //           <div className="flex flex-col">
 //             <span className="font-bold text-gray-700">Invoice Date</span>
 //             <span className="text-gray-900">{data?.date || "-"}</span>
@@ -184,7 +179,6 @@
 
 //       {/* Middle Section */}
 //       <div className=" ">
-       
 
 //         <div className="grid grid-cols-1 gap-4">
 //           {/* Bill To Section */}
@@ -193,7 +187,7 @@
 //             {data.users.customers.map((customer) => (
 //               <div key={customer.id}>
 //                 <p className="text-sm">
-//                   <span className=" font-bold">{data.users.name}</span> 
+//                   <span className=" font-bold">{data.users.name}</span>
 //                 </p>
 //                 {/* <p className="text-sm">Address: {customer.address || "N/A"}</p> */}
 //                 <p className="text-sm">
@@ -256,7 +250,7 @@
 //     // const fetchLogoUrl = async () => {
 //     //   try {
 //     //     const response = await axios.get(
-//     //       " http://127.0.0.1:8000/api/masterlogobill"
+//     //       " https://apibrize.brizindia.com/api/masterlogobill"
 //     //     );
 //     //     console.log("API Response:", response.data);
 
@@ -273,7 +267,7 @@
 //     // };
 //     const fetchLogoUrl = async () => {
 //       try {
-//         const response = await axios.get(" http://127.0.0.1:8000/api/masterlogobill");
+//         const response = await axios.get(" https://apibrize.brizindia.com/api/masterlogobill");
 //         const logoUrl = response.data.logo;
 
 //         if (logoUrl) {
@@ -436,7 +430,7 @@
 
 //     const fetchLogoUrl = async () => {
 //       try {
-//         const response = await axios.get(" http://127.0.0.1:8000/api/masterlogobill");
+//         const response = await axios.get(" https://apibrize.brizindia.com/api/masterlogobill");
 //         const logoUrl = response.data.logo;
 
 //         if (logoUrl) {
@@ -600,7 +594,7 @@
 
 //     const fetchLogoUrl = async () => {
 //       try {
-//         const response = await axios.get(" http://127.0.0.1:8000/api/masterlogobill");
+//         const response = await axios.get(" https://apibrize.brizindia.com/api/masterlogobill");
 //         const logoUrl = response.data.logo;
 
 //         if (logoUrl) {
@@ -742,7 +736,6 @@
 
 // export default InvoiceHeader;
 
-
 // cruurent goin for jewellery
 "use client";
 import axios from "axios";
@@ -779,7 +772,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
     }
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/cover/upload",
+        " https://apibrize.brizindia.com/api/cover/upload",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -819,7 +812,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
       }
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/masterlogobill",
+          " https://apibrize.brizindia.com/api/masterlogobill",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -850,7 +843,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
     <div className="border-t border-r border-l w-full border-gray-800 ">
       {/* {
         fetchedLogoUrl==null &&( */}
-          {/* <div className="bg-red-200 w-full h-[100px]  overflow-hidden">
+      {/* <div className="bg-red-200 w-full h-[100px]  overflow-hidden">
         <img
           src={fetchcoverimage}
           alt="Cover image Logo"
@@ -859,8 +852,6 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
         />
       </div> */}
 
-      
-      
       {/* Top Section */}
       <div className="border border-black w-full p-4 flex items-start">
         {/* Left Section */}
@@ -870,15 +861,13 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
           <div className="flex items-center space-x-4 border-b pb-2">
             {/* <img src={fetchedLogoUrl} className="w-[20%]" alt="Company Logo" /> */}
             {/* <img src={fetchedLogoUrl} className=" w-[40px] h-[40px] rounded-sm" alt="Company Logo" /> */}
-            {
-              fetchedLogoUrl!==null &&(
-                <img
-              src={fetchedLogoUrl}
-              alt="Company Logo"
-              className="logo-img w-32 h-auto"
-            />
-              )
-            }
+            {fetchedLogoUrl !== null && (
+              <img
+                src={fetchedLogoUrl}
+                alt="Company Logo"
+                className="logo-img w-32 h-auto"
+              />
+            )}
             <div>
               <h1 className="text-2xl font-bold text-red-600">
                 {companyName?.user?.information?.business_name || "N/A"}

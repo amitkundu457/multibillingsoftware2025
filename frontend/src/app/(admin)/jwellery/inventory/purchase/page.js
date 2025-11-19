@@ -1,9 +1,3 @@
-
-
-
-
-
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -25,7 +19,7 @@ import { usePurchase } from "@/app/hooks/purchase";
 import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import toast from "react-hot-toast";
-import {getProductService} from '@/app/components/config'
+import { getProductService } from "@/app/components/config";
 
 function Page() {
   // <-- Capitalize "Page"
@@ -44,7 +38,6 @@ function Page() {
   const [producstList, setProductList] = useState([]);
   const [purchaseList, setPurchaseList] = useState([]);
 
- 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -81,19 +74,20 @@ function Page() {
 
   const supplierList = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get(" http://127.0.0.1:8000/api/suppliers", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/suppliers",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     console.log("response", response?.data?.suppliers);
     setSupplierlist(response?.data?.suppliers);
   };
 
-  
-
   const fetchpurchaseList = async () => {
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/saloon-purchase-returnss",
+        " https://apibrize.brizindia.com/api/saloon-purchase-returnss",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -111,7 +105,6 @@ function Page() {
     supplierList();
     featchProductsList();
     fetchpurchaseList();
-   
   }, []);
 
   const [formData, setFormData] = useState({
@@ -173,15 +166,18 @@ function Page() {
 
   const fetchSupplierList = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get(" http://127.0.0.1:8000/api/suppliers", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/suppliers",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     setSupplierlist(response?.data?.suppliers || []);
   };
 
   const handleDeleteAllPurchase = async () => {
     const response = await axios.delete(
-      " http://127.0.0.1:8000/api/delete-all-purchase",
+      " https://apibrize.brizindia.com/api/delete-all-purchase",
       {
         headers: { authorization: `Bearer ${token}` },
       }
@@ -218,7 +214,8 @@ function Page() {
   };
 
   const handleDownloadSample = () => {
-    window.location.href = " http://127.0.0.1:8000/api/download-sample-purchase";
+    window.location.href =
+      " https://apibrize.brizindia.com/api/download-sample-purchase";
   };
 
   const handleFileChange = (e) => {
@@ -257,7 +254,7 @@ function Page() {
       }, 200); // Every 200ms, increase progress by 10% (Total 2s)
 
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/purchase/bulk-upload-csv",
+        " https://apibrize.brizindia.com/api/purchase/bulk-upload-csv",
         fileFormData,
         {
           headers: {
@@ -348,12 +345,12 @@ function Page() {
   const featchProductsList = async () => {
     try {
       // const res = await axios.get(
-      //   " http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+      //   " https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product",
       //   {
       //     headers: { Authorization: `Bearer ${token}` },
       //   }
       // );
-       const res = await getProductService();
+      const res = await getProductService();
       setProductList(res?.data);
     } catch (error) {
       console.error("Fetch products failed:", error);
@@ -457,14 +454,14 @@ function Page() {
       console.log("formData", formData);
 
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/saloon-purchase",
+        " https://apibrize.brizindia.com/api/saloon-purchase",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       toast.success("Purchase saved successfully!");
-      fetchpurchaseList()
+      fetchpurchaseList();
       console.log("response", response.data);
 
       // Success response handling
@@ -805,7 +802,6 @@ function Page() {
             placeholder="Nwt"
           />
         </div>
-        
 
         <div className="w-[6%] flex flex-col text-sm gap-1 p-1">
           <label htmlFor="">Amount</label>

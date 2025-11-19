@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal } from "react-responsive-modal";
@@ -41,7 +41,6 @@ const Customers = () => {
   });
   const notyf = new Notyf(); // Initialize Notyf
 
-
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -57,62 +56,62 @@ const Customers = () => {
     }
   };
 
-
-
-
-
-
-
   // Fetch Customers
   const fetchCustomers = async () => {
     try {
       const token = getCookie("access_token"); // Retrieve token
-  
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },
       };
-  
-      const { data } = await axios.get("  http://127.0.0.1:8000/api/customers", config);
+
+      const { data } = await axios.get(
+        "  https://apibrize.brizindia.com/api/customers",
+        config
+      );
       setCustomers(data);
     } catch (error) {
       notyf.error("Error fetching customers!");
       console.error("Error fetching customers:", error);
     }
   };
-  
 
   // Handle Create/Update
   const onSubmit = async (data) => {
     try {
       const token = getCookie("access_token"); // Retrieve token
-  
+
       const payload = {
         ...data,
         customer_type: data.customerType, // Mapping to backend's expected field
         customer_sub_type: data.customerSubType || null, // Ensure the sub type is sent as null if not provided
       };
-  
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers
           "Content-Type": "application/json",
         },
       };
-  
+
       if (modalType === "create") {
-        await axios.post("  http://127.0.0.1:8000/api/customers", payload, config);
+        await axios.post(
+          "  https://apibrize.brizindia.com/api/customers",
+          payload,
+          config
+        );
         notyf.success("Customer created successfully!");
       } else if (modalType === "edit") {
         await axios.post(
-          `  http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          `  https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
         notyf.success("Customer updated successfully!");
       }
-  
+
       fetchCustomers();
       closeModal();
     } catch (error) {
@@ -120,13 +119,14 @@ const Customers = () => {
       console.error("Error saving customer:", error);
     }
   };
-  
 
   // Handle Delete
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this customer?")) {
       try {
-        await axios.delete(`  http://127.0.0.1:8000/api/customers/${id}`);
+        await axios.delete(
+          `  https://apibrize.brizindia.com/api/customers/${id}`
+        );
         notyf.success("Customer deleted successfully!");
         fetchCustomers();
       } catch (error) {
@@ -163,11 +163,9 @@ const Customers = () => {
       return;
     }
     axios
-      .get("  http://127.0.0.1:8000/api/customerstype",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      ) // Correct endpoint for customer types
+      .get("  https://apibrize.brizindia.com/api/customerstype", {
+        headers: { Authorization: `Bearer ${token}` },
+      }) // Correct endpoint for customer types
       .then((response) => {
         console.log(response.data);
 
@@ -186,11 +184,9 @@ const Customers = () => {
       return;
     }
     axios
-      .get("  http://127.0.0.1:8000/api/customersubtypes",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      ) // Correct endpoint for sub-types
+      .get("  https://apibrize.brizindia.com/api/customersubtypes", {
+        headers: { Authorization: `Bearer ${token}` },
+      }) // Correct endpoint for sub-types
       .then((response) => {
         setCustomerSubTypeData(response.data); // Ensure response is correctly formatted
       })

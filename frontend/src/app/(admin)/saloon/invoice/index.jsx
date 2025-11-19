@@ -81,8 +81,7 @@ export default function InvoicePage() {
   const [printStatus_id, setPrintStatus_id] = useState("");
   const [printStatus, setPrintStatus] = useState([]);
   const [rate, setRate] = useState(0);
-  const [searchItem,setSearchItem] = useState("");
-
+  const [searchItem, setSearchItem] = useState("");
 
   const [addedProducts, setAddedProducts] = useState([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -93,7 +92,7 @@ export default function InvoicePage() {
   const [category, setCategory] = useState([]);
   const [making, setMaking] = useState(null);
   const [isDiscModalOpen, setDiscModalOpen] = useState(false);
-  const [isRSModalOpen,setIsRSModalOpen] = useState(false)
+  const [isRSModalOpen, setIsRSModalOpen] = useState(false);
   const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
   const [hallmarksCharge, setHallMarksCharge] = useState(null);
   const [makingInRsCharge, setMakingInRsCharge] = useState(null);
@@ -115,7 +114,7 @@ export default function InvoicePage() {
   const [disTotalMamerAmount, setDisTotalMamerAmount] = useState(0);
   const [dataFilter, setData] = useState([]);
   const [overallDiscount, setOverallDiscount] = useState(0);
-  const [rupeeOverAllsDiscount , setRupeesOverAllDiscount] = useState(0);
+  const [rupeeOverAllsDiscount, setRupeesOverAllDiscount] = useState(0);
   const [reward, setReward] = useState(null);
   const [netWt, setNtWt] = useState(null);
   const [pcss, setPcs] = useState(null);
@@ -152,27 +151,21 @@ export default function InvoicePage() {
   const [pakageChecked, setPakageChecked] = useState(false);
   const [memberships, setMemberships] = useState([]);
   const [pakageList, setPakageList] = useState([]);
-  const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
+  const [showBarcodeNumber, setShowBarcodeNumber] = useState(false);
 
   const [remainingAmount, setRemainingAmount] = useState(gto);
   const [memershipDiscunt, setMemberShipDiscount] = useState(null);
 
-   let overallDiscountAmount = 0;
+  let overallDiscountAmount = 0;
 
-  if(overallDiscount==0){
-       overallDiscountAmount = Number(rupeeOverAllsDiscount) ;
+  if (overallDiscount == 0) {
+    overallDiscountAmount = Number(rupeeOverAllsDiscount);
 
-    gto = gto-rupeeOverAllsDiscount;
-   
+    gto = gto - rupeeOverAllsDiscount;
+  } else {
+    overallDiscountAmount = (gto * overallDiscount) / 100;
+    gto = gto - overallDiscountAmount;
   }
-  else{
-   overallDiscountAmount = (gto * overallDiscount) / 100;
-   gto = gto - overallDiscountAmount;
- 
-  }
-
-  
-  
 
   const getToken = () => {
     const cookie = document.cookie
@@ -199,8 +192,8 @@ export default function InvoicePage() {
     try {
       // setLoading(true);
 
-      // let url = ` http://127.0.0.1:8000/api/product-service-saloon`;
-      let url = ` http://127.0.0.1:8000/api/product-service-saloon`;
+      // let url = ` https://apibrize.brizindia.com/api/product-service-saloon`;
+      let url = ` https://apibrize.brizindia.com/api/product-service-saloon`;
 
       if (type !== "All") {
         url += `?pro_ser_type=${type}`;
@@ -279,7 +272,7 @@ export default function InvoicePage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `  http://127.0.0.1:8000/api/memberships/${id}`
+        `  https://apibrize.brizindia.com/api/memberships/${id}`
       );
 
       console.log("memership  Response:", response.data);
@@ -300,7 +293,7 @@ export default function InvoicePage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/packagesassign/${id}`
+        ` https://apibrize.brizindia.com/api/packagesassign/${id}`
       );
 
       console.log("fetchPackageById:", response.data);
@@ -449,7 +442,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/product-service-groups",
+        " https://apibrize.brizindia.com/api/product-service-groups",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -482,7 +475,7 @@ export default function InvoicePage() {
     if (customerDetails.id) {
       axios
         .get(
-          `  http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
+          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -500,11 +493,14 @@ export default function InvoicePage() {
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/barcodes",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setAllProducts(response.data);
       return response.data; // Return the fetched data
@@ -524,9 +520,6 @@ export default function InvoicePage() {
     fetchPrintStatus();
   }, []);
 
-
- 
-
   //set selected categoey
   useEffect(() => {
     if (selectedCategory) {
@@ -537,7 +530,7 @@ export default function InvoicePage() {
     } else {
       setFilteredItems(items);
     }
-  }, [selectedCategory, items,barcode]);
+  }, [selectedCategory, items, barcode]);
 
   const fetchItems = async () => {
     const token = getToken();
@@ -549,7 +542,7 @@ export default function InvoicePage() {
     try {
       // const response = await getProductService();
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/product-and-service",
+        " https://apibrize.brizindia.com/api/product-and-service",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -563,15 +556,15 @@ export default function InvoicePage() {
     }
   };
 
-
-  useEffect(()=>{
-   const selectedSearchItem =  items.filter((item)=>item.name.toLowerCase().includes(searchItem.toLowerCase()));
-   setFilteredItems(selectedSearchItem)
-
-  },[searchItem])
+  useEffect(() => {
+    const selectedSearchItem = items.filter((item) =>
+      item.name.toLowerCase().includes(searchItem.toLowerCase())
+    );
+    setFilteredItems(selectedSearchItem);
+  }, [searchItem]);
 
   // const fetchEmployees = async () => {
-  //   const res = await axios.get("  http://127.0.0.1:8000/api/employees");
+  //   const res = await axios.get("  https://apibrize.brizindia.com/api/employees");
   //   setSalesperson(res.data.employees);
   // };
 
@@ -581,14 +574,19 @@ export default function InvoicePage() {
       notifyTokenMissing();
       return;
     }
-    const res = await axios.get("  http://127.0.0.1:8000/api/stylists", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await axios.get(
+      "  https://apibrize.brizindia.com/api/stylists",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     setStylist(res.data);
   };
 
   const fetchPrintStatus = async () => {
-    const res = await axios.get("  http://127.0.0.1:8000/api/print-status");
+    const res = await axios.get(
+      "  https://apibrize.brizindia.com/api/print-status"
+    );
     console.log("API Response:", res.data); // Debugging
     setPrintStatus(Array.isArray(res.data) ? res.data : []); // Ensure it's an array
 
@@ -712,8 +710,8 @@ export default function InvoicePage() {
   };
 
   const openCheckout = () => {
-     setCheckoutOpen(true);
-   };
+    setCheckoutOpen(true);
+  };
 
   const closeCheckout = () => {
     setCheckoutOpen(false);
@@ -819,7 +817,7 @@ export default function InvoicePage() {
     console.log(payload);
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/saloon-order", // Removed the space
+        " https://apibrize.brizindia.com/api/saloon-order", // Removed the space
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -888,7 +886,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.put(
-        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -912,7 +910,7 @@ export default function InvoicePage() {
 
   //   try {
   //     const response = await axios.post(
-  //       `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+  //       `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
   //       { customer_id: customerId, redeem_points: points } // Ensure both values are sent
   //     );
   //   } catch (error) {
@@ -942,10 +940,10 @@ export default function InvoicePage() {
       const foundItem = allProducts.find((p) => p.barcode_no === barcode);
       console.log("bracode2", foundItem);
 
-      const barcodeFilter = filteredItems.filter((p)=>p.id===foundItem.item_id);
+      const barcodeFilter = filteredItems.filter(
+        (p) => p.id === foundItem.item_id
+      );
       setFilteredItems(barcodeFilter);
-
-      
 
       if (foundItem) {
         console.log(foundItem.basic_rate);
@@ -1002,7 +1000,7 @@ export default function InvoicePage() {
           </Link>
 
           <Link
-              href="/saloon/reports/billreport/"
+            href="/saloon/reports/billreport/"
             className="flex flex-col items-center text-blue-600"
           >
             <VscReport size={20} />
@@ -1026,7 +1024,7 @@ export default function InvoicePage() {
           >
             % Disc
           </button>
-           <button
+          <button
             className="bg-green-500 text-white px-2 py-1 rounded text-sm"
             onClick={() => setIsRSModalOpen(true)}
           >
@@ -1287,7 +1285,9 @@ export default function InvoicePage() {
                 type="text"
                 value={searchItem}
                 placeholder="Search Item"
-                onChange={(e)=>{setSearchItem(e.target.value)}}
+                onChange={(e) => {
+                  setSearchItem(e.target.value);
+                }}
                 className="border rounded px-4 py-2 ml-2"
               />
             </div>
@@ -1337,35 +1337,38 @@ export default function InvoicePage() {
             <div className="flex items-center space-x-2">
               <span className="text-sm font-medium">Barcode</span>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer"
-                onChange={()=>{setShowBarcodeNumber(!showBarcodeNumber)}}
-                 />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  onChange={() => {
+                    setShowBarcodeNumber(!showBarcodeNumber);
+                  }}
+                />
                 <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
               </label>
             </div>
 
-            {
-              showBarcodeNumber && (
-                 <div className="flex gap-2">
-              <input
-                type="text"
-                value={barcode}
-                onChange={(e) => {setBarcode(e.target.value)
-                 }}
-                placeholder="Enter Barcode number"
-                className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
-              />
+            {showBarcodeNumber && (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={barcode}
+                  onChange={(e) => {
+                    setBarcode(e.target.value);
+                  }}
+                  placeholder="Enter Barcode number"
+                  className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+                />
 
-              <button
-                type="button"
-                onClick={handleSearchBarCode}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Search
-              </button>
-            </div>
-              )
-            }
+                <button
+                  type="button"
+                  onClick={handleSearchBarCode}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Search
+                </button>
+              </div>
+            )}
             {/* <span>
               <span className="text-blue-950 text-lg font-bold">
                 {" "}
@@ -1544,8 +1547,8 @@ export default function InvoicePage() {
             <button
               type="submit"
               className="w-full bg-green-500 text-white p-2 rounded mt-4"
-              onClick={()=>setBarcode("")}
-             >
+              onClick={() => setBarcode("")}
+            >
               Add Product
             </button>
           </form>
@@ -1554,9 +1557,7 @@ export default function InvoicePage() {
 
       {/* Checkout Modal */}
       {checkoutOpen && (
-       
         <Modal
-        
           open={openCheckout}
           onClose={closeCheckout}
           center

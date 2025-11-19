@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
@@ -7,14 +7,11 @@ const TaxPage = () => {
   const [taxes, setTaxes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [modalData, setModalData] = useState({ name: "", amount: "", fixed_amount: "" });
-
-
-
-
-
-
-
+  const [modalData, setModalData] = useState({
+    name: "",
+    amount: "",
+    fixed_amount: "",
+  });
 
   const getToken = () => {
     const cookie = document.cookie
@@ -31,12 +28,6 @@ const TaxPage = () => {
     }
   };
 
-
-
-
-
-
-
   // Fetch all taxes
   const fetchTaxes = async () => {
     const token = getToken();
@@ -45,7 +36,8 @@ const TaxPage = () => {
       return;
     }
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/tax",
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/tax",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -76,13 +68,14 @@ const TaxPage = () => {
     }
     try {
       if (isEditMode) {
-        await axios.put(` http://127.0.0.1:8000/api/tax/${modalData.id}`, modalData);
-      } else {
-        await axios.post(" http://127.0.0.1:8000/api/tax", modalData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+        await axios.put(
+          ` https://apibrize.brizindia.com/api/tax/${modalData.id}`,
+          modalData
         );
+      } else {
+        await axios.post(" https://apibrize.brizindia.com/api/tax", modalData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       }
       fetchTaxes();
       setIsModalOpen(false);
@@ -95,7 +88,7 @@ const TaxPage = () => {
   // Delete tax
   const handleDeleteTax = async (id) => {
     try {
-      await axios.delete(` http://127.0.0.1:8000/api/tax/${id}`);
+      await axios.delete(` https://apibrize.brizindia.com/api/tax/${id}`);
       fetchTaxes();
     } catch (error) {
       console.error("Error deleting tax:", error);
@@ -157,34 +150,46 @@ const TaxPage = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">{isEditMode ? "Edit Tax" : "Add Tax"}</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {isEditMode ? "Edit Tax" : "Add Tax"}
+            </h2>
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Tax Name</label>
               <input
                 type="text"
                 placeholder="Enter Tax Name"
                 value={modalData.name}
-                onChange={(e) => setModalData({ ...modalData, name: e.target.value })}
+                onChange={(e) =>
+                  setModalData({ ...modalData, name: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Amount(%)</label>
+              <label className="block text-sm font-medium mb-2">
+                Amount(%)
+              </label>
               <input
                 type="number"
                 placeholder="Enter Amount"
                 value={modalData.amount}
-                onChange={(e) => setModalData({ ...modalData, amount: e.target.value })}
+                onChange={(e) =>
+                  setModalData({ ...modalData, amount: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Fixed Amount</label>
+              <label className="block text-sm font-medium mb-2">
+                Fixed Amount
+              </label>
               <input
                 type="number"
                 placeholder="Enter Fixed Amount"
                 value={modalData.fixed_amount}
-                onChange={(e) => setModalData({ ...modalData, fixed_amount: e.target.value })}
+                onChange={(e) =>
+                  setModalData({ ...modalData, fixed_amount: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

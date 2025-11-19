@@ -1,4 +1,4 @@
- 'use client';
+"use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaChevronRight, FaTrash } from "react-icons/fa6";
@@ -29,15 +29,11 @@ const IndexPage = () => {
     }
   };
 
-
-const token = getToken();
-    if (!token) {
-      notifyTokenMissing();
-      return;
-    }
-
-
-
+  const token = getToken();
+  if (!token) {
+    notifyTokenMissing();
+    return;
+  }
 
   const fetchRateMasters = () => {
     const token = getToken();
@@ -45,12 +41,10 @@ const token = getToken();
       notifyTokenMissing();
       return;
     }
-    axios.get('  http://127.0.0.1:8000/api/ratemasterget',
-      {
+    axios
+      .get("  https://apibrize.brizindia.com/api/ratemasterget", {
         headers: { Authorization: `Bearer ${token}` },
-      }
-
-    )
+      })
       .then((response) => {
         setRateDatas(response.data);
       })
@@ -72,7 +66,8 @@ const token = getToken();
 
   const deleteRateMaster = (id) => {
     if (window.confirm("Are you sure you want to delete this rate?")) {
-      axios.delete(`  http://127.0.0.1:8000/api/ratemaster/${id}`)
+      axios
+        .delete(`  https://apibrize.brizindia.com/api/ratemaster/${id}`)
         .then(() => {
           setRateDatas(rateDatas.filter((data) => data.id !== id));
           alert("Rate deleted successfully");
@@ -94,17 +89,27 @@ const token = getToken();
         <table className="min-w-full bg-white border-collapse shadow-md rounded-lg overflow-hidden">
           <thead>
             <tr>
-              <th className="px-6 py-4 text-left bg-gray-200 text-sm font-semibold text-gray-700">Label</th>
-              <th className="px-6 py-4 text-left bg-gray-200 text-sm font-semibold text-gray-700">Rate</th>
-              <th className="px-6 py-4 text-left bg-gray-200 text-sm font-semibold text-gray-700">Actions</th>
+              <th className="px-6 py-4 text-left bg-gray-200 text-sm font-semibold text-gray-700">
+                Label
+              </th>
+              <th className="px-6 py-4 text-left bg-gray-200 text-sm font-semibold text-gray-700">
+                Rate
+              </th>
+              <th className="px-6 py-4 text-left bg-gray-200 text-sm font-semibold text-gray-700">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
             {rateDatas.length > 0 ? (
               rateDatas.map((data) => (
                 <tr key={data.id} className="border-b hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-800">{data.labelhere}</td>
-                  <td className="px-6 py-4 text-sm text-gray-800">{data.rate}</td>
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {data.labelhere}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800">
+                    {data.rate}
+                  </td>
                   <td className="px-6 py-4 text-sm text-gray-800 flex justify-between items-center">
                     <button
                       aria-label="Edit rate"
@@ -136,10 +141,7 @@ const token = getToken();
 
       {/* Conditionally render the modal */}
       {modelState && (
-        <Model 
-          closeModal={closeModel} 
-          selectedItem={selectedItem} 
-        />
+        <Model closeModal={closeModel} selectedItem={selectedItem} />
       )}
     </div>
   );

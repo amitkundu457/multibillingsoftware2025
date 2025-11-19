@@ -21,13 +21,14 @@ export default function PurchaseForm() {
     const formattedDate = currentDate.toLocaleDateString("en-CA"); // Formats to YYYY-MM-DD
     setPurchaseDate(formattedDate);
   }, []);
-  
 
   // Fetch stock returns data
   useEffect(() => {
     const fetchStockReturns = async () => {
       try {
-        const response = await fetch("  http://127.0.0.1:8000/api/stock-returns/");
+        const response = await fetch(
+          "  https://apibrize.brizindia.com/api/stock-returns/"
+        );
         const data = await response.json();
         setStockReturns(data);
       } catch (error) {
@@ -43,10 +44,14 @@ export default function PurchaseForm() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch("  http://127.0.0.1:8000/api/stock-returns/");
+        const response = await fetch(
+          "  https://apibrize.brizindia.com/api/stock-returns/"
+        );
         const data = await response.json();
         // Sort payments by date (newest first)
-        const sortedPayments = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const sortedPayments = data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
         setPayments(sortedPayments);
       } catch (error) {
         console.error("Error fetching payments:", error);
@@ -69,11 +74,14 @@ export default function PurchaseForm() {
     };
 
     try {
-      const response = await fetch("  http://127.0.0.1:8000/api/stock-returns/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "  https://apibrize.brizindia.com/api/stock-returns/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         alert("Purchase return submitted successfully!");
@@ -87,7 +95,9 @@ export default function PurchaseForm() {
         setPaymentNote("");
       } else {
         const errorData = await response.json();
-        alert("Error submitting data: " + (errorData.message || "Unknown error"));
+        alert(
+          "Error submitting data: " + (errorData.message || "Unknown error")
+        );
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -151,7 +161,9 @@ export default function PurchaseForm() {
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold mt-6">Previous Payments Information:</h3>
+        <h3 className="text-lg font-semibold mt-6">
+          Previous Payments Information:
+        </h3>
         <table className="w-full mt-2 border rounded">
           <thead className="bg-gray-300">
             <tr>
@@ -220,10 +232,16 @@ export default function PurchaseForm() {
         </div>
 
         <div className="flex justify-center mt-6">
-          <button className="bg-green-600 text-white py-2 px-6 rounded" onClick={handleSubmit}>
+          <button
+            className="bg-green-600 text-white py-2 px-6 rounded"
+            onClick={handleSubmit}
+          >
             Submit
           </button>
-          <button className="bg-orange-500 text-white py-2 px-6 rounded ml-4" onClick={handleCancel}>
+          <button
+            className="bg-orange-500 text-white py-2 px-6 rounded ml-4"
+            onClick={handleCancel}
+          >
             Cancel
           </button>
         </div>

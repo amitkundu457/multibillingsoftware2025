@@ -30,8 +30,6 @@
 //   const id = searchParams.get("id");
 //   const [companyName, setCompanyName] = useState([]);
 
-
-
 //   const getToken = () => {
 //     const cookie = document.cookie
 //       .split("; ")
@@ -47,13 +45,6 @@
 //     }
 //   };
 
-
-
-
-
-
-
-
 //   useEffect(() => {
 //     fetchCompanyDetails();
 //     fetchTaxes();
@@ -66,7 +57,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await axios.get("  http://127.0.0.1:8000/api/tax",
+//       const response = await axios.get("  https://apibrize.brizindia.com/api/tax",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -108,7 +99,7 @@
 //       const fetchInvoiceData = async () => {
 //         setLoading(true);
 //         try {
-//           const response = await axios.get(`  http://127.0.0.1:8000/api/saloon-printbill/${id}`);
+//           const response = await axios.get(`  https://apibrize.brizindia.com/api/saloon-printbill/${id}`);
 //           setInvoiceData(response.data);
 //         } catch (error) {
 //           console.error("Error fetching invoice data:", error);
@@ -160,9 +151,8 @@ const Page = () => {
   const [companyName, setCompanyName] = useState({});
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-  const [termsCondition,setTermCondition] = useState([]);
+  const [termsCondition, setTermCondition] = useState([]);
 
-  
   const printRef = useRef(null);
   const { data: logoUrl } = useSWR("logo", fetcher);
   const { data: logoBillUrl } = useSWR("logoBill", fetcherBill);
@@ -285,33 +275,36 @@ const Page = () => {
         return;
       }
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/tax", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/tax",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setTaxes(response.data?.data || []);
       } catch (error) {
         console.error("Error fetching taxes:", error);
       }
     };
 
-    
-
     fetchCompanyDetails();
     fetchTaxes();
     termsAndCondition();
   }, []);
 
-  const termsAndCondition  =  async()=>{
-          const token = getToken();
+  const termsAndCondition = async () => {
+    const token = getToken();
 
-    const response = await  axios.get(" http://127.0.0.1:8000/api/terms-condition-invoice",{
-        headers:{
-          Authorization:`Bearer ${token}`
-        }
-      });
-      setTermCondition(response.data)
-
-    }
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/terms-condition-invoice",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setTermCondition(response.data);
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -320,7 +313,7 @@ const Page = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          ` http://127.0.0.1:8000/api/saloon-printbill/${id}`
+          ` https://apibrize.brizindia.com/api/saloon-printbill/${id}`
         );
         setInvoiceData(response.data);
       } catch (error) {
@@ -338,9 +331,7 @@ const Page = () => {
 
   return (
     <div className="max-w-[60rem] mx-auto bg-white p-6 shadow-md">
-      
-
-      <div   ref={printRef}>
+      <div ref={printRef}>
         <InvoiceTable
           companyName={companyName}
           orderId={id}
@@ -348,7 +339,7 @@ const Page = () => {
           data={invoiceData}
           logoUrl={logoUrl}
           logoBillUrl={logoBillUrl}
-          termCondition = {termsCondition}
+          termCondition={termsCondition}
         />
         {/* <InvoiceFooter
          companyName={companyName}

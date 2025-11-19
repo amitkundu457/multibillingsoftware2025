@@ -58,7 +58,7 @@ const Customers = () => {
       };
 
       const { data } = await axios.get(
-        "  http://127.0.0.1:8000/api/customers",
+        "  https://apibrize.brizindia.com/api/customers",
         config
       );
       setCustomers(data);
@@ -92,7 +92,7 @@ const Customers = () => {
 
       if (modalType === "create") {
         await axios.post(
-          "  http://127.0.0.1:8000/api/customers",
+          "  https://apibrize.brizindia.com/api/customers",
           payload,
           config
         );
@@ -101,7 +101,7 @@ const Customers = () => {
       } else if (modalType === "edit") {
         console.log("updated.....", payload);
         await axios.post(
-          `  http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          `  https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
@@ -122,7 +122,9 @@ const Customers = () => {
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this customer?")) {
       try {
-        await axios.delete(`  http://127.0.0.1:8000/api/customers/${id}`);
+        await axios.delete(
+          `  https://apibrize.brizindia.com/api/customers/${id}`
+        );
         toast.success("Customer deleted successfully!");
         fetchCustomers();
         console.log("customber deleted ");
@@ -152,11 +154,11 @@ const Customers = () => {
   const openModal = (type, customer = null) => {
     setModalType(type);
     setCurrentCustomer(type === "edit" ? customer : null);
-  
+
     if (type === "create") {
       reset(); // 🧹 Clear form fields when creating
     }
-  
+
     setIsModalOpen(true);
   };
 
@@ -181,7 +183,7 @@ const Customers = () => {
     console.log("customber token", token);
     axios
       .get(
-        " http://127.0.0.1:8000/api/customerstype",
+        " https://apibrize.brizindia.com/api/customerstype",
 
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -201,7 +203,7 @@ const Customers = () => {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get("  http://127.0.0.1:8000/api/customersubtypes", {
+      .get("  https://apibrize.brizindia.com/api/customersubtypes", {
         headers: { Authorization: `Bearer ${token}` },
       }) // Correct endpoint for sub-types
       .then((response) => {
@@ -301,10 +303,6 @@ const Customers = () => {
 
 export default Customers;
 
-
-
-
-
 // "use client";
 
 // import React, { useEffect, useState } from "react";
@@ -349,7 +347,7 @@ export default Customers;
 //       const config = {
 //         headers: { Authorization: `Bearer ${token}` },
 //       };
-//       const { data } = await axios.get(" http://127.0.0.1:8000/api/customers", config);
+//       const { data } = await axios.get(" https://apibrize.brizindia.com/api/customers", config);
 //       setCustomers(data);
 //     } catch (error) {
 //       notyf.error("Error fetching customers!");
@@ -366,7 +364,7 @@ export default Customers;
 //         setTranslatedCustomers(customers);
 //         return;
 //       }
-  
+
 //       const texts = customers.flatMap(c => [
 //         c.customer_name,
 //         c.address,
@@ -374,11 +372,11 @@ export default Customers;
 //         c.country,
 //         c.remarke || ""
 //       ]);
-  
+
 //       try {
 //         const translated = await translateTextArray(texts, language);
 //         console.log("Translated texts:", translated);
-  
+
 //         const updated = customers.map((c, index) => {
 //           const i = index * 5;
 //           return {
@@ -397,11 +395,9 @@ export default Customers;
 //         setTranslatedCustomers(customers); // fallback
 //       }
 //     };
-  
+
 //     if (customers.length > 0) translateCustomers();
 //   }, [language, customers]);
-
- 
 
 //   const openModal = (type, customer = null) => {
 //     setModalType(type);
@@ -418,7 +414,7 @@ export default Customers;
 //   const handleDelete = async (id) => {
 //     if (confirm("Are you sure you want to delete this customer?")) {
 //       try {
-//         await axios.delete(` http://127.0.0.1:8000/api/customers/${id}`);
+//         await axios.delete(` https://apibrize.brizindia.com/api/customers/${id}`);
 //         toast.success("Customer deleted successfully!");
 //         fetchCustomers();
 //       } catch (error) {
@@ -465,7 +461,7 @@ export default Customers;
 //                 <button
 //                   onClick={() => openModal("edit", customer)}
 //                   className="px-2 py-1 mr-2 text-white bg-yellow-500 rounded"
-//                 >{t("edit")} 
+//                 >{t("edit")}
 //                 </button>
 //                 <button
 //                   onClick={() => handleDelete(customer.id)}
@@ -497,7 +493,7 @@ export default Customers;
 
 // export default Customers;
 
-// transalte  accroding to langauge 
+// transalte  accroding to langauge
 
 // "use client";
 
@@ -536,7 +532,7 @@ export default Customers;
 //       c.remarke || ""
 //     ]);
 
-//     const response = await axios.post(" http://127.0.0.1:8000/api/translate", {
+//     const response = await axios.post(" https://apibrize.brizindia.com/api/translate", {
 //       text: texts,
 //       target: targetLang
 //     });
@@ -568,7 +564,7 @@ export default Customers;
 //         }
 //       };
 
-//       const { data } = await axios.get(" http://127.0.0.1:8000/api/customers", config);
+//       const { data } = await axios.get(" https://apibrize.brizindia.com/api/customers", config);
 
 //       if (language !== "en") {
 //         const translatedData = await translateCustomerData(data, language);
@@ -602,7 +598,7 @@ export default Customers;
 //     if (confirm(t("delete_confirm"))) {
 //       try {
 //         const token = getCookie("access_token");
-//         await axios.delete(` http://127.0.0.1:8000/api/customers/${id}`, {
+//         await axios.delete(` https://apibrize.brizindia.com/api/customers/${id}`, {
 //           headers: { Authorization: `Bearer ${token}` }
 //         });
 //         toast.success(t("deleted"));

@@ -17,7 +17,7 @@ const ProductWise = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
- //token
+  //token
   //token
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -83,32 +83,32 @@ const ProductWise = () => {
   useEffect(() => {
     console.log("Filtered Data Updated:", filteredData);
   }, [filteredData]);
-  
-  
+
   const handlePrint = () => {
     console.log("Printing Data:", filteredData); // Debugging
-  
+
     if (!filteredData || filteredData.length === 0) {
       alert("No data available to print!");
       return;
     }
-  
+
     // Short delay to ensure UI updates before printing
     setTimeout(() => {
       window.print();
     }, 500);
   };
-  
 
   // Fetch Data with Loading
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Show Loading
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/purchase",
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/purchase",
           {
             headers: { Authorization: `Bearer ${token}` },
-          });
+          }
+        );
         setData(response?.data?.purchase);
         setFilteredData(response?.data?.purchase);
       } catch (error) {
@@ -149,9 +149,6 @@ const ProductWise = () => {
     setFilteredData(data); // Show all data again
   };
 
- 
-
-
   // Search Filtering
   useEffect(() => {
     const lowerQuery = searchQuery.toLowerCase();
@@ -169,9 +166,7 @@ const ProductWise = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center bg-gray-200 py-6 px-8 rounded-lg shadow-md">
-        <p className="font-bold text-2xl text-gray-800">
-          Purchase Report
-        </p>
+        <p className="font-bold text-2xl text-gray-800">Purchase Report</p>
         <div>
           <button
             onClick={handleDownloadPDF}

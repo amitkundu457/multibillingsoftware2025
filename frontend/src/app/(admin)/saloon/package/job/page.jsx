@@ -44,7 +44,6 @@ export default function JobForm() {
     gstin: "",
   });
 
-
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -59,7 +58,6 @@ export default function JobForm() {
       console.error("Authentication token not found!");
     }
   };
-
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posCode, setPosCode] = useState("");
@@ -90,19 +88,19 @@ export default function JobForm() {
     //reset(); // Clear all form fields
 
     const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
 
     const package_no = packageData.length > 0 ? packageData[0].package_no : "";
 
     const paymentPayload = {
       package_no: package_no, // Assigning the variable
-      paid_amount: totalGrossAmount
+      paid_amount: totalGrossAmount,
     };
     const orderResponse = await axios.post(
-      " http://127.0.0.1:8000/api/order-packages",
+      " https://apibrize.brizindia.com/api/order-packages",
       payload,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -110,7 +108,7 @@ if (!token) {
     );
 
     const paymentResponse = await axios.post(
-      " http://127.0.0.1:8000/api/update-payment",
+      " https://apibrize.brizindia.com/api/update-payment",
       paymentPayload,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -120,7 +118,7 @@ if (!token) {
     console.log(orderResponse);
     console.log(paymentResponse);
 
-    if (orderResponse.status === 201 && paymentResponse.status===200) {
+    if (orderResponse.status === 201 && paymentResponse.status === 200) {
       notyf.success(` package Order placed successfully!`);
 
       const orderId = orderResponse.data.id;
@@ -132,18 +130,9 @@ if (!token) {
       if (printConfirmation) {
         Printbill(orderId, orderResponse.data.bill_inv); // Call the direct print function
       }
-
-     
-      
-
-
-
-
     } else {
       notyf.error("package  not Booked !!");
     }
-
-   
   };
 
   const Printbill = (orderId, billInv) => {
@@ -251,18 +240,17 @@ if (!token) {
 
   //fetch stylist
   const fetchStylists = async () => {
-    
-const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
 
-    const response = await axios.get(" http://127.0.0.1:8000/api/stylists",
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/stylists",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
-
     );
     setStylists(response.data);
   };
@@ -273,23 +261,21 @@ if (!token) {
 
   //fetch assign package by customer
   const handleCheckboxChange = async (event) => {
-    
-const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
 
     const checked = event.target.checked;
     setIsChecked(checked);
 
     try {
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/packagesassign/${customerDetails.id}?enabled=${checked}`,
+        ` https://apibrize.brizindia.com/api/packagesassign/${customerDetails.id}?enabled=${checked}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-  
       );
       setPackageData(response.data.data);
       setServices(response.data.data[0].services);
@@ -314,41 +300,45 @@ if (!token) {
     <div className="p-4 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-lg font-bold mb-4">Assign Package</h2>
       {packageData?.length > 0 && (
-  <div className="absolute top-12 right-6 bg-white shadow-lg p-4 rounded-lg w-68">
-    {/* Mapping through packageData */}
-    {packageData.map((data, index) => (
-      <div key={index} className="border p-4 rounded-lg mb-4 bg-gray-50 shadow-md">
-        <p className="text-gray-700 font-semibold text-sm">
-          <span className="font-bold">Package Id:</span> {data.package_id}
-        </p>
-        <p className="text-gray-700 font-semibold text-sm">
-          <span className="font-bold">Package No:</span> {data.package_no}
-        </p>
+        <div className="absolute top-12 right-6 bg-white shadow-lg p-4 rounded-lg w-68">
+          {/* Mapping through packageData */}
+          {packageData.map((data, index) => (
+            <div
+              key={index}
+              className="border p-4 rounded-lg mb-4 bg-gray-50 shadow-md"
+            >
+              <p className="text-gray-700 font-semibold text-sm">
+                <span className="font-bold">Package Id:</span> {data.package_id}
+              </p>
+              <p className="text-gray-700 font-semibold text-sm">
+                <span className="font-bold">Package No:</span> {data.package_no}
+              </p>
 
-       
-        <p className="text-green-700 font-semibold text-sm">
-          <span className="font-bold">Package Amount:</span> ₹{data.package_amount}
-        </p>
-        <p className="text-blue-700 font-semibold text-sm">
-          <span className="font-bold">Service Amount:</span> ₹{data.service_amount}
-        </p>
-        <p className="text-green-700 font-semibold text-sm">
-          <span className="font-bold">Remaining Amount:</span> ₹{data.remaining_amount}
-        </p>
-        <p className="text-yellow-700 font-semibold text-sm">
-          <span className="font-bold">Expiry Date:</span> {data.package_expiry}
-        </p>
-       
-        {/* <p className="text-red-700 font-semibold text-sm">
+              <p className="text-green-700 font-semibold text-sm">
+                <span className="font-bold">Package Amount:</span> ₹
+                {data.package_amount}
+              </p>
+              <p className="text-blue-700 font-semibold text-sm">
+                <span className="font-bold">Service Amount:</span> ₹
+                {data.service_amount}
+              </p>
+              <p className="text-green-700 font-semibold text-sm">
+                <span className="font-bold">Remaining Amount:</span> ₹
+                {data.remaining_amount}
+              </p>
+              <p className="text-yellow-700 font-semibold text-sm">
+                <span className="font-bold">Expiry Date:</span>{" "}
+                {data.package_expiry}
+              </p>
+
+              {/* <p className="text-red-700 font-semibold text-sm">
           <span className="font-bold">Balance Amount:</span> ₹
           {data.remaining_amount - totalGrossAmount}
         </p> */}
-      </div>
-    ))}
-  </div>
-)}
-
-
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Phone Number Search */}
       <div className="mb-4 flex gap-2">
@@ -402,7 +392,7 @@ if (!token) {
           <div>
             <label className="block text-sm font-medium">Name</label>
             <input
-            readOnly
+              readOnly
               type="text"
               {...register("name", { required: "Name is required" })}
               className="w-full p-2 border rounded-md"
@@ -572,7 +562,7 @@ if (!token) {
               ))}
             </tbody>
           </table> */}
-         
+
           {selectedServices.length > 0 && (
             <div className="mt-4">
               <h2 className="text-lg font-semibold mb-4 text-gray-700">

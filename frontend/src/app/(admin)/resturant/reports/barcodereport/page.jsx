@@ -15,7 +15,8 @@ const BarcodeReport = () => {
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift());
+    if (parts.length === 2)
+      return decodeURIComponent(parts.pop().split(";").shift());
     return null;
   };
 
@@ -23,9 +24,12 @@ const BarcodeReport = () => {
     const fetchData = async () => {
       const token = getCookie("access_token");
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/barcode-print-history", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/barcode-print-history",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setReportData(response.data);
         setFilteredData(response.data);
       } catch (err) {
@@ -40,16 +44,21 @@ const BarcodeReport = () => {
     let data = [...reportData];
 
     if (startDate) {
-      data = data.filter((item) => new Date(item.printed_at) >= new Date(startDate));
+      data = data.filter(
+        (item) => new Date(item.printed_at) >= new Date(startDate)
+      );
     }
     if (endDate) {
-      data = data.filter((item) => new Date(item.printed_at) <= new Date(endDate));
+      data = data.filter(
+        (item) => new Date(item.printed_at) <= new Date(endDate)
+      );
     }
     if (search) {
       const q = search.toLowerCase();
-      data = data.filter((item) =>
-        item.product?.name?.toLowerCase().includes(q) ||
-        item.barcode?.barcode_no?.toLowerCase().includes(q)
+      data = data.filter(
+        (item) =>
+          item.product?.name?.toLowerCase().includes(q) ||
+          item.barcode?.barcode_no?.toLowerCase().includes(q)
       );
     }
 
@@ -57,7 +66,10 @@ const BarcodeReport = () => {
     setPage(1);
   }, [startDate, endDate, search, reportData]);
 
-  const paginatedData = filteredData.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  const paginatedData = filteredData.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   return (
@@ -110,7 +122,9 @@ const BarcodeReport = () => {
                 <td className="p-3">{item.barcode?.sku || "-"}</td>
                 {/* <td className="p-3">₹{item.barcode?.basic_rate || "-"}</td> */}
                 <td className="p-3">{item.user?.name || "-"}</td>
-                <td className="p-3">{format(new Date(item.printed_at), "yyyy-MM-dd HH:mm")}</td>
+                <td className="p-3">
+                  {format(new Date(item.printed_at), "yyyy-MM-dd HH:mm")}
+                </td>
               </tr>
             ))}
             {paginatedData.length === 0 && (
@@ -127,8 +141,9 @@ const BarcodeReport = () => {
       {/* Pagination */}
       <div className="mt-4 flex justify-between items-center">
         <p className="text-sm">
-          Showing {Math.min((page - 1) * itemsPerPage + 1, filteredData.length)} -{" "}
-          {Math.min(page * itemsPerPage, filteredData.length)} of {filteredData.length}
+          Showing {Math.min((page - 1) * itemsPerPage + 1, filteredData.length)}{" "}
+          - {Math.min(page * itemsPerPage, filteredData.length)} of{" "}
+          {filteredData.length}
         </p>
         <div className="flex space-x-2">
           <button

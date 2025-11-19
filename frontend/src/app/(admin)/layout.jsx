@@ -154,12 +154,12 @@ function AdminLayout({ children }) {
           href: `/${productUrl}/crm-page`,
           icon: TfiLayoutSliderAlt,
         },
-         {
+        {
           label: "Sales",
           href: `/${productUrl}/sales`,
           icon: TfiLayoutSliderAlt,
         },
-          {
+        {
           label: "Marketing Automation",
           href: `/${productUrl}/marketing`,
           icon: TfiLayoutSliderAlt,
@@ -183,7 +183,7 @@ function AdminLayout({ children }) {
           label: "Ring-Fencing",
           href: `/${productUrl}/ring-fencing`,
           icon: TfiLayoutSliderAlt,
-        }, 
+        },
         {
           label: "Help Centre",
           href: `/${productUrl}/help-center`,
@@ -199,16 +199,16 @@ function AdminLayout({ children }) {
           href: `/${productUrl}/about-brizIndia`,
           icon: TfiLayoutSliderAlt,
         },
-         {
+        {
           label: "Privacy Policy",
           href: `/${productUrl}/privacy-policy`,
           icon: TfiLayoutSliderAlt,
         },
-          {
+        {
           label: "Cancellation and Refund Policy",
           href: `/${productUrl}/cancelation-policy`,
           icon: TfiLayoutSliderAlt,
-        }, 
+        },
         {
           label: "Shipping and Delivery Policy ",
           href: `/${productUrl}/shipping-policy`,
@@ -491,17 +491,17 @@ function AdminLayout({ children }) {
           href: `/${productUrl}/member-bill/report/`,
           icon: FaScaleUnbalancedFlip,
         },
-         {
+        {
           label: "Stylist Reports",
           href: `/${productUrl}/reports/stylistreport/`,
           icon: GrWorkshop,
         },
-         {
+        {
           label: "Customer Reports",
           href: `/${productUrl}/reports/customerreport/`,
           icon: GrWorkshop,
         },
-         {
+        {
           label: "MemberShip plan  Reports",
           href: `/${productUrl}/reports/membershipplanreport/`,
           icon: GrWorkshop,
@@ -539,7 +539,7 @@ function AdminLayout({ children }) {
           href: `/${productUrl}/reports/customerreport`,
           icon: LiaFileInvoiceDollarSolid,
         },
-         {
+        {
           label: "Product Report",
           href: `/${productUrl}/reports/productwise`,
           icon: AiTwotoneDashboard,
@@ -826,7 +826,7 @@ function AdminLayout({ children }) {
         },
       ],
     },
-     {
+    {
       show: showMenuIn(["admin"]),
       title: "QR Upload",
       icon: FaCogs,
@@ -839,9 +839,9 @@ function AdminLayout({ children }) {
       ],
     },
 
-    //admin recharge
     ,
-     {
+    //admin recharge
+    {
       show: showMenuIn(["admin"]),
       title: "Client Recharge",
       icon: FaCogs,
@@ -938,7 +938,7 @@ function AdminLayout({ children }) {
           shallowRouting
         />
         <aside className="w-28 h-full  flex flex-col bg-green-600 ">
-        {/* <aside
+          {/* <aside
           className={`w-28 h-full fixed top-0 left-0 bg-green-600 flex flex-col z-40 transform transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
         md:translate-x-0 md:static md:flex`}
@@ -1329,8 +1329,6 @@ function AdminLayout({ children }) {
                   <LuLogOut />
                 </button>
               </div>
-
-              
             </div>
           </nav>
 

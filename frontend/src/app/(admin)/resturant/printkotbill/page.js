@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
@@ -37,7 +37,7 @@ export default function PrintFamilyBillPage() {
     const fetchLogoUrl = async () => {
       const token = getToken();
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/masterlogobill",
+        "https://apibrize.brizindia.com/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -52,8 +52,7 @@ export default function PrintFamilyBillPage() {
       try {
         const response = await getMe();
         if (response && response.data) {
-          setCompanyName(response?.data?.user_information
-            );
+          setCompanyName(response?.data?.user_information);
           console.log("Company Info:", response.data);
           setSellerState(
             response?.data?.user?.information?.state?.trim().toLowerCase() || ""
@@ -74,7 +73,7 @@ export default function PrintFamilyBillPage() {
     if (!cutomerid) return;
 
     axios
-      .get(`http://127.0.0.1:8000/api/customers/get/${cutomerid}`, {
+      .get(`https://apibrize.brizindia.com/api/customers/get/${cutomerid}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -92,7 +91,7 @@ export default function PrintFamilyBillPage() {
     const token = getCookie("access_token");
     if (booking_id) {
       fetch(
-        `http://127.0.0.1:8000/api/family-booking/${booking_id}/generate-bill`,
+        `https://apibrize.brizindia.com/api/family-booking/${booking_id}/generate-bill`,
         {
           method: "POST",
           headers: {
@@ -216,18 +215,19 @@ export default function PrintFamilyBillPage() {
 
   if (!booking_id) return <p>Please provide booking_id.</p>;
   if (loading) return <p>Loading bill for booking #{booking_id}...</p>;
-  if (!bill) 
-    {
-      return( <><p>No bill found for booking #{booking_id}.</p>;
-          <button 
-            onClick={window.location.reload}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Retry
-          </button>
-          </>
-          )
-    }
+  if (!bill) {
+    return (
+      <>
+        <p>No bill found for booking #{booking_id}.</p>;
+        <button
+          onClick={window.location.reload}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Retry
+        </button>
+      </>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-6 min-h-screen bg-gray-100 p-4">
@@ -281,7 +281,7 @@ export default function PrintFamilyBillPage() {
             {/* {bill?.client_address?.address_1 ||
               bill.client_address?.address_2 ||
               "NA"} */}
-              {companyName?.address_1 || "-"}
+            {companyName?.address_1 || "-"}
           </p>
           {/* <p>Phone: {bill?.client_address?.mobile_number ?? "N/A"}</p> */}
           <p>Phone: {companyName?.mobile_number ?? "-"}</p>
@@ -293,8 +293,8 @@ export default function PrintFamilyBillPage() {
             {/* <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
               GST IN: {bill?.client_address?.gst || {companyName?.gst}}
             </h1> */}
-             <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
-              GST NO: {companyName?.gst || "Not Provided"} 
+            <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
+              GST NO: {companyName?.gst || "Not Provided"}
             </h1>
           </div>
           <p className="mt-1">----------------------------</p>
@@ -305,7 +305,6 @@ export default function PrintFamilyBillPage() {
           <p className="text-yellow-600 font-bold">
             Customer Name: {bill.customer_name}
           </p>
-          
         </div>
 
         {/* Items */}

@@ -2,13 +2,12 @@
 import { useState, useEffect } from "react";
 import StockListTable from "../stocklist/page";
 // import StockReturnsTable from "../stockreturns/page";
-import axios from 'axios';
+import axios from "axios";
 
 export default function PurchaseForm() {
   const [supplierName, setSupplierName] = useState("");
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [suppliersData, setSuppliersData] = useState([]);
-
 
   const [referenceNo, setReferenceNo] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
@@ -35,51 +34,39 @@ export default function PurchaseForm() {
     }
   };
 
-
-
-
-
-
-
   useEffect(() => {
     const token = getToken();
     if (!token) {
       notifyTokenMissing();
       return;
     }
-      axios
-        .get("  http://127.0.0.1:8000/api/suppliers",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((response) => {
-          setSuppliersData(response.data);
-          const data = response.data;
-          console.log("suppleirs Data", data);
-        }, [])
-        .catch((error) => {
-          alert("failed to load suppliers data");
-        });
-    }, []);
+    axios
+      .get("  https://apibrize.brizindia.com/api/suppliers", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setSuppliersData(response.data);
+        const data = response.data;
+        console.log("suppleirs Data", data);
+      }, [])
+      .catch((error) => {
+        alert("failed to load suppliers data");
+      });
+  }, []);
 
-
-
-    
   useEffect(() => {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString("en-CA"); // Formats to YYYY-MM-DD
     setPurchaseDate(formattedDate);
   }, []);
 
-  
-  
-
   // Fetch stock returns data
   useEffect(() => {
     const fetchStockReturns = async () => {
       try {
-        const response = await fetch("  http://127.0.0.1:8000/api/stock-returns/");
+        const response = await fetch(
+          "  https://apibrize.brizindia.com/api/stock-returns/"
+        );
         const data = await response.json();
         setStockReturns(data);
       } catch (error) {
@@ -95,10 +82,14 @@ export default function PurchaseForm() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch("  http://127.0.0.1:8000/api/stock-returns");
+        const response = await fetch(
+          "  https://apibrize.brizindia.com/api/stock-returns"
+        );
         const data = await response.json();
         // Sort payments by date (newest first)
-        const sortedPayments = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const sortedPayments = data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
         setPayments(sortedPayments);
       } catch (error) {
         console.error("Error fetching payments:", error);
@@ -114,16 +105,18 @@ export default function PurchaseForm() {
       supplier_name: selectedSupplier,
       reference_no: referenceNo,
       date: purchaseDate,
-      status:status,
-      amount:amount,
+      status: status,
+      amount: amount,
       payment_type: paymentType,
       payment_note: paymentNote,
     };
 
     try {
-
-     const  response=  axios.post('  http://127.0.0.1:8000/api/stock-returns',formData);
-      // const response = await fetch("  http://127.0.0.1:8000/api/stock-returns", {
+      const response = axios.post(
+        "  https://apibrize.brizindia.com/api/stock-returns",
+        formData
+      );
+      // const response = await fetch("  https://apibrize.brizindia.com/api/stock-returns", {
       //   method: "POST",
       //   headers: { "Content-Type": "application/json" },
       //   body: JSON.stringify(formData),
@@ -140,7 +133,7 @@ export default function PurchaseForm() {
         setAccount("");
         setPaymentNote("");
       } else {
-         alert("Error submitting data: ");
+        alert("Error submitting data: ");
       }
     } catch (error) {
       console.error("Fetch error:", error);
@@ -162,7 +155,7 @@ export default function PurchaseForm() {
           Stock Return <span className="text-gray-500">Add/Update Stock</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <div>
+          <div>
             <label className="block font-medium">Supplier Name *</label>
             <select
               value={selectedSupplier}
@@ -211,7 +204,9 @@ export default function PurchaseForm() {
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold mt-6">Previous Payments Information:</h3>
+        <h3 className="text-lg font-semibold mt-6">
+          Previous Payments Information:
+        </h3>
         <table className="w-full mt-2 border rounded">
           <thead className="bg-gray-300">
             <tr>
@@ -280,10 +275,16 @@ export default function PurchaseForm() {
         </div>
 
         <div className="flex justify-center mt-6">
-          <button className="bg-green-600 text-white py-2 px-6 rounded" onClick={handleSubmit}>
+          <button
+            className="bg-green-600 text-white py-2 px-6 rounded"
+            onClick={handleSubmit}
+          >
             Submit
           </button>
-          <button className="bg-orange-500 text-white py-2 px-6 rounded ml-4" onClick={handleCancel}>
+          <button
+            className="bg-orange-500 text-white py-2 px-6 rounded ml-4"
+            onClick={handleCancel}
+          >
             Cancel
           </button>
         </div>

@@ -35,7 +35,7 @@ const RegistrationPage = () => {
     city: "",
     state: "",
     country: "",
-     category: "",
+    category: "",
     product_id: "",
     dist_id: "",
     contant_person: "",
@@ -94,7 +94,9 @@ const RegistrationPage = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axios.get("  http://127.0.0.1:8000/api/roles");
+        const response = await axios.get(
+          "  https://apibrize.brizindia.com/api/roles"
+        );
         console.log("API Response:", response); // Check the full response
         setRoles(response.data);
       } catch (error) {
@@ -197,13 +199,13 @@ const RegistrationPage = () => {
         password: formData.password, // You should handle password input securely
         password_confirmation: "12345678", // Same as above
         gst: formData.gst,
-        roleClient:formData.category
+        roleClient: formData.category,
       };
       console.log(dataToSend);
 
       // Send the data to the Laravel backend
       axios
-        .post("  http://127.0.0.1:8000/api/user-infos", dataToSend, {
+        .post("  https://apibrize.brizindia.com/api/user-infos", dataToSend, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -228,7 +230,6 @@ const RegistrationPage = () => {
           console.error("Error:", error.response.data?.message);
           // notyf.error(error.response.data?.message);
           toast.error(error.response.data?.message);
-
         });
     }
   };
@@ -454,7 +455,7 @@ const RegistrationPage = () => {
             </option>
             {distributors.map((category, index) => (
               <option key={index} value={category.user_id}>
-                {category.userdist.name} 
+                {category.userdist.name}
               </option>
             ))}
           </select>

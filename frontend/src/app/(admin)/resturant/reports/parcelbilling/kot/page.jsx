@@ -1,6 +1,3 @@
-
-
-
 // "use client";
 // import React, { useEffect, useState } from "react";
 // import { FaFilePdf } from "react-icons/fa6";
@@ -41,7 +38,7 @@
 //     const fetchData = async () => {
 //       try {
 //         const response = await axios.get(
-//           " http://127.0.0.1:8000/api/parcel-kot-report",
+//           " https://apibrize.brizindia.com/api/parcel-kot-report",
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -240,7 +237,7 @@
 //               {/* <th className="py-3 px-4 border-b">Bill Amt.</th>
 //               <th className="py-3 px-4 border-b">Qty</th> */}
 //               <th className="py-3 px-4 border-b">Billing Date</th>
-              
+
 //               <th className="py-3 px-4 border-b">Action</th>
 //             </tr>
 //           </thead>
@@ -256,7 +253,7 @@
 //                <td className="py-3 px-4 border-b">
 //   {new Date(item.order_date).toLocaleDateString('en-GB')}
 // </td>
-                
+
 //                 <td className="py-3 px-4 border-b">
 //                   <a
 //                     href={`${reporturl}/resturant/printparcelkot/?id=${item.order_id}`}
@@ -277,12 +274,6 @@
 // };
 
 // export default BillWise;
-
-
-
-
-
-
 
 "use client";
 import React, { useEffect, useState } from "react";
@@ -323,7 +314,7 @@ const BillWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/parcel-kot-report",
+          " https://apibrize.brizindia.com/api/parcel-kot-report",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -460,7 +451,7 @@ const BillWise = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
-        
+
         <button
           className="bg-red-500 text-white font-semibold rounded-lg px-6 py-3 hover:bg-red-600"
           onClick={() => {

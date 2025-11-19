@@ -29,7 +29,7 @@
 //       return;
 //     }
 //     try {
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/stocks", {
+//       const { data } = await axios.get("https://apibrize.brizindia.com/api/stocks", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setStocks(data?.stock || []);
@@ -45,7 +45,7 @@
 //       return;
 //     }
 //     try {
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/purchase", {
+//       const { data } = await axios.get("https://apibrize.brizindia.com/api/purchase", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setPurchase(data?.purchase || []);
@@ -268,7 +268,7 @@
 //       return;
 //     }
 //     try {
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/stocks", {
+//       const { data } = await axios.get("https://apibrize.brizindia.com/api/stocks", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setStocks(data?.stock || []);
@@ -284,7 +284,7 @@
 //       return;
 //     }
 //     try {
-//       const { data } = await axios.get("http://127.0.0.1:8000/api/purchase", {
+//       const { data } = await axios.get("https://apibrize.brizindia.com/api/purchase", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setPurchase(data?.purchase || []);
@@ -300,12 +300,10 @@
 //     fetchPurchaseData();
 //   }, [fetchStockData, fetchPurchaseData]);
 
-
 //   const handleResetDate = () => {
 //     setFromDate('');
 //     setToDate('');
 //   };
-  
 
 //   const isWithinDateRange = (dateString) => {
 //     const date = new Date(dateString);
@@ -494,7 +492,6 @@
 //   </div>
 // </div>
 
-
 //         <button
 //           onClick={handleExportPDF}
 //           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
@@ -610,8 +607,6 @@
 //   );
 // }
 
-
-
 // components/StockList.js
 "use client";
 import axios from "axios";
@@ -635,7 +630,9 @@ export default function StockList() {
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    return parts.length === 2 ? decodeURIComponent(parts.pop().split(";").shift()) : null;
+    return parts.length === 2
+      ? decodeURIComponent(parts.pop().split(";").shift())
+      : null;
   };
 
   const token = getCookie("access_token");
@@ -647,9 +644,12 @@ export default function StockList() {
     }
 
     try {
-      const { data } = await axios.get(" http://127.0.0.1:8000/api/stocks", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        " https://apibrize.brizindia.com/api/stocks",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setStocks(data?.stock || []);
     } catch (err) {
       console.error("Stock API Error:", err);
@@ -668,11 +668,19 @@ export default function StockList() {
 
   const isWithinDateRange = (dateString) => {
     const date = new Date(dateString);
-    return (!fromDate || date >= new Date(fromDate)) && (!toDate || date <= new Date(toDate));
+    return (
+      (!fromDate || date >= new Date(fromDate)) &&
+      (!toDate || date <= new Date(toDate))
+    );
   };
 
-  const filteredStocks = stocks.filter((item) => isWithinDateRange(item.created_at));
-  const totalQuantity = filteredStocks.reduce((sum, item) => sum + item.quantity, 0);
+  const filteredStocks = stocks.filter((item) =>
+    isWithinDateRange(item.created_at)
+  );
+  const totalQuantity = filteredStocks.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
@@ -707,7 +715,10 @@ export default function StockList() {
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Stock");
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
     saveAs(new Blob([excelBuffer]), "stock_list.xlsx");
   };
 
@@ -722,15 +733,40 @@ export default function StockList() {
       <div className="flex items-center gap-4 mb-4">
         <div>
           <label className="block text-sm font-medium">From Date</label>
-          <input type="date" className="border rounded px-2 py-1" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
+          <input
+            type="date"
+            className="border rounded px-2 py-1"
+            value={fromDate}
+            onChange={(e) => setFromDate(e.target.value)}
+          />
         </div>
         <div>
           <label className="block text-sm font-medium">To Date</label>
-          <input type="date" className="border rounded px-2 py-1" value={toDate} onChange={(e) => setToDate(e.target.value)} />
+          <input
+            type="date"
+            className="border rounded px-2 py-1"
+            value={toDate}
+            onChange={(e) => setToDate(e.target.value)}
+          />
         </div>
-        <button onClick={handleResetDate} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 mt-6">Reset</button>
-        <button onClick={handleExportPDF} className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 mt-6">Export PDF</button>
-        <button onClick={handleExportExcel} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mt-6">Export Excel</button>
+        <button
+          onClick={handleResetDate}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 mt-6"
+        >
+          Reset
+        </button>
+        <button
+          onClick={handleExportPDF}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 mt-6"
+        >
+          Export PDF
+        </button>
+        <button
+          onClick={handleExportExcel}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mt-6"
+        >
+          Export Excel
+        </button>
       </div>
 
       {/* Table */}
@@ -751,18 +787,24 @@ export default function StockList() {
             {filteredStocks.length > 0 ? (
               filteredStocks.map((item, index) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border">{item.product_service?.name || "N/A"}</td>
+                  <td className="py-2 px-4 border">
+                    {item.product_service?.name || "N/A"}
+                  </td>
                   <td className="py-2 px-4 border">{item.quantity}</td>
                   <td className="py-2 px-4 border">{item.gross_weight}</td>
                   <td className="py-2 px-4 border">{item.net_weight}</td>
                   <td className="py-2 px-4 border">{item.rate}</td>
                   <td className="py-2 px-4 border">{item.mrp}</td>
-                  <td className="py-2 px-4 border">{new Date(item.created_at).toLocaleDateString()}</td>
+                  <td className="py-2 px-4 border">
+                    {new Date(item.created_at).toLocaleDateString()}
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center py-4">No Stock Data</td>
+                <td colSpan="7" className="text-center py-4">
+                  No Stock Data
+                </td>
               </tr>
             )}
           </tbody>
@@ -771,5 +813,3 @@ export default function StockList() {
     </div>
   );
 }
-
-

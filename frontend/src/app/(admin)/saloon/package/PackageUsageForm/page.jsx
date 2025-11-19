@@ -1,7 +1,3 @@
-
-
-
-
 // "use client";
 // import { useState } from 'react';
 // import axios from 'axios';
@@ -28,7 +24,7 @@
 //     setItems([]);
 
 //     axios
-//       .get(` http://127.0.0.1:8000/api/package-getall/${trimmedId}`)
+//       .get(` https://apibrize.brizindia.com/api/package-getall/${trimmedId}`)
 //       .then((res) => {
 //         if (res.data.length === 0) {
 //           setNotFound(true);
@@ -55,7 +51,7 @@
 //     if (!searchedId) return;
 //     setLoading(true);
 //     try {
-//       await axios.put(` http://127.0.0.1:8000/api/updateUsage/${searchedId}`, {
+//       await axios.put(` https://apibrize.brizindia.com/api/updateUsage/${searchedId}`, {
 //         items: items.map(({ id, todayuse }) => ({ id, todayuse })),
 //       });
 //       alert("Today's usage updated!");
@@ -140,9 +136,6 @@
 //   );
 // }
 
-
-
-
 // "use client";
 // import { useRef, useState } from 'react';
 // import axios from 'axios';
@@ -170,7 +163,7 @@
 //     setItems([]);
 
 //     axios
-//       .get(` http://127.0.0.1:8000/api/package-getall/${trimmedId}`)
+//       .get(` https://apibrize.brizindia.com/api/package-getall/${trimmedId}`)
 //       .then((res) => {
 //         if (res.data.length === 0) {
 //           setNotFound(true);
@@ -197,7 +190,7 @@
 //     if (!searchedId) return;
 //     setLoading(true);
 //     try {
-//       await axios.put(` http://127.0.0.1:8000/api/updateUsage/${searchedId}`, {
+//       await axios.put(` https://apibrize.brizindia.com/api/updateUsage/${searchedId}`, {
 //         items: items.map(({ id, todayuse }) => ({ id, todayuse })),
 //       });
 //       alert("Today's usage updated!");
@@ -329,8 +322,6 @@
 //   );
 // }
 
-
-
 "use client";
 import { useState } from "react";
 import axios from "axios";
@@ -358,7 +349,7 @@ export default function PackageUsageForm() {
     setItems([]);
 
     axios
-      .get(` http://127.0.0.1:8000/api/package-getall/${trimmedId}`)
+      .get(` https://apibrize.brizindia.com/api/package-getall/${trimmedId}`)
       .then((res) => {
         if (res.data.length === 0) {
           setNotFound(true);
@@ -385,9 +376,12 @@ export default function PackageUsageForm() {
     if (!searchedId) return;
     setLoading(true);
     try {
-      await axios.put(` http://127.0.0.1:8000/api/updateUsage/${searchedId}`, {
-        items: items.map(({ id, todayuse }) => ({ id, todayuse })),
-      });
+      await axios.put(
+        ` https://apibrize.brizindia.com/api/updateUsage/${searchedId}`,
+        {
+          items: items.map(({ id, todayuse }) => ({ id, todayuse })),
+        }
+      );
       alert("Today's usage updated!");
     } catch (err) {
       alert("Error updating usage");
@@ -497,36 +491,35 @@ export default function PackageUsageForm() {
 
           <div id="print-section" className="mt-6 overflow-x-auto">
             <table className="w-full border">
-            <thead>
-  <tr>
-    <th className="text-center">Service Name</th>
-    <th className="text-center">Type</th>
-    <th className="text-center">Total Qty</th>
-    <th className="text-center">Used</th>
-    <th className="text-center no-print">Today Use</th>
-  </tr>
-</thead>
-<tbody>
-  {items.map((item, index) => (
-    <tr key={item.id}>
-      <td className="text-center">{item.service_name}</td>
-      <td className="text-center">{item.type}</td>
-      <td className="text-center">{item.total_quantity}</td>
-      <td className="text-center">{item.used ?? 0}</td>
-      <td className="no-print text-center">
-        <input
-          type="number"
-          min={0}
-          value={item.todayuse}
-          onChange={(e) => handleChange(index, e.target.value)}
-          className="border px-2 py-1 w-20 text-center"
-          placeholder="Today Use"
-        />
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+              <thead>
+                <tr>
+                  <th className="text-center">Service Name</th>
+                  <th className="text-center">Type</th>
+                  <th className="text-center">Total Qty</th>
+                  <th className="text-center">Used</th>
+                  <th className="text-center no-print">Today Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item, index) => (
+                  <tr key={item.id}>
+                    <td className="text-center">{item.service_name}</td>
+                    <td className="text-center">{item.type}</td>
+                    <td className="text-center">{item.total_quantity}</td>
+                    <td className="text-center">{item.used ?? 0}</td>
+                    <td className="no-print text-center">
+                      <input
+                        type="number"
+                        min={0}
+                        value={item.todayuse}
+                        onChange={(e) => handleChange(index, e.target.value)}
+                        className="border px-2 py-1 w-20 text-center"
+                        placeholder="Today Use"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </>

@@ -1,40 +1,42 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
-export default function FrontendEditor({ type = 'Contact Support' }) {
-  const [description, setDescription] = useState('');
+export default function FrontendEditor({ type = "Contact Support" }) {
+  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(true);
 
   // Load content from API
   useEffect(() => {
-  axios
-    .get(` http://127.0.0.1:8000/api/frontend-settings/${type}`)
-    .then((res) => {
-      setDescription(res.data.description || '');
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error('Error loading content:', err);
-      setLoading(false);
-    });
-}, [type]);
-
+    axios
+      .get(` https://apibrize.brizindia.com/api/frontend-settings/${type}`)
+      .then((res) => {
+        setDescription(res.data.description || "");
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error loading content:", err);
+        setLoading(false);
+      });
+  }, [type]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(` http://127.0.0.1:8000/api/frontend-settings`, {
-        type,
-        description,
-      });
-      alert('Saved successfully!');
+      await axios.post(
+        ` https://apibrize.brizindia.com/api/frontend-settings`,
+        {
+          type,
+          description,
+        }
+      );
+      alert("Saved successfully!");
     } catch (err) {
-      console.error('Save failed:', err);
-      alert('Error saving.');
+      console.error("Save failed:", err);
+      alert("Error saving.");
     }
   };
 

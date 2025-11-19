@@ -25,7 +25,7 @@
 
 //   const fetchAllBarCode = async () => {
 //     const token = getCookie("access_token");
-//     const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
+//     const response = await axios.get(" https://apibrize.brizindia.com/api/barcodes", {
 //       headers: {
 //         Authorization: `Bearer ${token}`,
 //       },
@@ -37,7 +37,7 @@
 //     const token = getCookie("access_token");
 //     try {
 //       const response = await axios.get(
-//         ` http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+//         ` https://apibrize.brizindia.com/api/barcode-search?search=${search}`,
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
@@ -280,11 +280,14 @@ const ProductSearch = () => {
 
   const fetchAllBarCode = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/barcodes",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     setBarcodeData(response.data);
   };
 
@@ -292,7 +295,7 @@ const ProductSearch = () => {
     const token = getCookie("access_token");
     try {
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+        ` https://apibrize.brizindia.com/api/barcode-search?search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -507,30 +510,28 @@ const ProductSearch = () => {
       {/* Barcode Preview Area */}
       {showPreview && (
         <div className="mt-6" ref={printRef}>
-
-<div className="mb-2 flex items-center space-x-2">
-      <input
-        type="checkbox"
-        checked={selectAll}
-        onChange={() => {
-          setSelectAll((prev) => {
-            const newSelectAll = !prev;
-            const newSelections = {};
-            filterBarcodeData.forEach((item) => {
-              for (let i = 0; i < item.quantity; i++) {
-                newSelections[`${item.id}-${i}`] = newSelectAll;
-              }
-            });
-            setSelectedBarcodes(newSelections);
-            return newSelectAll;
-          });
-        }}
-      />
-      <label className="text-sm font-medium">
-        {selectAll ? "Unselect All" : "Select All"}
-      </label>
-    </div>
-
+          <div className="mb-2 flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={selectAll}
+              onChange={() => {
+                setSelectAll((prev) => {
+                  const newSelectAll = !prev;
+                  const newSelections = {};
+                  filterBarcodeData.forEach((item) => {
+                    for (let i = 0; i < item.quantity; i++) {
+                      newSelections[`${item.id}-${i}`] = newSelectAll;
+                    }
+                  });
+                  setSelectedBarcodes(newSelections);
+                  return newSelectAll;
+                });
+              }}
+            />
+            <label className="text-sm font-medium">
+              {selectAll ? "Unselect All" : "Select All"}
+            </label>
+          </div>
 
           <div className="flex flex-wrap gap-4">
             {filterBarcodeData.map((item) =>
@@ -544,8 +545,6 @@ const ProductSearch = () => {
                   const barcodeValue = item.barcode_no;
 
                   return (
-                  
-
                     <div
                       key={key}
                       className={`barcode-card relative flex w-[72mm] h-[30mm] items-center border-t ${
@@ -573,15 +572,15 @@ const ProductSearch = () => {
                           // displayValue={false}
                           // margin={0}
                         />
-                         <div className="truncate text-[8px]">
-                        {/* {item?.barcode_no} */}
+                        <div className="truncate text-[8px]">
+                          {/* {item?.barcode_no} */}
                         </div>
                       </div>
 
                       {/* 27mm product details */}
                       <div className="product-details w-[27mm] h-[30mm] flex flex-col justify-center text-[10px] leading-tight overflow-hidden ml-1">
                         <div className="truncate">
-                        ₹{item.basic_rate} {item.product_name}
+                          ₹{item.basic_rate} {item.product_name}
                         </div>
                         <div className="truncate text-[6px]">
                           NWT:{item.nwt}
@@ -592,7 +591,6 @@ const ProductSearch = () => {
                         <div className="truncate text-[6px]">
                           DWT:{item.diamond_details}
                         </div>
-                       
                       </div>
                     </div>
                   );

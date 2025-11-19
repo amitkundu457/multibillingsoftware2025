@@ -182,7 +182,7 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
 
     try {
       const res = await axios.get(
-        " http://127.0.0.1:8000/api/terms-condition-invoice",
+        " https://apibrize.brizindia.com/api/terms-condition-invoice",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -205,8 +205,6 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
 
   return (
     <div className=" w-full justify-between border text-xs border-gray-300">
-      
-
       {/* Payment Details Section */}
       <div className="flex border-b border-gray-300">
         <div className="col-span-4  border-r border-gray-300 p-3">
@@ -228,7 +226,7 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
 
         <div className="col-span-4 w-[600px] border-r border-gray-300 p-1">
           <p className="text-sm text-[#333]">#Terms and Conditions</p>
-          
+
           <ul className="list-disc ml-4 space-y-1 text-xs text-gray-700">
             {content
               .split("\n")
@@ -243,7 +241,9 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
         </div>
 
         <div className="col-span-3 w-[400px] flex mx-auto justify-evenly  p-3 text-center">
-          <div className=" flex justify-center mt-32 ">Authorised Signature</div>
+          <div className=" flex justify-center mt-32 ">
+            Authorised Signature
+          </div>
           {/* <div className="absolute bottom-5 flex  mx-auto justify-center items-center">
             <p className=" text-[#333] text-xs">
             Authorised Signature

@@ -24,15 +24,11 @@
 //     }
 //   };
 
-
 // const token = getToken();
 //     if (!token) {
 //       notifyTokenMissing();
 //       return;
 //     }
-
-
-
 
 //   // Fetch items using Axios
 //   useEffect(() => {
@@ -45,8 +41,8 @@
 //       return;
 //     }
 //     try {
-//       const response = await axios.get("  http://127.0.0.1:8000/api/account-groups",
-        
+//       const response = await axios.get("  https://apibrize.brizindia.com/api/account-groups",
+
 // {
 //   headers: { Authorization: `Bearer ${token}` },
 // }
@@ -68,7 +64,7 @@
 //       // Update item
 //       try {
 //         const response = await axios.post(
-//           `  http://127.0.0.1:8000/api/account-groups/${editingItem.id}`,
+//           `  https://apibrize.brizindia.com/api/account-groups/${editingItem.id}`,
 //           data
 //         );
 //         const updatedItem = response.data;
@@ -88,9 +84,9 @@
 //       // Create new item
 //       try {
 //         const response = await axios.post(
-//           "  http://127.0.0.1:8000/api/account-groups",
+//           "  https://apibrize.brizindia.com/api/account-groups",
 //           data,
-          
+
 // {
 //   headers: { Authorization: `Bearer ${token}` },
 // }
@@ -116,7 +112,7 @@
 //   const handleDelete = async (id) => {
 //     try {
 //       const response = await axios.delete(
-//         `  http://127.0.0.1:8000/api/account-groups/${id}`
+//         `  https://apibrize.brizindia.com/api/account-groups/${id}`
 //       );
 //       if (response.status === 200) {
 //         setItems((prevItems) => prevItems.filter((item) => item.id !== id));
@@ -201,8 +197,6 @@
 //   );
 // }
 
-
-
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -239,9 +233,12 @@ export default function Home() {
       return;
     }
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/account-groups", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/account-groups",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setItems(response.data);
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -264,7 +261,7 @@ export default function Home() {
       // Update item
       try {
         const response = await axios.post(
-          ` http://127.0.0.1:8000/api/account-groups/${editingItem.id}`,
+          ` https://apibrize.brizindia.com/api/account-groups/${editingItem.id}`,
           data,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -285,7 +282,7 @@ export default function Home() {
       // Create new item
       try {
         const response = await axios.post(
-          " http://127.0.0.1:8000/api/account-groups",
+          " https://apibrize.brizindia.com/api/account-groups",
           data,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -315,7 +312,7 @@ export default function Home() {
     }
     try {
       const response = await axios.delete(
-        ` http://127.0.0.1:8000/api/account-groups/${id}`,
+        ` https://apibrize.brizindia.com/api/account-groups/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status === 200) {
@@ -338,7 +335,9 @@ export default function Home() {
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
             <input
               type="text"
               {...register("name")}

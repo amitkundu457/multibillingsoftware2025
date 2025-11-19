@@ -2,7 +2,11 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import {getMembershipplan,createMembershipplan,updateMembershipplan} from "../../../components/config"
+import {
+  getMembershipplan,
+  createMembershipplan,
+  updateMembershipplan,
+} from "../../../components/config";
 
 export default function MembershipPlans() {
   const [plans, setPlans] = useState([]);
@@ -43,8 +47,7 @@ export default function MembershipPlans() {
   const onSubmit = async (data) => {
     try {
       if (editingPlan) {
-       
-        await  updateMembershipplan(editingPlan.id,data);
+        await updateMembershipplan(editingPlan.id, data);
       } else {
         await createMembershipplan(data);
       }
@@ -58,7 +61,9 @@ export default function MembershipPlans() {
   // Handle Delete
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`  http://127.0.0.1:8000/api/membership-plans/${id}`);
+      await axios.delete(
+        `  https://apibrize.brizindia.com/api/membership-plans/${id}`
+      );
       fetchPlans();
     } catch (error) {
       console.error("Error deleting plan", error);
@@ -67,15 +72,15 @@ export default function MembershipPlans() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-    <div className="flex justify-between">
-    <h2 className="text-2xl font-bold mb-4">Membership Plans</h2>
-      <button
-        className="mb-4 bg-[#16A34A] text-white px-4 py-2 rounded "
-        onClick={() => openModal()}
-      >
-        + 
-      </button>
-    </div>
+      <div className="flex justify-between">
+        <h2 className="text-2xl font-bold mb-4">Membership Plans</h2>
+        <button
+          className="mb-4 bg-[#16A34A] text-white px-4 py-2 rounded "
+          onClick={() => openModal()}
+        >
+          +
+        </button>
+      </div>
 
       <div className="bg-white shadow-md rounded-lg p-4">
         {plans.map((plan) => (
@@ -84,8 +89,12 @@ export default function MembershipPlans() {
             className="flex justify-between items-center border-b py-2"
           >
             <div>
-              <p className="text-lg font-semibold">{plan.name} (₹{plan.fees})</p>
-              <p className="text-sm text-gray-600">{plan.validity} months | {plan.discount}% discount</p>
+              <p className="text-lg font-semibold">
+                {plan.name} (₹{plan.fees})
+              </p>
+              <p className="text-sm text-gray-600">
+                {plan.validity} months | {plan.discount}% discount
+              </p>
             </div>
             <div className="space-x-2">
               <button
@@ -109,7 +118,9 @@ export default function MembershipPlans() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-            <h3 className="text-lg font-semibold mb-2">{editingPlan ? "Edit Membership" : "Create Membership"}</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              {editingPlan ? "Edit Membership" : "Create Membership"}
+            </h3>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-3">
                 <label className="block text-sm font-medium">Name</label>
@@ -137,7 +148,9 @@ export default function MembershipPlans() {
               </div>
 
               <div className="mb-3">
-                <label className="block text-sm font-medium">Validity (days)</label>
+                <label className="block text-sm font-medium">
+                  Validity (days)
+                </label>
                 <input
                   type="number"
                   {...register("validity", { required: true, min: 1 })}
@@ -146,10 +159,16 @@ export default function MembershipPlans() {
               </div>
 
               <div className="mb-3">
-                <label className="block text-sm font-medium">Discount (%)</label>
+                <label className="block text-sm font-medium">
+                  Discount (%)
+                </label>
                 <input
                   type="number"
-                  {...register("discount", { required: true, min: 0, max: 100 })}
+                  {...register("discount", {
+                    required: true,
+                    min: 0,
+                    max: 100,
+                  })}
                   className="w-full border px-3 py-2 rounded"
                 />
               </div>

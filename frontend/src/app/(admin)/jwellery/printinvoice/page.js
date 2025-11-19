@@ -144,7 +144,7 @@
 //     }
 //     const fetchBis = async () => {
 //       try {
-//         const res = await axios.get(" http://127.0.0.1:8000/api/bis-number-get", {
+//         const res = await axios.get(" https://apibrize.brizindia.com/api/bis-number-get", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setBisNumber(res.data.bis_number);
@@ -163,7 +163,7 @@
 //         return;
 //       }
 //       try {
-//         const response = await axios.get(" http://127.0.0.1:8000/api/tax", {
+//         const response = await axios.get(" https://apibrize.brizindia.com/api/tax", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         if (response.data?.data) {
@@ -195,7 +195,7 @@
 //       setLoading(true);
 //       try {
 //         const response = await axios.get(
-//           ` http://127.0.0.1:8000/api/printbill/${id}`
+//           ` https://apibrize.brizindia.com/api/printbill/${id}`
 //         );
 //         setInvoiceData(response.data);
 //       } catch (error) {
@@ -409,7 +409,7 @@ const Page = () => {
     const fetchBis = async () => {
       try {
         const res = await axios.get(
-          " http://127.0.0.1:8000/api/bis-number-get",
+          " https://apibrize.brizindia.com/api/bis-number-get",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -430,9 +430,12 @@ const Page = () => {
         return;
       }
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/tax", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/tax",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (response.data?.data) {
           setTaxes(response.data.data);
         }
@@ -462,7 +465,7 @@ const Page = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          ` http://127.0.0.1:8000/api/printbill/${id}`
+          ` https://apibrize.brizindia.com/api/printbill/${id}`
         );
         setInvoiceData(response.data);
       } catch (error) {
@@ -483,7 +486,7 @@ const Page = () => {
         ref={printRef}
         className="print-container h-[297mm]  w-[210mm] print:w-[210mm] print:m-0 min-w-full mx-auto bg-white  text-[11px] leading-[1.5]"
       >
-      {/* <div
+        {/* <div
   ref={printRef}
   className="print-container w-[210mm] h-[297mm] bg-white text-[11px] leading-[1.5] print:w-[210mm] print:h-[297mm] print:m-0 print:p-0 print:shadow-none"
 > */}

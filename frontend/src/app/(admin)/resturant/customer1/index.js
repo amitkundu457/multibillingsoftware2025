@@ -27,12 +27,6 @@ const Customers = () => {
     }
   };
 
-
-
-
-
-
-
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       name: "",
@@ -54,7 +48,9 @@ const Customers = () => {
   // Fetch Customers
   const fetchCustomers = async () => {
     try {
-      const { data } = await axios.get("  http://127.0.0.1:8000/api/customers");
+      const { data } = await axios.get(
+        "  https://apibrize.brizindia.com/api/customers"
+      );
       setCustomers(data);
     } catch (error) {
       notyf.error("Error fetching customers!");
@@ -66,11 +62,14 @@ const Customers = () => {
   const onSubmit = async (data) => {
     try {
       if (modalType === "create") {
-        await axios.post("  http://127.0.0.1:8000/api/customers", data);
+        await axios.post(
+          "  https://apibrize.brizindia.com/api/customers",
+          data
+        );
         notyf.success("Customer created successfully!");
       } else if (modalType === "edit") {
         await axios.post(
-          `  http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          `  https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`,
           data
         );
         notyf.success("Customer updated successfully!");
@@ -91,11 +90,12 @@ const Customers = () => {
       notifyTokenMissing();
       return;
     }
-    const data = await axios.get("  http://127.0.0.1:8000/api/customersubtypes",
-      
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
+    const data = await axios.get(
+      "  https://apibrize.brizindia.com/api/customersubtypes",
+
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     console.log("customerSubType", data);
   };
@@ -107,26 +107,27 @@ const Customers = () => {
       notifyTokenMissing();
       return;
     }
-    const data = await axios.get("  http://127.0.0.1:8000/api/customerstype",
-      
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
+    const data = await axios.get(
+      "  https://apibrize.brizindia.com/api/customerstype",
+
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     console.log("customerType", data);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     handlerCustomberSubType();
-    handlerCustomberType()
-
-
-  },[])
+    handlerCustomberType();
+  }, []);
   // Handle Delete
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this customer?")) {
       try {
-        await axios.delete(`  http://127.0.0.1:8000/api/customers/${id}`);
+        await axios.delete(
+          `  https://apibrize.brizindia.com/api/customers/${id}`
+        );
         notyf.success("Customer deleted successfully!");
         fetchCustomers();
       } catch (error) {

@@ -17,12 +17,15 @@ export default function KotTables() {
 
   // ✅ Fetch all tables
   const fetchTables = async () => {
-          const token = getCookie("access_token"); // Retrieve token
+    const token = getCookie("access_token"); // Retrieve token
 
     try {
-       const res = await axios.get("http://127.0.0.1:8000/api/kot-tables", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://apibrize.brizindia.com/api/kot-tables",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setTables(res.data.tables || []);
     } catch (error) {
       console.error("Error fetching tables:", error);
@@ -35,14 +38,14 @@ export default function KotTables() {
 
   // ✅ Add a new table
   const handleAddTable = async (e) => {
-              const token = getCookie("access_token"); // Retrieve token
+    const token = getCookie("access_token"); // Retrieve token
 
     e.preventDefault();
     if (!tableNo) return alert("Please enter table number");
 
     try {
-       await axios.post(
-        "http://127.0.0.1:8000/api/kot-tables",
+      await axios.post(
+        "https://apibrize.brizindia.com/api/kot-tables",
         { table_no: tableNo },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -58,9 +61,12 @@ export default function KotTables() {
     if (!confirm("Are you sure you want to delete this table?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://127.0.0.1:8000/api/kot-tables/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `https://apibrize.brizindia.com/api/kot-tables/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       fetchTables(); // Refresh list
     } catch (error) {
       console.error("Error deleting table:", error);

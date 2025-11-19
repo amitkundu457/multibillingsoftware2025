@@ -18,7 +18,7 @@ const BillingReport = () => {
     setError(null);
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/billingreport",
+        " https://apibrize.brizindia.com/api/billingreport",
         {
           params: { start_date: startDate, end_date: endDate },
         }
@@ -66,7 +66,9 @@ const BillingReport = () => {
 
   return (
     <div className="absolute top-0 right-0 left-0 bottom-0 bg-white">
-      <div className="bg-green-700 text-center p-3 text-white">Billing Reports</div>
+      <div className="bg-green-700 text-center p-3 text-white">
+        Billing Reports
+      </div>
       <div className="flex items-center gap-4 mb-4 px-5 mt-3">
         <div className="flex items-center gap-2">
           <label htmlFor="fromDate" className="text-sm font-medium">
@@ -138,16 +140,20 @@ const BillingReport = () => {
                   {order.users?.name || "N/A"}
                 </td>
                 <td className="border px-4 py-2">
-                {order.users?.customers?.length ? order.users.customers[0].phone : "N/A"}
+                  {order.users?.customers?.length
+                    ? order.users.customers[0].phone
+                    : "N/A"}
                 </td>
                 <td className="border px-4 py-2">{order.total_price || 0}</td>
                 <td className="border px-4 py-2">
-  {order.payments?.filter(payment => parseFloat(payment.price) > 0).map((payment) => (
-    <div key={payment.id}>
-      {payment.payment_method}: {payment.price}
-    </div>
-  ))}
-</td>
+                  {order.payments
+                    ?.filter((payment) => parseFloat(payment.price) > 0)
+                    .map((payment) => (
+                      <div key={payment.id}>
+                        {payment.payment_method}: {payment.price}
+                      </div>
+                    ))}
+                </td>
 
                 {/* <td className="border px-4 py-2">
                   {order.delivery_date

@@ -1,5 +1,3 @@
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaFilePdf } from "react-icons/fa6";
@@ -39,7 +37,7 @@ const BillReport = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/billingPurchase",
+          " https://apibrize.brizindia.com/api/billingPurchase",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -53,7 +51,10 @@ const BillReport = () => {
     fetchData();
   }, [token]);
   useEffect(() => {
-    console.log("All bill_inv values:", data.map((item) => item.bill_inv));
+    console.log(
+      "All bill_inv values:",
+      data.map((item) => item.bill_inv)
+    );
   }, [data]);
   const filteredData = data
     .filter((item) => item.order_slip !== 1)
@@ -69,7 +70,7 @@ const BillReport = () => {
         item.billno?.toLowerCase().includes(lowerQuery) ||
         item.customer_name?.toLowerCase().includes(lowerQuery) ||
         item.customer_phone?.toLowerCase().includes(lowerQuery);
-        const matchesFilter =
+      const matchesFilter =
         filterType === "All"
           ? true
           : filterType === "Invoice"
@@ -237,7 +238,7 @@ const BillReport = () => {
               {/* <th className="py-3 px-4 border-b">Bill Amt.</th>
               <th className="py-3 px-4 border-b">Qty</th> */}
               <th className="py-3 px-4 border-b">Billing Date</th>
-              
+
               <th className="py-3 px-4 border-b">Action</th>
             </tr>
           </thead>
@@ -251,7 +252,7 @@ const BillReport = () => {
                 {/* <td className="py-3 px-4 border-b">{item.total_price}</td>
                 <td className="py-3 px-4 border-b">{item.quantity}</td> */}
                 <td className="py-3 px-4 border-b">{item.bill_date}</td>
-                
+
                 <td className="py-3 px-4 border-b">
                   <a
                     href={`${reporturl}/jwellery/printinvoice/?id=${item.pdf_id}`}
@@ -278,4 +279,3 @@ const BillReport = () => {
 };
 
 export default BillReport;
-

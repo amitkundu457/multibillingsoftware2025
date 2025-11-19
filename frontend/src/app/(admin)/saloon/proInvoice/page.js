@@ -40,8 +40,6 @@ const Page = () => {
     }
   };
 
-
-
   const handlePrint = () => {
     if (!printRef.current) return;
     const content = printRef.current.innerHTML;
@@ -131,7 +129,7 @@ const Page = () => {
     const fetchBis = async () => {
       try {
         const res = await axios.get(
-          " http://127.0.0.1:8000/api/bis-number-get",
+          " https://apibrize.brizindia.com/api/bis-number-get",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -152,9 +150,12 @@ const Page = () => {
         return;
       }
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/tax", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/tax",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (response.data?.data) {
           setTaxes(response.data.data);
         }
@@ -184,7 +185,7 @@ const Page = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          ` http://127.0.0.1:8000/api/printbill/${id}`
+          ` https://apibrize.brizindia.com/api/printbill/${id}`
         );
         setInvoiceData(response.data);
       } catch (error) {

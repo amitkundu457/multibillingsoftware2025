@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -24,11 +24,14 @@ const ResetPassword = () => {
     setIsLoading(true); // Show loader during API call
 
     try {
-       const response = await axios.post(" http://127.0.0.1:8000/api/forgot-password", {
-        email,
-        new_password: newPassword,
-        confirm_password:confirmPassword
-      });
+      const response = await axios.post(
+        " https://apibrize.brizindia.com/api/forgot-password",
+        {
+          email,
+          new_password: newPassword,
+          confirm_password: confirmPassword,
+        }
+      );
 
       // Simulate success response
       if (response.status === 200) {

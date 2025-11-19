@@ -36,7 +36,7 @@ const BarcodeData = () => {
   const [prefix, setPrefix] = useState(""); // User-entered prefix
   const [suffix, setSuffix] = useState(""); // Auto-incremented suffix
   const [barcode, setBarcode] = useState(""); // Full barcode (prefix + suffix)
-  const[barcodeCount,setBarcodeCount] = useState(0);
+  const [barcodeCount, setBarcodeCount] = useState(0);
 
   const fields = [
     "barcode_no",
@@ -67,15 +67,13 @@ const BarcodeData = () => {
     // "hallmark_charge",
     // "wastage_charge",
     // "other_charge",
- 
-    
   ];
   const fieldTitles = {
     barcode_no: "Barcode No",
     sku: "SKU",
     itemno: "Item No",
     // item_id: "Item ID",
-    item_id: "Product Name", 
+    item_id: "Product Name",
     // brand_id: "Brand",
     // purity_id: "Purity",
     // huid: "HUID",
@@ -116,7 +114,8 @@ const BarcodeData = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDownloadSample = () => {
-    window.location.href = "  http://127.0.0.1:8000/api/download-sample-barcode";
+    window.location.href =
+      "  https://apibrize.brizindia.com/api/download-sample-barcode";
   };
 
   const handleFileChange = (e) => {
@@ -148,7 +147,7 @@ const BarcodeData = () => {
 
     try {
       const response = await axios.post(
-        "  http://127.0.0.1:8000/api/upload/barcode",
+        "  https://apibrize.brizindia.com/api/upload/barcode",
         formDataToSend,
         { headers }
       );
@@ -156,7 +155,6 @@ const BarcodeData = () => {
     } catch (error) {
       console.log(error);
       console.log(formDataToSend);
-      
 
       alert("Error uploading file");
     }
@@ -202,7 +200,7 @@ const BarcodeData = () => {
     try {
       // const response = await getProductService();
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+        " https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -241,7 +239,7 @@ const BarcodeData = () => {
         alert("Data stored successfully!");
         setDataList([...dataList, response.data]);
         fetchData();
-        barocdeCount()
+        barocdeCount();
         reset();
         setOpenCreateModal(false);
       }
@@ -257,7 +255,7 @@ const BarcodeData = () => {
     const fetchNextBarcode = async () => {
       try {
         const response = await axios.get(
-          "  http://127.0.0.1:8000/api/next-barcode"
+          "  https://apibrize.brizindia.com/api/next-barcode"
         );
         setSuffix(response.data.next_barcode_number.toString()); // Ensure suffix is a string
       } catch (error) {
@@ -277,10 +275,10 @@ const BarcodeData = () => {
   // Handle form submission for updating data
   const handleUpdate = async (data) => {
     console.log("Update data:", data); // Log the data being sent for update
-   
+
     try {
       const response = await axios.put(
-        `  http://127.0.0.1:8000/api/barcodes/${selectedRecord.id}`,
+        `  https://apibrize.brizindia.com/api/barcodes/${selectedRecord.id}`,
         data
       );
       if (response.status === 200) {
@@ -305,7 +303,12 @@ const BarcodeData = () => {
     const headers = {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     };
-    const response = await axios.get(" http://127.0.0.1:8000/api/purity",{ headers });
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/purity",
+      {
+        headers,
+      }
+    );
     console.log("purity", response);
 
     setPurity(response.data);
@@ -318,11 +321,13 @@ const BarcodeData = () => {
     const headers = {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     };
-    const response = await axios.get(" http://127.0.0.1:8000/api/countByAuthenticatedUser",{ headers });
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/countByAuthenticatedUser",
+      { headers }
+    );
     console.log("setBarcodeCount", response);
 
-   setBarcodeCount(response?.data?.barcode_count);
-   
+    setBarcodeCount(response?.data?.barcode_count);
   };
 
   useEffect(() => {
@@ -334,12 +339,12 @@ const BarcodeData = () => {
     if (confirm("Are you sure you want to delete this record?")) {
       try {
         const response = await axios.get(
-          `  http://127.0.0.1:8000/api/barcodes-delete/${id}`
+          `  https://apibrize.brizindia.com/api/barcodes-delete/${id}`
         );
         if (response.status === 200) {
           alert("Data deleted successfully!");
           setDataList(dataList.filter((item) => item.id !== id));
-          barocdeCount()
+          barocdeCount();
         }
       } catch (error) {
         console.error("Error deleting data:", error);
@@ -368,9 +373,11 @@ const BarcodeData = () => {
         <FaPlus size={20} className="text-white" />
         Click to Upload File
       </button>
-      
+
       <h1 className="text-2xl font-bold mb-6">Barcode Data</h1>
-      <h4 className="text-lg font-semibold mb-4">Total Count: {barcodeCount}</h4>
+      <h4 className="text-lg font-semibold mb-4">
+        Total Count: {barcodeCount}
+      </h4>
 
       {/* Add Data Button */}
       <button
@@ -394,7 +401,9 @@ const BarcodeData = () => {
         <tbody>
           {dataList.map((item) => (
             <tr key={item.id} className="hover:bg-gray-100">
-              <td className="border px-4 py-2 text-center items-center mx-auto">{item.barcode_no}</td>
+              <td className="border px-4 py-2 text-center items-center mx-auto">
+                {item.barcode_no}
+              </td>
               <td className="border px-4 py-2 text-center">{item.sku}</td>
               <td className="border px-4 py-2 text-center">{item.itemno}</td>
               {/* <td className="border px-4 py-2 grid place-items-center"><Barcode displayValue={false} value={`${item.barcode_no}-${item.name}`} width={1} height={40} /></td> */}
@@ -427,7 +436,9 @@ const BarcodeData = () => {
           modal: "customModal",
         }}
       >
-        <h2 className="text-xl font-semibold text-green-500 mb-4">Add Barcode Data</h2>
+        <h2 className="text-xl font-semibold text-green-500 mb-4">
+          Add Barcode Data
+        </h2>
         <form onSubmit={handleSubmit(handleCreate)} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {fields.map((field) => (
@@ -436,8 +447,8 @@ const BarcodeData = () => {
                 {field.replace(/_/g, " ")} {field.includes("percent") ? "(%)" : ""}
                 </label> */}
                 <label className="block text-gray-700 capitalize">
-          {fieldTitles[field] || field.replace(/_/g, " ")}
-        </label>
+                  {fieldTitles[field] || field.replace(/_/g, " ")}
+                </label>
 
                 {/* Check if the field is "item_id" to render a select dropdown */}
                 {field === "item_id" ? (
@@ -454,24 +465,24 @@ const BarcodeData = () => {
                   </select>
                 ) : field === "barcode_no" ? (
                   <div className="flex items-center border rounded-md overflow-hidden">
-                  {/* Prefix Input (No Border) */}
-                  <input
-                    type="text"
-                    placeholder="Enter barcode prefix"
-                    {...register(field)}
-                    value={prefix}
-                    onChange={(e) => setPrefix(e.target.value)}
-                    className="px-4 py-2 w-2/3 focus:outline-none focus:ring-0 border-none"
-                  />
-                
-                  {/* Slash Separator */}
-                  <span className="px-2 text-gray-600 h-6">/</span>
-                
-                  {/* Read-only Suffix (No Border & Closer to Prefix) */}
-                  <span className="px-4 py-2 bg-gray-100 text-gray-500">{suffix}</span>
-                </div>
-                
-                
+                    {/* Prefix Input (No Border) */}
+                    <input
+                      type="text"
+                      placeholder="Enter barcode prefix"
+                      {...register(field)}
+                      value={prefix}
+                      onChange={(e) => setPrefix(e.target.value)}
+                      className="px-4 py-2 w-2/3 focus:outline-none focus:ring-0 border-none"
+                    />
+
+                    {/* Slash Separator */}
+                    <span className="px-2 text-gray-600 h-6">/</span>
+
+                    {/* Read-only Suffix (No Border & Closer to Prefix) */}
+                    <span className="px-4 py-2 bg-gray-100 text-gray-500">
+                      {suffix}
+                    </span>
+                  </div>
                 ) : field === "purity_id" ? (
                   <select
                     {...register(field)}
@@ -500,11 +511,10 @@ const BarcodeData = () => {
                   <input
                     {...register(field)}
                     className="border rounded w-full px-3 py-2"
-
-                    
                     // placeholder={`Enter ${field.replace("_", " ")}`}
-                    placeholder={`Enter ${fieldTitles[field] || field.replace(/_/g, " ")}`}
-
+                    placeholder={`Enter ${
+                      fieldTitles[field] || field.replace(/_/g, " ")
+                    }`}
                   />
                 )}
 
@@ -545,9 +555,9 @@ const BarcodeData = () => {
                 {/* <label className="block text-gray-700 capitalize">
                 {field.replace(/_/g, " ")} {field.includes("percent") ? "(%)" : ""}
                 </label>                 */}
-                 <label className="block text-gray-700 capitalize">
-          {fieldTitles[field] || field.replace(/_/g, " ")}
-        </label>
+                <label className="block text-gray-700 capitalize">
+                  {fieldTitles[field] || field.replace(/_/g, " ")}
+                </label>
 
                 {/* Conditionally Render Select Dropdowns */}
                 {field === "item_id" ? (
@@ -602,7 +612,9 @@ const BarcodeData = () => {
                     defaultValue={selectedRecord?.[field] || ""}
                     className="border rounded w-full px-3 py-2"
                     // placeholder={`Enter ${field.replace("_", " ")}`}
-                    placeholder={`Enter ${fieldTitles[field] || field.replace(/_/g, " ")}`}
+                    placeholder={`Enter ${
+                      fieldTitles[field] || field.replace(/_/g, " ")
+                    }`}
                   />
                 )}
 

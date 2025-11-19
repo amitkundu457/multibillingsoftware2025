@@ -22,10 +22,10 @@ const SalonInvoice = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/printpackage-bill/${id}`
+        ` https://apibrize.brizindia.com/api/printpackage-bill/${id}`
       );
       const invoiceResponse = await axios.get(
-        ` http://127.0.0.1:8000/api/generate-package-invoice/22`
+        ` https://apibrize.brizindia.com/api/generate-package-invoice/22`
       );
 
       setData(response.data);
@@ -41,7 +41,7 @@ const SalonInvoice = () => {
       }
 
       const clientResponse = await axios.get(
-        ` http://127.0.0.1:8000/api/auth/agme`,
+        ` https://apibrize.brizindia.com/api/auth/agme`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -59,7 +59,7 @@ const SalonInvoice = () => {
 
   return (
     <div
-     // ref={printRef}
+      // ref={printRef}
       className="max-w-4xl mx-auto bg-white shadow-lg p-8 rounded-lg border border-gray-300 print:w-full print:shadow-none print:border-none print:p-4"
     >
       {/* Salon Details */}
@@ -92,11 +92,21 @@ const SalonInvoice = () => {
       {/* Customer Details */}
       {data?.users && (
         <div className="mb-6 bg-gray-100 p-6 rounded-lg" key={data.id}>
-          <h2 className="text-lg font-semibold text-gray-800">Customer Details</h2>
-          <p className="text-sm"><strong>Name:</strong> {data.users.name}</p>
-          <p className="text-sm"><strong>Contact:</strong> +91 {data.users.customers[0]?.phone}</p>
-          <p className="text-sm"><strong>Address:</strong> {data.users.customers[0]?.address}</p>
-          <p className="text-sm"><strong>Pin Code:</strong> {data.users.customers[0]?.pincode}</p>
+          <h2 className="text-lg font-semibold text-gray-800">
+            Customer Details
+          </h2>
+          <p className="text-sm">
+            <strong>Name:</strong> {data.users.name}
+          </p>
+          <p className="text-sm">
+            <strong>Contact:</strong> +91 {data.users.customers[0]?.phone}
+          </p>
+          <p className="text-sm">
+            <strong>Address:</strong> {data.users.customers[0]?.address}
+          </p>
+          <p className="text-sm">
+            <strong>Pin Code:</strong> {data.users.customers[0]?.pincode}
+          </p>
         </div>
       )}
 
@@ -138,7 +148,9 @@ const SalonInvoice = () => {
                 <td className="border px-3 py-2">{details.service_name}</td>
                 <td className="border px-3 py-2">{details.price}</td>
                 <td className="border px-3 py-2">{details.stylist_name}</td>
-                <td className="border px-3 py-2">{new Date(data.created_at).toLocaleDateString()}</td>
+                <td className="border px-3 py-2">
+                  {new Date(data.created_at).toLocaleDateString()}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -148,14 +160,22 @@ const SalonInvoice = () => {
       {/* Payment Summary */}
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-gray-800">Payment Summary</h2>
-        <p className="text-sm"><strong>Subtotal:</strong> {data?.price ?? "N/A"}</p>
-        <p className="text-sm"><strong>Payment Method:</strong> PACKAGE</p>
+        <p className="text-sm">
+          <strong>Subtotal:</strong> {data?.price ?? "N/A"}
+        </p>
+        <p className="text-sm">
+          <strong>Payment Method:</strong> PACKAGE
+        </p>
       </div>
 
       {/* Signature & Print Button */}
       <div className="flex justify-between mt-8">
-        <p className="text-sm"><strong>Customer Signature: ___________</strong></p>
-        <p className="text-sm"><strong>Salon Representative: ___________</strong></p>
+        <p className="text-sm">
+          <strong>Customer Signature: ___________</strong>
+        </p>
+        <p className="text-sm">
+          <strong>Salon Representative: ___________</strong>
+        </p>
       </div>
 
       {/* <button

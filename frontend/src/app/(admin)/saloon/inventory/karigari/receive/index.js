@@ -4,7 +4,14 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState, useCallback } from "react";
-import { FaEdit, FaPlus, FaRupeeSign, FaSave, FaTimes, FaTrash } from "react-icons/fa";
+import {
+  FaEdit,
+  FaPlus,
+  FaRupeeSign,
+  FaSave,
+  FaTimes,
+  FaTrash,
+} from "react-icons/fa";
 import { FaArrowRotateRight } from "react-icons/fa6";
 
 // Notyf needs to be imported properly if used
@@ -97,9 +104,12 @@ function Page() {
   const KarigarListName = async () => {
     if (!token) return;
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/karigar-list", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/karigar-list",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setkarigarList(response.data);
     } catch (error) {
       console.error("Error fetching karigariList:", error);
@@ -115,7 +125,12 @@ function Page() {
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === "karigarlist_id" ? Number(value) : type === "checkbox" ? checked : value,
+      [name]:
+        name === "karigarlist_id"
+          ? Number(value)
+          : type === "checkbox"
+          ? checked
+          : value,
     }));
 
     setErrors((prevErrors) => ({
@@ -205,7 +220,10 @@ function Page() {
     <div className="absolute left-0 top-0 w-full bg-white h-full">
       <div className="w-full flex p-3 px-6 bg-green-500 text-white">
         <p className="flex-1 text-center font-semibold">Stock Receive</p>
-        <Link href="/admin/inventory/karigari" className="flex items-center text-sm gap-2">
+        <Link
+          href="/admin/inventory/karigari"
+          className="flex items-center text-sm gap-2"
+        >
           <FaTimes />
         </Link>
       </div>
@@ -215,7 +233,10 @@ function Page() {
           <FaArrowRotateRight size={24} className="text-blue-700" />
           <span>Refresh</span>
         </button>
-        <button onClick={handleSubmit} className="text-sm px-4 flex flex-col items-center gap-1">
+        <button
+          onClick={handleSubmit}
+          className="text-sm px-4 flex flex-col items-center gap-1"
+        >
           <FaSave size={24} className="text-blue-700" />
           <span>Save</span>
         </button>
@@ -320,7 +341,10 @@ function Page() {
           />
         </div>
         <div className="flex items-end p-2 w-1/6">
-          <button onClick={addItem} className="text-sm bg-green-500 text-white px-4 py-2 rounded">
+          <button
+            onClick={addItem}
+            className="text-sm bg-green-500 text-white px-4 py-2 rounded"
+          >
             Add Item
           </button>
         </div>
@@ -429,7 +453,7 @@ export default Page;
 //     if (!token) return;
 //     try {
 //       const response = await axios.get(
-//         " http://127.0.0.1:8000/api/karigar-list",
+//         " https://apibrize.brizindia.com/api/karigar-list",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -618,4 +642,3 @@ export default Page;
 // }
 
 // export default Page;
-

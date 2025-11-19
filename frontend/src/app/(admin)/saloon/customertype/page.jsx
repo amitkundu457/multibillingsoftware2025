@@ -25,7 +25,7 @@ export const Model = ({ onClose, onSave }) => {
     const token = getCookie("access_token");
 
     axios
-      .post(" http://127.0.0.1:8000/api/customerstype", inputData, {
+      .post(" https://apibrize.brizindia.com/api/customerstype", inputData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -81,9 +81,9 @@ export const Model = ({ onClose, onSave }) => {
 
 const Page = () => {
   const [showModel, setShowModel] = useState(false);
-  const [EditModelShow ,setEditModelShow]=useState(false)
+  const [EditModelShow, setEditModelShow] = useState(false);
   const [data, setData] = useState([]);
-  const[editId ,setEditId]=useState();
+  const [editId, setEditId] = useState();
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -95,18 +95,15 @@ const Page = () => {
   };
 
   const fetchData = () => {
-   
     const token = getCookie("access_token");
 
     axios
-      .get("  http://127.0.0.1:8000/api/customerstype",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .get("  https://apibrize.brizindia.com/api/customerstype", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
         setData(response.data.data);
       })
@@ -132,8 +129,8 @@ const Page = () => {
 
   const handleEdit = (id) => {
     console.log("Edit ID:", id);
-    setEditId(id)
-    setEditModelShow(true)
+    setEditId(id);
+    setEditModelShow(true);
     // Implement edit logic here  customerstype/{id}
 
     // console.log("id for Edit", id);
@@ -141,7 +138,7 @@ const Page = () => {
     //   const token = getCookie("access_token");
 
     //   axios
-    //     .post(` http://127.0.0.1:8000/api/customerstype/${id}`, {
+    //     .post(` https://apibrize.brizindia.com/api/customerstype/${id}`, {
     //       headers: {
     //         Authorization: `Bearer ${token}`,
     //       },
@@ -163,7 +160,7 @@ const Page = () => {
       const token = getCookie("access_token");
 
       axios
-        .delete(`  http://127.0.0.1:8000/api/customerstype/${id}`, {
+        .delete(`  https://apibrize.brizindia.com/api/customerstype/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -233,21 +230,21 @@ const Page = () => {
       </table>
 
       {showModel && <Model onClose={onClose} onSave={onClose} />}
-      {EditModelShow && <EditModel  onClose={onCloseEdit} onSave={onCloseEdit} id={editId} />}
+      {EditModelShow && (
+        <EditModel onClose={onCloseEdit} onSave={onCloseEdit} id={editId} />
+      )}
     </div>
   );
 };
 
 export default Page;
 
+// Edit Model types
 
-
-
-// Edit Model types 
-
-
-export const EditModel = ({ onClose, onSave, id ,selectedItem }) => {
-  const [inputData, setInputData] = useState({ name: selectedItem?.name || "" });
+export const EditModel = ({ onClose, onSave, id, selectedItem }) => {
+  const [inputData, setInputData] = useState({
+    name: selectedItem?.name || "",
+  });
 
   const handleData = (e) => {
     setInputData({ ...inputData, [e.target.name]: e.target.value });
@@ -265,16 +262,20 @@ export const EditModel = ({ onClose, onSave, id ,selectedItem }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const token = getCookie("access_token");
-    console.log("edit_id",id)
-    console.log("input data",inputData)
+    console.log("edit_id", id);
+    console.log("input data", inputData);
 
     axios
-      .post(` http://127.0.0.1:8000/api/customerstype/${id}`, inputData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        ` https://apibrize.brizindia.com/api/customerstype/${id}`,
+        inputData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then(() => {
         onSave();
         alert("Data updated successfully!");
@@ -286,8 +287,14 @@ export const EditModel = ({ onClose, onSave, id ,selectedItem }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg w-96"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="text-xl font-bold mb-4">Edit Customer Type</h2>
         <input
           name="name"
@@ -298,8 +305,18 @@ export const EditModel = ({ onClose, onSave, id ,selectedItem }) => {
           className="w-full p-2 border rounded-md mb-4"
         />
         <div className="flex justify-between">
-          <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md" onClick={onClose}>Cancel</button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded-md">Save</button>
+          <button
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>

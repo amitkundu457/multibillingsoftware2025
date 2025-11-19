@@ -35,7 +35,7 @@
 //     const fetchData = async () => {
 //       try {
 //         setLoading(true);
-//         const response = await axios.get(" http://127.0.0.1:8000/api/partyreport", {
+//         const response = await axios.get(" https://apibrize.brizindia.com/api/partyreport", {
 //           headers: { authorization: `Bearer ${token}` },
 //         });
 //         setData(response?.data);
@@ -265,8 +265,6 @@
 
 // export default Home;
 
-
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { FaFilePdf } from "react-icons/fa6";
@@ -301,10 +299,13 @@ const Page = () => {
   // Fetch Customers
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get(" http://127.0.0.1:8000/api/customers", {
-        headers: { authorization: `Bearer ${token}` },
-      });
-      console.log("Customers:",res);
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/customers",
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("Customers:", res);
       setCustomers(res.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -314,12 +315,15 @@ const Page = () => {
   // Fetch Report Data
   const fetchReportData = async () => {
     try {
-      // " http://127.0.0.1:8000/api/partyreport"  http://127.0.0.1:8000/api/agentsalesreport
+      // " https://apibrize.brizindia.com/api/partyreport"  https://apibrize.brizindia.com/api/agentsalesreport
       setLoading(true);
-      const result = await axios.get(" http://127.0.0.1:8000/api/partyreport", {
-        headers: { authorization: `Bearer ${token}` },
-      });
-console.log("reslut",result)
+      const result = await axios.get(
+        " https://apibrize.brizindia.com/api/partyreport",
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("reslut", result);
       setData(result.data);
       setFilteredData(result.data);
     } catch (error) {
@@ -331,15 +335,17 @@ console.log("reslut",result)
 
   const handleFilter = () => {
     const filtered = data.filter((item) => {
-      console.log("filter here",item)
+      console.log("filter here", item);
       const orderDate = new Date(item.order_date);
       const start = startDate ? new Date(startDate) : null;
       const end = endDate ? new Date(endDate) : null;
 
-      const matchDate = (!start || orderDate >= start) && (!end || orderDate <= end);
-      const matchCustomer = !selectedCustomer || item.customer_id == selectedCustomer;
-      console.log("selectedcutomber",selectedCustomer)
-      console.log("item.customer_id",item.customer_id)
+      const matchDate =
+        (!start || orderDate >= start) && (!end || orderDate <= end);
+      const matchCustomer =
+        !selectedCustomer || item.customer_id == selectedCustomer;
+      console.log("selectedcutomber", selectedCustomer);
+      console.log("item.customer_id", item.customer_id);
 
       return matchDate && matchCustomer;
     });
@@ -430,7 +436,10 @@ console.log("reslut",result)
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center bg-white py-4 px-6 rounded-lg shadow-md">
-        <h1 className="font-bold text-2xl text-gray-800"> Customer Wise Report</h1>
+        <h1 className="font-bold text-2xl text-gray-800">
+          {" "}
+          Customer Wise Report
+        </h1>
         <div>
           <button
             onClick={downloadPDF}

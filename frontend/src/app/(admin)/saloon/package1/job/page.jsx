@@ -75,22 +75,22 @@ export default function JobForm() {
 
     const paymentPayload = {
       package_no: package_no, // Assigning the variable
-      paid_amount: totalGrossAmount
+      paid_amount: totalGrossAmount,
     };
     const orderResponse = await axios.post(
-      "  http://127.0.0.1:8000/api/order-packages",
+      "  https://apibrize.brizindia.com/api/order-packages",
       payload
     );
 
     const paymentResponse = await axios.post(
-      "  http://127.0.0.1:8000/api/update-payment",
+      "  https://apibrize.brizindia.com/api/update-payment",
       paymentPayload
     );
 
     console.log(orderResponse);
     console.log(paymentResponse);
 
-    if (orderResponse.status === 201 && paymentResponse.status===200) {
+    if (orderResponse.status === 201 && paymentResponse.status === 200) {
       notyf.success(` package Order placed successfully!`);
 
       const orderId = orderResponse.data.id;
@@ -102,18 +102,9 @@ export default function JobForm() {
       if (printConfirmation) {
         Printbill(orderId, orderResponse.data.bill_inv); // Call the direct print function
       }
-
-     
-      
-
-
-
-
     } else {
       notyf.error("package  not Booked !!");
     }
-
-   
   };
 
   const Printbill = (orderId, billInv) => {
@@ -219,7 +210,9 @@ export default function JobForm() {
 
   //fetch stylist
   const fetchStylists = async () => {
-    const response = await axios.get("  http://127.0.0.1:8000/api/stylists");
+    const response = await axios.get(
+      "  https://apibrize.brizindia.com/api/stylists"
+    );
     setStylists(response.data);
   };
 
@@ -234,7 +227,7 @@ export default function JobForm() {
 
     try {
       const response = await axios.get(
-        `  http://127.0.0.1:8000/api/packagesassign/${customerDetails.id}?enabled=${checked}`
+        `  https://apibrize.brizindia.com/api/packagesassign/${customerDetails.id}?enabled=${checked}`
       );
       setPackageData(response.data.data);
       setServices(response.data.data[0].services);
@@ -257,35 +250,40 @@ export default function JobForm() {
     <div className="p-4 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-lg font-bold mb-4">Job Form</h2>
       {packageData?.length > 0 && (
-  <div className="absolute top-12 right-6 bg-white shadow-lg p-4 rounded-lg w-68">
-    {/* Mapping through packageData */}
-    {packageData.map((data, index) => (
-      <div key={index} className="border p-4 rounded-lg mb-4 bg-gray-50 shadow-md">
-        <p className="text-gray-700 font-semibold text-sm">
-          <span className="font-bold">Package No:</span> {data.package_no}
-        </p>
-        <p className="text-yellow-700 font-semibold text-sm">
-          <span className="font-bold">Expiry Date:</span> {data.package_expiry}
-        </p>
-        <p className="text-green-700 font-semibold text-sm">
-          <span className="font-bold">Package Amount:</span> ₹{data.package_amount}
-        </p>
-        <p className="text-green-700 font-semibold text-sm">
-          <span className="font-bold">Remaining Amount:</span> ₹{data.remaining_amount}
-        </p>
-        <p className="text-blue-700 font-semibold text-sm">
-          <span className="font-bold">Service Amount:</span> ₹{totalGrossAmount}
-        </p>
-        <p className="text-red-700 font-semibold text-sm">
-          <span className="font-bold">Balance Amount:</span> ₹
-          {data.remaining_amount - totalGrossAmount}
-        </p>
-      </div>
-    ))}
-  </div>
-)}
-
-
+        <div className="absolute top-12 right-6 bg-white shadow-lg p-4 rounded-lg w-68">
+          {/* Mapping through packageData */}
+          {packageData.map((data, index) => (
+            <div
+              key={index}
+              className="border p-4 rounded-lg mb-4 bg-gray-50 shadow-md"
+            >
+              <p className="text-gray-700 font-semibold text-sm">
+                <span className="font-bold">Package No:</span> {data.package_no}
+              </p>
+              <p className="text-yellow-700 font-semibold text-sm">
+                <span className="font-bold">Expiry Date:</span>{" "}
+                {data.package_expiry}
+              </p>
+              <p className="text-green-700 font-semibold text-sm">
+                <span className="font-bold">Package Amount:</span> ₹
+                {data.package_amount}
+              </p>
+              <p className="text-green-700 font-semibold text-sm">
+                <span className="font-bold">Remaining Amount:</span> ₹
+                {data.remaining_amount}
+              </p>
+              <p className="text-blue-700 font-semibold text-sm">
+                <span className="font-bold">Service Amount:</span> ₹
+                {totalGrossAmount}
+              </p>
+              <p className="text-red-700 font-semibold text-sm">
+                <span className="font-bold">Balance Amount:</span> ₹
+                {data.remaining_amount - totalGrossAmount}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Phone Number Search */}
       <div className="mb-4 flex gap-2">
@@ -496,7 +494,7 @@ export default function JobForm() {
                   </td>
                   <td>
                     <button
-                    type="button"
+                      type="button"
                       onClick={handleAddService}
                       className="bg-blue-500 text-white p-2 rounded"
                     >
@@ -585,7 +583,7 @@ export default function JobForm() {
 
         {/* Submit Button */}
         <button
-        type="submit"
+          type="submit"
           onClick={handleSubmit(onSubmitPackage)}
           className="mt-4 bg-green-500 text-white p-2 rounded"
         >

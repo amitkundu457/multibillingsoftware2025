@@ -73,7 +73,7 @@
 
 //   const handleDeleteAllStock = async () => {
 //     const response = await axios.delete(
-//       " http://127.0.0.1:8000/api/delete-all-stock"
+//       " https://apibrize.brizindia.com/api/delete-all-stock"
 //     );
 //     if (response.status === 200) {
 //       alert(response.data.message); // Show success message
@@ -85,7 +85,7 @@
 //   };
 
 //   const handleDownloadSample = () => {
-//     window.location.href = " http://127.0.0.1:8000/api/download-sample-stock";
+//     window.location.href = " https://apibrize.brizindia.com/api/download-sample-stock";
 //   };
 
 //   const handleFileChange = (e) => {
@@ -109,7 +109,7 @@
 
 //     try {
 //       const response = await axios.post(
-//         "http://127.0.0.1:8000/api/upload/stock",
+//         "https://apibrize.brizindia.com/api/upload/stock",
 //         formData,
 //         {
 //           headers: {
@@ -179,8 +179,8 @@
 //         onClick={() => {
 //           setIsOpen(true);
 //         }}
-//         className="absolute top-16 right-6 flex items-center gap-2 px-4 py-2 text-white font-semibold 
-//              bg-gradient-to-r from-blue-500 to-blue-700 rounded-full shadow-md 
+//         className="absolute top-16 right-6 flex items-center gap-2 px-4 py-2 text-white font-semibold
+//              bg-gradient-to-r from-blue-500 to-blue-700 rounded-full shadow-md
 //              hover:from-blue-600 hover:to-blue-800 hover:shadow-lg transition-all duration-300"
 //       >
 //         <FaPlus size={20} className="text-white" />
@@ -190,8 +190,8 @@
 //         onClick={() => {
 //           setDeleteModel(true);
 //         }}
-//         className="absolute top-28 right-6 flex items-center gap-2 px-3 py-2 text-white font-semibold 
-//              bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md 
+//         className="absolute top-28 right-6 flex items-center gap-2 px-3 py-2 text-white font-semibold
+//              bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md
 //              hover:from-red-600 hover:to-red-800 hover:shadow-lg transition-all duration-300"
 //       >
 //         <FaTimes size={20} className="text-white" />
@@ -199,8 +199,8 @@
 //       </button>
 //       <button
 //         onClick={handleDownloadProductServices}
-//         className="absolute top-40 right-6 flex items-center gap-2 px-4 py-2 text-white font-semibold 
-//        bg-gradient-to-r from-green-500 to-green-700 rounded-full shadow-md 
+//         className="absolute top-40 right-6 flex items-center gap-2 px-4 py-2 text-white font-semibold
+//        bg-gradient-to-r from-green-500 to-green-700 rounded-full shadow-md
 //        hover:from-green-600 hover:to-green-800 hover:shadow-lg transition-all duration-300"
 //       >
 //         <FaRupeeSign size={16} className="text-white" />
@@ -316,7 +316,6 @@
 //         </div>
 //       </form>
 
-      
 //       <div className="flex flex-col gap-1 p-2 h-[500px] mt-10 overflow-y-auto border border-gray-300 rounded">
 //         {!isLoading &&
 //           data.stock
@@ -413,7 +412,6 @@
 
 // export default Page;
 
-
 "use client";
 import Link from "next/link";
 import { useState } from "react";
@@ -489,7 +487,7 @@ function Page() {
   };
 
   // const handleDeleteAllStock = async () => {
-  //   const response = await axios.delete("http://127.0.0.1:8000/api/delete-all-stock");
+  //   const response = await axios.delete("https://apibrize.brizindia.com/api/delete-all-stock");
   //   if (response.status === 200) {
   //     alert(response.data.message);
   //     setDeleteModel(false);
@@ -500,19 +498,22 @@ function Page() {
 
   const handleDeleteAllStock = async () => {
     const token = getToken(); // Reuse the token fetcher
-  
+
     if (!token) {
       notifyTokenMissing(); // Optional: show error if no token
       return;
     }
-  
+
     try {
-      const response = await axios.delete("http://127.0.0.1:8000/api/delete-all-stock", {
-        headers: {
-          Authorization: `Bearer ${token}`, // Attach token here
-        },
-      });
-  
+      const response = await axios.delete(
+        "https://apibrize.brizindia.com/api/delete-all-stock",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token here
+          },
+        }
+      );
+
       if (response.status === 200) {
         alert(response.data.message);
         setDeleteModel(false);
@@ -524,10 +525,10 @@ function Page() {
       alert("Failed to delete stock.");
     }
   };
-  
 
   const handleDownloadSample = () => {
-    window.location.href = "http://127.0.0.1:8000/api/download-sample-stock";
+    window.location.href =
+      "https://apibrize.brizindia.com/api/download-sample-stock";
   };
 
   const handleFileChange = (e) => {
@@ -551,7 +552,7 @@ function Page() {
 
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/upload/stock",
+        " https://apibrize.brizindia.com/api/upload/stock",
         formData,
         {
           headers: {
@@ -596,14 +597,18 @@ function Page() {
 
   // PAGINATION LOGIC
   const itemsPerPage = 10;
-  const filteredStock = !isLoading ? data?.stock?.filter((st) => st.date == null) || [] : [];
+  const filteredStock = !isLoading
+    ? data?.stock?.filter((st) => st.date == null) || []
+    : [];
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredStock.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredStock.length / itemsPerPage);
-  const handlePrevPage = () => currentPage > 1 && setCurrentPage((prev) => prev - 1);
-  const handleNextPage = () => currentPage < totalPages && setCurrentPage((prev) => prev + 1);
+  const handlePrevPage = () =>
+    currentPage > 1 && setCurrentPage((prev) => prev - 1);
+  const handleNextPage = () =>
+    currentPage < totalPages && setCurrentPage((prev) => prev + 1);
 
   return (
     <div className="absolute left-0 top-0 w-full h-full bg-white">
@@ -679,23 +684,30 @@ function Page() {
           )}
         </div>
 
-        {["quantity", "gross_weight", "net_weight", "rate", "mrp"].map((field) => (
-          <div className="flex flex-col w-[10%]" key={field}>
-            <label className="capitalize">{field.replace("_", " ")}</label>
-            <input
-              type="text"
-              name={field}
-              value={formData[field]}
-              onChange={handleChange}
-              className="form-input border border-gray-400 rounded text-sm"
-              placeholder={field.toUpperCase()}
-            />
-            {errors[field] && <p className="text-red-500">{errors[field][0]}</p>}
-          </div>
-        ))}
+        {["quantity", "gross_weight", "net_weight", "rate", "mrp"].map(
+          (field) => (
+            <div className="flex flex-col w-[10%]" key={field}>
+              <label className="capitalize">{field.replace("_", " ")}</label>
+              <input
+                type="text"
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                className="form-input border border-gray-400 rounded text-sm"
+                placeholder={field.toUpperCase()}
+              />
+              {errors[field] && (
+                <p className="text-red-500">{errors[field][0]}</p>
+              )}
+            </div>
+          )
+        )}
 
         <div className="flex items-end">
-          <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
             <FaPlus />
           </button>
         </div>
@@ -721,7 +733,11 @@ function Page() {
               currentItems.map((st, index) => (
                 <tr key={index} className="hover:bg-gray-100">
                   <td className="border p-2">{indexOfFirstItem + index + 1}</td>
-                  <td className="border p-2">{st.product_service?.name || st.product_service_name || "N/A"}</td>
+                  <td className="border p-2">
+                    {st.product_service?.name ||
+                      st.product_service_name ||
+                      "N/A"}
+                  </td>
                   <td className="border p-2">{st.quantity}</td>
                   <td className="border p-2">{st.gross_weight}</td>
                   <td className="border p-2">{st.net_weight}</td>
@@ -767,89 +783,103 @@ function Page() {
           </div>
         )} */}
 
-
-
-{totalPages > 1 && (
-  <div className="flex justify-center mt-6 items-center gap-2 text-sm">
-    <button
-      onClick={handlePrevPage}
-      disabled={currentPage === 1}
-      className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
-    >
-      Prev
-    </button>
-
-    {/* Dynamic Pagination Logic */}
-    {(() => {
-      const pagesToShow = [];
-      const maxPageButtons = 5;
-
-      const startPage = Math.max(
-        1,
-        currentPage <= maxPageButtons ? 1 : currentPage - Math.floor(maxPageButtons / 2)
-      );
-      const endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
-
-      // Always show first 1-2 pages
-      if (startPage > 1) {
-        pagesToShow.push(
-          <button
-            key={1}
-            onClick={() => setCurrentPage(1)}
-            className={`px-3 py-1 border rounded ${currentPage === 1 ? "bg-blue-500 text-white" : "hover:bg-gray-100"}`}
-          >
-            1
-          </button>
-        );
-        if (startPage > 2) {
-          pagesToShow.push(<span key="start-ellipsis">...</span>);
-        }
-      }
-
-      // Dynamic middle pages
-      for (let i = startPage; i <= endPage; i++) {
-        if (i !== 1 && i !== totalPages) {
-          pagesToShow.push(
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-6 items-center gap-2 text-sm">
             <button
-              key={i}
-              onClick={() => setCurrentPage(i)}
-              className={`px-3 py-1 border rounded ${currentPage === i ? "bg-blue-500 text-white" : "hover:bg-gray-100"}`}
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
             >
-              {i}
+              Prev
             </button>
-          );
-        }
-      }
 
-      // Always show last 1-2 pages
-      if (endPage < totalPages) {
-        if (endPage < totalPages - 1) {
-          pagesToShow.push(<span key="end-ellipsis">...</span>);
-        }
-        pagesToShow.push(
-          <button
-            key={totalPages}
-            onClick={() => setCurrentPage(totalPages)}
-            className={`px-3 py-1 border rounded ${currentPage === totalPages ? "bg-blue-500 text-white" : "hover:bg-gray-100"}`}
-          >
-            {totalPages}
-          </button>
-        );
-      }
+            {/* Dynamic Pagination Logic */}
+            {(() => {
+              const pagesToShow = [];
+              const maxPageButtons = 5;
 
-      return pagesToShow;
-    })()}
+              const startPage = Math.max(
+                1,
+                currentPage <= maxPageButtons
+                  ? 1
+                  : currentPage - Math.floor(maxPageButtons / 2)
+              );
+              const endPage = Math.min(
+                totalPages,
+                startPage + maxPageButtons - 1
+              );
 
-    <button
-      onClick={handleNextPage}
-      disabled={currentPage === totalPages}
-      className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
-    >
-      Next
-    </button>
-  </div>
-)}
+              // Always show first 1-2 pages
+              if (startPage > 1) {
+                pagesToShow.push(
+                  <button
+                    key={1}
+                    onClick={() => setCurrentPage(1)}
+                    className={`px-3 py-1 border rounded ${
+                      currentPage === 1
+                        ? "bg-blue-500 text-white"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    1
+                  </button>
+                );
+                if (startPage > 2) {
+                  pagesToShow.push(<span key="start-ellipsis">...</span>);
+                }
+              }
 
+              // Dynamic middle pages
+              for (let i = startPage; i <= endPage; i++) {
+                if (i !== 1 && i !== totalPages) {
+                  pagesToShow.push(
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i)}
+                      className={`px-3 py-1 border rounded ${
+                        currentPage === i
+                          ? "bg-blue-500 text-white"
+                          : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {i}
+                    </button>
+                  );
+                }
+              }
+
+              // Always show last 1-2 pages
+              if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                  pagesToShow.push(<span key="end-ellipsis">...</span>);
+                }
+                pagesToShow.push(
+                  <button
+                    key={totalPages}
+                    onClick={() => setCurrentPage(totalPages)}
+                    className={`px-3 py-1 border rounded ${
+                      currentPage === totalPages
+                        ? "bg-blue-500 text-white"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {totalPages}
+                  </button>
+                );
+              }
+
+              return pagesToShow;
+            })()}
+
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Upload Modal */}
@@ -860,11 +890,17 @@ function Page() {
             onChange={handleFileChange}
             className="mb-2 border p-2 rounded w-full"
           />
-          <button onClick={uploadStock} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">
+          <button
+            onClick={uploadStock}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2"
+          >
             Upload
           </button>
           <div className="my-4 w-full border-t" />
-          <button onClick={handleDownloadSample} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          <button
+            onClick={handleDownloadSample}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
             Download Sample
           </button>
         </div>
@@ -872,12 +908,20 @@ function Page() {
 
       {/* Delete Modal */}
       <Modal open={deleteModel} onClose={() => setDeleteModel(false)} center>
-        <h2 className="text-xl font-semibold text-center mb-4">Delete All Stock?</h2>
+        <h2 className="text-xl font-semibold text-center mb-4">
+          Delete All Stock?
+        </h2>
         <div className="flex justify-center gap-4">
-          <button className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400" onClick={() => setDeleteModel(false)}>
+          <button
+            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            onClick={() => setDeleteModel(false)}
+          >
             Cancel
           </button>
-          <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700" onClick={handleDeleteAllStock}>
+          <button
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            onClick={handleDeleteAllStock}
+          >
             Confirm
           </button>
         </div>

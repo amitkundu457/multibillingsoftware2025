@@ -24,7 +24,7 @@ export const ShowProduct = ({
       <p className="text-lg text-green-600">₹{price}</p>
       <p className="text-sm text-gray-500">Quantity: {quantity}</p>
       <div className="flex items-center space-x-2 mt-2">
-       <button
+        <button
           onClick={onDecrease}
           className=" px-4 py-1 
     rounded-xl 
@@ -69,11 +69,11 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   const [familyBookingId, setFamilyBookingId] = useState("");
   const [itemsCategory, setItemsCategory] = useState([]);
   const [data, setData] = useState([]);
-    const [showBarcodeNumber,setShowBarcodeNumber] = useState(false);
-    const [barcode, setBarcode] = useState("");
-    const [allProducts, setAllProducts] = useState([]);
-    const [searchItem,setSearchItem]  = useState(null);
-  
+  const [showBarcodeNumber, setShowBarcodeNumber] = useState(false);
+  const [barcode, setBarcode] = useState("");
+  const [allProducts, setAllProducts] = useState([]);
+  const [searchItem, setSearchItem] = useState(null);
+
   const [pcss, setPcs] = useState(null);
 
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -102,15 +102,13 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       setFilteredItems(filtered);
     }
   };
-  
-  useEffect(()=>{
-    const newItem = data.filter((p)=>p.name.toLowerCase().includes(searchItem.toLowerCase()));
-  setFilteredItems(newItem);
 
-
-  },[searchItem]);
-
-  
+  useEffect(() => {
+    const newItem = data.filter((p) =>
+      p.name.toLowerCase().includes(searchItem.toLowerCase())
+    );
+    setFilteredItems(newItem);
+  }, [searchItem]);
 
   const handleCloseModal = () => {
     setFormVisible(false); // Close modal
@@ -129,7 +127,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     const token = getCookie("access_token");
 
     if (isOpen) {
-      fetch(" http://127.0.0.1:8000/api/kot-tables", {
+      fetch(" https://apibrize.brizindia.com/api/kot-tables", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -143,7 +141,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get(" http://127.0.0.1:8000/api/product-and-service", {
+      .get(" https://apibrize.brizindia.com/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -164,9 +162,12 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       const token = getCookie("access_token");
 
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/type",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setItemsCategory(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -177,26 +178,27 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
   }, []);
 
   useEffect(() => {
-      
-      fetchBarCodeData();
-      
-    }, []);
+    fetchBarCodeData();
+  }, []);
 
   const fetchBarCodeData = async () => {
-      try {
-        const token = getCookie("access_token");
-        const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
+    try {
+      const token = getCookie("access_token");
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/barcodes",
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-  
-        setAllProducts(response.data);
-        return response.data; // Return the fetched data
-      } catch (error) {
-        console.error("Error fetching barcode data:", error);
-      }
-    };
+        }
+      );
+
+      setAllProducts(response.data);
+      return response.data; // Return the fetched data
+    } catch (error) {
+      console.error("Error fetching barcode data:", error);
+    }
+  };
 
   const Printbill = (bookingId) => {
     if (!bookingId) {
@@ -225,7 +227,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await fetch(
-        " http://127.0.0.1:8000/api/book-family-tables",
+        " https://apibrize.brizindia.com/api/book-family-tables",
         {
           method: "POST",
           headers: {
@@ -325,7 +327,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
 
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/book-family-tables",
+        " https://apibrize.brizindia.com/api/book-family-tables",
         payload,
         {
           headers: {
@@ -383,15 +385,13 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     }
     try {
       const response = await axios.put(
-        " http://127.0.0.1:8000/api/update-family-tables",
+        " https://apibrize.brizindia.com/api/update-family-tables",
         updatePayload
       );
 
       setSelectedProduct([]);
 
-      const printConfirmation = window.confirm(
-        "Do you want to print the Kot?"
-      );
+      const printConfirmation = window.confirm("Do you want to print the Kot?");
 
       if (printConfirmation) {
         Printbill(response.data.family_booking_id);
@@ -403,7 +403,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
     console.log("Add item for booking ID:", familyBookingId);
   };
 
-    const handleSearchBarCode = async () => {
+  const handleSearchBarCode = async () => {
     if (!barcode.trim()) {
       setError("Please enter a barcode or fill details manually.");
       // setIsEditable(true);
@@ -415,10 +415,10 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
       const foundItem = allProducts.find((p) => p.barcode_no === barcode);
       console.log("bracode2", foundItem);
 
-      const barcodeFilter = filteredItems.filter((p)=>p.id===foundItem.item_id);
+      const barcodeFilter = filteredItems.filter(
+        (p) => p.id === foundItem.item_id
+      );
       setFilteredItems(barcodeFilter);
-
-      
 
       if (foundItem) {
         console.log(foundItem.basic_rate);
@@ -575,14 +575,13 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
               {/* filtered product */}
               <div>
                 <input
-                type="text"
-                placeholder="Item name"
-                value={searchItem}
-                onChange={(e)=>setSearchItem(e.target.value)}
+                  type="text"
+                  placeholder="Item name"
+                  value={searchItem}
+                  onChange={(e) => setSearchItem(e.target.value)}
                 />
- 
               </div>
-               <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3">
                 <select
                   name="category"
                   id="category"
@@ -605,39 +604,42 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
                   Reset
                 </button>
               </div>
-               {/* Barcode Toggle */}
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-medium">Barcode</span>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer"
-                onChange={()=>{setShowBarcodeNumber(!showBarcodeNumber)}}
-                 />
-                <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
-              </label>
-            </div>
-            {/* barcode input feild */}
-            {
-              showBarcodeNumber && (
-                 <div className="flex gap-2">
-              <input
-                type="text"
-                value={barcode}
-                onChange={(e) => {setBarcode(e.target.value)
-                 }}
-                placeholder="Enter Barcode number"
-                className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
-              />
+              {/* Barcode Toggle */}
+              <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium">Barcode</span>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
+                    onChange={() => {
+                      setShowBarcodeNumber(!showBarcodeNumber);
+                    }}
+                  />
+                  <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                </label>
+              </div>
+              {/* barcode input feild */}
+              {showBarcodeNumber && (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={barcode}
+                    onChange={(e) => {
+                      setBarcode(e.target.value);
+                    }}
+                    placeholder="Enter Barcode number"
+                    className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+                  />
 
-              <button
-                type="button"
-                onClick={handleSearchBarCode}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Search
-              </button>
-            </div>
-              )
-            }
+                  <button
+                    type="button"
+                    onClick={handleSearchBarCode}
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  >
+                    Search
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -651,7 +653,7 @@ export default function FamilyBookingModal({ isOpen, onClose }) {
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={` http://127.0.0.1:8000/storage/${item.image}`}
+                  src={` https://apibrize.brizindia.com/storage/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

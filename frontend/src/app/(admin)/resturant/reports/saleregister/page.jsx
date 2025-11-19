@@ -36,7 +36,7 @@ const Home = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/salesreport",
+          " https://apibrize.brizindia.com/api/salesreport",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -174,9 +174,7 @@ const Home = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
-        <button
-          className="bg-green-500 text-white font-semibold rounded-lg px-6 py-3 hover:bg-green-600"
-        >
+        <button className="bg-green-500 text-white font-semibold rounded-lg px-6 py-3 hover:bg-green-600">
           Search
         </button>
         <button
@@ -238,7 +236,10 @@ const Home = () => {
                 </td>
                 <td className="py-3 px-4 border-t">
                   {filteredData
-                    .reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0)
+                    .reduce(
+                      (sum, item) => sum + (parseFloat(item.price) || 0),
+                      0
+                    )
                     .toFixed(2)}
                 </td>
                 <td className="py-3 px-4 border-t"></td>

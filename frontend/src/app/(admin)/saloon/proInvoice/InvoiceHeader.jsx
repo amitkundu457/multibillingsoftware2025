@@ -1,5 +1,3 @@
-
-
 // "use client";
 // import axios from "axios";
 // import { useEffect, useState } from "react";
@@ -32,7 +30,7 @@
 //       return;
 //     }
 //     try {
-//       const response = await axios.get(" http://127.0.0.1:8000/api/cover/upload", {
+//       const response = await axios.get(" https://apibrize.brizindia.com/api/cover/upload", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 
@@ -64,7 +62,7 @@
 //         return;
 //       }
 //       try {
-//         const response = await axios.get(" http://127.0.0.1:8000/api/masterlogobill", {
+//         const response = await axios.get(" https://apibrize.brizindia.com/api/masterlogobill", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 
@@ -222,7 +220,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
     }
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/cover/upload",
+        " https://apibrize.brizindia.com/api/cover/upload",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -262,7 +260,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
       }
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/masterlogobill",
+          " https://apibrize.brizindia.com/api/masterlogobill",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -293,7 +291,7 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
     <div className="border-t border-r border-l w-full border-gray-800 ">
       {/* {
         fetchedLogoUrl==null &&( */}
-          {/* <div className="bg-red-200 w-full h-[100px]  overflow-hidden">
+      {/* <div className="bg-red-200 w-full h-[100px]  overflow-hidden">
         <img
           src={fetchcoverimage}
           alt="Cover image Logo"
@@ -302,18 +300,16 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
         />
       </div> */}
 
-        {/* )
+      {/* )
       } */}
-      
+
       {/* Top Section */}
       <div className="border border-black w-full p-4 flex items-start">
         {/* Left Section */}
 
         <div className="w-2/3 pr-4 border-r border-black">
           {/* Header Section */}
-          
 
-         
           <div className="mt-4">
             {/* Address Section */}
             <div>
@@ -353,25 +349,21 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
         {/* Right Section */}
         <div className="w-1/3 pl-4 mt-10 text-sm space-y-2">
           <div className=" flex  justify-evenly  gap-5">
-          <div className="flex flex-col ">
-            <span className="font-bold text-gray-700">Invoice No.</span>
-            <span className="text-gray-900">{data?.billno || "-"}</span>
-          </div>
+            <div className="flex flex-col ">
+              <span className="font-bold text-gray-700">Invoice No.</span>
+              <span className="text-gray-900">{data?.billno || "-"}</span>
+            </div>
 
-        
-
-          <div className="flex flex-col">
-            <span className="font-bold text-gray-700">Invoice Date</span>
-            <span className="text-gray-900">{data?.date || "-"}</span>
+            <div className="flex flex-col">
+              <span className="font-bold text-gray-700">Invoice Date</span>
+              <span className="text-gray-900">{data?.date || "-"}</span>
+            </div>
           </div>
         </div>
-          </div>
       </div>
 
       {/* Middle Section */}
       <div className=" ">
-       
-
         <div className="grid grid-cols-1 gap-4">
           {/* Bill To Section */}
           <div className=" border-r border-l border-gray-800 p-4">
@@ -379,12 +371,11 @@ const InvoiceHeader = ({ bisNumber, data, logoUrl, companyName }) => {
             {data.users.customers.map((customer) => (
               <div key={customer.id}>
                 <p className="text-sm">
-                  <span className=" font-bold">{data?.users?.name}</span> 
+                  <span className=" font-bold">{data?.users?.name}</span>
                 </p>
                 {/* <p className="text-sm">Address: {customer.address || "N/A"}</p> */}
                 <p className="text-sm">
-                  <span className="">Phone:</span>{" "}
-                  {customer.phone || "N/A"}
+                  <span className="">Phone:</span> {customer.phone || "N/A"}
                 </p>
                 {/* <p className="text-sm">GSTIN: {customer.gstin || "N/A"}</p> */}
                 <p className="text-sm ">

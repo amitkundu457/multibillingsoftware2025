@@ -13,8 +13,7 @@ export default function MembershipSales() {
   });
   const [plans, setPlans] = useState([]);
 
-
-  //token 
+  //token
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -30,10 +29,6 @@ export default function MembershipSales() {
     }
   };
 
-
-
-
-
   useEffect(() => {
     fetchPlans();
   }, []);
@@ -43,24 +38,29 @@ export default function MembershipSales() {
   }, [filters]); // Re-fetch data when filters change
 
   const fetchData = async () => {
-    
-const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/membership-sales-report", {
-        params: {
-          from: filters.from || undefined,
-          to: filters.to || undefined,
-          membership_plan: filters.membership_plan !== "all" ? filters.membership_plan : undefined,
-          status: filters.status || undefined,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/membership-sales-report",
+        {
+          params: {
+            from: filters.from || undefined,
+            to: filters.to || undefined,
+            membership_plan:
+              filters.membership_plan !== "all"
+                ? filters.membership_plan
+                : undefined,
+            status: filters.status || undefined,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const salesData = response.data.map((sale) => {
         const saleDate = dayjs(sale.sale_date);
@@ -80,43 +80,46 @@ if (!token) {
     }
   };
 
-//   const fetchPlans = async () => {
-    
-// const token = getToken();
-// if (!token) {
-//   notifyTokenMissing();
-//   return;
-// }
-//     try {
-//       const response = await axios.get("  http://127.0.0.1:8000/api/membership-plans",
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       );
-//       setPlans(response.data);
-//     } catch (error) {
-//       console.error("Error fetching membership plans:", error);
-//     }
-//   };
-const fetchPlans = async () => {
-  const token = getToken();
-  if (!token) {
-    notifyTokenMissing();
-    return;
-  }
+  //   const fetchPlans = async () => {
 
-  try {
-    const response = await axios.get(" http://127.0.0.1:8000/api/membership-plans", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  // const token = getToken();
+  // if (!token) {
+  //   notifyTokenMissing();
+  //   return;
+  // }
+  //     try {
+  //       const response = await axios.get("  https://apibrize.brizindia.com/api/membership-plans",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       );
+  //       setPlans(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching membership plans:", error);
+  //     }
+  //   };
+  const fetchPlans = async () => {
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
 
-    setPlans(response.data);
-  } catch (error) {
-    console.error("Error fetching membership plans:", error);
-  }
-};
+    try {
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/membership-plans",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setPlans(response.data);
+    } catch (error) {
+      console.error("Error fetching membership plans:", error);
+    }
+  };
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -181,7 +184,9 @@ const fetchPlans = async () => {
         <tbody>
           {sales.length === 0 ? (
             <tr>
-              <td colSpan="6" className="text-center p-4">No records found</td>
+              <td colSpan="6" className="text-center p-4">
+                No records found
+              </td>
             </tr>
           ) : (
             sales.map((sale) => (
@@ -190,7 +195,13 @@ const fetchPlans = async () => {
                 <td className="p-2 border">{sale.plan?.name || "N/A"}</td>
                 <td className="p-2 border">{sale.sale_date}</td>
                 <td className="p-2 border">{sale.expiry_date}</td>
-                <td className={`p-2 border ${sale.status === "Expired" ? "text-red-500" : "text-green-500"}`}>
+                <td
+                  className={`p-2 border ${
+                    sale.status === "Expired"
+                      ? "text-red-500"
+                      : "text-green-500"
+                  }`}
+                >
                   {sale.status}
                 </td>
                 <td className="p-2 border">{sale.stylist?.name || "N/A"}</td>

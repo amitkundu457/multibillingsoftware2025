@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
 
 export default function CoverUpload() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploadUrl, setUploadUrl] = useState(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -20,7 +20,7 @@ export default function CoverUpload() {
     }
   };
 
-  //token 
+  //token
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -36,32 +36,26 @@ export default function CoverUpload() {
     }
   };
 
-
-
-
-
-
   const handleUpload = async () => {
-    
-const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
     if (!file) return;
     setLoading(true);
-    setMessage('');
+    setMessage("");
 
     const formData = new FormData();
-    formData.append('cover', file);
+    formData.append("cover", file);
 
     try {
       const res = await axios.post(
-        ' http://127.0.0.1:8000/api/cover/upload', // Replace with your API endpoint
+        " https://apibrize.brizindia.com/api/cover/upload", // Replace with your API endpoint
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`, // Use your auth system
           },
         }
@@ -69,7 +63,7 @@ if (!token) {
       setUploadUrl(res.data.data.cover);
       setMessage(res.data.message);
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Upload failed');
+      setMessage(err.response?.data?.message || "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -89,7 +83,11 @@ if (!token) {
       {preview && (
         <div>
           <p className="text-sm text-gray-500 mb-1">Preview:</p>
-          <img src={preview} alt="Preview" className="w-full h-48 object-cover rounded border" />
+          <img
+            src={preview}
+            alt="Preview"
+            className="w-full h-48 object-cover rounded border"
+          />
         </div>
       )}
 
@@ -98,7 +96,7 @@ if (!token) {
         disabled={loading || !file}
         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:bg-gray-400"
       >
-        {loading ? 'Uploading...' : 'Upload'}
+        {loading ? "Uploading..." : "Upload"}
       </button>
 
       {message && (
@@ -108,7 +106,11 @@ if (!token) {
       {uploadUrl && (
         <div className="mt-4">
           <p className="text-sm text-gray-500 mb-1">Uploaded Cover Image:</p>
-          <img src={uploadUrl} alt="Uploaded Cover" className="w-full h-48 object-cover rounded border" />
+          <img
+            src={uploadUrl}
+            alt="Uploaded Cover"
+            className="w-full h-48 object-cover rounded border"
+          />
         </div>
       )}
     </div>

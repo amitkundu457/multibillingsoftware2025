@@ -14,7 +14,6 @@
 //   const [modelState, setModelState] = useState(false);
 //   const [selectedItem, setSelectedItem] = useState(null);
 
-
 //   const getToken = () => {
 //     const cookie = document.cookie
 //       .split("; ")
@@ -30,32 +29,27 @@
 //     }
 //   };
 
-
 // const token = getToken();
 //     if (!token) {
 //       notifyTokenMissing();
 //       return;
 //     }
 
-
-
-
-
 //     useEffect(() => {
-      
+
 //       fetchData();
 //     }, []);
 //     const fetchData = async () => {
 //       const token = getToken();
-  
+
 //       if (!token) {
 //         notifyTokenMissing();
 //         return;
 //       }
-  
+
 //       try {
 //         const response = await axios.get(
-//           " http://127.0.0.1:8000/api/account-masters",
+//           " https://apibrize.brizindia.com/api/account-masters",
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -66,8 +60,6 @@
 //         // Optionally: show error to user
 //       }
 //     };
-  
-    
 
 //   const closeModel = () => {
 //     setModelState(false);
@@ -80,7 +72,7 @@
 
 //   const handleDeleteData = (id) => {
 //     axios
-//       .delete(` http://127.0.0.1:8000/api/account-masters/${id}`)
+//       .delete(` https://apibrize.brizindia.com/api/account-masters/${id}`)
 //       .then(() => {
 //         fetchData();
 //         alert("data deleted  Succesfully");
@@ -212,9 +204,12 @@ const Page = () => {
     }
 
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/account-masters", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/account-masters",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setData(response.data);
     } catch (error) {
       console.error("Failed to fetch account masters:", error);
@@ -237,7 +232,9 @@ const Page = () => {
 
   const handleDeleteData = async (id) => {
     try {
-      await axios.delete(` http://127.0.0.1:8000/api/account-masters/${id}`);
+      await axios.delete(
+        ` https://apibrize.brizindia.com/api/account-masters/${id}`
+      );
       alert("Data deleted successfully");
       setData((prev) => prev.filter((item) => item.id !== id));
     } catch (error) {
@@ -282,15 +279,23 @@ const Page = () => {
               } hover:bg-gray-200`}
             >
               <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.account_name}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                {item.account_name}
+              </td>
               <td className="border border-gray-300 px-4 py-2">{item.gstin}</td>
               <td className="border border-gray-300 px-4 py-2">{item.phone}</td>
               {/* <td className="border border-gray-300 px-4 py-2">{item.account_group_id}</td> */}
               <td className="border border-gray-300 px-4 py-2">{item.state}</td>
               <td className="border border-gray-300 px-4 py-2">{item.city}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.contact_person}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.blance}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.status}</td>
+              <td className="border border-gray-300 px-4 py-2">
+                {item.contact_person}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                {item.blance}
+              </td>
+              <td className="border border-gray-300 px-4 py-2">
+                {item.status}
+              </td>
               <td className="flex border border-gray-300 px-4 py-2 justify-around">
                 <button onClick={() => handleEdit(item)}>
                   <FaEdit className="text-xl text-blue-600 hover:text-blue-800" />

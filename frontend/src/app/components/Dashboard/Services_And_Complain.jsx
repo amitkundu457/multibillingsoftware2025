@@ -3,9 +3,8 @@ import { FaThumbsUp } from "react-icons/fa";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Link from 'next/link';
+import Link from "next/link";
 import useSWR from "swr";
-
 
 export default function Services_And_Complain({ label }) {
   const [todayDelivery, setTodayDelivery] = useState(0);
@@ -32,7 +31,6 @@ export default function Services_And_Complain({ label }) {
     return res.data;
   });
 
-  
   const roleToUrlMap = {
     admin: "admin",
     jwellery: "jwellery",
@@ -42,7 +40,7 @@ export default function Services_And_Complain({ label }) {
   };
 
   const productUrl = roleToUrlMap[!isLoading && user?.roles?.[0]?.name] || "";
-  console.log("pruddcturl2",productUrl);
+  console.log("pruddcturl2", productUrl);
 
   const token = getCookie("access_token");
 
@@ -50,9 +48,12 @@ export default function Services_And_Complain({ label }) {
     if (!token) return;
 
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/todaydelivery", {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/todaydelivery",
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
       setTodayDelivery(response?.data);
     } catch (error) {
       console.error("Failed to fetch delivery count", error);
@@ -63,9 +64,12 @@ export default function Services_And_Complain({ label }) {
     if (!token) return;
 
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/complain-list", {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/complain-list",
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
       setTotalComplain(response?.data);
     } catch (error) {
       console.error("Failed to fetch complain count", error);
@@ -98,15 +102,22 @@ export default function Services_And_Complain({ label }) {
       <div className="mt-2  flex justify-between items-center sm:grid sm:grid-cols-3 sm:gap-4 border-2 border-blue-500 rounded-lg  p-4 sm:p-10">
         <div className=" flex flex-col ">
           <div className="text-purple-600 text-sm sm:text-lg sm:font-bold">
-            <Link href={`/${productUrl}/reviewlists` } className="cursor-pointer">
-            <p  className="hover:text-green-400">Today Delivery</p>
+            <Link
+              href={`/${productUrl}/reviewlists`}
+              className="cursor-pointer"
+            >
+              <p className="hover:text-green-400">Today Delivery</p>
             </Link>
-            </div>
-  <div className="text-purple-600 text-sm sm:text-lg sm:font-bold">
-            <Link href={`/${productUrl}/reviewlists` } className="cursor-pointer">
-            <p  className="hover:text-green-400">Today Complain</p>
+          </div>
+          <div className="text-purple-600 text-sm sm:text-lg sm:font-bold">
+            <Link
+              href={`/${productUrl}/reviewlists`}
+              className="cursor-pointer"
+            >
+              <p className="hover:text-green-400">Today Complain</p>
             </Link>
-            </div>        </div>
+          </div>{" "}
+        </div>
 
         {/* <div>
           <h3 className="text-sm text-gray-500"></h3>

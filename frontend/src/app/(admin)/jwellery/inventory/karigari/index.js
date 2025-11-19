@@ -1,3 +1,312 @@
+// "use client";
+
+// import { useState, useEffect } from "react";
+// import axios from "axios";
+// import Link from "next/link";
+// import {
+//   FaChevronRight,
+//   FaEdit,
+//   FaPlus,
+//   FaTimes,
+//   FaTrash,
+// } from "react-icons/fa";
+// import { useKarigari } from "@/app/hooks/karigari";
+
+// function Page() {
+//   const [dropdown, setDropdown] = useState(false);
+//   const [data, setData] = useState(null);
+//   const [isLoading, setIsLoading] = useState(true);
+
+//   const [karigaries, setKarigaries] = useState([]);
+//   const [type, setType] = useState(""); // State to hold selected type
+
+//   // work for filter data
+//   // Function to fetch data from the API
+// //   const fetchKarigariData = async (selectedType = "") => {
+// //     try {
+// //         const response = await axios.get(" https://apibrize.brizindia.com/api/karigari", {
+// //             params: selectedType ? { type: selectedType } : {},
+// //         });
+
+// //         console.log("Filtered Data:", response.data);
+// //         setData(response.data.karigaries)
+// //         setKarigaries(response.data.karigaries);
+// //     } catch (error) {
+// //         console.error("Error fetching data:", error);
+// //     }
+// // };
+// const getToken = () => {
+//   const cookie = document.cookie
+//     .split("; ")
+//     .find((row) => row.startsWith("access_token="));
+//   return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+// };
+
+// const notifyTokenMissing = () => {
+//   if (typeof window !== "undefined" && window.notyf) {
+//     window.notyf.error("Authentication token not found!");
+//   } else {
+//     console.error("Authentication token not found!");
+//   }
+// };
+
+// const fetchKarigariData = async (selectedType = "") => {
+//   const token = getToken();
+//   if (!token) {
+//     notifyTokenMissing();
+//     return;
+//   }
+//   try {
+//     const response = await axios.get(" https://apibrize.brizindia.com/api/karigari", {
+//       params: selectedType ? { type: selectedType } : {},
+
+//         headers: { Authorization: `Bearer ${token}` },
+
+//     });
+
+//     console.log("Filtered Data:", response.data);
+//     setKarigaries(response.data.karigaries);
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// };
+
+//   // Fetch all data on initial render
+//   useEffect(() => {
+//     fetchKarigariData();
+//   }, []);
+
+//   // Call the useKarigari hook directly here to fetch data
+//   const {
+//     data: karigariData,
+//     isLoading: loading,
+//     deleteOldKarigari,
+//   } = useKarigari();
+
+//   // Update state when the data is available
+//   useEffect(() => {
+//     if (karigariData) {
+//       // setData(karigariData);
+//       setIsLoading(loading);
+//     }
+//   }, [karigariData, loading]);
+//   if (typeof window === "undefined") {
+//     return null; // Skip rendering on the server
+//   }
+
+//   // const handleDelete = async (id) => {
+//   //   if (confirm("Are you sure want to delete?")) {
+//   //     await deleteOldKarigari(id);
+//   //   }
+//   // };
+
+//   const handleDelete = async (id) => {
+//     if (confirm("Are you sure you want to delete?")) {
+//       try {
+//         await deleteOldKarigari(id);
+
+//         // Filter out the deleted item from karigaries state
+//         setKarigaries((prevKarigaries) =>
+//           prevKarigaries.filter((kgi) => kgi.id !== id)
+//         );
+
+//         console.log(`Deleted karigari ID: ${id}`);
+//       } catch (error) {
+//         console.error("Error deleting data:", error);
+//       }
+//     }
+//   };
+
+//   return (
+//     <div className="absolute left-0 top-0 w-full bg-white h-full">
+//       <div className="w-full flex p-3 px-6 bg-green-500 text-white">
+//         <p className="flex-1 text-center font-semibold">Karigari Entry</p>
+//         <Link href="/dashboard" className="flex items-center text-sm gap-2">
+//           <FaTimes />
+//         </Link>
+//       </div>
+//       <div className="flex px-6 py-1">
+//         <div className="flex flex-col w-1/5 gap-2 p-2 text-sm">
+//           <label htmlFor="">Start Date</label>
+//           <input type="date" className="form-input text-sm rounded" />
+//         </div>
+//         <div className="flex flex-col w-1/5 gap-2 p-2 text-sm">
+//           <label htmlFor="">End Date</label>
+//           <input type="date" className="form-input text-sm rounded" />
+//         </div>
+//         {/* <div className="flex flex-col w-1/5 gap-2 p-2 text-sm">
+//           <label htmlFor="">Type</label>
+//           <select name="" id="" className="form-select text-sm rounded">
+//             <option value="">All</option>
+
+//             <option   onClick={() => fetchKarigariData("issue")} >issue</option>
+//             {/* <option value="issue">Issue</option> */}
+//         {/* <option value="receive">Receive</option> */}
+//         {/* <option   onClick={() => fetchKarigariData("received")} >received</option> */}
+//         {/* </select> */}
+//         {/* </div> */}
+//         {/* */}
+
+//         <div className="flex flex-col w-1/5 gap-2 p-2 text-sm">
+//           <label htmlFor="">Type</label>
+//           <select
+//             className="form-select text-sm rounded"
+//             value={type}
+//             onChange={(e) => {
+//               setType(e.target.value); // Update state
+//               fetchKarigariData(e.target.value); // Fetch filtered data
+//             }}
+//           >
+//             <option value="">All</option>
+//             <option value="issue">Issue</option>
+//             <option value="received">Received</option>
+//           </select>
+//         </div>
+
+//         <div className="flex items-end p-2 w-1/5">
+//           <button className="text-sm bg-green-500 text-white py-2 px-6 rounded">
+//             Show
+//           </button>
+//         </div>
+//         <div className="flex items-end p-2 flex-1 justify-end relative">
+//           <button
+//             onClick={() => setDropdown(!dropdown)}
+//             className="text-sm bg-green-500 text-white py-4 px-4 rounded-full"
+//           >
+//             <FaPlus size={18} />
+//           </button>
+//           <ul
+//             className={`p-2 rounded absolute top-full bg-white shadow-lg shadow-black/20 w-44 right-0 ${
+//               dropdown ? "block" : "hidden"
+//             }`}
+//           >
+//             <li>
+//               <Link
+//                 href="/jwellery/inventory/karigari/issue"
+//                 className="text-sm text-zinc-700 flex justify-between items-center p-2"
+//               >
+//                 <span>Issue</span>
+//                 <FaChevronRight />
+//               </Link>
+//             </li>
+//             <li>
+//               <Link
+//                 href="/jwellery/inventory/karigari/receive"
+//                 className="text-sm text-zinc-700 flex justify-between items-center p-2"
+//               >
+//                 <span>Received</span>
+//                 <FaChevronRight />
+//               </Link>
+//             </li>
+//           </ul>
+//         </div>
+//       </div>
+//       <div className="w-full p-3">
+//         <table className="w-full text-sm text-left">
+//           <thead>
+//             <tr>
+//               <th className="font-medium bg-pink-300 px-3 py-3 rounded-l">
+//                 Date
+//               </th>
+//               <th className="font-medium bg-pink-300 px-3 py-3">Voucher No.</th>
+//               <th className="font-medium bg-pink-300 px-3 py-3">Type</th>
+//               <th className="font-medium bg-pink-300 px-3 py-3">Party Name</th>
+//               <th className="font-medium bg-pink-300 px-3 py-3">
+//                 Total Weight
+//               </th>
+//               <th className="font-medium bg-pink-300 px-3 py-3">Days</th>
+//               <th className="font-medium bg-pink-300 px-3 py-3 rounded-r">
+//                 Action
+//               </th>
+//             </tr>
+//           </thead>
+//           {/* <tbody>
+//             {!isLoading &&
+//               data?.karigaries?.map((kgi) => (
+//                 <tr key={kgi.id}>
+//                   <td className="px-3 py-3">
+//                     {new Date(kgi.date).toLocaleDateString("en-GB")}
+//                   </td>
+//                   <td className="px-3 py-3">{kgi.voucher_no}</td>
+//                   <td className="px-3 py-3 uppercase">{kgi.type}</td>
+//                   <td className="px-3 py-3"></td>
+//                   <td className="px-3 py-3">00</td>
+//                   <td className="px-3 py-3">00</td>
+//                   <td className="px-3 py-3">
+//                     <div className="flex gap-4 items-center">
+//                       <Link
+//                         href={
+//                           kgi.type === "issue"
+//                             ? `/jwellery/inventory/karigari/issue/?id=${kgi.id}`
+//                             : `/jwellery/inventory/karigari/receive/?id=${kgi.id}`
+//                         }
+//                         className="text-blue-500"
+//                       >
+//                         <FaEdit />
+//                       </Link>
+//                       <button
+//                         onClick={() => handleDelete(kgi.id)}
+//                         className="text-red-500"
+//                       >
+//                         <FaTrash />
+//                       </button>
+//                     </div>
+//                   </td>
+//                 </tr>
+//               ))}
+//           </tbody> */}
+// <tbody>
+//   {!isLoading &&
+//     karigaries?.map((kgi) => (
+//       <tr key={kgi.id}>
+//         <td className="px-3 py-3">
+//           {new Date(kgi.date).toLocaleDateString("en-GB")}
+//         </td>
+//         <td className="px-3 py-3">{kgi.voucher_no}</td>
+//         <td className="px-3 py-3 uppercase">{kgi.type}</td>
+//         <td className="px-3 py-3">{kgi?.karigari_items?.karigar_list?.name}</td>
+//         <td className="px-3 py-3">00</td>
+//         <td className="px-3 py-3">00</td>
+//         <td className="px-3 py-3">
+//           <div className="flex gap-4 items-center">
+//             <Link
+//               href={
+//                 kgi.type === "issue"
+//                   ? `/jwellery/inventory/karigari/issue/?id=${kgi.id}`
+//                   : `/jwellery/inventory/karigari/receive/?id=${kgi.id}`
+//               }
+//               className="text-blue-500"
+//             >
+//               <FaEdit />
+//             </Link>
+//             <button onClick={() => handleDelete(kgi.id)} className="text-red-500">
+//               <FaTrash />
+//             </button>
+//           </div>
+//         </td>
+//       </tr>
+//     ))}
+// </tbody>
+
+//           <tfoot>
+//             <tr>
+//               <td className="px-3 py-3 bg-green-500">Total</td>
+//               <td className="px-3 py-3 bg-green-500"></td>
+//               <td className="px-3 py-3 bg-green-500"></td>
+//               <td className="px-3 py-3 bg-green-500"></td>
+//               <td className="px-3 py-3 bg-green-500">0</td>
+//               <td className="px-3 py-3 bg-green-500"></td>
+//               <td className="px-3 py-3 bg-green-500"></td>
+//             </tr>
+//           </tfoot>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Page;
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -14,157 +323,84 @@ import { useKarigari } from "@/app/hooks/karigari";
 
 function Page() {
   const [dropdown, setDropdown] = useState(false);
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
   const [karigaries, setKarigaries] = useState([]);
-  const [type, setType] = useState(""); // State to hold selected type
+  const [type, setType] = useState("");
 
-  // work for filter data
-  // Function to fetch data from the API
-//   const fetchKarigariData = async (selectedType = "") => {
-//     try {
-//         const response = await axios.get(" http://127.0.0.1:8000/api/karigari", {
-//             params: selectedType ? { type: selectedType } : {},
-//         });
+  const getToken = () => {
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+  };
 
-//         console.log("Filtered Data:", response.data);
-//         setData(response.data.karigaries)
-//         setKarigaries(response.data.karigaries);
-//     } catch (error) {
-//         console.error("Error fetching data:", error);
-//     }
-// };
-const getToken = () => {
-  const cookie = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("access_token="));
-  return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
-};
+  const fetchKarigariData = async (selectedType = "") => {
+    const token = getToken();
+    if (!token) {
+      console.error("Authentication token not found!");
+      return;
+    }
+    try {
+      const response = await axios.get(
+        "https://apibrize.brizindia.com/api/karigari",
+        {
+          params: selectedType ? { type: selectedType } : {},
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-const notifyTokenMissing = () => {
-  if (typeof window !== "undefined" && window.notyf) {
-    window.notyf.error("Authentication token not found!");
-  } else {
-    console.error("Authentication token not found!");
-  }
-};
+      console.log("Filtered Data:", response.data);
+      setKarigaries(response.data.karigaries);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-
-
-
-
-
-
-const fetchKarigariData = async (selectedType = "") => {
-  const token = getToken();
-  if (!token) {
-    notifyTokenMissing();
-    return;
-  }
-  try {
-    const response = await axios.get(" http://127.0.0.1:8000/api/karigari", {
-      params: selectedType ? { type: selectedType } : {},
-     
-        headers: { Authorization: `Bearer ${token}` },
-      
-    });
-
-    console.log("Filtered Data:", response.data);
-    setKarigaries(response.data.karigaries);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-
-
-  // Fetch all data on initial render
   useEffect(() => {
     fetchKarigariData();
   }, []);
 
-  // Call the useKarigari hook directly here to fetch data
-  const {
-    data: karigariData,
-    isLoading: loading,
-    deleteOldKarigari,
-  } = useKarigari();
-
-  // Update state when the data is available
-  useEffect(() => {
-    if (karigariData) {
-      // setData(karigariData);
-      setIsLoading(loading);
-    }
-  }, [karigariData, loading]);
-  if (typeof window === "undefined") {
-    return null; // Skip rendering on the server
-  }
-
-  // const handleDelete = async (id) => {
-  //   if (confirm("Are you sure want to delete?")) {
-  //     await deleteOldKarigari(id);
-  //   }
-  // };
-
+  const { deleteOldKarigari } = useKarigari();
 
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete?")) {
       try {
         await deleteOldKarigari(id);
-  
-        // Filter out the deleted item from karigaries state
-        setKarigaries((prevKarigaries) =>
-          prevKarigaries.filter((kgi) => kgi.id !== id)
-        );
-  
-        console.log(`Deleted karigari ID: ${id}`);
+        setKarigaries((prev) => prev.filter((kgi) => kgi.id !== id));
       } catch (error) {
         console.error("Error deleting data:", error);
       }
     }
   };
 
-
-
   return (
     <div className="absolute left-0 top-0 w-full bg-white h-full">
+      {/* Header */}
       <div className="w-full flex p-3 px-6 bg-green-500 text-white">
         <p className="flex-1 text-center font-semibold">Karigari Entry</p>
         <Link href="/dashboard" className="flex items-center text-sm gap-2">
           <FaTimes />
         </Link>
       </div>
+
+      {/* Filters */}
       <div className="flex px-6 py-1">
         <div className="flex flex-col w-1/5 gap-2 p-2 text-sm">
-          <label htmlFor="">Start Date</label>
+          <label>Start Date</label>
           <input type="date" className="form-input text-sm rounded" />
         </div>
         <div className="flex flex-col w-1/5 gap-2 p-2 text-sm">
-          <label htmlFor="">End Date</label>
+          <label>End Date</label>
           <input type="date" className="form-input text-sm rounded" />
         </div>
-        {/* <div className="flex flex-col w-1/5 gap-2 p-2 text-sm">
-          <label htmlFor="">Type</label>
-          <select name="" id="" className="form-select text-sm rounded">
-            <option value="">All</option>
-           
-            <option   onClick={() => fetchKarigariData("issue")} >issue</option>
-            {/* <option value="issue">Issue</option> */}
-        {/* <option value="receive">Receive</option> */}
-        {/* <option   onClick={() => fetchKarigariData("received")} >received</option> */}
-        {/* </select> */}
-        {/* </div> */}
-        {/* */}
 
         <div className="flex flex-col w-1/5 gap-2 p-2 text-sm">
-          <label htmlFor="">Type</label>
+          <label>Type</label>
           <select
             className="form-select text-sm rounded"
             value={type}
             onChange={(e) => {
-              setType(e.target.value); // Update state
-              fetchKarigariData(e.target.value); // Fetch filtered data
+              setType(e.target.value);
+              fetchKarigariData(e.target.value);
             }}
           >
             <option value="">All</option>
@@ -178,6 +414,8 @@ const fetchKarigariData = async (selectedType = "") => {
             Show
           </button>
         </div>
+
+        {/* Add Button */}
         <div className="flex items-end p-2 flex-1 justify-end relative">
           <button
             onClick={() => setDropdown(!dropdown)}
@@ -211,39 +449,83 @@ const fetchKarigariData = async (selectedType = "") => {
           </ul>
         </div>
       </div>
+
+      {/* Table */}
       <div className="w-full p-3">
         <table className="w-full text-sm text-left">
           <thead>
             <tr>
-              <th className="font-medium bg-pink-300 px-3 py-3 rounded-l">
-                Date
-              </th>
+              <th className="font-medium bg-pink-300 px-3 py-3">Date</th>
               <th className="font-medium bg-pink-300 px-3 py-3">Voucher No.</th>
               <th className="font-medium bg-pink-300 px-3 py-3">Type</th>
               <th className="font-medium bg-pink-300 px-3 py-3">Party Name</th>
-              <th className="font-medium bg-pink-300 px-3 py-3">
-                Total Weight
+              <th className="font-medium bg-pink-300 px-3 py-3">Products</th>
+              <th className="font-medium bg-pink-300 px-3 py-3 text-right">
+                Total Nwt
               </th>
-              <th className="font-medium bg-pink-300 px-3 py-3">Days</th>
-              <th className="font-medium bg-pink-300 px-3 py-3 rounded-r">
+              <th className="font-medium bg-pink-300 px-3 py-3 text-right">
+                Total Pcs
+              </th>
+              <th className="font-medium bg-pink-300 px-3 py-3 text-right">
+                Tounch
+              </th>
+              <th className="font-medium bg-pink-300 px-3 py-3 text-right">
+                Total Rate
+              </th>
+              <th className="font-medium bg-pink-300 px-3 py-3 text-center rounded-r">
                 Action
               </th>
             </tr>
           </thead>
-          {/* <tbody>
-            {!isLoading &&
-              data?.karigaries?.map((kgi) => (
-                <tr key={kgi.id}>
+
+          <tbody>
+            {karigaries.map((kgi) => {
+              // Calculate totals from karigari_items
+              const totalNwt = kgi.karigari_items.reduce(
+                (sum, item) => sum + parseFloat(item.nwt || 0),
+                0
+              );
+              const totalPcs = kgi.karigari_items.reduce(
+                (sum, item) => sum + parseFloat(item.pcs || 0),
+                0
+              );
+              const totalRate = kgi.karigari_items.reduce(
+                (sum, item) => sum + parseFloat(item.rate || 0),
+                0
+              );
+
+              const tounch = kgi.karigari_items[0]?.tounch || "-";
+
+              const karigarName =
+                kgi.karigari_items[0]?.karigar_list?.name || "-";
+
+              return (
+                <tr key={kgi.id} className="border-b hover:bg-gray-50">
                   <td className="px-3 py-3">
                     {new Date(kgi.date).toLocaleDateString("en-GB")}
                   </td>
                   <td className="px-3 py-3">{kgi.voucher_no}</td>
                   <td className="px-3 py-3 uppercase">{kgi.type}</td>
-                  <td className="px-3 py-3"></td>
-                  <td className="px-3 py-3">00</td>
-                  <td className="px-3 py-3">00</td>
+                  <td className="px-3 py-3">{karigarName}</td>
                   <td className="px-3 py-3">
-                    <div className="flex gap-4 items-center">
+                    {kgi.karigari_items.map((item, idx) => (
+                      <div key={idx}>
+                        {item.product_name} ({item.nwt}g)
+                      </div>
+                    ))}
+                  </td>
+                  <td className="px-3 py-3 text-right">
+                    {totalNwt.toFixed(2)}
+                  </td>
+                  <td className="px-3 py-3 text-right">
+                    {totalPcs.toFixed(2)}
+                  </td>
+                  <td className="px-3 py-3 text-right">{tounch}</td>
+                  <td className="px-3 py-3 text-right">
+                    {totalRate.toFixed(2)}
+                  </td>
+                  <td className="px-3 py-3 text-center">
+                    <div className="flex gap-3 justify-center">
                       <Link
                         href={
                           kgi.type === "issue"
@@ -263,53 +545,9 @@ const fetchKarigariData = async (selectedType = "") => {
                     </div>
                   </td>
                 </tr>
-              ))}
-          </tbody> */}
-<tbody>
-  {!isLoading &&
-    karigaries?.map((kgi) => (
-      <tr key={kgi.id}>
-        <td className="px-3 py-3">
-          {new Date(kgi.date).toLocaleDateString("en-GB")}
-        </td>
-        <td className="px-3 py-3">{kgi.voucher_no}</td>
-        <td className="px-3 py-3 uppercase">{kgi.type}</td>
-        <td className="px-3 py-3"></td>
-        <td className="px-3 py-3">00</td>
-        <td className="px-3 py-3">00</td>
-        <td className="px-3 py-3">
-          <div className="flex gap-4 items-center">
-            <Link
-              href={
-                kgi.type === "issue"
-                  ? `/jwellery/inventory/karigari/issue/?id=${kgi.id}`
-                  : `/jwellery/inventory/karigari/receive/?id=${kgi.id}`
-              }
-              className="text-blue-500"
-            >
-              <FaEdit />
-            </Link>
-            <button onClick={() => handleDelete(kgi.id)} className="text-red-500">
-              <FaTrash />
-            </button>
-          </div>
-        </td>
-      </tr>
-    ))}
-</tbody>
-
-
-          <tfoot>
-            <tr>
-              <td className="px-3 py-3 bg-green-500">Total</td>
-              <td className="px-3 py-3 bg-green-500"></td>
-              <td className="px-3 py-3 bg-green-500"></td>
-              <td className="px-3 py-3 bg-green-500"></td>
-              <td className="px-3 py-3 bg-green-500">0</td>
-              <td className="px-3 py-3 bg-green-500"></td>
-              <td className="px-3 py-3 bg-green-500"></td>
-            </tr>
-          </tfoot>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     </div>

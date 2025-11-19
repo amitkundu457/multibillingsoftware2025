@@ -14,7 +14,7 @@ const MembershipServiceRates = () => {
     id: "",
     group_id: "",
     service_type_id: "",
-    service_type:"",
+    service_type: "",
     membership_plan_id: "",
     service_rate: "",
   });
@@ -30,11 +30,11 @@ const MembershipServiceRates = () => {
   const fetchData = async () => {
     try {
       const [serviceRatesRes, groupsRes, serviceGroupsRes] = await Promise.all([
-        axios.get(" http://127.0.0.1:8000/api/membership-rate"),
-        axios.get(" http://127.0.0.1:8000/api/membershipidtype"),
-        axios.get(" http://127.0.0.1:8000/api/membership-groups"),
+        axios.get(" https://apibrize.brizindia.com/api/membership-rate"),
+        axios.get(" https://apibrize.brizindia.com/api/membershipidtype"),
+        axios.get(" https://apibrize.brizindia.com/api/membership-groups"),
       ]);
-  
+
       setServiceRates(serviceRatesRes.data);
       setGroups(groupsRes.data);
       setServiceGroups(serviceGroupsRes.data); // Assuming you have this state
@@ -42,14 +42,14 @@ const MembershipServiceRates = () => {
       console.error("Error fetching data:", error);
     }
   };
-  
-  
 
   // Fetch membership plans when a member is selected
   const fetchPlans = async (memberId) => {
     if (!memberId) return;
     try {
-      const response = await axios.get(`  http://127.0.0.1:8000/api/membershipid/${memberId}`);
+      const response = await axios.get(
+        `  https://apibrize.brizindia.com/api/membershipid/${memberId}`
+      );
       setPlans(response.data);
     } catch (error) {
       console.error("Error fetching membership plans:", error);
@@ -84,23 +84,21 @@ const MembershipServiceRates = () => {
     setPlans([]); // Reset plans
   };
 
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
+
     setFormData((prevData) => {
       let updatedData = { ...prevData, [name]: value };
-  
+
       // If a group is selected, update selectedMemberId and fetch plans
       if (name === "group_id") {
         setSelectedMemberId(value);
         fetchPlans(value); // Fetch plans based on selected group
       }
-  
+
       // If a membership plan is selected, update service name and price
       if (name === "membership_plan_id") {
-        const selectedPlan = plans.find(plan => plan.id === parseInt(value));
+        const selectedPlan = plans.find((plan) => plan.id === parseInt(value));
         if (selectedPlan) {
           updatedData = {
             ...updatedData,
@@ -109,11 +107,10 @@ const MembershipServiceRates = () => {
           };
         }
       }
-  
+
       return updatedData;
     });
   };
-  
 
   // Handle Create or Update
   const handleSubmit = async (e) => {
@@ -123,9 +120,15 @@ const MembershipServiceRates = () => {
 
     try {
       if (editMode) {
-        await axios.post(`  http://127.0.0.1:8000/api/membership-service-rate/${formData.id}`, formData);
+        await axios.post(
+          `  https://apibrize.brizindia.com/api/membership-service-rate/${formData.id}`,
+          formData
+        );
       } else {
-        await axios.post("  http://127.0.0.1:8000/api/membership-rate", formData);
+        await axios.post(
+          "  https://apibrize.brizindia.com/api/membership-rate",
+          formData
+        );
       }
       closeModal();
       fetchData();
@@ -151,10 +154,9 @@ const MembershipServiceRates = () => {
       >
         Add New
       </button>
-      
+
       {/* Table */}
       <table className="w-full border-collapse ">
-
         <thead className="border bg-[#16A34A] text-white">
           <tr>
             <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
@@ -173,48 +175,51 @@ const MembershipServiceRates = () => {
           </tr>
         </thead>
         <tbody className="bg-slate-100">
-  {serviceRates.map((service) => (
-    <tr key={service.id}>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-        {service.gname}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-        {service.mname}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-        {service.type_name}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-        ${service.fees}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 flex space-x-2">
-        {/* Edit Button */}
-        <button 
-          onClick={() => openModal(service)} 
-          className="bg-green-600 text-white px-3 py-1 rounded">
-          Edit
-        </button>
+          {serviceRates.map((service) => (
+            <tr key={service.id}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                {service.gname}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                {service.mname}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                {service.type_name}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
+                ${service.fees}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 flex space-x-2">
+                {/* Edit Button */}
+                <button
+                  onClick={() => openModal(service)}
+                  className="bg-green-600 text-white px-3 py-1 rounded"
+                >
+                  Edit
+                </button>
 
-        {/* Delete Button */}
-        <button 
-          onClick={() => handleDelete(service.id)} 
-          className="bg-red-600 text-white px-3 py-1 rounded">
-          Delete
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+                {/* Delete Button */}
+                <button
+                  onClick={() => handleDelete(service.id)}
+                  className="bg-red-600 text-white px-3 py-1 rounded"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
 
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg max-w-md w-full">
-            <h3 className="text-xl font-semibold mb-4">{editMode ? "Edit Service Rate" : "Add Service Rate"}</h3>
+            <h3 className="text-xl font-semibold mb-4">
+              {editMode ? "Edit Service Rate" : "Add Service Rate"}
+            </h3>
             <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+              <div>
                 <label className="block font-medium">Service Group</label>
                 <select
                   name="service_type_id"
@@ -223,12 +228,15 @@ const MembershipServiceRates = () => {
                   className="w-full p-2 border rounded"
                 >
                   <option value="">Choose Service Group</option>
-                  {serviceGroup.map(service => (
-                    <option key={service.id} value={service.id}>{service.name}</option>
+                  {serviceGroup.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.name}
+                    </option>
                   ))}
-                  
                 </select>
-                {errors.service_type && <p className="text-red-500">{errors.service_type}</p>}
+                {errors.service_type && (
+                  <p className="text-red-500">{errors.service_type}</p>
+                )}
               </div>
               <div>
                 <label className="block font-medium">Select Membership </label>
@@ -239,11 +247,15 @@ const MembershipServiceRates = () => {
                   className="w-full p-2 border rounded"
                 >
                   <option value="">Choose Member</option>
-                  {groups.map(group => (
-                    <option key={group.id} value={group.id}>{group.type_name}</option>
+                  {groups.map((group) => (
+                    <option key={group.id} value={group.id}>
+                      {group.type_name}
+                    </option>
                   ))}
                 </select>
-                {errors.group_id && <p className="text-red-500">{errors.group_id}</p>}
+                {errors.group_id && (
+                  <p className="text-red-500">{errors.group_id}</p>
+                )}
               </div>
 
               {/* Membership Plan */}
@@ -257,14 +269,15 @@ const MembershipServiceRates = () => {
                   disabled={!selectedMemberId} // Disable if no member selected
                 >
                   <option value="">Choose Plan</option>
-                  {plans.map(plan => (
-                    <option key={plan.id} value={plan.id}>{plan.name} - ${plan.fees}</option>
+                  {plans.map((plan) => (
+                    <option key={plan.id} value={plan.id}>
+                      {plan.name} - ${plan.fees}
+                    </option>
                   ))}
                 </select>
               </div>
 
               {/* Service Type */}
-             
 
               {/* Service Rate */}
               <div>
@@ -293,10 +306,17 @@ const MembershipServiceRates = () => {
 
               {/* Buttons */}
               <div className="flex justify-between">
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
                   {loading ? "Saving..." : editMode ? "Update" : "Create"}
                 </button>
-                <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-2 rounded">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="bg-gray-400 text-white px-4 py-2 rounded"
+                >
                   Cancel
                 </button>
               </div>
@@ -309,4 +329,3 @@ const MembershipServiceRates = () => {
 };
 
 export default MembershipServiceRates;
-

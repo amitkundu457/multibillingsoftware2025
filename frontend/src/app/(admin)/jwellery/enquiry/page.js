@@ -23,12 +23,6 @@ export default function Home() {
     }
   };
 
-
-
-
-
-
-
   // Fetch items using Axios
   useEffect(() => {
     fetchItems();
@@ -41,11 +35,11 @@ export default function Home() {
       return;
     }
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/enquiry",
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/enquiry",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-
       );
       setItems(response.data);
     } catch (error) {
@@ -64,7 +58,7 @@ export default function Home() {
       // Update item
       try {
         const response = await axios.put(
-          `  http://127.0.0.1:8000/api/enquiry/${editingItem.id}`,
+          `  https://apibrize.brizindia.com/api/enquiry/${editingItem.id}`,
           data
         );
         const updatedItem = response.data;
@@ -83,12 +77,11 @@ export default function Home() {
       // Create new item
       try {
         const response = await axios.post(
-          "  http://127.0.0.1:8000/api/enquiry",
+          "  https://apibrize.brizindia.com/api/enquiry",
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
-
         );
         setItems((prevItems) => [...prevItems, response.data]);
         fetchItems();
@@ -114,7 +107,7 @@ export default function Home() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `  http://127.0.0.1:8000/api/enquiry/${id}`
+        `  https://apibrize.brizindia.com/api/enquiry/${id}`
       );
       if (response.status === 200) {
         setItems((prevItems) => prevItems.filter((item) => item.id !== id));
@@ -133,11 +126,14 @@ export default function Home() {
           {editingItem ? "Edit Enquiry" : "Create Enquiry"}
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
+          <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">
               Source
             </label>
-            <select {...register("source")} className="mt-1 p-2 w-full border rounded-md">
+            <select
+              {...register("source")}
+              className="mt-1 p-2 w-full border rounded-md"
+            >
               <option value="direct">Direct</option>
               <option value="vendor">Vendor</option>
               <option value="convenience">Convenience</option>
@@ -165,7 +161,6 @@ export default function Home() {
             ></textarea>
           </div>
 
-        
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">
               Phone
@@ -198,8 +193,6 @@ export default function Home() {
               className="mt-1 p-2 w-full border rounded-md"
             />
           </div>
-
-        
 
           <button
             type="submit"

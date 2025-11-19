@@ -123,7 +123,7 @@
 
 //   const fetchPackages = async () => {
 //     try {
-//       const response = await axios.get(" http://127.0.0.1:8000/api/packages", {
+//       const response = await axios.get(" https://apibrize.brizindia.com/api/packages", {
 //         headers: {
 //           Authorization: `Bearer ${token}`, // Attach token
 //           "Content-Type": "application/json",
@@ -144,7 +144,7 @@
 //     }
 //     try {
 
-//       const response = await axios.get(` http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product`,
+//       const response = await axios.get(` https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product`,
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -171,7 +171,7 @@
 //     }
 //     try {
 
-//       const response = await axios.get(` http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Service`,
+//       const response = await axios.get(` https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Service`,
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -205,56 +205,56 @@
 //         serviceRes,
 //       ] = await Promise.all([
 //         axios.get(
-//           " http://127.0.0.1:8000/api/packagename",
+//           " https://apibrize.brizindia.com/api/packagename",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           " http://127.0.0.1:8000/api/package-type",
+//           " https://apibrize.brizindia.com/api/package-type",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           " http://127.0.0.1:8000/api/package-category",
+//           " https://apibrize.brizindia.com/api/package-category",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           " http://127.0.0.1:8000/api/packagesubtypes",
+//           " https://apibrize.brizindia.com/api/packagesubtypes",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           " http://127.0.0.1:8000/api/taxf",
+//           " https://apibrize.brizindia.com/api/taxf",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           " http://127.0.0.1:8000/api/tax-type",
+//           " https://apibrize.brizindia.com/api/tax-type",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           " http://127.0.0.1:8000/api/membership-groups",
+//           " https://apibrize.brizindia.com/api/membership-groups",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
 //         ),
 //         axios.get(
-//           " http://127.0.0.1:8000/api/packageservice-type",
+//           " https://apibrize.brizindia.com/api/packageservice-type",
 
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
@@ -294,7 +294,7 @@
 //   // const token = getCookie("access_token");
 
 //   const axiosInstance = axios.create({
-//     baseURL: " http://127.0.0.1:8000/api",
+//     baseURL: " https://apibrize.brizindia.com/api",
 //     headers: {
 //       Authorization: `Bearer ${token}`, // Attach token
 //       "Content-Type": "application/json",
@@ -329,7 +329,7 @@
 //     if (!window.confirm("Are you sure you want to delete this package?"))
 //       return;
 //     try {
-//       await axios.delete(` http://127.0.0.1:8000/api/packages/${id}`);
+//       await axios.delete(` https://apibrize.brizindia.com/api/packages/${id}`);
 //       toast.success("Package deleted successfully");
 //       fetchPackages();
 //     } catch (error) {
@@ -879,12 +879,15 @@ export default function Packages() {
 
   const fetchPackages = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/packages", {
-        headers: {
-          Authorization: `Bearer ${token}`, // Attach token
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/packages",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log("Package data:", response.data);
       setPackages(response.data);
     } catch (error) {
@@ -900,7 +903,7 @@ export default function Packages() {
     }
     try {
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product`,
+        ` https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -926,7 +929,7 @@ export default function Packages() {
     }
     try {
       const response = await axios.get(
-        ` http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Service`,
+        ` https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Service`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -959,56 +962,56 @@ export default function Packages() {
         serviceRes,
       ] = await Promise.all([
         axios.get(
-          " http://127.0.0.1:8000/api/packagename",
+          " https://apibrize.brizindia.com/api/packagename",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          " http://127.0.0.1:8000/api/package-type",
+          " https://apibrize.brizindia.com/api/package-type",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          " http://127.0.0.1:8000/api/package-category",
+          " https://apibrize.brizindia.com/api/package-category",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          " http://127.0.0.1:8000/api/packagesubtypes",
+          " https://apibrize.brizindia.com/api/packagesubtypes",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          " http://127.0.0.1:8000/api/taxf",
+          " https://apibrize.brizindia.com/api/taxf",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          " http://127.0.0.1:8000/api/tax-type",
+          " https://apibrize.brizindia.com/api/tax-type",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          " http://127.0.0.1:8000/api/membership-groups",
+          " https://apibrize.brizindia.com/api/membership-groups",
 
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         ),
         axios.get(
-          " http://127.0.0.1:8000/api/packageservice-type",
+          " https://apibrize.brizindia.com/api/packageservice-type",
 
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -1048,7 +1051,7 @@ export default function Packages() {
   // const token = getCookie("access_token");
 
   const axiosInstance = axios.create({
-    baseURL: " http://127.0.0.1:8000/api",
+    baseURL: " https://apibrize.brizindia.com/api",
     headers: {
       Authorization: `Bearer ${token}`, // Attach token
       "Content-Type": "application/json",
@@ -1104,7 +1107,7 @@ export default function Packages() {
     if (!window.confirm("Are you sure you want to delete this package?"))
       return;
     try {
-      await axios.delete(` http://127.0.0.1:8000/api/packages/${id}`);
+      await axios.delete(` https://apibrize.brizindia.com/api/packages/${id}`);
       toast.success("Package deleted successfully");
       fetchPackages();
     } catch (error) {

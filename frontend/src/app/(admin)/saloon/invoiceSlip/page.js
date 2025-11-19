@@ -6,7 +6,7 @@ import { getLogo } from "@/app/components/config";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import InvoiceSlip from "./index"
+import InvoiceSlip from "./index";
 import axios from "axios";
 
 const fetcher = async () => {
@@ -21,9 +21,6 @@ const Page = () => {
   const { data: logoUrl, error } = useSWR("logo", fetcher);
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-
-
-
 
   const getToken = () => {
     const cookie = document.cookie
@@ -40,29 +37,24 @@ const Page = () => {
     }
   };
 
-
-
-
-
   useEffect(() => {
     console.log("Component mounted. Fetching taxes...");
     fetchTaxes();
   }, []); // Fetch taxes only once on mount
 
   const fetchTaxes = async () => {
-    
-const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
 
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/tax",
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/tax",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-
       );
       console.log("Taxes API Response:", response);
       if (response.data && response.data.data) {
@@ -87,7 +79,7 @@ if (!token) {
         setLoading(true);
         try {
           const response = await fetch(
-            `  http://127.0.0.1:8000/api/printbill/${id}`
+            `  https://apibrize.brizindia.com/api/printbill/${id}`
           );
           const data = await response.json();
           setInvoiceData(data);
@@ -111,9 +103,6 @@ if (!token) {
 
   return (
     <div className="max-w-[60rem] mx-auto bg-white p-6 shadow-md">
-    
-   
-  
       {/* <InvoiceFooter taxes={taxes} data={invoiceData}  /> */}
       <InvoiceSlip
         data={invoiceData}

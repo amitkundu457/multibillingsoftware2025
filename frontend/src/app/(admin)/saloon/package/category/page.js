@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -7,8 +7,7 @@ export default function CategoryPackage() {
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState(null);
 
-
-  //token 
+  //token
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -24,50 +23,48 @@ export default function CategoryPackage() {
     }
   };
 
-
-
-
-
   useEffect(() => {
     fetchSubtypes();
   }, []);
 
   const fetchSubtypes = async () => {
-    
-const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
 
-    const response = await axios.get(" http://127.0.0.1:8000/api/package-category",
-      
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/package-category",
 
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     setSubtypes(response.data);
   };
 
   const handleSubmit = async (e) => {
-    
-const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
 
     e.preventDefault();
     if (editingId) {
-      await axios.put(` http://127.0.0.1:8000/api/package-category/${editingId}`, { name });
+      await axios.put(
+        ` https://apibrize.brizindia.com/api/package-category/${editingId}`,
+        { name }
+      );
     } else {
-      await axios.post(" http://127.0.0.1:8000/api/package-category", { name },
-        
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
+      await axios.post(
+        " https://apibrize.brizindia.com/api/package-category",
+        { name },
 
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
     }
     setName("");
@@ -82,7 +79,9 @@ if (!token) {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this subtype?")) {
-      await axios.delete(` http://127.0.0.1:8000/api/package-category/${id}`);
+      await axios.delete(
+        ` https://apibrize.brizindia.com/api/package-category/${id}`
+      );
       fetchSubtypes();
     }
   };
@@ -92,17 +91,20 @@ if (!token) {
       <h2 className="text-xl font-bold mb-4">Manage Category</h2>
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="flex ">
-        <input
-          type="text"
-          placeholder="Subtype Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="border p-2 mr-2"
-          required
-        />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-          {editingId ? "Update" : "Add"}
-        </button>
+          <input
+            type="text"
+            placeholder="Subtype Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="border p-2 mr-2"
+            required
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            {editingId ? "Update" : "Add"}
+          </button>
         </div>
       </form>
 
@@ -111,8 +113,18 @@ if (!token) {
           <li key={subtype.id} className="flex justify-between py-2">
             {subtype.name}
             <div>
-              <button onClick={() => handleEdit(subtype)} className="bg-yellow-500 text-white px-2 py-1 mr-2">Edit</button>
-              <button onClick={() => handleDelete(subtype.id)} className="bg-red-500 text-white px-2 py-1">Delete</button>
+              <button
+                onClick={() => handleEdit(subtype)}
+                className="bg-yellow-500 text-white px-2 py-1 mr-2"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(subtype.id)}
+                className="bg-red-500 text-white px-2 py-1"
+              >
+                Delete
+              </button>
             </div>
           </li>
         ))}

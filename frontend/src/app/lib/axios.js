@@ -1,7 +1,7 @@
 import Axios from "axios";
 
 const axios = Axios.create({
-  baseURL: "  http://127.0.0.1:8000/api/",
+  baseURL: "  https://apibrize.brizindia.com/api/",
   headers: {
     "X-Requested-With": "XMLHttpRequest",
     "Content-Type": "multipart/form-data",
@@ -10,5 +10,5 @@ const axios = Axios.create({
 
 export default axios;
 
-export const reporturl=`https://brizindia.com`
+export const reporturl = `https://brizindia.com`;
 //  export const reporturl=`http://localhost:3000`

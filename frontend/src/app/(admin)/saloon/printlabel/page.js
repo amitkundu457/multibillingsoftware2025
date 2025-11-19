@@ -24,9 +24,12 @@ const ProductSearch = () => {
 
   const fetchAllBarCode = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/barcodes",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     const allBarCodeData = response.data;
     setBarcodeData(response.data);
     setBarcodeData(
@@ -39,36 +42,35 @@ const ProductSearch = () => {
   }, []);
 
   const fetchProducts = async () => {
-        const token = getCookie("access_token");
+    const token = getCookie("access_token");
 
-      try {
-        const res = await axios.get(
-          ` http://127.0.0.1:8000/api/barcode-search?search=${search}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+    try {
+      const res = await axios.get(
+        ` https://apibrize.brizindia.com/api/barcode-search?search=${search}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-        const productList = res.data.length > 0 ? res.data : setBarcodeData([]);
+      const productList = res.data.length > 0 ? res.data : setBarcodeData([]);
 
-        setProducts(productList);
+      setProducts(productList);
 
-        const productNames = productList.map(
-          (pro) => pro.name || pro.product_name
-        );
+      const productNames = productList.map(
+        (pro) => pro.name || pro.product_name
+      );
 
-        const filteredBarcodes = barcodeData.filter((item) =>
-          productNames.includes(item.product_name)
-        );
+      const filteredBarcodes = barcodeData.filter((item) =>
+        productNames.includes(item.product_name)
+      );
 
-        setBarcodeData(filteredBarcodes);
-      } catch (err) {
-        console.error("Product fetch error", err);
-      }
-    };
+      setBarcodeData(filteredBarcodes);
+    } catch (err) {
+      console.error("Product fetch error", err);
+    }
+  };
 
   useEffect(() => {
-         if ( search === "")  fetchAllBarCode();
- 
-   }, [search]);
+    if (search === "") fetchAllBarCode();
+  }, [search]);
 
   const filterBarCode = (product) => {
     const result = barcodeData.filter(
@@ -117,7 +119,7 @@ const ProductSearch = () => {
       }
 
       await axios.post(
-        " http://127.0.0.1:8000/api/barcode-print-history",
+        " https://apibrize.brizindia.com/api/barcode-print-history",
         {
           barcodes: selectedItems.map((item) => ({
             barcode_id: item.id,
@@ -180,12 +182,13 @@ const ProductSearch = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-<button
-  onClick={fetchProducts}
-  className="ml-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200"
->
-  Search
-</button>      </div>
+        <button
+          onClick={fetchProducts}
+          className="ml-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200"
+        >
+          Search
+        </button>{" "}
+      </div>
 
       {/* Product List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">

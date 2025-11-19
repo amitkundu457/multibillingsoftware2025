@@ -67,12 +67,15 @@ export default function Packages() {
 
   const fetchPackages = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/packages", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/packages",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setPackages(response.data);
     } catch (error) {
       console.error("Error fetching packages:", error);
@@ -85,15 +88,24 @@ export default function Packages() {
 
   const fetchDropdownData = async () => {
     try {
-      const [namePack, typeRes, categoryRes, subtypeRes, taxRes, taxTypeRes, groupRes, serviceRes] = await Promise.all([
-        axios.get(" http://127.0.0.1:8000/api/packagename"),
-        axios.get(" http://127.0.0.1:8000/api/package-type"),
-        axios.get(" http://127.0.0.1:8000/api/package-category"),
-        axios.get(" http://127.0.0.1:8000/api/packagesubtypes"),
-        axios.get(" http://127.0.0.1:8000/api/taxf"),
-        axios.get(" http://127.0.0.1:8000/api/tax-type"),
-        axios.get(" http://127.0.0.1:8000/api/membership-groups"),
-        axios.get(" http://127.0.0.1:8000/api/packageservice-type"),
+      const [
+        namePack,
+        typeRes,
+        categoryRes,
+        subtypeRes,
+        taxRes,
+        taxTypeRes,
+        groupRes,
+        serviceRes,
+      ] = await Promise.all([
+        axios.get(" https://apibrize.brizindia.com/api/packagename"),
+        axios.get(" https://apibrize.brizindia.com/api/package-type"),
+        axios.get(" https://apibrize.brizindia.com/api/package-category"),
+        axios.get(" https://apibrize.brizindia.com/api/packagesubtypes"),
+        axios.get(" https://apibrize.brizindia.com/api/taxf"),
+        axios.get(" https://apibrize.brizindia.com/api/tax-type"),
+        axios.get(" https://apibrize.brizindia.com/api/membership-groups"),
+        axios.get(" https://apibrize.brizindia.com/api/packageservice-type"),
       ]);
 
       setnamePack(namePack.data);
@@ -110,7 +122,7 @@ export default function Packages() {
   };
 
   const axiosInstance = axios.create({
-    baseURL: " http://127.0.0.1:8000/api",
+    baseURL: " https://apibrize.brizindia.com/api",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
@@ -147,9 +159,10 @@ export default function Packages() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this package?")) return;
+    if (!window.confirm("Are you sure you want to delete this package?"))
+      return;
     try {
-      await axios.delete(` http://127.0.0.1:8000/api/packages/${id}`);
+      await axios.delete(` https://apibrize.brizindia.com/api/packages/${id}`);
       toast.success("Package deleted successfully");
       fetchPackages();
     } catch (error) {
@@ -186,7 +199,8 @@ export default function Packages() {
 
   const calculatePackagePrice = (servicesList) => {
     const total = servicesList.reduce(
-      (sum, service) => sum + (Number(service.price) || 0) * (Number(service.quantity) || 0),
+      (sum, service) =>
+        sum + (Number(service.price) || 0) * (Number(service.quantity) || 0),
       0
     );
     setValue("packagePrice", total);
@@ -204,7 +218,10 @@ export default function Packages() {
     };
 
     try {
-      const response = await axios.post(" http://127.0.0.1:8000/api/package-services-name", serviceData);
+      const response = await axios.post(
+        " https://apibrize.brizindia.com/api/package-services-name",
+        serviceData
+      );
       if (response.status === 201) {
         toast.success("Services added successfully!");
       } else {
@@ -235,12 +252,28 @@ export default function Packages() {
           packages.map((pkg) => (
             <div key={pkg.id} className="border p-4 rounded shadow">
               <h3 className="text-lg font-semibold mb-2">{pkg.name}</h3>
-              <p><strong>Type:</strong> {pkg.type?.name || "N/A"}</p>
-              <p><strong>Category:</strong> {pkg.category?.name || "N/A"}</p>
-              <p><strong>Price:</strong> ₹{pkg.price}</p>
+              <p>
+                <strong>Type:</strong> {pkg.type?.name || "N/A"}
+              </p>
+              <p>
+                <strong>Category:</strong> {pkg.category?.name || "N/A"}
+              </p>
+              <p>
+                <strong>Price:</strong> ₹{pkg.price}
+              </p>
               <div className="flex justify-between mt-4">
-                <button onClick={() => handleEdit(pkg)} className="text-blue-500">Edit</button>
-                <button onClick={() => handleDelete(pkg.id)} className="text-red-500">Delete</button>
+                <button
+                  onClick={() => handleEdit(pkg)}
+                  className="text-blue-500"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(pkg.id)}
+                  className="text-red-500"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))

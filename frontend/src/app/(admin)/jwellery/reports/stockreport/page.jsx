@@ -1,6 +1,3 @@
-
-
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -38,26 +35,24 @@ export default function Home() {
 
   useEffect(() => {
     const lowerSearch = searchQuery.toLowerCase();
-  
+
     const filtered = productList.filter((item) => {
       const nameMatch = item.name?.toLowerCase().includes(lowerSearch);
-  
-      const status =
-        item.available_quantity > 0 ? "in stock" : "out of stock";
+
+      const status = item.available_quantity > 0 ? "in stock" : "out of stock";
       const statusMatch = status.includes(lowerSearch);
-  
+
       return nameMatch || statusMatch;
     });
-  
+
     setFilteredList(filtered);
   }, [searchQuery, productList]);
-  
 
   const fetchProductsList = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/stockDetails",
+        " https://apibrize.brizindia.com/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -154,9 +149,9 @@ export default function Home() {
             </thead>
             <tbody>
               {filteredList.length > 0 ? (
-                filteredList.map((item,index) => (
-                  <tr key={index}  className="hover:bg-gray-100">
-                     <td className="py-2 px-4 border">{index+1}</td>
+                filteredList.map((item, index) => (
+                  <tr key={index} className="hover:bg-gray-100">
+                    <td className="py-2 px-4 border">{index + 1}</td>
                     <td className="py-2 px-4 border">{item.name}</td>
                     <td className="py-2 px-4 border">
                       {item.current_stock > 0

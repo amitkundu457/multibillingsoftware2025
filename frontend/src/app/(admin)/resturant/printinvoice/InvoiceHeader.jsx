@@ -7,7 +7,7 @@ const InvoiceHeader = ({ data, logoUrl, companyName }) => {
   const [billNo, setBillNo] = useState("");
   const [fetchedLogoUrl, setFetchedLogoUrl] = useState("");
 
-  //token 
+  //token
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -23,9 +23,6 @@ const InvoiceHeader = ({ data, logoUrl, companyName }) => {
     }
   };
 
-
-
-
   useEffect(() => {
     const fetchNextBillNo = async () => {
       try {
@@ -39,13 +36,13 @@ const InvoiceHeader = ({ data, logoUrl, companyName }) => {
 
     const fetchLogoUrl = async () => {
       const token = getToken();
-    if (!token) {
-      notifyTokenMissing();
-      return;
-    }
+      if (!token) {
+        notifyTokenMissing();
+        return;
+      }
       try {
         const response = await axios.get(
-          "  http://127.0.0.1:8000/api/masterlogobill",
+          "  https://apibrize.brizindia.com/api/masterlogobill",
           {
             headers: { Authorization: `Bearer ${token}` },
           }

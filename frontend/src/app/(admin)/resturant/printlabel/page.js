@@ -17,15 +17,19 @@ const ProductSearch = () => {
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift());
+    if (parts.length === 2)
+      return decodeURIComponent(parts.pop().split(";").shift());
     return null;
   };
 
   const fetchAllBarCode = async () => {
     const token = getCookie("access_token");
-    const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/barcodes",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     setBarcodeData(response.data);
   };
 
@@ -38,10 +42,12 @@ const ProductSearch = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(
-          ` http://127.0.0.1:8000/api/barcode-search?search=${search}`,
+          ` https://apibrize.brizindia.com/api/barcode-search?search=${search}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-      const onlyProduct =   res.data.filter((item=>item.pro_ser_type ==="Product"));
+        const onlyProduct = res.data.filter(
+          (item) => item.pro_ser_type === "Product"
+        );
         setProducts(onlyProduct);
       } catch (err) {
         console.error("Product fetch error", err);
@@ -73,52 +79,47 @@ const ProductSearch = () => {
     }));
   };
 
-
-
   useEffect(() => {
-  // Initialize selectedBarcodes state: all selected by default
-  const initialSelection = {};
-  filterBarcodeData.forEach(item => {
-    initialSelection[item.id] = true;
-  });
-  setSelectedBarcodes(initialSelection);
-}, [filterBarcodeData]);
-
+    // Initialize selectedBarcodes state: all selected by default
+    const initialSelection = {};
+    filterBarcodeData.forEach((item) => {
+      initialSelection[item.id] = true;
+    });
+    setSelectedBarcodes(initialSelection);
+  }, [filterBarcodeData]);
 
   const handlePrint = async () => {
-  try {
-    const token = getCookie("access_token");
-    // Only include selected barcodes explicitly selected
-    const selectedItems = filterBarcodeData.filter(
-      (item) => selectedBarcodes[item.id] === true
-    );
+    try {
+      const token = getCookie("access_token");
+      // Only include selected barcodes explicitly selected
+      const selectedItems = filterBarcodeData.filter(
+        (item) => selectedBarcodes[item.id] === true
+      );
 
-    if (selectedItems.length === 0) {
-      alert("Please select at least one barcode to print.");
-      return;
-    }
-
-    await axios.post(
-      " http://127.0.0.1:8000/api/barcode-print-history",
-      {
-        barcodes: selectedItems.map((item) => ({
-          barcode_id: item.id,
-          product_id: item.item_id,
-        })),
-      },
-      {
-        headers: { Authorization: `Bearer ${token}` },
+      if (selectedItems.length === 0) {
+        alert("Please select at least one barcode to print.");
+        return;
       }
-    );
-    alert("Print history saved.");
-    window.print();
-  } catch (err) {
-    console.error("Failed to save print history:", err);
-    alert("Print save failed!");
-  }
-};
 
-
+      await axios.post(
+        " https://apibrize.brizindia.com/api/barcode-print-history",
+        {
+          barcodes: selectedItems.map((item) => ({
+            barcode_id: item.id,
+            product_id: item.item_id,
+          })),
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      alert("Print history saved.");
+      window.print();
+    } catch (err) {
+      console.error("Failed to save print history:", err);
+      alert("Print save failed!");
+    }
+  };
 
   return (
     <div className="p-6 w-[80%] mx-auto">
@@ -176,7 +177,9 @@ const ProductSearch = () => {
           >
             <h3 className="text-lg font-semibold">{product.name}</h3>
             <p className="text-sm text-gray-500">Barcode: {product.barcode}</p>
-            <p className="text-sm text-gray-500">Item Code: {product.item_code}</p>
+            <p className="text-sm text-gray-500">
+              Item Code: {product.item_code}
+            </p>
           </div>
         ))}
       </div>
@@ -223,39 +226,51 @@ const ProductSearch = () => {
       {showPreview && (
         <div className="mt-6" id="print-area" ref={printRef}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            {filterBarcodeData.map((item) =>
-  (selectedBarcodes[item.id] ?? true) && // Only render if selected
-    Array(item.quantity)
-      .fill(null)
-      .map((_, idx) => {
-        const barcodeValue = item.itemno;
-        return (
-          <div
-            key={`${item.id}-${idx}`}
-            className="barcode-card p-4 border rounded-lg grid place-items-center"
-          >
-            <div className="mb-2 print-hide">
-              <input
-                type="checkbox"
-                checked={!!selectedBarcodes[item.id]}
-                onChange={() => toggleBarcodeSelection(item.id)}
-                className="mr-2"
-              />
-              <label>Select for print</label>
-            </div>
-            <p className="text-center font-semibold">{item.name}</p>
-            <p className="text-center text-[11px]">Price: ₹{item.basic_rate}</p>
-            <div className="flex space-x-[4px] print-hide">
-              <p className="text-center text-[11px]">nwt: {item.nwt}</p>
-              <p className="text-center text-[11px]">gwt: ₹{item.gwt}</p>
-            </div>
-            <div className="w-full max-w-[250px] flex justify-center items-center overflow-hidden">
-             <Barcode value={barcodeValue} width={2} height={80} format="CODE128" />
-            </div>
-          </div>
-        );
-      })
-)}
+            {filterBarcodeData.map(
+              (item) =>
+                (selectedBarcodes[item.id] ?? true) && // Only render if selected
+                Array(item.quantity)
+                  .fill(null)
+                  .map((_, idx) => {
+                    const barcodeValue = item.itemno;
+                    return (
+                      <div
+                        key={`${item.id}-${idx}`}
+                        className="barcode-card p-4 border rounded-lg grid place-items-center"
+                      >
+                        <div className="mb-2 print-hide">
+                          <input
+                            type="checkbox"
+                            checked={!!selectedBarcodes[item.id]}
+                            onChange={() => toggleBarcodeSelection(item.id)}
+                            className="mr-2"
+                          />
+                          <label>Select for print</label>
+                        </div>
+                        <p className="text-center font-semibold">{item.name}</p>
+                        <p className="text-center text-[11px]">
+                          Price: ₹{item.basic_rate}
+                        </p>
+                        <div className="flex space-x-[4px] print-hide">
+                          <p className="text-center text-[11px]">
+                            nwt: {item.nwt}
+                          </p>
+                          <p className="text-center text-[11px]">
+                            gwt: ₹{item.gwt}
+                          </p>
+                        </div>
+                        <div className="w-full max-w-[250px] flex justify-center items-center overflow-hidden">
+                          <Barcode
+                            value={barcodeValue}
+                            width={2}
+                            height={80}
+                            format="CODE128"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })
+            )}
           </div>
         </div>
       )}

@@ -1,7 +1,3 @@
-
-
-
-
 // 'use client';
 // import React, { useEffect, useState } from 'react';
 // import {
@@ -44,7 +40,7 @@
 
 //     try {
 //       const response = await axios.get(
-//         " http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+//         " https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -165,24 +161,21 @@
 
 // export default Page;
 
-'use client';
-import React, { useEffect, useState } from 'react';
-import {
-  baseImageURL,
-  getProductService,
-} from "@/app/components/config";
-import axios from 'axios';
+"use client";
+import React, { useEffect, useState } from "react";
+import { baseImageURL, getProductService } from "@/app/components/config";
+import axios from "axios";
 
 const Page = () => {
-  const today = new Date().toISOString().split('T')[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
 
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const getToken = () => {
     const cookie = document.cookie
@@ -208,7 +201,7 @@ const Page = () => {
 
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+        " https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -248,7 +241,8 @@ const Page = () => {
     }
 
     const filtered = items.filter((item) => {
-      const expiryRaw = item.expires || item.expiry_date || item.expired_at || '';
+      const expiryRaw =
+        item.expires || item.expiry_date || item.expired_at || "";
       if (!expiryRaw) return false;
 
       const expiryDate = new Date(expiryRaw);
@@ -275,7 +269,9 @@ const Page = () => {
       {/* Date Filter Inputs */}
       <div className="flex flex-wrap gap-4 bg-white p-4 rounded-lg shadow-md">
         <div className="flex flex-col">
-          <label className="text-gray-700 font-medium mb-1">Start Expiry Date</label>
+          <label className="text-gray-700 font-medium mb-1">
+            Start Expiry Date
+          </label>
           <input
             type="date"
             value={startDate}
@@ -286,7 +282,9 @@ const Page = () => {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-gray-700 font-medium mb-1">End Expiry Date</label>
+          <label className="text-gray-700 font-medium mb-1">
+            End Expiry Date
+          </label>
           <input
             type="date"
             value={endDate}
@@ -325,7 +323,10 @@ const Page = () => {
                   <td className="p-3">{item.name}</td>
                   <td className="p-3">{item.code}</td>
                   <td className="p-3">
-                    {item.expires || item.expiry_date || item.expired_at || 'N/A'}
+                    {item.expires ||
+                      item.expiry_date ||
+                      item.expired_at ||
+                      "N/A"}
                   </td>
                 </tr>
               ))

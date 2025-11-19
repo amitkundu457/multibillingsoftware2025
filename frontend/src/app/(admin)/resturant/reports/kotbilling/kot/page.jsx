@@ -1,5 +1,3 @@
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaFilePdf } from "react-icons/fa6";
@@ -39,12 +37,12 @@ const BillWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/kot-billing",
+          " https://apibrize.brizindia.com/api/kot-billing",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("bill kot billing",response);
+        console.log("bill kot billing", response);
         setData(response.data || []);
         setFilteredResult(response.data || []);
       } catch (error) {
@@ -177,7 +175,7 @@ const BillWise = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
-        
+
         <button
           className="bg-red-500 text-white font-semibold rounded-lg px-6 py-3 hover:bg-red-600"
           onClick={() => {
@@ -213,7 +211,7 @@ const BillWise = () => {
               <th className="py-3 px-4 border-b">Customer Name</th>
               {/* <th className="py-3 px-4 border-b">Customer Phone</th> */}
               <th className="py-3 px-4 border-b">Member count</th>
-              
+
               {/* <th className="py-3 px-4 border-b">Billing Date</th> */}
               <th className="py-3 px-4 border-b">Action</th>
             </tr>

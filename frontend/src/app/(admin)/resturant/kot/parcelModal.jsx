@@ -37,9 +37,7 @@ export const ShowProduct = ({
         <button
           onClick={onDecrease}
           className="text-blue-500 font-semibold text-lg"
-        >
-          
-        </button>
+        ></button>
         <span className="font-bold text-xl">{quantity}</span>
         <button
           onClick={onIncrease}
@@ -125,11 +123,14 @@ function ParcelModal({ isOpen, onClose }) {
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/barcodes",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setAllProducts(response.data);
       return response.data; // Return the fetched data
@@ -173,7 +174,7 @@ function ParcelModal({ isOpen, onClose }) {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get(" http://127.0.0.1:8000/api/product-and-service", {
+      .get(" https://apibrize.brizindia.com/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -194,9 +195,12 @@ function ParcelModal({ isOpen, onClose }) {
       const token = getCookie("access_token");
 
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/type",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setItemsCategory(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -241,7 +245,7 @@ function ParcelModal({ isOpen, onClose }) {
 
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/parcel-order",
+        " https://apibrize.brizindia.com/api/parcel-order",
         {
           customer_id: customerDetails?.id || null,
           parcelType_id: selectedParcelTypeId,
@@ -341,7 +345,7 @@ function ParcelModal({ isOpen, onClose }) {
     }
   };
 
-  const API_URL = " http://127.0.0.1:8000/api/parcel-types";
+  const API_URL = " https://apibrize.brizindia.com/api/parcel-types";
 
   useEffect(() => {
     fetch(API_URL)
@@ -548,7 +552,7 @@ function ParcelModal({ isOpen, onClose }) {
                 className="bg-white border rounded-lg p-3 shadow hover:shadow-lg cursor-pointer flex flex-col items-center transition"
               >
                 <img
-                  src={` http://127.0.0.1:8000/storage/${item.image}`}
+                  src={` https://apibrize.brizindia.com/storage/${item.image}`}
                   alt={item.name}
                   className="w-full h-28 object-cover rounded mb-2"
                 />

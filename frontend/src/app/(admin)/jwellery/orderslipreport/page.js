@@ -18,7 +18,7 @@ const OrderSlipReport = () => {
     setError(null);
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/orderreport",
+        " https://apibrize.brizindia.com/api/orderreport",
         {
           params: { start_date: startDate, end_date: endDate },
         }
@@ -138,7 +138,9 @@ const OrderSlipReport = () => {
                   {order.users?.name || "N/A"}
                 </td>
                 <td className="border px-4 py-2">
-                {order.users?.customers?.length ? order.users.customers[0].phone : "N/A"}
+                  {order.users?.customers?.length
+                    ? order.users.customers[0].phone
+                    : "N/A"}
                 </td>
                 <td className="border px-4 py-2">{order.total_price || 0}</td>
                 {/* <td className="border px-4 py-2">

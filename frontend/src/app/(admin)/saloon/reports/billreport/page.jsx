@@ -1,9 +1,3 @@
-
-
-
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaFilePdf } from "react-icons/fa6";
@@ -44,10 +38,13 @@ const Home = () => {
 
     const fetchData = async () => {
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/saloon-order-cash", {
-          headers: { authorization: `Bearer ${token}` },
-        });
-        console.log("Fetched saloon dailycash:", response.data);  
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/saloon-order-cash",
+          {
+            headers: { authorization: `Bearer ${token}` },
+          }
+        );
+        console.log("Fetched saloon dailycash:", response.data);
         setData(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -62,17 +59,13 @@ const Home = () => {
     const isInDateRange =
       (!startDate || new Date(startDate) <= itemDate) &&
       (!endDate || new Date(endDate) >= itemDate);
-  
+
     return (
       isInDateRange &&
-      (
-        item.billno?.toLowerCase().includes(lowerQuery) ||
-        item.users?.name?.toLowerCase().includes(lowerQuery)
-      )
+      (item.billno?.toLowerCase().includes(lowerQuery) ||
+        item.users?.name?.toLowerCase().includes(lowerQuery))
     );
   });
-  
-  
 
   const downloadPDF = () => {
     const doc = new jsPDF();
@@ -161,9 +154,7 @@ const Home = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
-        <button
-          className="bg-green-500 text-white font-semibold rounded-lg px-6 py-3 hover:bg-green-600"
-        >
+        <button className="bg-green-500 text-white font-semibold rounded-lg px-6 py-3 hover:bg-green-600">
           Search
         </button>
         <button
@@ -200,7 +191,6 @@ const Home = () => {
               {/* <th className="py-3 px-4 border-b">Payment Mode</th> */}
               <th className="py-3 px-4 border-b">Bill Date</th>
               <th className="py-3 px-4 border-b">Action</th>
-            
             </tr>
           </thead>
           <tbody>
@@ -212,11 +202,12 @@ const Home = () => {
                 <td className="py-3 px-4 border-b">{item.users?.name}</td>
                 {/* <td className="py-3 px-4 border-b">{item.payment_method}</td> */}
                 {/* <td className="py-3 px-4 border-b">{item.price}</td> */}
-                <td className="py-3 px-4 border-b">{item.created_at?.slice(0,10)}</td>
+                <td className="py-3 px-4 border-b">
+                  {item.created_at?.slice(0, 10)}
+                </td>
                 <td className="py-3 px-4 border-b">
                   <a
                     href={`${reporturl}/saloon/printinvoice/?id=${item.id}`}
-                    
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
@@ -224,7 +215,6 @@ const Home = () => {
                     prints
                   </a>
                 </td>
-              
               </tr>
             ))}
           </tbody>

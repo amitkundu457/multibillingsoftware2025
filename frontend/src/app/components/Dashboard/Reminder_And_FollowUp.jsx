@@ -7,18 +7,15 @@ import { useCookies } from "react-cookie";
 import { IoMdNotificationsOff } from "react-icons/io";
 
 export default function Reminder_And_FollowUp({ label }) {
-    const [loading, setLoading] = useState(true); // Loading state
-      const [cookies, setCookie, removeCookie] = useCookies();
-    
-
+  const [loading, setLoading] = useState(true); // Loading state
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   const [count, setCount] = useState({
     today_reminders: 0,
     today_followups: 0,
   });
 
-
-   const {
+  const {
     data: user,
     isLoading,
     mutate,
@@ -29,7 +26,6 @@ export default function Reminder_And_FollowUp({ label }) {
     return res.data;
   });
 
-  
   const roleToUrlMap = {
     admin: "admin",
     jwellery: "jwellery",
@@ -39,7 +35,7 @@ export default function Reminder_And_FollowUp({ label }) {
   };
 
   const productUrl = roleToUrlMap[!isLoading && user?.roles?.[0]?.name] || "";
-  console.log("pruddcturl2",productUrl);
+  console.log("pruddcturl2", productUrl);
 
   const getToken = () => {
     const cookie = document.cookie
@@ -56,12 +52,11 @@ export default function Reminder_And_FollowUp({ label }) {
     }
   };
 
-
   useEffect(() => {
     async function fetchCounts() {
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/reminder-follow-up/today-counts"
+          " https://apibrize.brizindia.com/api/reminder-follow-up/today-counts"
         );
         setCount(response.data);
       } catch (error) {
@@ -102,12 +97,13 @@ export default function Reminder_And_FollowUp({ label }) {
         {/* Today Follow-up */}
         <div className="flex justify-between">
           <Link href={`/${productUrl}/followup/`}>
-           <h3 className="text-purple-600 text-lg font-bold  hover:text-green-500">Today Reminder And  Follow-up</h3>
-          <p className="text-teal-600 text-lg font-bold">
-          {count.today_follow_ups || 0}
-          </p>
+            <h3 className="text-purple-600 text-lg font-bold  hover:text-green-500">
+              Today Reminder And Follow-up
+            </h3>
+            <p className="text-teal-600 text-lg font-bold">
+              {count.today_follow_ups || 0}
+            </p>
           </Link>
-         
         </div>
       </div>
     </div>

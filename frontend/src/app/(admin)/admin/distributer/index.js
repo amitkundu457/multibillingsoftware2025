@@ -41,9 +41,8 @@ const DistributorManager = () => {
     account_holder_name: "",
     account_type: "",
     status: "",
-    password:""
+    password: "",
   });
- 
 
   const fetchDistributors = useCallback(async () => {
     try {
@@ -69,7 +68,7 @@ const DistributorManager = () => {
     fetchDistributors();
     fetchEmployees();
   }, [fetchDistributors, fetchEmployees]);
-  console.log("aaabbbcc",distributors)
+  console.log("aaabbbcc", distributors);
 
   const openModal = (type, id = null) => {
     setModalType(type);
@@ -97,7 +96,7 @@ const DistributorManager = () => {
         account_holder_name: "",
         account_type: "",
         status: "",
-        password:""
+        password: "",
       });
     }
     setModalOpen(true);
@@ -140,8 +139,8 @@ const DistributorManager = () => {
 
     const url =
       modalType === "create"
-        ? "  http://127.0.0.1:8000/api/distrubuters"
-        : `  http://127.0.0.1:8000/api/distrubuters/${currentDistributor.id}`;
+        ? "  https://apibrize.brizindia.com/api/distrubuters"
+        : `  https://apibrize.brizindia.com/api/distrubuters/${currentDistributor.id}`;
 
     try {
       if (modalType === "create") {
@@ -154,7 +153,7 @@ const DistributorManager = () => {
       fetchDistributors();
       closeModal();
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.response.data.message);
       console.error("Error processing the request:", error);
       // notyf.error("Failed to process the request.");
     }

@@ -39,7 +39,7 @@ const Page = () => {
 
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/gstReport",
+          " https://apibrize.brizindia.com/api/gstReport",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -155,7 +155,9 @@ const Page = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center bg-gray-200 py-6 px-8 rounded-lg shadow-md">
-        <p className="font-bold text-2xl text-gray-800">GST wise purchase Report</p>
+        <p className="font-bold text-2xl text-gray-800">
+          GST wise purchase Report
+        </p>
         <div>
           <button
             onClick={downloadPDF}
@@ -240,10 +242,14 @@ const Page = () => {
                 {/* <td className="py-3 px-4 border-b">{item.product_name}</td> */}
                 <td className="py-3 px-4 border-b">{item.billno}</td>
                 {/* <td className="py-3 px-4 border-b">{item.tax_name}</td> */}
-                <td className="py-3 px-4 border-b">{item.total_qty? item.total_qty :"NA"}</td>
+                <td className="py-3 px-4 border-b">
+                  {item.total_qty ? item.total_qty : "NA"}
+                </td>
                 {/* <td className="py-3 px-4 border-b">{item.rate}</td> */}
                 {/* <td className="py-3 px-4 border-b">{item.gst_percent}</td> */}
-                <td className="py-3 px-4 border-b">{item.total_tax ? item.total_tax :"NA"}</td>
+                <td className="py-3 px-4 border-b">
+                  {item.total_tax ? item.total_tax : "NA"}
+                </td>
                 {/* <td className="py-3 px-4 border-b">{item.total_price}</td> */}
                 <td className="py-3 px-4 border-b">
                   <a

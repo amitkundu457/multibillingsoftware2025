@@ -17,7 +17,7 @@
 //     };
 
 //     const token = getCookie("access_token");
-    
+
 //     useEffect(() => {
 //         if (!token) {
 //             console.error("Authentication token not found!");
@@ -29,7 +29,7 @@
 //     const fetchProductsList = async () => {
 //         setLoading(true);
 //         try {
-//             const response = await axios.get(" http://127.0.0.1:8000/api/stockDetails", {
+//             const response = await axios.get(" https://apibrize.brizindia.com/api/stockDetails", {
 //                 headers: { Authorization: `Bearer ${token}` },
 //             });
 //             setProductList(response.data);
@@ -59,7 +59,7 @@
 //                             {productList.map((item) => (
 //                                 <tr key={item.id} className="hover:bg-gray-100">
 //                                     <td className="py-2 px-4 border">{item.name}</td>
-                                    
+
 //                                     <td className="py-2 px-4 border">{item.available_quantity>0 ? item.available_quantity : "0"}</td>
 
 //                                     <td className="py-2 px-4 border">
@@ -78,7 +78,6 @@
 //         </>
 //     );
 // }
-
 
 "use client";
 
@@ -117,31 +116,29 @@ export default function Home() {
 
   useEffect(() => {
     const lowerSearch = searchQuery.toLowerCase();
-  
+
     const filtered = productList.filter((item) => {
       const nameMatch = item.name?.toLowerCase().includes(lowerSearch);
-  
-      const status =
-        item.available_quantity > 0 ? "in stock" : "out of stock";
+
+      const status = item.available_quantity > 0 ? "in stock" : "out of stock";
       const statusMatch = status.includes(lowerSearch);
-  
+
       return nameMatch || statusMatch;
     });
-  
+
     setFilteredList(filtered);
   }, [searchQuery, productList]);
-  
 
   const fetchProductsList = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+        " https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log("'featchProductsList",response)
+      console.log("'featchProductsList", response);
       setProductList(response.data);
       setFilteredList(response.data);
     } catch (error) {
@@ -176,8 +173,7 @@ export default function Home() {
       filteredList.map((item, index) => ({
         "S.No": index + 1,
         "Product Name": item.name,
-        "Total Quantity":
-          item.current_stock > 0 ? item.current_stock : "0",
+        "Total Quantity": item.current_stock > 0 ? item.current_stock : "0",
         Status: item.current_stock > 0 ? "In Stock" : "Out of Stock",
       }))
     );
@@ -233,14 +229,12 @@ export default function Home() {
             </thead>
             <tbody>
               {filteredList.length > 0 ? (
-                filteredList.map((item,index) => (
-                  <tr key={index}  className="hover:bg-gray-100">
-                     <td className="py-2 px-4 border">{index+1}</td>
+                filteredList.map((item, index) => (
+                  <tr key={index} className="hover:bg-gray-100">
+                    <td className="py-2 px-4 border">{index + 1}</td>
                     <td className="py-2 px-4 border">{item.name}</td>
                     <td className="py-2 px-4 border">
-                      {item.current_stock > 0
-                        ? item.current_stock
-                        : "0"}
+                      {item.current_stock > 0 ? item.current_stock : "0"}
                     </td>
                     <td className="py-2 px-4 border">
                       {item.current_stock > 0 ? (

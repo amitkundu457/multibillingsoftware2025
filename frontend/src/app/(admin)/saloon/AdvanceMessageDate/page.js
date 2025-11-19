@@ -24,9 +24,12 @@ export default function AdvanceMessageDate() {
   const fetchData = async () => {
     const token = getCookie("access_token");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/sms-advance-date", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        "https://apibrize.brizindia.com/api/sms-advance-date",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const json = await res.json();
       setData(json.data);
     } catch (err) {
@@ -49,8 +52,8 @@ export default function AdvanceMessageDate() {
     e.preventDefault();
 
     const url = editingId
-      ? `http://127.0.0.1:8000/api/sms-advance-date/${editingId}`
-      : "http://127.0.0.1:8000/api/sms-advance-date";
+      ? `https://apibrize.brizindia.com/api/sms-advance-date/${editingId}`
+      : "https://apibrize.brizindia.com/api/sms-advance-date";
     const method = editingId ? "PUT" : "POST";
 
     try {
@@ -64,7 +67,12 @@ export default function AdvanceMessageDate() {
       });
 
       if (res.ok) {
-        setForm({ birthdayAdvance: "", anniversaryAdvance: "", bblcAdvanceDate: "", reminderAdvanceDate: "" });
+        setForm({
+          birthdayAdvance: "",
+          anniversaryAdvance: "",
+          bblcAdvanceDate: "",
+          reminderAdvanceDate: "",
+        });
         setEditingId(null);
         fetchData(); // refresh list
       }
@@ -87,13 +95,16 @@ export default function AdvanceMessageDate() {
   // Delete entry
   const handleDelete = async (id) => {
     const token = getCookie("access_token");
-     if (!confirm("Are you sure?")) return;
+    if (!confirm("Are you sure?")) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/sms-advance-date/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await fetch(
+        `https://apibrize.brizindia.com/api/sms-advance-date/${id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (res.ok) fetchData(); // refresh list
     } catch (err) {
       console.error(err);
@@ -138,7 +149,10 @@ export default function AdvanceMessageDate() {
           onChange={handleChange}
           className="border p-2 w-full"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
           {editingId ? "Update" : "Create"}
         </button>
       </form>
@@ -146,13 +160,28 @@ export default function AdvanceMessageDate() {
       {/* Data List */}
       <ul className="space-y-2">
         {data.map((item) => (
-          <li key={item.id} className="flex justify-between items-center border p-2 rounded">
+          <li
+            key={item.id}
+            className="flex justify-between items-center border p-2 rounded"
+          >
             <span>
-              Birthday: {item.birthdayAdvance} | Anniversary: {item.anniversaryAdvance} | BBLC: {item.bblcAdvanceDate} | Reminder: {item.reminderAdvanceDate}
+              Birthday: {item.birthdayAdvance} | Anniversary:{" "}
+              {item.anniversaryAdvance} | BBLC: {item.bblcAdvanceDate} |
+              Reminder: {item.reminderAdvanceDate}
             </span>
             <div className="space-x-2">
-              <button onClick={() => handleEdit(item)} className="bg-yellow-400 px-2 py-1 rounded">Edit</button>
-              <button onClick={() => handleDelete(item.id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+              <button
+                onClick={() => handleEdit(item)}
+                className="bg-yellow-400 px-2 py-1 rounded"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(item.id)}
+                className="bg-red-500 text-white px-2 py-1 rounded"
+              >
+                Delete
+              </button>
             </div>
           </li>
         ))}

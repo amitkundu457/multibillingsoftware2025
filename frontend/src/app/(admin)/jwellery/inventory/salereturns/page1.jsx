@@ -18,14 +18,13 @@ export default function PurchaseReturn() {
   const [paymentNote, setPaymentNote] = useState("");
   const [suppliersData, setSuppliersData] = useState([]);
   const [selectedSupplier, setSelectedSupplier] = useState("");
-  const [reason,setReason] = useState("");
+  const [reason, setReason] = useState("");
 
   useEffect(() => {
     const currentDate = new Date();
     const formattedDate = currentDate.toLocaleDateString("en-CA"); // Formats to YYYY-MM-DD
     setPurchaseDate(formattedDate);
   }, []);
-
 
   const getToken = () => {
     const cookie = document.cookie
@@ -42,19 +41,12 @@ export default function PurchaseReturn() {
     }
   };
 
-
-
-
-
-
-
-
   // Fetch stock returns data
   useEffect(() => {
     const fetchStockReturns = async () => {
       try {
         const response = await fetch(
-          "  http://127.0.0.1:8000/api/purchase-returns/"
+          "  https://apibrize.brizindia.com/api/purchase-returns/"
         );
         const data = await response.json();
         setStockReturns(data);
@@ -77,11 +69,9 @@ export default function PurchaseReturn() {
     }
 
     axios
-      .get("  http://127.0.0.1:8000/api/suppliers",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .get("  https://apibrize.brizindia.com/api/suppliers", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         setSuppliersData(response.data);
         const data = response.data;
@@ -97,7 +87,7 @@ export default function PurchaseReturn() {
     const fetchPayments = async () => {
       try {
         const response = await fetch(
-          "  http://127.0.0.1:8000/api/purchase-returns/"
+          "  https://apibrize.brizindia.com/api/purchase-returns/"
         );
         const data = await response.json();
         // Sort payments by date (newest first)
@@ -123,16 +113,19 @@ export default function PurchaseReturn() {
       amount,
       payment_type: paymentType,
       payment_note: paymentNote,
-      reasons:reason
+      reasons: reason,
     };
     console.log(formData);
 
     try {
-      const response = await fetch("  http://127.0.0.1:8000/api/purchase-returns", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "  https://apibrize.brizindia.com/api/purchase-returns",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (response.ok) {
         alert("Purchase return submitted successfully!");
@@ -223,18 +216,22 @@ export default function PurchaseReturn() {
             </select>
           </div>
         </div>
-             {/* //reason input */}
+        {/* //reason input */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 w-full">
-        <div className="w-full">
-        <label className="block font-medium">Any specific  Reason  for purchase/return stock</label>
+          <div className="w-full">
+            <label className="block font-medium">
+              Any specific Reason for purchase/return stock
+            </label>
 
-        <input type="text"  className=" p-2 border rounded w-full"
-        value={reason}
-        onChange={(e)=>{setReason(e.target.value)}}
-        
-        />
-        </div>
-
+            <input
+              type="text"
+              className=" p-2 border rounded w-full"
+              value={reason}
+              onChange={(e) => {
+                setReason(e.target.value);
+              }}
+            />
+          </div>
         </div>
 
         <h3 className="text-lg font-semibold mt-6">

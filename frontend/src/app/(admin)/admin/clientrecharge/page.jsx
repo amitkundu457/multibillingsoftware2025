@@ -1,5 +1,3 @@
-
-
 // 'use client';
 
 // import React, { useEffect, useState } from 'react';
@@ -17,7 +15,7 @@
 
 //   useEffect(() => {
 //     axios
-//       .get(' http://127.0.0.1:8000/api/clinet')
+//       .get(' https://apibrize.brizindia.com/api/clinet')
 //       .then((res) => {
 //         setData(res.data);
 //         if (res.data.length > 0) {
@@ -48,7 +46,7 @@
 
 //     try {
 //       const res = await axios.post(
-//         ' http://127.0.0.1:8000/api/coinpurchase-admin',
+//         ' https://apibrize.brizindia.com/api/coinpurchase-admin',
 //         {
 //           id: parseInt(form.id),
 //           amount: parseFloat(form.amount),
@@ -169,29 +167,27 @@
 
 // export default ClientRoleAndCoinPurchase;
 
+"use client";
 
-
-'use client';
-
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const ClientRoleAndCoinPurchase = () => {
   const [data, setData] = useState([]);
-  const [selectedRole, setSelectedRole] = useState('jwellery');
+  const [selectedRole, setSelectedRole] = useState("jwellery");
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 10;
 
   const [form, setForm] = useState({
-    id: '',
-    amount: '',
+    id: "",
+    amount: "",
   });
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   // Fetch data on load
   useEffect(() => {
     axios
-      .get(' http://127.0.0.1:8000/api/clinet')
+      .get(" https://apibrize.brizindia.com/api/clinet")
       .then((res) => {
         setData(res.data);
         if (res.data.length > 0) {
@@ -199,7 +195,7 @@ const ClientRoleAndCoinPurchase = () => {
         }
       })
       .catch((err) => {
-        console.error('Error fetching data:', err);
+        console.error("Error fetching data:", err);
       });
   }, []);
 
@@ -214,25 +210,25 @@ const ClientRoleAndCoinPurchase = () => {
   // Handle coin purchase form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
 
     try {
       const res = await axios.post(
-        ' http://127.0.0.1:8000/api/coinpurchase-admin',
+        " https://apibrize.brizindia.com/api/coinpurchase-admin",
         {
           id: parseInt(form.id),
           amount: parseFloat(form.amount),
         },
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
-      setMessage(res.data.message || 'Purchase successful!');
-      setForm({ id: '', amount: '' });
+      setMessage(res.data.message || "Purchase successful!");
+      setForm({ id: "", amount: "" });
     } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Submission failed.';
-      setMessage('Error: ' + errorMsg);
+      const errorMsg = err.response?.data?.message || "Submission failed.";
+      setMessage("Error: " + errorMsg);
     }
   };
 
@@ -243,7 +239,8 @@ const ClientRoleAndCoinPurchase = () => {
   };
 
   // Get users of selected role
-  const selectedUsers = data.find((item) => item.role === selectedRole)?.users || [];
+  const selectedUsers =
+    data.find((item) => item.role === selectedRole)?.users || [];
 
   // Pagination logic
   const indexOfLastUser = currentPage * usersPerPage;
@@ -271,8 +268,8 @@ const ClientRoleAndCoinPurchase = () => {
               onClick={() => handleRoleChange(item.role)}
               className={`px-4 py-2 rounded-full border ${
                 selectedRole === item.role
-                  ? 'bg-green-500 text-white border-green-500'
-                  : 'bg-white text-blue-600 border-blue-600'
+                  ? "bg-green-500 text-white border-green-500"
+                  : "bg-white text-blue-600 border-blue-600"
               }`}
             >
               {item.role}
@@ -296,14 +293,18 @@ const ClientRoleAndCoinPurchase = () => {
               {currentUsers.length > 0 ? (
                 currentUsers.map((user, index) => (
                   <tr key={user.id} className="hover:bg-gray-50">
-                    <td className="p-3 border">{indexOfFirstUser + index + 1}</td>
+                    <td className="p-3 border">
+                      {indexOfFirstUser + index + 1}
+                    </td>
                     <td className="p-3 border">{user.id}</td>
                     <td className="p-3 border">{user.name}</td>
                     <td className="p-3 border">{user.email}</td>
                     <td className="p-3 border">
-                      {
-                        user.status==null?<span className='text-red-700'>Pending</span>:<span className='text-green-500'>Approved</span>
-                      }
+                      {user.status == null ? (
+                        <span className="text-red-700">Pending</span>
+                      ) : (
+                        <span className="text-green-500">Approved</span>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -333,8 +334,8 @@ const ClientRoleAndCoinPurchase = () => {
                   onClick={() => goToPage(idx + 1)}
                   className={`px-3 py-1 border rounded ${
                     currentPage === idx + 1
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white text-black'
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-black"
                   }`}
                 >
                   {idx + 1}

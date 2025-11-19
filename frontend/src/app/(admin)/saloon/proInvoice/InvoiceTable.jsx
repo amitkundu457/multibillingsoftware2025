@@ -61,7 +61,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
     (sum, invoice) => sum + Number(invoice.pro_total),
     0
   );
-  
+
   const isSameState = buyerState === "" ? true : buyerState === sellerState;
 
   console.log("isSameState1", isSameState);
@@ -89,7 +89,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
     }, 0);
 
     totalTaxAmount = Math.round(totalCGST + totalSGST);
-  //  roundoff  = totalCGST + totalSGST;
+    //  roundoff  = totalCGST + totalSGST;
   } else {
     totalIGST = data.details.reduce((sum, invoice) => {
       const igst = (invoice.pro_total * invoice.tax_rate) / 100;
@@ -117,7 +117,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
     }
     try {
       const response = await axios.get(
-        "  http://127.0.0.1:8000/api/masterlogobill",
+        "  https://apibrize.brizindia.com/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -168,7 +168,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
   console.log("Base Total: ", totalPrice);
   console.log("Total Tax Amount: ", totalTax);
   console.log("Grand Total: ", grandTotal);
-  roundoff=Number(totalPrice+totalTax).toFixed(2)
+  roundoff = Number(totalPrice + totalTax).toFixed(2);
   // Function to round to two decimal places
   const roundToTwoDecimals = (value) => Math.round(value * 100) / 100;
   const roundedGrandTotal = Math.round(grandTotal);
@@ -191,7 +191,6 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
 
   return (
     <div className="border-t w-full   relative  border-gray-800">
-      
       {/* <div className="opacity-10 absolute bottom-[40%] left-[25%]">
         {fetchedLogoUrl && (
           <img src={fetchedLogoUrl} alt="Logo" className="w-[80%]" />
@@ -204,22 +203,22 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
               SL No.
             </th>
             <th className="border-r text-[13px] text-[#333]  w-[9rem] font-medium border-gray-800 text-center p-2">
-            SERVICES
+              SERVICES
             </th>
-            
+
             <th className="border-r text-[13px] text-[#333] font-medium border-gray-800 text-center p-2">
               QTY
             </th>
             {/* <th className="border-r text-[13px] text-[#333] font-medium border-gray-800 text-center p-2">
               RATE
             </th> */}
-           
+
             <th className="border-r text-[13px] text-[#333] font-medium border-gray-800 text-center p-2">
-             DIS(₹)
+              DIS(₹)
             </th>
-            
+
             <th className="border-r text-[13px] text-[#333] font-medium border-gray-800 text-center p-2">
-            AMOUNT(₹)
+              AMOUNT(₹)
             </th>
           </tr>
         </thead>
@@ -237,16 +236,14 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
                 <span className=" text-[10px]">{invoice.description}</span>
               </td>
 
-             
               <td className=" border-r font-medium text-[13px] border-gray-800 text-center p-2">
                 {invoice.qty}
               </td>
 
-             
               <td className=" border-r font-medium text-[13px] border-gray-800 text-center p-2">
                 {invoice?.otherCharge}
               </td>
-              
+
               <td className=" border-r font-medium text-[13px] border-gray-800 text-center p-2">
                 {invoice.pro_total}
               </td>
@@ -254,70 +251,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
           ))}
 
           <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800  text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-            <td className=" border-r border-gray-800 text-center p-2"></td>
-          </tr>
-          <tr>
-          <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800  text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
@@ -329,14 +263,72 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             <td className=" border-r border-gray-800  text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
             <td className=" border-r border-gray-800 text-center p-2"></td>
-            
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+          </tr>
+          <tr>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800  text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
+            <td className=" border-r border-gray-800 text-center p-2"></td>
           </tr>
 
           {/* huid */}
-
-          
-        
-          
 
           <tr className="bg-red-100 p-[3rem]">
             <td className=" border-r border-gray-800 text-center p-2"></td>
@@ -440,7 +432,6 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
             </tr>
           )}
 
-         
           {isSameState && (
             <>
               <tr>
@@ -475,29 +466,26 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
               <td className="border-r italic border-gray-800 text-right p-2">
                 igst @
               </td>
-              
+
               <td className=" border-r border-gray-800 text-center"></td>
               <td className=" border-r border-gray-800 text-center"></td>
-              
+
               <td className="border-r border-gray-800 text-center p-2">
                 ₹{totalIGST.toFixed(2)}
               </td>
             </tr>
           )}
 
-         
-
           <tr className="bg-red-100 p-[3rem]">
             <td className=" border-r border-gray-800 text-center"></td>
             <td className="border-r border-gray-800 text-right p-2 font-bold">
               Total
             </td>
-            
+
             <td className="border-r border-gray-800 text-center p-2">
               {data?.totalqty ? data?.totalqty : "0"}
             </td>
 
-       
             <td className=" border-r border-gray-800 text-center p-2"></td>
             {/* <td className="border-r border-gray-800 text-center p-2 font-bold">
                 ₹{" "}
@@ -518,9 +506,8 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName }) => {
           </tr>
           {/* )} */}
         </tbody>
-
       </table>
-    
+
       {/*
       {isSameState && data.bill_inv !== 1 && ( */}
       {isSameState && (
@@ -917,7 +904,7 @@ export default InvoiceTable;
 //     }
 //     try {
 //       const response = await axios.get(
-//         "  http://127.0.0.1:8000/api/masterlogobill",
+//         "  https://apibrize.brizindia.com/api/masterlogobill",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -1046,7 +1033,7 @@ export default InvoiceTable;
 //               Mkg Chg (%)/Rs
 //             </th> */}
 //              <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
-//               Gst on mkg 
+//               Gst on mkg
 //             </th>
 //             <th className="border-r text-xs text-[#333] font-medium border-gray-800 text-center ">
 //               Mkg Cost(₹)
@@ -1151,7 +1138,7 @@ export default InvoiceTable;
 //               <td className="border-r text-xs border-gray-800 text-center">
 //   {invoice?.gstOnMaking}
 // </td>
-              
+
 //                <td className=" border-r  text-xs border-gray-800 text-center ">
 //                {invoice?.mkg_chg_RS_P == null
 //                       ? "0"
@@ -1180,14 +1167,14 @@ export default InvoiceTable;
 //                 )}
 //               </td> */}
 //               <td className="border-r  text-xs border-gray-800 text-center ">
-              
+
 //                   <span>
 //                     {invoice?.making_dsc != null
 //                       ? `${invoice.making_dsc}%`
 //                       : "0%"}
-                    
+
 //                   </span>
-              
+
 //               </td>
 //               <td className=" border-r text-xs border-gray-800 text-center ">
 //                 {invoice.pro_total}
@@ -1823,7 +1810,7 @@ export default InvoiceTable;
 //         {/*</tfoot>*/}
 //       </table>
 //       {/* calculation new table */}
-//       {/* 
+//       {/*
 //       {isSameState && data.bill_inv !== 1 && ( */}
 //       {isSameState && (
 //         <div className="overflow-x-auto mt-7 text-xs">
@@ -2116,16 +2103,3 @@ export default InvoiceTable;
 // };
 
 // export default InvoiceTable;
-
-
-
-
-
-
-
-
-
-
-
-
-

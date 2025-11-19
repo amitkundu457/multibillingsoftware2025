@@ -38,9 +38,12 @@ export default function Home() {
 
     const fetchItems = async () => {
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/type",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setItems(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -52,9 +55,12 @@ export default function Home() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/type", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/type",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setItems(response.data);
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -67,7 +73,7 @@ export default function Home() {
     if (editingItem) {
       try {
         const response = await axios.put(
-          ` http://127.0.0.1:8000/api/type/${editingItem.id}`,
+          ` https://apibrize.brizindia.com/api/type/${editingItem.id}`,
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -88,7 +94,7 @@ export default function Home() {
     } else {
       try {
         const response = await axios.post(
-          " http://127.0.0.1:8000/api/type",
+          " https://apibrize.brizindia.com/api/type",
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -112,7 +118,7 @@ export default function Home() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        ` http://127.0.0.1:8000/api/type/${id}`,
+        ` https://apibrize.brizindia.com/api/type/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

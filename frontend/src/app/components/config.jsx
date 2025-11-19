@@ -1,14 +1,14 @@
 // import apiClient from "../../axios/app/lib/axios";
-import apiClient from "../lib/axios"
+import apiClient from "../lib/axios";
 import axios from "axios";
 
 // const apiClient = axios.create({
-//   baseURL: "  http://127.0.0.1:8000/api/",
+//   baseURL: "  https://apibrize.brizindia.com/api/",
 // });
 
 // console.log(apiClient.get('https://google.com'))
 // createNewStock, destroyStock
-export const baseImageURL = "  http://127.0.0.1:8000/";
+export const baseImageURL = "  https://apibrize.brizindia.com/";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
@@ -80,7 +80,7 @@ export const deleteSalesServices = (id) =>
   apiClient.delete(`salesassign/delete/${id}`);
 
 // export const getemployees = () => apiClient.get("employees");
-export const getemployees = () =>{
+export const getemployees = () => {
   const token = getCookie("access_token");
 
   if (!token) {
@@ -93,8 +93,7 @@ export const getemployees = () =>{
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
   });
-
-}
+};
 export const creategetemployees = (data) => apiClient.post("salesassign", data);
 export const updategetemployees = (id, data) =>
   apiClient.post(`salesassign/${id}`, data);
@@ -172,20 +171,18 @@ export const getProductService = () => {
   });
 };
 export const createProductService = (data) => {
-  
   const token = getCookie("access_token");
-  console.log("creatprudtc service_confgi,",token)
+  console.log("creatprudtc service_confgi,", token);
   if (!token) {
     throw new Error("Access token is missing. Please log in.");
   }
-  apiClient.post("product-services", data,
-    {
+  apiClient.post("product-services", data, {
     headers: {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
   });
-  
-  console.log("ab config")
+
+  console.log("ab config");
   // return ab;
 };
 export const updateProductService = (id, data) =>
@@ -193,8 +190,37 @@ export const updateProductService = (id, data) =>
 export const deleteProductService = (id) =>
   apiClient.delete(`product-services/${id}`);
 
-export const getphoneSearch = (phone) =>
-  apiClient.get(`customers/search`, { params: { phone } });
+// export const getphoneSearch = (phone) =>{
+
+//   const token = getCookie("access_token");
+
+//   if (!token) {
+//     console.error("No access token found");
+//     return Promise.reject("No access token found");
+//   }
+
+//   const headers = {
+//     Authorization: `Bearer ${token}`, // Include the token in Authorization header
+//   };
+
+//  return apiClient.get(`customers/search`, { params: { phone } } , { headers });
+// }
+
+export const getphoneSearch = (phone) => {
+  const token = getCookie("access_token");
+
+  if (!token) {
+    console.error("No access token found");
+    return Promise.reject("No access token found");
+  }
+
+  return apiClient.get("customers/search", {
+    params: { phone },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
 //resturant state
 
@@ -256,7 +282,7 @@ export const getcompany = () => {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
   });
-}
+};
 // export const getServiceGroup = () => apiClient.get("product-service-groups");
 export const getServiceGroup = () => {
   const token = getCookie("access_token"); // Retrieve the token
@@ -265,17 +291,16 @@ export const getServiceGroup = () => {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
   });
-}
+};
 // export const getType = () => apiClient.get("type");
-export const getType=()=>{
+export const getType = () => {
   const token = getCookie("access_token"); // Retrieve the token
   return apiClient.get(`type`, {
     headers: {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
   });
-
-}
+};
 
 export const StoreAccount = (data) => {
   const token = getCookie("access_token"); // Retrieve the token
@@ -359,7 +384,7 @@ export const getRate = (data) => {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
   });
-}
+};
 export const getLogo = (data) => apiClient.get("master");
 export const getcreateogo = (data) => apiClient.post("master-update", data);
 
@@ -371,15 +396,15 @@ export const getcreateogoBill = (id, data) =>
 
 // export const getRate = (data) => apiClient.get('product-services');
 
-export const createAccountGroup = (data) =>{
+export const createAccountGroup = (data) => {
   const token = getCookie("access_token"); // Retrieve the token
   return apiClient.post("account-groups", data, {
     headers: {
-      Authorization: `Bearer ${token}`, 
+      Authorization: `Bearer ${token}`,
     },
   });
 };
- 
+
 export const getAccountGroup = () => {
   const token = getCookie("access_token"); // Retrieve the token
   return apiClient.get("account-groups", {
@@ -388,7 +413,6 @@ export const getAccountGroup = () => {
     },
   });
 };
-
 
 export const getAccountType = () => apiClient.get("account-types");
 
@@ -399,7 +423,7 @@ export const createNewStock = (data) => {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
   });
-}
+};
 export const destroyStock = (id) => {
   const token = getCookie("access_token"); // Retrieve the token
   return apiClient.delete(`stock/${id}`, {
@@ -407,49 +431,33 @@ export const destroyStock = (id) => {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
   });
-}
-
-
-
-
-
-
-
-
-
+};
 
 export const getPurchase = () => {
   const token = getCookie("access_token");
-console.log("creatprudtc service_confgi,",token)
-if (!token) {
-  throw new Error("Access token is missing. Please log in.");
-}
+  console.log("creatprudtc service_confgi,", token);
+  if (!token) {
+    throw new Error("Access token is missing. Please log in.");
+  }
 
-
-  apiClient.get("purchase",{
+  apiClient.get("purchase", {
     headers: {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
-
   });
-}
+};
 
-
-export const createNewPurchase = async(data) =>{
-
+export const createNewPurchase = async (data) => {
   const token = getCookie("access_token"); // Retrieve the token
-  console.log("toke create purchase",token)
+  console.log("toke create purchase", token);
 
   // Set up the headers with the token
   const headers = {
     Authorization: `Bearer ${token}`, // Include the token in the Authorization header
   };
- return apiClient.post("purchase", data,{headers});
-// return await axios.post(" http://127.0.0.1:8000/api/purchase", data, {headers})
-}
-
-
-
+  return apiClient.post("purchase", data, { headers });
+  // return await axios.post(" https://apibrize.brizindia.com/api/purchase", data, {headers})
+};
 
 export const updatePurchase = (id, data) =>
   apiClient.put(`purchase/${id}`, data);
@@ -458,62 +466,58 @@ export const deletePurchase = (id) => apiClient.delete(`purchase/${id}`);
 // export const getKarigari = () => apiClient.get("karigari");
 export const getKarigari = () => {
   const token = getCookie("access_token"); // Retrieve the token
-  console.log("creatprudtc service_confgi,",token)
+  console.log("creatprudtc service_confgi,", token);
   if (!token) {
     throw new Error("Access token is missing. Please log in.");
   }
-  apiClient.get("karigari",{
+  apiClient.get("karigari", {
     headers: {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
-
   });
-}
+};
 // export const createNewKarigari = (data) => apiClient.post("karigari", data);
-export const createNewKarigari = (data) =>{
+export const createNewKarigari = (data) => {
   const token = getCookie("access_token"); // Retrieve the token
-  console.log("creatprudtc service_confgi,",token)
+  console.log("creatprudtc service_confgi,", token);
   if (!token) {
     throw new Error("Access token is missing. Please log in.");
   }
-  apiClient.post("karigari", data,{
+  apiClient.post("karigari", data, {
     headers: {
       Authorization: `Bearer ${token}`, // Include the token in the Authorization header
     },
-
   });
-}
+};
 
 export const getSingleKarigari = (id) => apiClient.get(`karigari/${id}`);
-
 
 export const updateExistingKarigari = async (id, updatedData) => {
   try {
     console.log("🚀 Updating Karigari...");
     console.log("ID:", id);
-    console.log("data",updatedData)
+    console.log("data", updatedData);
 
-
-    
-    const response = await fetch(`  http://127.0.0.1:8000/api/karigariupdate/${id}`, {
-      method: "POST", 
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    });
-    
+    const response = await fetch(
+      `  https://apibrize.brizindia.com/api/karigariupdate/${id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json(); 
-    
+    const data = await response.json();
+
     console.log("✅ Update Successful:", data);
 
-    return data; 
-    
+    return data;
   } catch (error) {
     console.error("❌ Error updating Karigari:", error.message);
     throw error;
@@ -567,9 +571,6 @@ export const displayCoin = () => {
   return apiClient.get("coinid", { headers });
 };
 
-
-
-
 export const getMembershipplan = () => {
   const token = getCookie("access_token");
   const headers = {
@@ -577,8 +578,6 @@ export const getMembershipplan = () => {
   };
   return apiClient.get("membership-plans", { headers });
 };
-
-
 
 export const createMembershipplan = (data) => {
   const token = getCookie("access_token"); // Retrieve the token
@@ -592,7 +591,7 @@ export const createMembershipplan = (data) => {
   return apiClient.post("membership-plans", data, { headers });
 };
 
-export const updateMembershipplan = (id, data) =>{
+export const updateMembershipplan = (id, data) => {
   const token = getCookie("access_token"); // Retrieve the token
   // Set up the headers with the token
   const headers = {
@@ -600,15 +599,15 @@ export const updateMembershipplan = (id, data) =>{
   };
   // Make the API call with the headers
   return apiClient.post(`membership-plans/${id}`, data, { headers });
-}
+};
 
-export const getMembershipGroup=() =>{
+export const getMembershipGroup = () => {
   const token = getCookie("access_token");
   const headers = {
     Authorization: `Bearer ${token}`, // Include the token in the Authorization header
   };
   return apiClient.get("membership-groups", { headers });
-}
+};
 
 export const createMembershipGroup = (data) => {
   const token = getCookie("access_token"); // Retrieve the token
@@ -618,10 +617,9 @@ export const createMembershipGroup = (data) => {
   };
   // Make the API call with the headers
   return apiClient.post("membership-groups", data, { headers });
-}
+};
 
-
-export const updateMembershipGroup = (id, data) =>{
+export const updateMembershipGroup = (id, data) => {
   const token = getCookie("access_token"); // Retrieve the token
   // Set up the headers with the token
   const headers = {
@@ -629,8 +627,7 @@ export const updateMembershipGroup = (id, data) =>{
   };
   // Make the API call with the headers
   return apiClient.post(`membership-groups/${id}`, data, { headers });
-}
+};
 
-
-
-export const deleteMembershipGroup = (id) => apiClient.delete(`membership-groups/${id}`);
+export const deleteMembershipGroup = (id) =>
+  apiClient.delete(`membership-groups/${id}`);

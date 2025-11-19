@@ -12,6 +12,7 @@ class SmsSetting extends Model
 'created_by',
 'template_id',
 'status',
+'description'
    ];
 
    public function smsCredential()

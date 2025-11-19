@@ -49,7 +49,7 @@ export default function HeroSection({ scrollToSection }) {
     setError("");
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/formverivy",
+        " https://apibrize.brizindia.com/api/formverivy",
         { email }
       );
       setStoredEmail(email);
@@ -71,84 +71,87 @@ export default function HeroSection({ scrollToSection }) {
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
         onSlideChange={handleSlideChange}
-          className="w-full md:h-screen"
+        className="w-full md:h-screen"
       >
         {sliderData.map((slider, index) => (
-         <SwiperSlide key={slider?.id} >
-  <div className="relative w-full h-[30vh] md:h-[85vh] sm:h-screen overflow-hidden">
-    {/* Background Image */}
-  <Image
-  src={
-    slider.image
-      ? `${baseImageURL}${slider.image}`
-      : "/default-image.jpg"
-  }
-  alt="Slider"
-  fill
-  priority
-  className="object-cover w-full h-full"
-/>
+          <SwiperSlide key={slider?.id}>
+            <div className="relative w-full h-[30vh] md:h-[85vh] sm:h-screen overflow-hidden">
+              {/* Background Image */}
+              <Image
+                src={
+                  slider.image
+                    ? `${baseImageURL}${slider.image}`
+                    : "/default-image.jpg"
+                }
+                alt="Slider"
+                fill
+                priority
+                className="object-cover w-full h-full"
+              />
 
-    {/* Overlay Content */}
-    <div className="absolute top-[15%] left-[5%] md:left-[10%] text-gray-600  md:text-white max-w-[90%] sm:max-w-[80%] md:max-w-[60%] lg:max-w-[45%] xl:max-w-[35%] p-4">
-      <h1
-        className={`mb-4 text-[1.2rem] sm:text-[1.5rem] md:text-[2rem] xl:text-[3rem] font-bold ${
-          activeIndex === index
-            ? "animateIn animated zoomIn duration-250"
-            : "opacity-0"
-        }`}
-      >
-        {slider.title && slider.title !== "null"
-          ? slider.title
-          : "Default Title"}
-      </h1>
-      <p
-        className={`mb-6 text-sm sm:text-base md:text-lg ${
-          activeIndex === index ? "animate-slide-in" : "opacity-0"
-        }`}
-      >
-        {slider.description && slider.description !== "null"
-          ? slider.description
-          : "Default Description"}
-      </p>
+              {/* Overlay Content */}
+              <div className="absolute top-[15%] left-[5%] md:left-[10%] text-gray-600  md:text-white max-w-[90%] sm:max-w-[80%] md:max-w-[60%] lg:max-w-[45%] xl:max-w-[35%] p-4">
+                <h1
+                  className={`mb-4 text-[1.2rem] sm:text-[1.5rem] md:text-[2rem] xl:text-[3rem] font-bold ${
+                    activeIndex === index
+                      ? "animateIn animated zoomIn duration-250"
+                      : "opacity-0"
+                  }`}
+                >
+                  {slider.title && slider.title !== "null"
+                    ? slider.title
+                    : "Default Title"}
+                </h1>
+                <p
+                  className={`mb-6 text-sm sm:text-base md:text-lg ${
+                    activeIndex === index ? "animate-slide-in" : "opacity-0"
+                  }`}
+                >
+                  {slider.description && slider.description !== "null"
+                    ? slider.description
+                    : "Default Description"}
+                </p>
 
-      {/* Desktop Form */}
-      <div className="hidden sm:block  p-3 rounded-xl w-full max-w-md">
-        <div className="flex">
-          <input
-            type="text"
-            placeholder="Enter mobile / email"
-            className="p-3 border border-gray-300 text-black outline-none rounded-l-full w-full"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <button
-            className="px-6 py-3 text-white bg-[#0C406F] rounded-r-full"
-            onClick={handleNavigation}
-          >
-            GET STARTED
-          </button>
-        </div>
-      </div>
-    </div>
+                {/* Desktop Form */}
+                <div className="hidden sm:block  p-3 rounded-xl w-full max-w-md">
+                  <div className="flex">
+                    <input
+                      type="text"
+                      placeholder="Enter mobile / email"
+                      className="p-3 border border-gray-300 text-black outline-none rounded-l-full w-full"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <button
+                      className="px-6 py-3 text-white bg-[#0C406F] rounded-r-full"
+                      onClick={handleNavigation}
+                    >
+                      GET STARTED
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-    {/* Scroll Icon */}
-    <div className="absolute bottom-6 flex justify-center w-full">
-      <svg
-        onClick={scrollToSection}
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="2"
-        stroke="currentColor"
-        className="w-8 h-8 mt-4 text-white cursor-pointer animate-bounce"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-      </svg>
-    </div>
-  </div>
-</SwiperSlide>
-
+              {/* Scroll Icon */}
+              <div className="absolute bottom-6 flex justify-center w-full">
+                <svg
+                  onClick={scrollToSection}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="w-8 h-8 mt-4 text-white cursor-pointer animate-bounce"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+          </SwiperSlide>
         ))}
       </Swiper>
 

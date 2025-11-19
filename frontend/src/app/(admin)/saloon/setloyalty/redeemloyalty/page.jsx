@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import React, { useState } from "react";
 import axios from "axios";
 
@@ -19,8 +19,11 @@ const Page = () => {
     };
 
     try {
-      const response = await axios.post("  http://127.0.0.1:8000/api/redeem-setup", data);
-      
+      const response = await axios.post(
+        "  https://apibrize.brizindia.com/api/redeem-setup",
+        data
+      );
+
       if (response.status === 201) {
         alert("Data saved successfully!");
         console.log("Response:", response.data);
@@ -42,7 +45,9 @@ const Page = () => {
 
         {/* Redemption Value Section */}
         <div className="flex items-center justify-between gap-2 mb-4">
-          <label className="font-medium text-gray-600 w-1/2">Redemption Value</label>
+          <label className="font-medium text-gray-600 w-1/2">
+            Redemption Value
+          </label>
           <input
             type="number"
             className="border rounded-lg p-2 w-full"

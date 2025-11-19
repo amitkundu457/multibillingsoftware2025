@@ -1,40 +1,45 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const SetCoinsPerOrder = () => {
-  const [coins, setCoins] = useState('');
+  const [coins, setCoins] = useState("");
   const [currentCoins, setCurrentCoins] = useState(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   // Fetch current setting
   useEffect(() => {
-    axios.get(' http://127.0.0.1:8000/api/get-coins-per-order')
-      .then(res => {
+    axios
+      .get(" https://apibrize.brizindia.com/api/get-coins-per-order")
+      .then((res) => {
         if (res.data && res.data.coins_per_order !== undefined) {
           setCurrentCoins(res.data.coins_per_order);
         }
       })
-      .catch(err => console.error('Error fetching current coin value', err));
+      .catch((err) => console.error("Error fetching current coin value", err));
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
 
     try {
-      const res = await axios.post(' http://127.0.0.1:8000/api/set-coins-per-order', {
-        coins_per_order: parseInt(coins),
-      }, {
-        headers: { 'Content-Type': 'application/json' }
-      });
+      const res = await axios.post(
+        " https://apibrize.brizindia.com/api/set-coins-per-order",
+        {
+          coins_per_order: parseInt(coins),
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-      setMessage(res.data.message || 'Coins updated.');
+      setMessage(res.data.message || "Coins updated.");
       setCurrentCoins(parseInt(coins));
-      setCoins('');
+      setCoins("");
     } catch (err) {
-      const errorMsg = err.response?.data?.message || 'Update failed.';
-      setMessage('Error: ' + errorMsg);
+      const errorMsg = err.response?.data?.message || "Update failed.";
+      setMessage("Error: " + errorMsg);
     }
   };
 
@@ -48,9 +53,7 @@ const SetCoinsPerOrder = () => {
         </p>
       )}
 
-      {message && (
-        <p className="mb-4 text-green-600">{message}</p>
-      )}
+      {message && <p className="mb-4 text-green-600">{message}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

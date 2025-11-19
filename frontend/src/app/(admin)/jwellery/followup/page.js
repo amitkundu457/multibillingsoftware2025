@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import {
@@ -37,23 +37,19 @@ export default function ReminderBox() {
     }
   };
 
-
-
   const fetchReminders = async () => {
-    
-
-const token = getToken();
-if (!token) {
-  notifyTokenMissing();
-  return;
-}
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
     setLoading(true);
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/enquiry",
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/enquiry",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-
       );
       setReminders(response.data);
     } catch (error) {
@@ -63,52 +59,49 @@ if (!token) {
     }
   };
 
-  
-  
   // Updated to accept phone parameter
-  const handleSendSms = async (phone,reminder) => {
+  const handleSendSms = async (phone, reminder) => {
     setSmsLoading(true);
 
-
     // Ensure reminder is valid before proceeding
-  if (!reminder || !reminder.id || !reminder.date) {
-    console.error("Invalid reminder data:", reminder);
-    alert("Error: Invalid reminder data.");
-    setSmsLoading(false);
-    return;
-  }
+    if (!reminder || !reminder.id || !reminder.date) {
+      console.error("Invalid reminder data:", reminder);
+      alert("Error: Invalid reminder data.");
+      setSmsLoading(false);
+      return;
+    }
 
+    // Create follow-up payload dynamically
+    const followUpPayload = {
+      enquiry_id: reminder.id, // Ensure this field is correct
+      //follow_up_date: reminder.date, // Ensure correct field name
+      follow_up_date: new Date().toISOString().split("T")[0], // Set today's date
 
+      notes: reminder.description || "", // Default to empty string
+    };
 
-  // Create follow-up payload dynamically
-  const followUpPayload = {
-    enquiry_id: reminder.id, // Ensure this field is correct
-    //follow_up_date: reminder.date, // Ensure correct field name
-    follow_up_date: new Date().toISOString().split("T")[0], // Set today's date
+    const ReminderPayload = {
+      enquiry_id: reminder.id, // Ensure this field is correct
+      //follow_up_date: reminder.date, // Ensure correct field name
+      reminder_date: reminder.date,
 
-    notes: reminder.description || "", // Default to empty string
-  };
-
-  const ReminderPayload = {
-    enquiry_id: reminder.id, // Ensure this field is correct
-    //follow_up_date: reminder.date, // Ensure correct field name
-    reminder_date: reminder.date,
-
-    note: reminder.description || "", // Default to empty string
-  };
-
+      note: reminder.description || "", // Default to empty string
+    };
 
     try {
       const response = await axios.post(
-        "  http://127.0.0.1:8000/api/enquerymessage",
+        "  https://apibrize.brizindia.com/api/enquerymessage",
         { phone } // Passing the specific phone number in the request body
       );
       const followUpResponse = await axios.post(
-        " http://127.0.0.1:8000/api/reminder-follow-up/follow-up",followUpPayload);
+        " https://apibrize.brizindia.com/api/reminder-follow-up/follow-up",
+        followUpPayload
+      );
 
-        const RemindersResponse = await axios.post(
-          " http://127.0.0.1:8000/api/reminder-follow-up/reminder",ReminderPayload);
-
+      const RemindersResponse = await axios.post(
+        " https://apibrize.brizindia.com/api/reminder-follow-up/reminder",
+        ReminderPayload
+      );
 
       console.log("SMS response:", response.data);
       alert("SMS sent successfully!");
@@ -219,7 +212,9 @@ if (!token) {
                         {reminder.description}
                       </p>
                       <div className="flex justify-between items-center mt-2">
-                        <p className="text-gray-500 text-sm">Date: {reminder.date}</p>
+                        <p className="text-gray-500 text-sm">
+                          Date: {reminder.date}
+                        </p>
                         <span className="bg-orange-400 text-white text-xs font-bold px-2 py-1 rounded">
                           {index + 1}
                         </span>
@@ -248,7 +243,9 @@ if (!token) {
                     </div>
                   ))
                 ) : (
-                  <p className="text-center text-gray-500">No reminders found</p>
+                  <p className="text-center text-gray-500">
+                    No reminders found
+                  </p>
                 )
               ) : (
                 <p className="text-center text-gray-500">No follow-ups</p>

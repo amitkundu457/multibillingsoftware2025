@@ -40,7 +40,7 @@ const Productwise = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/productReportSales",
+          " https://apibrize.brizindia.com/api/productReportSales",
           {
             headers: { authorization: `Bearer ${token}` },
           }
@@ -75,7 +75,7 @@ const Productwise = () => {
     autoTable(doc, {
       // "Total Amount"
       startY: 20,
-      head: [["S.No", "Product Name", "Total Quantity",]],
+      head: [["S.No", "Product Name", "Total Quantity"]],
       body: filteredData.map((item, index) => [
         index + 1,
         item.name || "N/A",
@@ -129,7 +129,9 @@ const Productwise = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center bg-gray-200 py-6 px-8 rounded-lg shadow-md">
-        <p className="font-bold text-2xl text-gray-800">Product Wise Purchase</p>
+        <p className="font-bold text-2xl text-gray-800">
+          Product Wise Purchase
+        </p>
         <div>
           <button
             onClick={handleDownloadPDF}
@@ -160,7 +162,9 @@ const Productwise = () => {
       {/* Table Section */}
       <div className="mt-6 overflow-x-auto">
         {loading ? (
-          <p className="text-center text-lg font-semibold text-gray-600">Loading...</p>
+          <p className="text-center text-lg font-semibold text-gray-600">
+            Loading...
+          </p>
         ) : (
           <table className="w-full text-left bg-white rounded-lg shadow-lg overflow-hidden">
             <thead className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-semibold">
@@ -177,7 +181,9 @@ const Productwise = () => {
                   <tr key={index} className="hover:bg-gray-50 transition">
                     <td className="py-3 px-4 border-b">{index + 1}</td>
                     <td className="py-3 px-4 border-b">{item.name || "N/A"}</td>
-                    <td className="py-3 px-4 border-b">{item.total_quantity || "N/A"}</td>
+                    <td className="py-3 px-4 border-b">
+                      {item.total_quantity || "N/A"}
+                    </td>
                     {/* <td className="py-3 px-4 border-b">{item.total_sales || "N/A"}</td> */}
                   </tr>
                 ))

@@ -1,9 +1,3 @@
-
-
-
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaFilePdf } from "react-icons/fa6";
@@ -43,7 +37,7 @@ const BillWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/package-report",
+          " https://apibrize.brizindia.com/api/package-report",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -58,38 +52,38 @@ const BillWise = () => {
     fetchData();
   }, [token]);
   useEffect(() => {
-    console.log("All bill_inv values:", data.map((item) => item.bill_inv));
+    console.log(
+      "All bill_inv values:",
+      data.map((item) => item.bill_inv)
+    );
   }, [data]);
-  
 
   const filteredData = data.filter((item) => {
     const lowerQuery = searchQuery.toLowerCase();
-  
+
     const createdAt = item.created_at?.slice(0, 10); // format: YYYY-MM-DD
-  
+
     const isInDateRange =
       (!startDate || startDate <= createdAt) &&
       (!endDate || endDate >= createdAt);
-  
+
     const matchesSearch =
       item.package_no?.toLowerCase().includes(lowerQuery) ||
       item.users?.name?.toLowerCase().includes(lowerQuery) ||
       item.customer?.phone?.toLowerCase().includes(lowerQuery);
-  
-    
+
     return isInDateRange && matchesSearch;
   });
-  
 
   const downloadPDF = () => {
     const doc = new jsPDF();
     const tableColumn = [
       "S.No",
       "Package No.",
-    
+
       "Customer Name",
       "Customer Ph",
-      
+
       "Assign Date",
     ];
     const tableRows = [];
@@ -98,10 +92,10 @@ const BillWise = () => {
       const row = [
         index + 1,
         item.package_no,
-    
+
         item.users?.name,
         item.customer?.phone,
-        
+
         item.created_at?.slice(0, 10),
       ];
       tableRows.push(row);
@@ -123,7 +117,7 @@ const BillWise = () => {
         "package No.": item.package_no,
         // "Product Name": item.product_name,
         "Customer Name": item.users?.name,
-        "Customer Ph":   item.customer?.phone,
+        "Customer Ph": item.customer?.phone,
         // "Bill Amt.": item.total_price,
         // "Quantity": item.quantity,
         // "G Weight": item.gross_weight,
@@ -180,7 +174,7 @@ const BillWise = () => {
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />
-        
+
         <button
           className="bg-green-500 text-white font-semibold rounded-lg px-6 py-3 hover:bg-green-600"
           onClick={() => {}}
@@ -223,32 +217,33 @@ const BillWise = () => {
               {/* <th className="py-3 px-4 border-b">Bill Amt.</th>
               <th className="py-3 px-4 border-b">Qty</th> */}
               <th className="py-3 px-4 border-b">Assign Date</th>
-              
+
               <th className="py-3 px-4 border-b">Action</th>
             </tr>
           </thead>
           <tbody>
-  {filteredData.map((item, index) => (
-    <tr key={index} className="hover:bg-gray-50">
-      <td className="py-3 px-4 border-b">{index + 1}</td>
-      <td className="py-3 px-4 border-b">{item.package_no}</td>
-      <td className="py-3 px-4 border-b">{item.users?.name}</td>
-      <td className="py-3 px-4 border-b">{item.customer?.phone}</td>
-      <td className="py-3 px-4 border-b">{item.created_at?.slice(0, 10)}</td>
-      <td className="py-3 px-4 border-b">
-        <a
-          href={`${reporturl}/saloon/printpackage/?id=${item.id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline"
-        >
-          Print
-        </a>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+            {filteredData.map((item, index) => (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="py-3 px-4 border-b">{index + 1}</td>
+                <td className="py-3 px-4 border-b">{item.package_no}</td>
+                <td className="py-3 px-4 border-b">{item.users?.name}</td>
+                <td className="py-3 px-4 border-b">{item.customer?.phone}</td>
+                <td className="py-3 px-4 border-b">
+                  {item.created_at?.slice(0, 10)}
+                </td>
+                <td className="py-3 px-4 border-b">
+                  <a
+                    href={`${reporturl}/saloon/printpackage/?id=${item.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    Print
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>

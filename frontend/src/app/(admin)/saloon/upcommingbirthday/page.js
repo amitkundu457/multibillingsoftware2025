@@ -32,7 +32,10 @@ const CustomersCelebrate = () => {
       const token = getCookie("access_token"); // Retrieve token
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const { data } = await axios.get("  http://127.0.0.1:8000/api/customerUpcommingbirthday", config);
+      const { data } = await axios.get(
+        "  https://apibrize.brizindia.com/api/customerUpcommingbirthday",
+        config
+      );
       setCustomers(data);
     } catch (error) {
       notyf.error("Error fetching customers!");
@@ -43,7 +46,9 @@ const CustomersCelebrate = () => {
   // Handle Checkbox Change
   const handleCheckboxChange = (customerId) => {
     setSelectedCustomers((prev) =>
-      prev.includes(customerId) ? prev.filter((id) => id !== customerId) : [...prev, customerId]
+      prev.includes(customerId)
+        ? prev.filter((id) => id !== customerId)
+        : [...prev, customerId]
     );
   };
 
@@ -53,14 +58,18 @@ const CustomersCelebrate = () => {
       notyf.error("Please select at least one customer!");
       return;
     }
-  
+
     console.log("Sending customer IDs:", selectedCustomers); // Debugging log
-  
+
     try {
       const token = getCookie("access_token"); // Retrieve token
       const config = { headers: { Authorization: `Bearer ${token}` } };
-  
-      await axios.post("  http://127.0.0.1:8000/api/bulksendmessagebidthday", { customer_ids: selectedCustomers }, config);
+
+      await axios.post(
+        "  https://apibrize.brizindia.com/api/bulksendmessagebidthday",
+        { customer_ids: selectedCustomers },
+        config
+      );
       notyf.success("Messages sent successfully!");
       setSelectedCustomers([]); // Clear selection after sending
     } catch (error) {
@@ -68,28 +77,38 @@ const CustomersCelebrate = () => {
       console.error("Error sending bulk messages:", error);
     }
   };
-  
 
   return (
     <div className="p-6">
       <h1 className="mb-4 text-2xl font-bold">Upcomming Customers Birthday </h1>
-    <div className="space-x-3 ">
-    {/* <button
+      <div className="space-x-3 ">
+        {/* <button
         onClick={sendBulkMessages}
         className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
       >
         Send Message
        
       </button> */}
-      <Link className="text-white bg-red-800 p-2" href="/jwellery/upcominganiversery/">Upcoming Anniversary</Link>
-    </div>
+        <Link
+          className="text-white bg-red-800 p-2"
+          href="/jwellery/upcominganiversery/"
+        >
+          Upcoming Anniversary
+        </Link>
+      </div>
       <table className="w-full border border-collapse border-gray-300 mt-5">
         <thead>
           <tr>
             {/* <th className="px-4 py-2 border text-center border-gray-300">Select</th> */}
-            <th className="px-4 py-2 border text-center border-gray-300">Name</th>
-            <th className="px-4 py-2 border text-center border-gray-300">Phone</th>
-            <th className="px-4 py-2 border text-center border-gray-300">DOB</th>
+            <th className="px-4 py-2 border text-center border-gray-300">
+              Name
+            </th>
+            <th className="px-4 py-2 border text-center border-gray-300">
+              Phone
+            </th>
+            <th className="px-4 py-2 border text-center border-gray-300">
+              DOB
+            </th>
             {/* <th className="px-4 py-2 border border-gray-300">Anniversary</th> */}
             {/* <th className="px-4 py-2 border border-gray-300">Actions</th> */}
           </tr>
@@ -105,9 +124,15 @@ const CustomersCelebrate = () => {
                 />
               
               </td> */}
-              <td className="px-4 py-2 border text-center border-gray-300">{customer.name}</td>
-              <td className="px-4 py-2 border text-center border-gray-300">{customer.phone}</td>
-              <td className="px-4 py-2 border text-center border-gray-300">{customer.dob}</td>
+              <td className="px-4 py-2 border text-center border-gray-300">
+                {customer.name}
+              </td>
+              <td className="px-4 py-2 border text-center border-gray-300">
+                {customer.phone}
+              </td>
+              <td className="px-4 py-2 border text-center border-gray-300">
+                {customer.dob}
+              </td>
               {/* <td className="px-4 py-2 border text-center border-gray-300">{customer.anniversary}</td> */}
               {/* <td className="px-4 py-2 border border-gray-300">
                 <button className="px-2 py-1 mr-2 text-white bg-yellow-500 rounded">
@@ -123,7 +148,6 @@ const CustomersCelebrate = () => {
       </table>
 
       {/* Send Bulk Messages Button */}
-      
     </div>
   );
 };

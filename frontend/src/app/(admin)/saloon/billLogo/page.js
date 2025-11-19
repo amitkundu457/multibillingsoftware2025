@@ -7,59 +7,52 @@ const ImageUploadUpdate = () => {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
   const [billLogoUrl, setBillLogoUrl] = useState(""); // Updated variable name
- 
+
   const [logoId, setLogoId] = useState(null); // Store the logo ID dynamically
-console.log("kjhg",billLogoUrl)
+  console.log("kjhg", billLogoUrl);
 
-//token 
-const getToken = () => {
-  const cookie = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("access_token="));
-  return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
-};
+  //token
+  const getToken = () => {
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+  };
 
-const notifyTokenMissing = () => {
-  if (typeof window !== "undefined" && window.notyf) {
-    window.notyf.error("Authentication token not found!");
-  } else {
-    console.error("Authentication token not found!");
-  }
-};
-
-
-
-
-
-
-
-useEffect(() => {
-  const token = getToken();
-  if (!token) {
-    notifyTokenMissing();
-    return;
-  }
-  const fetchLogo = async () => {
-    try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/masterlogobill",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-
-      );
-      console.log("Fetched Logo Data:", response.data); // Debugging
-
-      if (response.data && response.data.logo) {
-        setBillLogoUrl(response.data.logo);
-      }
-    } catch (error) {
-      console.error("Error fetching logo:", error);
+  const notifyTokenMissing = () => {
+    if (typeof window !== "undefined" && window.notyf) {
+      window.notyf.error("Authentication token not found!");
+    } else {
+      console.error("Authentication token not found!");
     }
   };
 
-  fetchLogo();
-}, []);
+  useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
+    const fetchLogo = async () => {
+      try {
+        const response = await axios.get(
+          "  https://apibrize.brizindia.com/api/masterlogobill",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log("Fetched Logo Data:", response.data); // Debugging
 
+        if (response.data && response.data.logo) {
+          setBillLogoUrl(response.data.logo);
+        }
+      } catch (error) {
+        console.error("Error fetching logo:", error);
+      }
+    };
+
+    fetchLogo();
+  }, []);
 
   const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
@@ -82,39 +75,34 @@ useEffect(() => {
 
     const formData = new FormData();
     formData.append("logo", fileToUpload);
-  
+
     try {
       console.log("Uploading file:", fileToUpload);
-  
+
       const response = await axios.post(
-        "  http://127.0.0.1:8000/api/masterlogobill", 
-        formData, 
-        { headers: { "Content-Type": "multipart/form-data",
-           Authorization: `Bearer ${token}`
-         } }
+        "  https://apibrize.brizindia.com/api/masterlogobill",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-  
+
       console.log("Server Response:", response.data);
-  
+
       setMessage(response.data.message);
       setBillLogoUrl(response.data.data.logo); // Use `logo` from API
       setFile(null);
     } catch (error) {
-      console.error("Upload Error:", error.response ? error.response.data : error);
+      console.error(
+        "Upload Error:",
+        error.response ? error.response.data : error
+      );
       setMessage("Failed to upload the image. Please try again.");
     }
   };
-
-
-
-
-   
-
-
-
-
-   
-  
 
   return (
     <div className="max-w-xl mx-auto p-6 border rounded-lg shadow-lg bg-white">
@@ -123,7 +111,11 @@ useEffect(() => {
       <div className="mb-6">
         <label className="block text-gray-700 mb-2">Current Logo:</label>
         {billLogoUrl ? (
-          <img src={billLogoUrl} alt="Current Logo" className="w-48 h-auto rounded-lg mx-auto" />
+          <img
+            src={billLogoUrl}
+            alt="Current Logo"
+            className="w-48 h-auto rounded-lg mx-auto"
+          />
         ) : (
           <p className="text-gray-500">No logo available</p>
         )}
@@ -138,13 +130,11 @@ useEffect(() => {
         />
       </div>
 
-      <div className="space-y-4 max-w-sm mx-auto mt-10 p-4 border rounded shadow">
-       
+      <div className="space-y-4 max-w-sm mx-auto mt-10 p-4 border rounded shadow"></div>
 
-       
-    </div>
-
-      {message && <p className="text-center text-lg text-red-500 mt-4">{message}</p>}
+      {message && (
+        <p className="text-center text-lg text-red-500 mt-4">{message}</p>
+      )}
     </div>
   );
 };

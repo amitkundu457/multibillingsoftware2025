@@ -1,6 +1,3 @@
-
-
-
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -71,12 +68,12 @@ const PackageReceipt = () => {
     printWindow.print();
     printWindow.close();
   };
-  
+
   useEffect(() => {
     const fetchPackageDetails = async () => {
       try {
         const response = await axios.get(
-          ` http://127.0.0.1:8000/api/printpackage/${id}`
+          ` https://apibrize.brizindia.com/api/printpackage/${id}`
         );
         setItemsList(response?.data?.items);
         setCustomerData(response?.data?.customer_info);
@@ -95,7 +92,7 @@ const PackageReceipt = () => {
         }
 
         const clientResponse = await axios.get(
-          ` http://127.0.0.1:8000/api/auth/agme`,
+          ` https://apibrize.brizindia.com/api/auth/agme`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -109,7 +106,6 @@ const PackageReceipt = () => {
     fetchPackageDetails();
     getClientData();
   }, [id]);
-
 
   return (
     <>
@@ -178,7 +174,8 @@ const PackageReceipt = () => {
             {packageData?.customer?.phone || "N/A"}
           </p>
           <p>
-            <span className="text-sm">Email:</span> {customerData?.email || "N/A"}
+            <span className="text-sm">Email:</span>{" "}
+            {customerData?.email || "N/A"}
           </p>
         </div>
 

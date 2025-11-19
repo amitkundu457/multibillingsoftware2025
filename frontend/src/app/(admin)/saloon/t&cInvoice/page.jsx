@@ -1,6 +1,3 @@
-
-
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -39,10 +36,13 @@ const TermsEditor = () => {
     }
 
     try {
-      const res = await axios.get(" http://127.0.0.1:8000/api/terms-condition-invoice", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-console.log("ternm and condtion",res)
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/terms-condition-invoice",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("ternm and condtion", res);
       if (res.data.length > 0) {
         setContent(res.data[0].content);
         setTermId(res.data[0].id);
@@ -69,7 +69,7 @@ console.log("ternm and condtion",res)
 
       if (termId) {
         await axios.put(
-          ` http://127.0.0.1:8000/api/terms-condition-invoice/${termId}`,
+          ` https://apibrize.brizindia.com/api/terms-condition-invoice/${termId}`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -77,7 +77,7 @@ console.log("ternm and condtion",res)
         setMessage("✅ Updated successfully");
       } else {
         const res = await axios.post(
-          ` http://127.0.0.1:8000/api/terms-condition-invoice`,
+          ` https://apibrize.brizindia.com/api/terms-condition-invoice`,
           payload,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -100,7 +100,9 @@ console.log("ternm and condtion",res)
 
   return (
     <div className="w-full mx-auto p-6 bg-white rounded ">
-      <h2 className="text-2xl font-bold mb-4">Terms and Conditions (Invoice)</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        Terms and Conditions (Invoice)
+      </h2>
 
       {/* Editor */}
       <textarea
@@ -123,7 +125,11 @@ console.log("ternm and condtion",res)
 
       {/* Message */}
       {message && (
-        <p className={`mt-4 text-sm ${message.startsWith("✅") ? "text-green-600" : "text-red-600"}`}>
+        <p
+          className={`mt-4 text-sm ${
+            message.startsWith("✅") ? "text-green-600" : "text-red-600"
+          }`}
+        >
           {message}
         </p>
       )}

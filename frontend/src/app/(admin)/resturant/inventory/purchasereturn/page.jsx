@@ -16,7 +16,7 @@
 //   const [paymentType, setPaymentType] = useState("");
 //   const [account, setAccount] = useState("");
 //   const [paymentNote, setPaymentNote] = useState("");
-  // const [suppliersData, setSuppliersData] = useState([]);
+// const [suppliersData, setSuppliersData] = useState([]);
 //   const [selectedSupplier, setSelectedSupplier] = useState("");
 //   const [reason, setReason] = useState("");
 
@@ -41,17 +41,11 @@
 //     }
 //   };
 
-
-
-
-
-
-
 //   // Fetch stock returns data
 //   const fetchStockReturns = async () => {
 //     try {
 //       const response = await fetch(
-//         " http://127.0.0.1:8000/api/purchase-returns"
+//         " https://apibrize.brizindia.com/api/purchase-returns"
 //       );
 //       const data = await response.json();
 //       setStockReturns(data);
@@ -74,8 +68,8 @@
 //       return;
 //     }
 //     axios
-//       .get(" http://127.0.0.1:8000/api/suppliers",
-        
+//       .get(" https://apibrize.brizindia.com/api/suppliers",
+
 // {
 //   headers: { Authorization: `Bearer ${token}` },
 // }
@@ -94,7 +88,7 @@
 //   const fetchPayments = async () => {
 //     try {
 //       const response = await fetch(
-//         " http://127.0.0.1:8000/api/purchase-returns"
+//         " https://apibrize.brizindia.com/api/purchase-returns"
 //       );
 //       const data = await response.json();
 //       console.log("payment info", response);
@@ -108,7 +102,7 @@
 //     }
 //   };
 //   useEffect(() => {
-    
+
 //     fetchPayments();
 //   }, []);
 
@@ -128,7 +122,7 @@
 //     console.log(formData);
 
 //     try {
-//       const response = await fetch("  http://127.0.0.1:8000/api/purchase-returns", {
+//       const response = await fetch("  https://apibrize.brizindia.com/api/purchase-returns", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify(formData),
@@ -175,22 +169,22 @@
 //           purchase/return<span className="text-gray-500"> Stock</span>
 //         </h2>
 //         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          // <div>
-          //   <label className="block font-medium">Supplier Name *</label>
-          //   <select
-          //     value={selectedSupplier}
-          //     onChange={(e) => setSelectedSupplier(e.target.value)}
-          //     className="w-full p-2 border rounded"
-          //   >
-          //     <option value="">- Select Supplier -</option>
-          //     {suppliersData.suppliers &&
-          //       suppliersData.suppliers.map((supplier) => (
-          //         <option key={supplier.id} value={supplier.name}>
-          //           {supplier.name}
-          //         </option>
-          //       ))}
-          //   </select>
-          // </div>
+// <div>
+//   <label className="block font-medium">Supplier Name *</label>
+//   <select
+//     value={selectedSupplier}
+//     onChange={(e) => setSelectedSupplier(e.target.value)}
+//     className="w-full p-2 border rounded"
+//   >
+//     <option value="">- Select Supplier -</option>
+//     {suppliersData.suppliers &&
+//       suppliersData.suppliers.map((supplier) => (
+//         <option key={supplier.id} value={supplier.name}>
+//           {supplier.name}
+//         </option>
+//       ))}
+//   </select>
+// </div>
 
 //           <div>
 //             <label className="block font-medium">Reference No.</label>
@@ -331,15 +325,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -389,11 +374,12 @@ export default function PurchaseReturn() {
     //   return;
     // }
     axios
-      .get(" http://127.0.0.1:8000/api/suppliers",
-        
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
+      .get(
+        " https://apibrize.brizindia.com/api/suppliers",
+
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then((response) => {
         setSuppliersData(response.data);
@@ -408,9 +394,12 @@ export default function PurchaseReturn() {
   useEffect(() => {
     const fetchSalesReturn = async () => {
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/saloon-purchase-returns", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/saloon-purchase-returns",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setStockReturns(response.data);
       } catch (error) {
         console.error("Error fetching stock returns:", error);
@@ -423,9 +412,12 @@ export default function PurchaseReturn() {
 
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get(" http://127.0.0.1:8000/api/customers", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/customers",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setCustomerData(res.data);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -435,7 +427,7 @@ export default function PurchaseReturn() {
   const featchProductsList = async () => {
     try {
       const res = await axios.get(
-        " http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+        " https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -453,9 +445,12 @@ export default function PurchaseReturn() {
 
   const fetchPayments = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/saloon-purchase-returns", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/saloon-purchase-returns",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const sortedPayments = response.data.sort(
         (a, b) => new Date(b.date) - new Date(a.date)
       );
@@ -486,19 +481,26 @@ export default function PurchaseReturn() {
     };
 
     try {
-      await axios.post(" http://127.0.0.1:8000/api/saloon-purchase-return", formData, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        " https://apibrize.brizindia.com/api/saloon-purchase-return",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       alert("Sale return submitted successfully!");
       handleCancel();
       fetchPayments();
     } catch (error) {
       console.error("Error submitting sale return:", error);
-      alert("Error submitting data: " + (error.response?.data?.message || error.message));
+      alert(
+        "Error submitting data: " +
+          (error.response?.data?.message || error.message)
+      );
     }
   };
 
@@ -519,7 +521,10 @@ export default function PurchaseReturn() {
   // Pagination
   const indexOfLastPayment = currentPage * paymentsPerPage;
   const indexOfFirstPayment = indexOfLastPayment - paymentsPerPage;
-  const currentPayments = payments.slice(indexOfFirstPayment, indexOfLastPayment);
+  const currentPayments = payments.slice(
+    indexOfFirstPayment,
+    indexOfLastPayment
+  );
   const totalPages = Math.ceil(payments.length / paymentsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -528,12 +533,12 @@ export default function PurchaseReturn() {
     <div className="p-6 bg-gradient-to-b from-white to-gray-100 min-h-screen">
       <div className="max-full mx-auto bg-white p-6 rounded-lg shadow-xl border border-gray-200">
         <h2 className="text-3xl font-bold text-gray-800 border-b pb-2 mb-4">
-        purchase/return Stock
+          purchase/return Stock
         </h2>
 
         {/* Form and Inputs Here (as you already wrote) */}
-         {/* Customer Name and Reference No */}
-         <div className="flex flex-col md:flex-row gap-4 mt-4">
+        {/* Customer Name and Reference No */}
+        <div className="flex flex-col md:flex-row gap-4 mt-4">
           {/* <div className="flex-1">
             <label className="block font-medium">Customer Name</label>
             <select
@@ -566,7 +571,6 @@ export default function PurchaseReturn() {
                 ))}
             </select>
           </div>
-          
 
           <div className="flex-1">
             <label className="block font-medium">Reference No.</label>
@@ -582,8 +586,7 @@ export default function PurchaseReturn() {
         {/* Date and Status */}
         <div className="flex flex-col md:flex-row gap-4 mt-4">
           <div className="flex-1">
-            <label className="block font-medium">Purchase Date *
-            </label>
+            <label className="block font-medium">Purchase Date *</label>
             <input
               type="date"
               value={purchaseDate}
@@ -721,8 +724,12 @@ export default function PurchaseReturn() {
                     <td className="p-2">{indexOfFirstPayment + index + 1}</td>
                     <td className="p-2">{payment.product?.name}</td>
                     <td className="p-2">{payment.quantity}</td>
-                    <td className="p-2">{payment?.saloon_purchase_return_payments?.payment_type}</td>
-                    <td className="p-2">{payment?.saloon_purchase_return_payments?.amount}</td>
+                    <td className="p-2">
+                      {payment?.saloon_purchase_return_payments?.payment_type}
+                    </td>
+                    <td className="p-2">
+                      {payment?.saloon_purchase_return_payments?.amount}
+                    </td>
                     <td className="p-2">{payment.reason}</td>
                     <td className="p-2">{payment.date}</td>
                   </tr>
@@ -744,7 +751,9 @@ export default function PurchaseReturn() {
             <button
               key={i}
               onClick={() => paginate(i + 1)}
-              className={`px-3 py-1 border rounded ${currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+              className={`px-3 py-1 border rounded ${
+                currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
+              }`}
             >
               {i + 1}
             </button>
@@ -754,5 +763,3 @@ export default function PurchaseReturn() {
     </div>
   );
 }
-
-

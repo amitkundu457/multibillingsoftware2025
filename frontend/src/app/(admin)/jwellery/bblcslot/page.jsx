@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FiEdit, FiTrash2, FiX } from "react-icons/fi";
@@ -19,7 +19,9 @@ export default function BBLCSlotAdmin() {
   // Fetch slots from backend
   const fetchSlots = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/bblc-slots");
+      const res = await axios.get(
+        "https://apibrize.brizindia.com/api/bblc-slots"
+      );
       setSlots(res.data);
     } catch (err) {
       console.error(err);
@@ -49,7 +51,7 @@ export default function BBLCSlotAdmin() {
       if (editingSlot) {
         // Update existing slot
         await axios.put(
-          `http://127.0.0.1:8000/api/bblc-slots/${editingSlot.id}`,
+          `https://apibrize.brizindia.com/api/bblc-slots/${editingSlot.id}`,
           { ...form } // days is string
         );
         setEditingSlot(null);
@@ -63,7 +65,7 @@ export default function BBLCSlotAdmin() {
           return;
         }
 
-        await axios.post("http://127.0.0.1:8000/api/bblc-slots", {
+        await axios.post("https://apibrize.brizindia.com/api/bblc-slots", {
           ...form, // days is string
         });
       }
@@ -90,7 +92,7 @@ export default function BBLCSlotAdmin() {
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this slot?")) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/bblc-slots/${id}`);
+      await axios.delete(`https://apibrize.brizindia.com/api/bblc-slots/${id}`);
       fetchSlots();
     } catch (err) {
       console.error(err);
@@ -123,7 +125,9 @@ export default function BBLCSlotAdmin() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">BBLC Slots Admin</h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">
+        BBLC Slots Admin
+      </h1>
 
       {/* Form Card */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
@@ -200,17 +204,29 @@ export default function BBLCSlotAdmin() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
             <tr>
-              <th className="px-6 py-3 text-left text-gray-600 font-medium">Name</th>
-              <th className="px-6 py-3 text-left text-gray-600 font-medium">Day(s)</th>
-              <th className="px-6 py-3 text-left text-gray-600 font-medium">Time</th>
-              <th className="px-6 py-3 text-left text-gray-600 font-medium">Enabled</th>
-              <th className="px-6 py-3 text-left text-gray-600 font-medium">Actions</th>
+              <th className="px-6 py-3 text-left text-gray-600 font-medium">
+                Name
+              </th>
+              <th className="px-6 py-3 text-left text-gray-600 font-medium">
+                Day(s)
+              </th>
+              <th className="px-6 py-3 text-left text-gray-600 font-medium">
+                Time
+              </th>
+              <th className="px-6 py-3 text-left text-gray-600 font-medium">
+                Enabled
+              </th>
+              <th className="px-6 py-3 text-left text-gray-600 font-medium">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {slots.map((slot) => (
               <tr key={slot.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-medium text-gray-800">{slot.name}</td>
+                <td className="px-6 py-4 font-medium text-gray-800">
+                  {slot.name}
+                </td>
                 <td className="px-6 py-4 text-gray-600">{slot.days}</td>
                 <td className="px-6 py-4 text-gray-600">{slot.send_time}</td>
                 <td className="px-6 py-4">{slot.enabled ? "✅" : "❌"}</td>

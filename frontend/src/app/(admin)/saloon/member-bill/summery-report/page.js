@@ -14,7 +14,9 @@ export default function MembershipSummary() {
 
   const fetchSummary = async () => {
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/membership-sales-summery-report");
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/membership-sales-summery-report"
+      );
       setSummary(response.data);
     } catch (error) {
       console.error("Error fetching summary:", error);
@@ -24,8 +26,17 @@ export default function MembershipSummary() {
   const exportToPDF = () => {
     const doc = new jsPDF();
     doc.text("Membership Plan Summary Report", 14, 10);
-    
-    const tableColumn = ["S.No", "Membership Name", "Validity (Months)", "Fees", "Discount (%)", "Sold", "Active", "Expired"];
+
+    const tableColumn = [
+      "S.No",
+      "Membership Name",
+      "Validity (Months)",
+      "Fees",
+      "Discount (%)",
+      "Sold",
+      "Active",
+      "Expired",
+    ];
     const tableRows = summary.map((plan, index) => [
       index + 1,
       plan.membership_name,
@@ -34,13 +45,13 @@ export default function MembershipSummary() {
       plan.discount,
       plan.sold,
       plan.active,
-      plan.expired
+      plan.expired,
     ]);
 
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
-      startY: 20
+      startY: 20,
     });
 
     doc.save("Membership_Summary_Report.pdf");
@@ -56,11 +67,23 @@ export default function MembershipSummary() {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Membership Plan Summary Report</h2>
+      <h2 className="text-2xl font-bold mb-4">
+        Membership Plan Summary Report
+      </h2>
 
       <div className="flex gap-4 mb-4">
-        <button onClick={exportToPDF} className="bg-red-500 text-white px-4 py-2 rounded">Export PDF</button>
-        <button onClick={exportToExcel} className="bg-green-500 text-white px-4 py-2 rounded">Export Excel</button>
+        <button
+          onClick={exportToPDF}
+          className="bg-red-500 text-white px-4 py-2 rounded"
+        >
+          Export PDF
+        </button>
+        <button
+          onClick={exportToExcel}
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Export Excel
+        </button>
       </div>
 
       <table className="min-w-full bg-white border border-gray-300">
@@ -79,7 +102,9 @@ export default function MembershipSummary() {
         <tbody>
           {summary.length === 0 ? (
             <tr>
-              <td colSpan="8" className="text-center p-4">No records found</td>
+              <td colSpan="8" className="text-center p-4">
+                No records found
+              </td>
             </tr>
           ) : (
             summary.map((plan, index) => (

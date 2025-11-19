@@ -57,7 +57,7 @@
 //       }
 
 //       const response = await axios.get(
-//         "  http://127.0.0.1:8000/api/partial-order",
+//         "  https://apibrize.brizindia.com/api/partial-order",
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`, // Include the token in the headers
@@ -79,7 +79,7 @@
 //   };
 //   // Fetch user ID
 //   useEffect(() => {
-//     axios.get("  http://127.0.0.1:8000/api/order").then((response) => {
+//     axios.get("  https://apibrize.brizindia.com/api/order").then((response) => {
 //       setUserId(response.data.id);
 //     });
 //   }, []);
@@ -105,7 +105,7 @@
 //       };
 
 //       const response = await axios.post(
-//         "  http://127.0.0.1:8000/api/partial-order",
+//         "  https://apibrize.brizindia.com/api/partial-order",
 //         dataPost
 //       );
 
@@ -166,16 +166,16 @@
 //         </thead>
 //         <tbody>
 //           {orderData.map((order) => {
-            // const customer = order?.users?.name || "N/A";
-            // const tax = (parseFloat(order.gross_total || 0) * 18) / 100; // Tax calculation (18%)
-            // const payment = order?.payments?.[0];
-            // const dueAmount =
-            //   parseFloat(order.total_price || 0) -
-            //   parseFloat(payment?.price || 0); // Calculate due amount
-            // const customerDetails = order?.users?.customers?.[0] || {}; // Extract customer details
+// const customer = order?.users?.name || "N/A";
+// const tax = (parseFloat(order.gross_total || 0) * 18) / 100; // Tax calculation (18%)
+// const payment = order?.payments?.[0];
+// const dueAmount =
+//   parseFloat(order.total_price || 0) -
+//   parseFloat(payment?.price || 0); // Calculate due amount
+// const customerDetails = order?.users?.customers?.[0] || {}; // Extract customer details
 
-            // // Get the paid amount for the specific order
-            // const paidAmountForOrder = paidAmounts[order.id] || 0;
+// // Get the paid amount for the specific order
+// const paidAmountForOrder = paidAmounts[order.id] || 0;
 
 //             return (
 //               <tr key={order.id} className="border-b">
@@ -204,32 +204,32 @@
 //                   <p>
 //                     {customerDetails.phone || "N/A"}
 //                   </p>
-                // </td>
-                // <td className="border border-gray-300 px-4 py-2">
-                //   <p>
-                //     <strong>Paid Amount:</strong> ₹{order.total_payment}
-                //   </p>
-                //   <p>
-                //     <strong>Due Amount:</strong> ₹{order.due_payment}
-                //   </p>
-                //   <p>
-                //     <strong>Total Price:</strong> ₹{order.total_price}
-                //   </p>
-                //   {order.due_payment == 0 ? (
-                //     <p className="bg-green-700 text-white p-2 w-[4rem] rounded">
-                //       Paid
-                //     </p>
-                //   ) : (
-                //     <button
-                //       className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all"
-                //       onClick={() =>
-                //         openModal(dueAmount, order.users.id, order.id)
-                //       }
-                //     >
-                //       Make Payment
-                //     </button>
-                //   )}
-                // </td>
+// </td>
+// <td className="border border-gray-300 px-4 py-2">
+//   <p>
+//     <strong>Paid Amount:</strong> ₹{order.total_payment}
+//   </p>
+//   <p>
+//     <strong>Due Amount:</strong> ₹{order.due_payment}
+//   </p>
+//   <p>
+//     <strong>Total Price:</strong> ₹{order.total_price}
+//   </p>
+//   {order.due_payment == 0 ? (
+//     <p className="bg-green-700 text-white p-2 w-[4rem] rounded">
+//       Paid
+//     </p>
+//   ) : (
+//     <button
+//       className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all"
+//       onClick={() =>
+//         openModal(dueAmount, order.users.id, order.id)
+//       }
+//     >
+//       Make Payment
+//     </button>
+//   )}
+// </td>
 //                 {/* <td className="border border-gray-300 px-4 py-2">
 //                   {dueAmount > 0 ? "Pending" : "Paid"}
 //                 </td> */}
@@ -368,7 +368,7 @@
 //     });
 //     setOpen(true);
 //   };
-  
+
 // //   const closeModal = () => setOpen(false);
 // const closeModal = () => {
 //     setSelectedOption("");
@@ -398,7 +398,7 @@
 //       }
 
 //       const response = await axios.get(
-//         " http://127.0.0.1:8000/api/partial-order",
+//         " https://apibrize.brizindia.com/api/partial-order",
 //         {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
@@ -431,7 +431,7 @@
 //       };
 
 //       const response = await axios.post(
-//         " http://127.0.0.1:8000/api/partial-order",
+//         " https://apibrize.brizindia.com/api/partial-order",
 //         dataPost
 //       );
 
@@ -581,7 +581,7 @@
 //                       </button>
 //                     )}
 //                   </td> */}
-                                 
+
 //                 <td className="border border-gray-300 px-4 py-2">
 //                   <p>
 //                     <strong>Paid Amount:</strong> ₹{(order.total_payment).toFixed(1)}
@@ -612,8 +612,8 @@
 //             })}
 //         </tbody>
 //       </table>
-// {/* 
-      
+// {/*
+
 //       <Modal open={open} onClose={closeModal} center>
 //         <div className="p-6 bg-white rounded-lg shadow-md">
 //           <p className="text-lg font-semibold">Due Amount: ₹{dueAmount}</p>
@@ -753,8 +753,6 @@
 
 // export default PartialOrder;
 
-
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -770,7 +768,7 @@ const PartialOrder = () => {
   const [dueAmount, setDueAmount] = useState(0);
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [orderId, setOrderId] = useState(0);
-  const[isPaying,setIsPaying]=useState(false);
+  const [isPaying, setIsPaying] = useState(false);
   const [paymentData, setPaymentData] = useState({
     price: 0,
     date: "",
@@ -831,11 +829,14 @@ const PartialOrder = () => {
 
     try {
       if (!token) throw new Error("No token found.");
-      const response = await axios.get(" http://127.0.0.1:8000/api/partial-order", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/partial-order",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         setOrderData(response.data.data || []);
@@ -850,19 +851,19 @@ const PartialOrder = () => {
   };
 
   const paymentMethod = async () => {
-    if(isPaying){
-        toast.success("Payamnet is processing")
-        return;
+    if (isPaying) {
+      toast.success("Payamnet is processing");
+      return;
     }
     if (paymentData.price <= 0) {
-        toast.error("Enter a valid amount greater than 0");
-        return;
-      }
-    
-      if (paymentData.price > dueAmount) {
-        toast.error("Entered amount exceeds due amount.");
-        return;
-      }
+      toast.error("Enter a valid amount greater than 0");
+      return;
+    }
+
+    if (paymentData.price > dueAmount) {
+      toast.error("Entered amount exceeds due amount.");
+      return;
+    }
     setIsPaying(true);
     try {
       const today = new Date();
@@ -877,7 +878,7 @@ const PartialOrder = () => {
       };
 
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/partial-order",
+        " https://apibrize.brizindia.com/api/partial-order",
         dataPost
       );
 
@@ -903,18 +904,17 @@ const PartialOrder = () => {
     } catch (error) {
       toast.error("Error processing payment.");
       setIsPaying(false);
+    } finally {
+      setIsPaying(false); // Always reset
     }
-    finally {
-        setIsPaying(false); // Always reset
-      }
   };
 
   const handleAmountChange = (e) => {
     const enteredAmount = parseFloat(e.target.value) || 0;
     if (enteredAmount > dueAmount) {
-        toast.error("Amount cannot exceed due amount");
-        return;
-      }
+      toast.error("Amount cannot exceed due amount");
+      return;
+    }
     setPaymentData({ ...paymentData, price: enteredAmount });
     const updatedRemainingAmount = dueAmount - enteredAmount;
     setRemainingAmount(updatedRemainingAmount);
@@ -929,17 +929,16 @@ const PartialOrder = () => {
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4 mb-4">
-       
-       <div>
-       <label className="block text-sm font-medium">Search</label>
-       <input
-          type="text"
-          placeholder="Search by customer name, phone, or bill no"
-          className="border px-4  rounded w-full sm:w-[300px]"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-        />
-       </div>
+        <div>
+          <label className="block text-sm font-medium">Search</label>
+          <input
+            type="text"
+            placeholder="Search by customer name, phone, or bill no"
+            className="border px-4  rounded w-full sm:w-[300px]"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+          />
+        </div>
         <div>
           <label className="block text-sm font-medium">From Date</label>
           <input
@@ -1007,8 +1006,12 @@ const PartialOrder = () => {
                     {customerDetails.phone || "N/A"}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    <p><strong>Paid:</strong> ₹{paidAmount.toFixed(2)}</p>
-                    <p><strong>Due:</strong> ₹{dueAmount.toFixed(2)}</p>
+                    <p>
+                      <strong>Paid:</strong> ₹{paidAmount.toFixed(2)}
+                    </p>
+                    <p>
+                      <strong>Due:</strong> ₹{dueAmount.toFixed(2)}
+                    </p>
                     {dueAmount === 0 ? (
                       <span className="bg-green-600 text-white px-2 py-1 rounded inline-block mt-1">
                         Paid
@@ -1089,7 +1092,7 @@ const PartialOrder = () => {
               Back
             </button>
             <button
-            disabled={isPaying}
+              disabled={isPaying}
               onClick={paymentMethod}
               className={`px-4 py-2 rounded-lg text-white font-medium transition ${
                 isPaying

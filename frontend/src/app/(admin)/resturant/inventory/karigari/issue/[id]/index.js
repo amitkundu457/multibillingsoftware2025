@@ -36,13 +36,15 @@ function Page() {
 
   const router = useRouter();
   const { id } = router.query;
-  console.log("karigri id",id)
+  console.log("karigri id", id);
 
   //fetch karigar_List
 
   async function KarigarListName() {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/karigar-list");
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/karigar-list"
+      );
       // const data = await response.json();
 
       console.log("listofkarigir", response);
@@ -51,9 +53,9 @@ function Page() {
     }
   }
 
-  useEffect(()=>{
-    KarigarListName()
-  },[])
+  useEffect(() => {
+    KarigarListName();
+  }, []);
 
   // Fetch existing data when component mounts or `id`, `data`, or `isLoading` changes
   useEffect(() => {

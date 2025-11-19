@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
-import {reporturl} from "@/app/lib/axios";
+import { reporturl } from "@/app/lib/axios";
 
 const Page = () => {
   const [startDate, setStartDate] = useState("");
@@ -33,9 +33,12 @@ const Page = () => {
   // Fetch Employees
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get(" http://127.0.0.1:8000/api/employees", {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/employees",
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
       setEmployees(res.data.employees);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -46,9 +49,12 @@ const Page = () => {
   const fetchReportData = async () => {
     try {
       setLoading(true);
-      const result = await axios.get(" http://127.0.0.1:8000/api/agentsalesreport", {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const result = await axios.get(
+        " https://apibrize.brizindia.com/api/agentsalesreport",
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
       setData(result.data);
       setFilteredData(result.data);
     } catch (error) {
@@ -291,15 +297,15 @@ const Page = () => {
                         : ""}
                     </td>
                     <td className="py-3 px-4 border-b">
-                  <a
-                    href={`${reporturl}/jwellery/printinvoice/?id=${item.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    BillPdf
-                  </a>
-                </td>
+                      <a
+                        href={`${reporturl}/jwellery/printinvoice/?id=${item.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline"
+                      >
+                        BillPdf
+                      </a>
+                    </td>
                   </tr>
                 ))
               ) : (

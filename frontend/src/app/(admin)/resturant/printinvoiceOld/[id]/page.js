@@ -1,14 +1,18 @@
 import axios from "axios";
-import InvoiceClient from '../invoiceClient'
+import InvoiceClient from "../invoiceClient";
 
 export async function generateStaticParams() {
   try {
-    const response = await axios.get("  http://127.0.0.1:8000/api/invoice-ids");
+    const response = await axios.get(
+      "  https://apibrize.brizindia.com/api/invoice-ids"
+    );
     const ids = response.data;
 
     return ids.map((id) => ({ id: id.toString() }));
-    console.log("Generated static params:", ids.map((id) => ({ id: id.toString() })));
-
+    console.log(
+      "Generated static params:",
+      ids.map((id) => ({ id: id.toString() }))
+    );
   } catch (error) {
     console.error("Error in generateStaticParams:", error.message);
     return [
@@ -17,9 +21,6 @@ export async function generateStaticParams() {
     ];
   }
 }
-
-
-
 
 export default function PrintInvoicePage({ params }) {
   const { id } = params;

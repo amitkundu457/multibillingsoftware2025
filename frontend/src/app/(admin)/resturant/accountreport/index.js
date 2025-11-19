@@ -232,37 +232,38 @@ const AccountsEntries = () => {
     fetchAccountType();
   }, [modalType, setValue]);
 
-
   const applyFilters = useCallback(() => {
     const filtered = entries.filter((entry) => {
       const entryDate = new Date(entry.created_at);
       entryDate.setHours(0, 0, 0, 0); // Normalize entry date to start of day
-  
+
       const fromDate = dateRange.from ? new Date(dateRange.from) : null;
       if (fromDate) fromDate.setHours(0, 0, 0, 0); // Normalize from date
-  
+
       const toDate = dateRange.to ? new Date(dateRange.to) : null;
       if (toDate) toDate.setHours(23, 59, 59, 999); // Normalize to end of day
-  
+
       const isWithinDateRange =
         (!fromDate || entryDate >= fromDate) &&
         (!toDate || entryDate <= toDate);
-  
+
       const matchesFilter = entry.account_type === filter;
-  
+
       return isWithinDateRange && matchesFilter;
     });
-  
+
     setFilteredEntries(filtered);
   }, [entries, dateRange, filter]);
-  
+
   useEffect(() => {
     applyFilters(); // ✅ Runs every time filter changes
   }, [dateRange, filter, entries, applyFilters]);
   useEffect(() => {
     if (modalType) {
       axios
-        .get(` http://127.0.0.1:8000/api/last-transaction-number/${modalType}`)
+        .get(
+          ` https://apibrize.brizindia.com/api/last-transaction-number/${modalType}`
+        )
         .then((response) => setTransactionNumber(response.data.transaction_no))
         .catch((error) =>
           console.error("Error fetching transaction number:", error)
@@ -273,7 +274,7 @@ const AccountsEntries = () => {
   const fetchLastTransactionNumber = async (transactionType) => {
     try {
       const response = await fetch(
-        ` http://127.0.0.1:8000/api/last-transaction-number/${transactionType}`
+        ` https://apibrize.brizindia.com/api/last-transaction-number/${transactionType}`
       );
       const data = await response.json();
       return data.transaction_no; // Assuming API returns { transaction_no: "XXX" }
@@ -292,7 +293,7 @@ const AccountsEntries = () => {
     setModalNumber(generateModalNumber(type)); // Generate the dynamic number
 
     setIsOpen(true); // Open the modal
-    console.log("edit data",entryData);
+    console.log("edit data", entryData);
     if (entryData) {
       setEditId(entryData.id);
       populateFormData(entryData);
@@ -326,7 +327,7 @@ const AccountsEntries = () => {
     // console.log("data group type", data);
     try {
       const res = await axios.post(
-        "  http://127.0.0.1:8000/api/account-groups",
+        "  https://apibrize.brizindia.com/api/account-groups",
         data,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -350,14 +351,17 @@ const AccountsEntries = () => {
     const data = { name: newAccountType };
 
     try {
-      const response = await fetch("  http://127.0.0.1:8000/api/account-types", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "  https://apibrize.brizindia.com/api/account-types",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (response.ok) {
         // Successfully submitted, close the modal and handle success
@@ -473,14 +477,14 @@ const AccountsEntries = () => {
         setSubmitStatus("Record updated successfully!");
         notyf.success("Data updated successfully!");
         setIsOpen(false); // Close the modal
-    setModalType("");
+        setModalType("");
       } else {
         response = await StoreAccount(data);
         console.log(response);
         setSubmitStatus("Record created successfully!");
         notyf.success("Data placed successfully!");
         setIsOpen(false); // Close the modal
-    setModalType("");
+        setModalType("");
       }
 
       reset();
@@ -503,7 +507,7 @@ const AccountsEntries = () => {
       fetchAccountMasters();
       reset(); // Reset the form after successful submission
       setIsOpen(false); // Close the modal
-    setModalType("");
+      setModalType("");
     } catch (error) {
       console.error(error);
       setSubmitStatus("Failed to create receipt.");
@@ -565,7 +569,7 @@ const AccountsEntries = () => {
 
     try {
       const response = await axios.post(
-        "  http://127.0.0.1:8000/api/account-masters",
+        "  https://apibrize.brizindia.com/api/account-masters",
         data,
         {
           headers: {
@@ -879,7 +883,7 @@ const AccountsEntries = () => {
               {/* Account */}
               <div className="mb-4 flex space-x-3">
                 <div className="w-[80%]">
-                <label>Credit Account</label>
+                  <label>Credit Account</label>
                   <select
                     name="credit_customer_id"
                     className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -916,7 +920,6 @@ const AccountsEntries = () => {
                 {modalType === "contra" || modalType === "journal" ? (
                   <>
                     <div className="w-[80%]">
-                      
                       <label>Debit Account</label>
                       <select
                         name="debit_customer_id"

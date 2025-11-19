@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { BsPeopleFill } from "react-icons/bs";
 import axios from "axios";
-import Link from 'next/link';
+import Link from "next/link";
 import useSWR from "swr";
- 
+
 export default function Customer({ label }) {
-    const [customerCounts, setCustomerCounts] = useState({
+  const [customerCounts, setCustomerCounts] = useState({
     total: 0,
     walkIn: 0,
     qr: 0,
     socialMedia: 0,
   });
 
-   const {
+  const {
     data: user,
     isLoading,
     mutate,
@@ -23,7 +23,6 @@ export default function Customer({ label }) {
     return res.data;
   });
 
-  
   const roleToUrlMap = {
     admin: "admin",
     jwellery: "jwellery",
@@ -33,10 +32,11 @@ export default function Customer({ label }) {
   };
 
   const productUrl = roleToUrlMap[!isLoading && user?.roles?.[0]?.name] || "";
-  console.log("pruddcturl2",productUrl);
+  console.log("pruddcturl2", productUrl);
 
   useEffect(() => {
-    axios.get(" http://127.0.0.1:8000/api/customer-visit-sources")
+    axios
+      .get(" https://apibrize.brizindia.com/api/customer-visit-sources")
       .then((response) => {
         setCustomerCounts(response.data);
       })
@@ -59,33 +59,42 @@ export default function Customer({ label }) {
         </div>
       </div>
       <div className="mt-2 grid grid-cols-3 gap-4 border-2 border-blue-500 rounded-lg p-10">
-        <div >
-          <Link href={`/${productUrl}/reports/customerreport`}  className="cursor-pointer  " > 
-             <h3 className="text-sm text-gray-500 hover:text-green-500" >Walk-in</h3>
-          <p className="text-purple-600 text-lg font-bold">
-            {customerCounts.walkIn}
-          </p>
-
+        <div>
+          <Link
+            href={`/${productUrl}/reports/customerreport`}
+            className="cursor-pointer  "
+          >
+            <h3 className="text-sm text-gray-500 hover:text-green-500">
+              Walk-in
+            </h3>
+            <p className="text-purple-600 text-lg font-bold">
+              {customerCounts.walkIn}
+            </p>
           </Link>
-         
         </div>
         <div>
-          <Link href={`/${productUrl}/reports/customerreport`}  className="cursor-pointer  ">
-          <h3 className="text-sm text-gray-500 hover:text-green-500">QR</h3>
-          <p className="text-blue-600 text-lg font-bold">
-            {customerCounts.qr}
-          </p>
+          <Link
+            href={`/${productUrl}/reports/customerreport`}
+            className="cursor-pointer  "
+          >
+            <h3 className="text-sm text-gray-500 hover:text-green-500">QR</h3>
+            <p className="text-blue-600 text-lg font-bold">
+              {customerCounts.qr}
+            </p>
           </Link>
-          
         </div>
         <div>
-          <Link  href={`/${productUrl}/reports/customerreport`}  className="cursor-pointer  ">
-           <h3 className="text-sm text-gray-500 hover:text-green-500">Social Media</h3>
-          <p className="text-teal-600 text-lg font-bold">
-            {customerCounts.socialMedia}
-          </p>
+          <Link
+            href={`/${productUrl}/reports/customerreport`}
+            className="cursor-pointer  "
+          >
+            <h3 className="text-sm text-gray-500 hover:text-green-500">
+              Social Media
+            </h3>
+            <p className="text-teal-600 text-lg font-bold">
+              {customerCounts.socialMedia}
+            </p>
           </Link>
-         
         </div>
       </div>
     </div>

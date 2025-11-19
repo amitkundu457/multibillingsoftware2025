@@ -22,34 +22,35 @@ function Page() {
 
   // work for filter data
   // Function to fetch data from the API
-//   const fetchKarigariData = async (selectedType = "") => {
-//     try {
-//         const response = await axios.get(" http://127.0.0.1:8000/api/karigari", {
-//             params: selectedType ? { type: selectedType } : {},
-//         });
+  //   const fetchKarigariData = async (selectedType = "") => {
+  //     try {
+  //         const response = await axios.get(" https://apibrize.brizindia.com/api/karigari", {
+  //             params: selectedType ? { type: selectedType } : {},
+  //         });
 
-//         console.log("Filtered Data:", response.data);
-//         setData(response.data.karigaries)
-//         setKarigaries(response.data.karigaries);
-//     } catch (error) {
-//         console.error("Error fetching data:", error);
-//     }
-// };
+  //         console.log("Filtered Data:", response.data);
+  //         setData(response.data.karigaries)
+  //         setKarigaries(response.data.karigaries);
+  //     } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //     }
+  // };
 
+  const fetchKarigariData = async (selectedType = "") => {
+    try {
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/karigari",
+        {
+          params: selectedType ? { type: selectedType } : {},
+        }
+      );
 
-const fetchKarigariData = async (selectedType = "") => {
-  try {
-    const response = await axios.get(" http://127.0.0.1:8000/api/karigari", {
-      params: selectedType ? { type: selectedType } : {},
-    });
-
-    console.log("Filtered Data:", response.data);
-    setKarigaries(response.data.karigaries);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-
+      console.log("Filtered Data:", response.data);
+      setKarigaries(response.data.karigaries);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   // Fetch all data on initial render
   useEffect(() => {
@@ -80,25 +81,22 @@ const fetchKarigariData = async (selectedType = "") => {
   //   }
   // };
 
-
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete?")) {
       try {
         await deleteOldKarigari(id);
-  
+
         // Filter out the deleted item from karigaries state
         setKarigaries((prevKarigaries) =>
           prevKarigaries.filter((kgi) => kgi.id !== id)
         );
-  
+
         console.log(`Deleted karigari ID: ${id}`);
       } catch (error) {
         console.error("Error deleting data:", error);
       }
     }
   };
-
-
 
   return (
     <div className="absolute left-0 top-0 w-full bg-white h-full">
@@ -238,39 +236,41 @@ const fetchKarigariData = async (selectedType = "") => {
                 </tr>
               ))}
           </tbody> */}
-<tbody>
-  {!isLoading &&
-    karigaries?.map((kgi) => (
-      <tr key={kgi.id}>
-        <td className="px-3 py-3">
-          {new Date(kgi.date).toLocaleDateString("en-GB")}
-        </td>
-        <td className="px-3 py-3">{kgi.voucher_no}</td>
-        <td className="px-3 py-3 uppercase">{kgi.type}</td>
-        <td className="px-3 py-3"></td>
-        <td className="px-3 py-3">00</td>
-        <td className="px-3 py-3">00</td>
-        <td className="px-3 py-3">
-          <div className="flex gap-4 items-center">
-            <Link
-              href={
-                kgi.type === "issue"
-                  ? `/jwellery/inventory/karigari/issue/?id=${kgi.id}`
-                  : `/jwellery/inventory/karigari/receive/?id=${kgi.id}`
-              }
-              className="text-blue-500"
-            >
-              <FaEdit />
-            </Link>
-            <button onClick={() => handleDelete(kgi.id)} className="text-red-500">
-              <FaTrash />
-            </button>
-          </div>
-        </td>
-      </tr>
-    ))}
-</tbody>
-
+          <tbody>
+            {!isLoading &&
+              karigaries?.map((kgi) => (
+                <tr key={kgi.id}>
+                  <td className="px-3 py-3">
+                    {new Date(kgi.date).toLocaleDateString("en-GB")}
+                  </td>
+                  <td className="px-3 py-3">{kgi.voucher_no}</td>
+                  <td className="px-3 py-3 uppercase">{kgi.type}</td>
+                  <td className="px-3 py-3"></td>
+                  <td className="px-3 py-3">00</td>
+                  <td className="px-3 py-3">00</td>
+                  <td className="px-3 py-3">
+                    <div className="flex gap-4 items-center">
+                      <Link
+                        href={
+                          kgi.type === "issue"
+                            ? `/jwellery/inventory/karigari/issue/?id=${kgi.id}`
+                            : `/jwellery/inventory/karigari/receive/?id=${kgi.id}`
+                        }
+                        className="text-blue-500"
+                      >
+                        <FaEdit />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(kgi.id)}
+                        className="text-red-500"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
 
           <tfoot>
             <tr>

@@ -1,10 +1,9 @@
- "use client";
+"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getMe } from "../../../components/config";
 import axios from "axios";
-
 
 const ParcelBill = () => {
   const [buyerState, setbuyState] = useState("");
@@ -21,30 +20,29 @@ const ParcelBill = () => {
   const [billData, setBillData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [printStyle, setPrintStyle] = useState("thermal");
-    const [logoUrl, setLogoUrl] = useState("");
+  const [logoUrl, setLogoUrl] = useState("");
 
-
-    const getToken = () => {
+  const getToken = () => {
     const cookie = document.cookie
       .split("; ")
       .find((row) => row.startsWith("access_token="));
     return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
   };
 
-   useEffect(() => {
-      const fetchLogoUrl = async () => {
-        const token = getToken();
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/masterlogobill",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setLogoUrl(response.data.logo);
-      };
-      fetchLogoUrl();
-    }, []);
-  
+  useEffect(() => {
+    const fetchLogoUrl = async () => {
+      const token = getToken();
+      const response = await axios.get(
+        "https://apibrize.brizindia.com/api/masterlogobill",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setLogoUrl(response.data.logo);
+    };
+    fetchLogoUrl();
+  }, []);
+
   const billRef = useRef();
   const searchParams = useSearchParams();
   const parcel_order_id = searchParams.get("id");
@@ -73,43 +71,42 @@ const ParcelBill = () => {
     fetchCompanyDetails();
   }, []);
   useEffect(() => {
-    if (!parcel_order_id)  window.location.reload(); 
-    
+    if (!parcel_order_id) window.location.reload();
+
     fetchBill();
+  }, [parcel_order_id]);
 
-   }, [parcel_order_id]);
-
-   const fetchBill = async () => {
-     if (!parcel_order_id) {
-       setLoading(false);
+  const fetchBill = async () => {
+    if (!parcel_order_id) {
+      setLoading(false);
       return;
     }
-      const token = getCookie("access_token");
+    const token = getCookie("access_token");
 
-      try {
-        const res = await fetch(
-          ` http://127.0.0.1:8000/api/parcel-order/${parcel_order_id}/generate-bill`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // ✅ Include token here
-            },
-          }
-        );
+    try {
+      const res = await fetch(
+        ` https://apibrize.brizindia.com/api/parcel-order/${parcel_order_id}/generate-bill`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ Include token here
+          },
+        }
+      );
 
-        const data = await res.json();
-        console.log("billpracel", data);
-       setBillData(data);
-        setbuyState(data?.customer?.state);
-        // if (res.ok);
-        // else console.error('Server error:', data.message);
-      } catch (err) {
-        console.error("Error fetching bill:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const data = await res.json();
+      console.log("billpracel", data);
+      setBillData(data);
+      setbuyState(data?.customer?.state);
+      // if (res.ok);
+      // else console.error('Server error:', data.message);
+    } catch (err) {
+      console.error("Error fetching bill:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
   const isSameState = buyerState && sellerState && buyerState === sellerState;
   console.log("isSameState", isSameState);
   const handlePrint = () => {
@@ -260,13 +257,15 @@ const ParcelBill = () => {
   };
 
   if (loading) return <div className="text-center mt-4">Loading bill...</div>;
-   if (!billData) {
+  if (!billData) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="bg-white p-6 rounded-lg shadow-md text-center">
           <h2 className="text-xl font-bold text-gray-800 mb-4">No Bill Data</h2>
-          <p className="text-gray-700 mb-4">No bill found for ID {parcel_order_id}.</p>
-          <button 
+          <p className="text-gray-700 mb-4">
+            No bill found for ID {parcel_order_id}.
+          </p>
+          <button
             onClick={fetchBill}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
           >
@@ -322,40 +321,38 @@ const ParcelBill = () => {
             />
           </div>
         )}
-        
-       <div className="header text-center">
-        {/* gst */}
-          
-  {/* Shop Owner Name */}
-  <h1 className="text-green-700 font-extrabold text-xl uppercase tracking-wide">
-    {billData?.created_by?.name || "Unknown Creator"}
-  </h1>
 
-  {/* Address */}
-  <p className="text-gray-700 text-sm">
-    {billData?.client_address?.address_1 ||
-      billData?.client_address?.address_2 ||
-      "Address Not Available"}
-  </p>
+        <div className="header text-center">
+          {/* gst */}
 
-  {/* Contact Info */}
-  <p className="text-gray-700 text-sm">
-    {billData?.client_address?.mobile_number || "No Contact Number"}
-  </p>
-  <p className="text-gray-700 text-sm">
-    {billData?.client_address?.email || "No Email Provided"}
-  </p>
-  <div>
-   <h1 className="text-gray-700 font-extrabold   uppercase tracking-wide">
-    GST IN:{billData?.client_address?.gst || "GSt not provided"}
-  </h1>
-</div>
+          {/* Shop Owner Name */}
+          <h1 className="text-green-700 font-extrabold text-xl uppercase tracking-wide">
+            {billData?.created_by?.name || "Unknown Creator"}
+          </h1>
 
-  {/* Divider */}
-  <div className="my-2 border-t border-gray-300"></div>
-</div>
+          {/* Address */}
+          <p className="text-gray-700 text-sm">
+            {billData?.client_address?.address_1 ||
+              billData?.client_address?.address_2 ||
+              "Address Not Available"}
+          </p>
 
+          {/* Contact Info */}
+          <p className="text-gray-700 text-sm">
+            {billData?.client_address?.mobile_number || "No Contact Number"}
+          </p>
+          <p className="text-gray-700 text-sm">
+            {billData?.client_address?.email || "No Email Provided"}
+          </p>
+          <div>
+            <h1 className="text-gray-700 font-extrabold   uppercase tracking-wide">
+              GST IN:{billData?.client_address?.gst || "GSt not provided"}
+            </h1>
+          </div>
 
+          {/* Divider */}
+          <div className="my-2 border-t border-gray-300"></div>
+        </div>
 
         {/* Order Info */}
         <div className="mb-3">
@@ -442,32 +439,32 @@ const ParcelBill = () => {
         </div>
 
         {/* Payment Summary */}
-{billData?.payments?.length > 0 && (
-  <div className="mt-2 text-xs">
-    <div className="font-semibold text-center mb-1">Payment</div>
-    <table className="w-full">
-      <tbody>
-        {billData.payments.map((p, i) => (
-          <tr key={i}>
-            <td className="text-left">{p.payment_method}</td>
-            <td className="text-right">₹{parseFloat(p.amount).toFixed(2)}</td>
-          </tr>
-        ))}
-        <tr className="font-bold border-t border-dashed border-gray-400">
-          <td>Total</td>
-          <td className="text-right">
-            ₹
-            {billData.payments
-              .reduce((sum, p) => sum + parseFloat(p.amount), 0)
-              .toFixed(2)}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-)}
-
-
+        {billData?.payments?.length > 0 && (
+          <div className="mt-2 text-xs">
+            <div className="font-semibold text-center mb-1">Payment</div>
+            <table className="w-full">
+              <tbody>
+                {billData.payments.map((p, i) => (
+                  <tr key={i}>
+                    <td className="text-left">{p.payment_method}</td>
+                    <td className="text-right">
+                      ₹{parseFloat(p.amount).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+                <tr className="font-bold border-t border-dashed border-gray-400">
+                  <td>Total</td>
+                  <td className="text-right">
+                    ₹
+                    {billData.payments
+                      .reduce((sum, p) => sum + parseFloat(p.amount), 0)
+                      .toFixed(2)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Footer */}
         <div className="footer">

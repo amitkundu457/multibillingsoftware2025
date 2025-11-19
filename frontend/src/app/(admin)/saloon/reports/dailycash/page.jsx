@@ -1,9 +1,3 @@
-
-
-
-
-
-
 // "use client";
 // import React, { useEffect, useState } from "react";
 // import { FaFilePdf } from "react-icons/fa6";
@@ -13,7 +7,6 @@
 // import autoTable from "jspdf-autotable";
 // import * as XLSX from "xlsx";
 // import {reporturl} from "@/app/lib/axios"; // Adjust the import path as needed
-
 
 // // Optional: Replace this with your notification system if notyf is not defined globally
 // const notyf = {
@@ -46,10 +39,10 @@
 
 //     const fetchData = async () => {
 //       try {
-//         const response = await axios.get(" http://127.0.0.1:8000/api/saloon-order-cash", {
+//         const response = await axios.get(" https://apibrize.brizindia.com/api/saloon-order-cash", {
 //           headers: { authorization: `Bearer ${token}` },
 //         });
-//         console.log("Fetched saloon dailycash:", response.data);  
+//         console.log("Fetched saloon dailycash:", response.data);
 //         setData(response.data.data);
 //       } catch (error) {
 //         console.error("Error fetching data:", error);
@@ -64,7 +57,7 @@
 //     const isInDateRange =
 //       (!startDate || new Date(startDate) <= itemDate) &&
 //       (!endDate || new Date(endDate) >= itemDate);
-  
+
 //     return (
 //       isInDateRange &&
 //       (
@@ -73,8 +66,6 @@
 //       )
 //     );
 //   });
-  
-  
 
 //   const downloadPDF = () => {
 //     const doc = new jsPDF();
@@ -202,7 +193,7 @@
 //               {/* <th className="py-3 px-4 border-b">Payment Mode</th> */}
 //               <th className="py-3 px-4 border-b">Pymt Date</th>
 //               <th className="py-3 px-4 border-b">Action</th>
-            
+
 //             </tr>
 //           </thead>
 //           <tbody>
@@ -225,7 +216,7 @@
 //                     prints
 //                   </a>
 //                 </td>
-              
+
 //               </tr>
 //             ))}
 //           </tbody>
@@ -276,12 +267,15 @@ const PaymentSummaryCards = () => {
         params.to_date = toDate;
       }
 
-      const res = await axios.get(" http://127.0.0.1:8000/api/cash-saloon", {
-        params,
-        headers: {
-          Authorization: `Bearer ${token}`, // Replace dynamically
-        },
-      });
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/cash-saloon",
+        {
+          params,
+          headers: {
+            Authorization: `Bearer ${token}`, // Replace dynamically
+          },
+        }
+      );
 
       setSummary(res.data.summary);
     } catch (error) {

@@ -25,7 +25,7 @@
 //     const token = getCookie("access_token");
 
 //     axios
-//       .post(" http://127.0.0.1:8000/api/customerstype", inputData, {
+//       .post(" https://apibrize.brizindia.com/api/customerstype", inputData, {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //           "Content-Type": "application/json",
@@ -100,15 +100,11 @@
 //     }
 //   };
 
-
 // const token = getToken();
 //     if (!token) {
 //       notifyTokenMissing();
 //       return;
 //     }
-
-
-
 
 //   const getCookie = (name) => {
 //     const value = `; ${document.cookie}`;
@@ -126,7 +122,7 @@
 //       return;
 //     }
 //     axios
-//       .get(" http://127.0.0.1:8000/api/customerstype ",
+//       .get(" https://apibrize.brizindia.com/api/customerstype ",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -165,7 +161,7 @@
 //     //   const token = getCookie("access_token");
 
 //     //   axios
-//     //     .post(` http://127.0.0.1:8000/api/customerstype/${id}`, {
+//     //     .post(` https://apibrize.brizindia.com/api/customerstype/${id}`, {
 //     //       headers: {
 //     //         Authorization: `Bearer ${token}`,
 //     //       },
@@ -187,7 +183,7 @@
 //       const token = getCookie("access_token");
 
 //       axios
-//         .delete(`  http://127.0.0.1:8000/api/customerstype/${id}`, {
+//         .delete(`  https://apibrize.brizindia.com/api/customerstype/${id}`, {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
 //           },
@@ -264,11 +260,7 @@
 
 // export default Page;
 
-
-
-
-// // Edit Model types 
-
+// // Edit Model types
 
 // export const EditModel = ({ onClose, onSave, id ,selectedItem }) => {
 //   const [inputData, setInputData] = useState({ name: selectedItem?.name || "" });
@@ -293,7 +285,7 @@
 //     console.log("input data",inputData)
 
 //     axios
-//       .post(` http://127.0.0.1:8000/api/customerstype/${id}`, inputData, {
+//       .post(` https://apibrize.brizindia.com/api/customerstype/${id}`, inputData, {
 //         headers: {
 //           Authorization: `Bearer ${token}`,
 //           "Content-Type": "application/json",
@@ -330,7 +322,6 @@
 //   );
 // };
 
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaUserEdit } from "react-icons/fa";
@@ -348,7 +339,8 @@ export const Model = ({ onClose, onSave }) => {
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift());
+    if (parts.length === 2)
+      return decodeURIComponent(parts.pop().split(";").shift());
     return null;
   };
 
@@ -357,7 +349,7 @@ export const Model = ({ onClose, onSave }) => {
     const token = getCookie("access_token");
 
     axios
-      .post(" http://127.0.0.1:8000/api/customerstype", inputData, {
+      .post(" https://apibrize.brizindia.com/api/customerstype", inputData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -366,8 +358,8 @@ export const Model = ({ onClose, onSave }) => {
       .then(() => {
         alert("Data added successfully!");
         onSave();
-        onClose(); 
-       })
+        onClose();
+      })
       .catch((error) => {
         console.error("Error:", error);
         alert("Failed to save data");
@@ -393,10 +385,16 @@ export const Model = ({ onClose, onSave }) => {
           className="w-full p-2 border rounded-md mb-4"
         />
         <div className="flex justify-between">
-          <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md" onClick={onClose}>
+          <button
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
+            onClick={onClose}
+          >
             Cancel
           </button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded-md">
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md"
+          >
             Save
           </button>
         </div>
@@ -412,14 +410,15 @@ export const EditModel = ({ onClose, onSave, id }) => {
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift());
+    if (parts.length === 2)
+      return decodeURIComponent(parts.pop().split(";").shift());
     return null;
   };
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get(` http://127.0.0.1:8000/api/customerstype/${id}`, {
+      .get(` https://apibrize.brizindia.com/api/customerstype/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setInputData({ name: res.data.data.name }))
@@ -438,12 +437,16 @@ export const EditModel = ({ onClose, onSave, id }) => {
     const token = getCookie("access_token");
 
     axios
-      .post(` http://127.0.0.1:8000/api/customerstype/${id}`, inputData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        ` https://apibrize.brizindia.com/api/customerstype/${id}`,
+        inputData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then(() => {
         alert("Data updated successfully!");
         onSave();
@@ -473,10 +476,16 @@ export const EditModel = ({ onClose, onSave, id }) => {
           className="w-full p-2 border rounded-md mb-4"
         />
         <div className="flex justify-between">
-          <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md" onClick={onClose}>
+          <button
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md"
+            onClick={onClose}
+          >
             Cancel
           </button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-blue-600 text-white rounded-md">
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md"
+          >
             Save
           </button>
         </div>
@@ -517,7 +526,7 @@ const Page = () => {
     }
 
     axios
-      .get(" http://127.0.0.1:8000/api/customerstype", {
+      .get(" https://apibrize.brizindia.com/api/customerstype", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -535,9 +544,9 @@ const Page = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this record?")) {
-    const token = getCookie("access_token");
+      const token = getCookie("access_token");
       axios
-        .delete(` http://127.0.0.1:8000/api/customerstype/${id}`, {
+        .delete(` https://apibrize.brizindia.com/api/customerstype/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
@@ -568,8 +577,12 @@ const Page = () => {
       <table className="min-w-full table-auto border-collapse border border-gray-300">
         <thead className="bg-gray-100">
           <tr>
-            <th className="px-4 py-2 text-left font-semibold text-gray-700">Name</th>
-            <th className="px-4 py-2 text-left font-semibold text-gray-700">Action</th>
+            <th className="px-4 py-2 text-left font-semibold text-gray-700">
+              Name
+            </th>
+            <th className="px-4 py-2 text-left font-semibold text-gray-700">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -605,9 +618,15 @@ const Page = () => {
         </tbody>
       </table>
 
-      {showModel && <Model onClose={() => setShowModel(false)} onSave={fetchData} />}
+      {showModel && (
+        <Model onClose={() => setShowModel(false)} onSave={fetchData} />
+      )}
       {editModelShow && (
-        <EditModel onClose={() => setEditModelShow(false)} onSave={fetchData} id={editId} />
+        <EditModel
+          onClose={() => setEditModelShow(false)}
+          onSave={fetchData}
+          id={editId}
+        />
       )}
     </div>
   );

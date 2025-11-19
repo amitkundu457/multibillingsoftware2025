@@ -21,11 +21,14 @@ const Saloon = () => {
   // Fetch stylists
   const fetchStylists = async () => {
     const token = getToken();
-    const response = await axios.get(" http://127.0.0.1:8000/api/stylists", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      " https://apibrize.brizindia.com/api/stylists",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     setStylists(response.data);
   };
 
@@ -52,12 +55,12 @@ const Saloon = () => {
 
   // Create or Update Stylist
   const handleSave = async () => {
-        const token = getToken();
+    const token = getToken();
 
     if (selectedStylist) {
       // Update existing stylist
       await axios.put(
-        ` http://127.0.0.1:8000/api/stylists/${selectedStylist.id}`,
+        ` https://apibrize.brizindia.com/api/stylists/${selectedStylist.id}`,
         stylistData,
         {
           headers: {
@@ -67,11 +70,15 @@ const Saloon = () => {
       );
     } else {
       // Add new stylist
-      await axios.post(" http://127.0.0.1:8000/api/stylists", stylistData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        " https://apibrize.brizindia.com/api/stylists",
+        stylistData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     }
     fetchStylists(); // Re-fetch the list of stylists
     closeModal();
@@ -80,7 +87,7 @@ const Saloon = () => {
   // Delete Stylist
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this stylist?")) {
-      await axios.delete(` http://127.0.0.1:8000/api/stylists/${id}`);
+      await axios.delete(` https://apibrize.brizindia.com/api/stylists/${id}`);
       fetchStylists(); // Re-fetch after delete
     }
   };

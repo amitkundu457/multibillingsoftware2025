@@ -3,8 +3,16 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 
-export default function BookingModal({customer_id}) {
-  const { register, handleSubmit, formState: { errors }, reset, setValue, getValues,watch } = useForm();
+export default function BookingModal({ customer_id }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    getValues,
+    watch,
+  } = useForm();
   const [mode, setMode] = useState("new"); // "new" or "modify"
   const [nextNumber, setNextNumber] = useState({});
   const [packages, setPackages] = useState([]);
@@ -27,23 +35,27 @@ export default function BookingModal({customer_id}) {
   const token = getCookie("access_token");
 
   const fetchNumber = () => {
-    axios.get("  http://127.0.0.1:8000/api/packagesnext-numbers")
-      .then(res => {
+    axios
+      .get("  https://apibrize.brizindia.com/api/packagesnext-numbers")
+      .then((res) => {
         setNextNumber(res.data);
         setValue("packageNo", res.data.package_no || "");
         setValue("receiptNo", res.data.receipt_no || "");
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   };
 
   const fetchPackages = async () => {
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/packagename", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/packagename",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       setPackages(response.data);
     } catch (error) {
       console.error("Error fetching packages:", error);
@@ -57,14 +69,17 @@ export default function BookingModal({customer_id}) {
       alert("Please enter a Package No");
       return;
     }
-    
+
     setLoading(true);
     try {
-      const response = await axios.get(`  http://127.0.0.1:8000/api/packagesassn/${packageNo}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `  https://apibrize.brizindia.com/api/packagesassn/${packageNo}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const packageData = response.data;
       if (packageData) {
@@ -87,13 +102,12 @@ export default function BookingModal({customer_id}) {
   const handleModeChange = (event) => {
     const selectedMode = event.target.value;
     setMode(selectedMode);
-    
+
     if (selectedMode === "new") {
       reset();
       fetchNumber();
     }
   };
-
 
   const Printbill = (orderId, billInv) => {
     if (!orderId) {
@@ -115,23 +129,24 @@ export default function BookingModal({customer_id}) {
 
   // Handle form submission
   const onSubmit = (data) => {
-    const apiUrl = mode === "new" 
-      ? "  http://127.0.0.1:8000/api/packagesassign" 
-      : `  http://127.0.0.1:8000/api/packageupdate/${data.packageNo}`;
-alert(data.packageNo)
+    const apiUrl =
+      mode === "new"
+        ? "  https://apibrize.brizindia.com/api/packagesassign"
+        : `  https://apibrize.brizindia.com/api/packageupdate/${data.packageNo}`;
+    alert(data.packageNo);
     const method = mode === "new" ? axios.post : axios.post;
 
     method(apiUrl, data)
       .then((res) => {
         const packageAssignId = res.data.data.customer_id; // Ensure backend returns this
-       // alert(mode === "new" ? "New package saved!" : "Package updated successfully!");
-       const printConfirmation = window.confirm(
-        "Do you want to print the bill?"
-      );
+        // alert(mode === "new" ? "New package saved!" : "Package updated successfully!");
+        const printConfirmation = window.confirm(
+          "Do you want to print the bill?"
+        );
 
-      if (printConfirmation) {
-        Printbill(packageAssignId, res.data.bill_inv); // Call the direct print function
-      }
+        if (printConfirmation) {
+          Printbill(packageAssignId, res.data.bill_inv); // Call the direct print function
+        }
 
         reset();
       })
@@ -143,11 +158,15 @@ alert(data.packageNo)
 
   const selectedPackageId = watch("package_id"); // Watch selected package
 
-
-   // Auto-fill service amount when a package is selected
-   useEffect(() => {
-    const selectedPackage = packages.find((pkg) => pkg.id === Number(selectedPackageId));
-    setValue("serviceAmount", selectedPackage ? selectedPackage.price || "" : "");
+  // Auto-fill service amount when a package is selected
+  useEffect(() => {
+    const selectedPackage = packages.find(
+      (pkg) => pkg.id === Number(selectedPackageId)
+    );
+    setValue(
+      "serviceAmount",
+      selectedPackage ? selectedPackage.price || "" : ""
+    );
   }, [selectedPackageId, packages, setValue]);
 
   return (
@@ -158,11 +177,21 @@ alert(data.packageNo)
         {/* Mode Selection */}
         <div className="flex gap-4">
           <label>
-            <input type="radio" value="new" checked={mode === "new"} onChange={handleModeChange} />
+            <input
+              type="radio"
+              value="new"
+              checked={mode === "new"}
+              onChange={handleModeChange}
+            />
             New
           </label>
           <label>
-            <input type="radio" value="modify" checked={mode === "modify"} onChange={handleModeChange} />
+            <input
+              type="radio"
+              value="modify"
+              checked={mode === "modify"}
+              onChange={handleModeChange}
+            />
             Modify
           </label>
         </div>
@@ -187,7 +216,9 @@ alert(data.packageNo)
               </button>
             )}
           </div>
-          {errors.packageNo && <p className="text-red-500">{errors.packageNo.message}</p>}
+          {errors.packageNo && (
+            <p className="text-red-500">{errors.packageNo.message}</p>
+          )}
         </div>
 
         {/* Receipt No */}
@@ -198,13 +229,18 @@ alert(data.packageNo)
             {...register("receiptNo", { required: "Receipt No is required" })}
             className="w-full p-2 border rounded-md"
           />
-          {errors.receiptNo && <p className="text-red-500">{errors.receiptNo.message}</p>}
+          {errors.receiptNo && (
+            <p className="text-red-500">{errors.receiptNo.message}</p>
+          )}
         </div>
 
         {/* Package Selection */}
         <div>
           <label>Package</label>
-          <select {...register("package_id", { required: "Choose a package" })} className="w-full p-2 border rounded-md">
+          <select
+            {...register("package_id", { required: "Choose a package" })}
+            className="w-full p-2 border rounded-md"
+          >
             <option value="">Choose package</option>
             {packages.map((pkg) => (
               <option key={pkg.id} value={pkg.id}>
@@ -212,19 +248,21 @@ alert(data.packageNo)
               </option>
             ))}
           </select>
-          {errors.package_id && <p className="text-red-500">{errors.package_id.message}</p>}
+          {errors.package_id && (
+            <p className="text-red-500">{errors.package_id.message}</p>
+          )}
         </div>
 
-         {/* Service Amount - Auto-filled */}
-      <div>
-        <label>Service Amount</label>
-        <input
-          type="number"
-          {...register("serviceAmount")}
-          className="w-full p-2 border rounded-md bg-gray-100"
-          readOnly
-        />
-      </div>
+        {/* Service Amount - Auto-filled */}
+        <div>
+          <label>Service Amount</label>
+          <input
+            type="number"
+            {...register("serviceAmount")}
+            className="w-full p-2 border rounded-md bg-gray-100"
+            readOnly
+          />
+        </div>
 
         {/* Other Form Fields */}
         {[
@@ -233,59 +271,82 @@ alert(data.packageNo)
           // { name: "serviceAmount", label: "Service Amount", type: "number" },
           { name: "paidAmount", label: "Paid Amount", type: "number" },
           { name: "balanceAmount", label: "Balance Amount", type: "number" },
-          { name: "remainingAmount", label: "Remaining Amount", type: "number" },
+          {
+            name: "remainingAmount",
+            label: "Remaining Amount",
+            type: "number",
+          },
           { name: "paymentDate", label: "Payment  Date", type: "date" },
           { name: "packageBooking", label: "Package  Booking", type: "date" },
           { name: "packageExpiry", label: "Package  Expiry", type: "date" },
-        //   { name: "settlementMode", label: "Package  Expiry", type: "date" },
+          //   { name: "settlementMode", label: "Package  Expiry", type: "date" },
         ].map((field) => (
           <div key={field.name}>
             <label>{field.label}</label>
             <input
               type={field.type}
-              {...register(field.name, { required: `${field.label} is required` })}
+              {...register(field.name, {
+                required: `${field.label} is required`,
+              })}
               className="w-full p-2 border rounded-md"
             />
-            {errors[field.name] && <p className="text-red-500">{errors[field.name].message}</p>}
+            {errors[field.name] && (
+              <p className="text-red-500">{errors[field.name].message}</p>
+            )}
           </div>
         ))}
 
-<div>
+        <div>
           <label>Settlement </label>
-          <select {...register("settlementMode", { required: "Choose a package" })} className="w-full p-2 border rounded-md">
+          <select
+            {...register("settlementMode", { required: "Choose a package" })}
+            className="w-full p-2 border rounded-md"
+          >
             <option value="">Choose settlement mode</option>
             <option value="0">Cash</option>
             <option value="1">Debit</option>
-         
           </select>
-          {errors.package_id && <p className="text-red-500">{errors.package_id.message}</p>}
+          {errors.package_id && (
+            <p className="text-red-500">{errors.package_id.message}</p>
+          )}
         </div>
 
         <div>
           <label>Payment Status </label>
-          <select {...register("paymentStatus", { required: "Choose a package" })} className="w-full p-2 border rounded-md">
+          <select
+            {...register("paymentStatus", { required: "Choose a package" })}
+            className="w-full p-2 border rounded-md"
+          >
             <option value="">Choose Status</option>
             <option value="0">Paid</option>
             <option value="1">Unpaid</option>
-         
           </select>
-          {errors.package_id && <p className="text-red-500">{errors.package_id.message}</p>}
+          {errors.package_id && (
+            <p className="text-red-500">{errors.package_id.message}</p>
+          )}
         </div>
 
         <div>
           <label>Package Status </label>
-          <select {...register("packageStatus", { required: "Choose a package" })} className="w-full p-2 border rounded-md">
+          <select
+            {...register("packageStatus", { required: "Choose a package" })}
+            className="w-full p-2 border rounded-md"
+          >
             <option value="">Choose Status</option>
             <option value="0">Complete</option>
             <option value="1">Unpaid</option>
-         
           </select>
-          {errors.package_id && <p className="text-red-500">{errors.package_id.message}</p>}
+          {errors.package_id && (
+            <p className="text-red-500">{errors.package_id.message}</p>
+          )}
         </div>
 
         {/* Submit Button */}
         <div className="flex gap-2">
-          <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-md">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-green-500 text-white rounded-md"
+          >
             {mode === "new" ? "Save & Print" : "Modify & Save"}
           </button>
         </div>

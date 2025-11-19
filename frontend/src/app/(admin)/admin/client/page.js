@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect,useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
@@ -14,15 +14,12 @@ const ClientManagement = () => {
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [distributors, setDistributors] = useState([]);
-  const { register, handleSubmit, reset, setValue,getValues ,  } = useForm();
+  const { register, handleSubmit, reset, setValue, getValues } = useForm();
   const [roles, setRoles] = useState([]);
-   const [distributorsc, setDistributorsc] = useState([]);
- 
-   
+  const [distributorsc, setDistributorsc] = useState([]);
+
   // Fetch clients from the API
   useEffect(() => {
-  
-
     fetchClients();
     fetchRoles();
     fetchDistributors();
@@ -30,9 +27,11 @@ const ClientManagement = () => {
 
   const fetchRoles = async () => {
     try {
-      const response = await axios.get('  http://127.0.0.1:8000/api/roles');
-      console.log('API Response:', response); // Check the full response
-      setRoles(response.data); 
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/roles"
+      );
+      console.log("API Response:", response); // Check the full response
+      setRoles(response.data);
     } catch (error) {
       console.error("Failed to fetch roles:", error);
     }
@@ -40,7 +39,9 @@ const ClientManagement = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/user-infos");
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/user-infos"
+      );
       setClients(response.data.data);
     } catch (error) {
       console.error("Error fetching clients:", error);
@@ -60,7 +61,9 @@ const ClientManagement = () => {
   useEffect(() => {
     const fetchDistributors = async () => {
       try {
-        const response = await axios.get("  http://127.0.0.1:8000/api/distributors/search");
+        const response = await axios.get(
+          "  https://apibrize.brizindia.com/api/distributors/search"
+        );
         setDistributors(response.data.data);
       } catch (error) {
         console.error("Error fetching distributors:", error);
@@ -95,7 +98,6 @@ const ClientManagement = () => {
     setValue("dist_id", client.dist_id);
     setEditModalOpen(true);
   };
-  
 
   // Open the assign modal
   const handleAssign = (client) => {
@@ -109,7 +111,7 @@ const ClientManagement = () => {
     // alert('test')
     try {
       const response = await axios.post(
-        `  http://127.0.0.1:8000/api/user-infos/${data.user_id}`,
+        `  https://apibrize.brizindia.com/api/user-infos/${data.user_id}`,
         data,
         {
           headers: { "Content-Type": "application/json" },
@@ -121,14 +123,16 @@ const ClientManagement = () => {
         setEditModalOpen(false);
         reset();
         // Refresh the client list
-        const updatedClients = await axios.get("  http://127.0.0.1:8000/api/user-infos");
+        const updatedClients = await axios.get(
+          "  https://apibrize.brizindia.com/api/user-infos"
+        );
         setClients(updatedClients.data.data);
       } else {
         alert(`Error: ${response.data.message}`);
       }
     } catch (error) {
       console.error("Error updating client:", error);
-     toast.error(error.response.data?.message);
+      toast.error(error.response.data?.message);
       alert("An error occurred while updating the client.");
     }
   };
@@ -136,16 +140,16 @@ const ClientManagement = () => {
   // Handle form submission for assigning distributor
   const onSubmitAssign = async (data) => {
     console.log("Form Data Submitted:", data); // Debugging log
-  
+
     try {
       const response = await axios.post(
-        `  http://127.0.0.1:8000/api/assign-distributor`,
+        `  https://apibrize.brizindia.com/api/assign-distributor`,
         data,
         {
           headers: { "Content-Type": "application/json" },
         }
       );
-  
+
       if (response.status === 200) {
         alert("Distributor assigned successfully!");
         setAssignModalOpen(false);
@@ -155,17 +159,18 @@ const ClientManagement = () => {
       }
     } catch (error) {
       console.error("Error assigning distributor:", error);
-  
+
       // Show correct error message
-      alert(error.response?.data?.message || "Failed to assign distributor. Please try again.");
+      alert(
+        error.response?.data?.message ||
+          "Failed to assign distributor. Please try again."
+      );
     }
   };
-  
-
 
   const handleDelete = (id) => {
     axios
-      .post(`  http://127.0.0.1:8000/api/user-infosdel/${id}`)
+      .post(`  https://apibrize.brizindia.com/api/user-infosdel/${id}`)
       .then((response) => {
         console.log(response);
         fetchClients();
@@ -190,14 +195,14 @@ const ClientManagement = () => {
   const handleCustomerSubmit = async (e) => {
     e.preventDefault();
 
-    const url = '  http://127.0.0.1:8000/api/user-infos/27'; // API endpoint
-    const method = 'post'; // Use PUT or PATCH depending on your API
+    const url = "  https://apibrize.brizindia.com/api/user-infos/27"; // API endpoint
+    const method = "post"; // Use PUT or PATCH depending on your API
 
     try {
       const response = await fetch(url, {
         method: method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -207,24 +212,22 @@ const ClientManagement = () => {
       }
 
       const result = await response.json();
-      console.log('Success:', result);
+      console.log("Success:", result);
       closeActionModal(); // Close the modal after successful update
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
-  
- 
-  
 
   return (
     <div>
       <div className="grid place-items-center bg-[#04A24C] text-white p-3">
-        Client Management <form onSubmit={handleSubmit(onSubmitAssign)}>
-  {/* <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+        Client Management{" "}
+        <form onSubmit={handleSubmit(onSubmitAssign)}>
+          {/* <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
     Assign
   </button> */}
-</form>
+        </form>
       </div>
       <table className="table-auto w-full border-collapse border border-[#F0B171]">
         <thead className="bg-[#F0B171]">
@@ -256,12 +259,12 @@ const ClientManagement = () => {
                   Edit
                 </button>
                 <button
-                    onClick={() => handleDelete(client.id)}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-100 p-2 rounded-full transition-all duration-200"
-                    title="Delete"
-                  >
-                    <MdDelete size={20} />
-                    </button>
+                  onClick={() => handleDelete(client.id)}
+                  className="text-red-500 hover:text-red-700 hover:bg-red-100 p-2 rounded-full transition-all duration-200"
+                  title="Delete"
+                >
+                  <MdDelete size={20} />
+                </button>
                 <button
                   className="bg-green-500 text-white px-4 py-2 rounded"
                   onClick={() => handleAssign(client)}
@@ -287,10 +290,16 @@ const ClientManagement = () => {
         <div className="p-4">
           <h2 className="text-xl font-bold mb-4">Edit Client</h2>
           <form onSubmit={handleSubmit(onSubmitEdit)}>
-            <input type="text" {...register("client_id", { required: true })} hidden />
+            <input
+              type="text"
+              {...register("client_id", { required: true })}
+              hidden
+            />
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">First Name:</label>
+              <label className="block text-sm font-medium text-gray-700">
+                First Name:
+              </label>
               <input
                 type="text"
                 {...register("first_name", { required: true })}
@@ -299,7 +308,9 @@ const ClientManagement = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Last Name:</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Last Name:
+              </label>
               <input
                 type="text"
                 {...register("last_name", { required: true })}
@@ -308,7 +319,9 @@ const ClientManagement = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Email:</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Email:
+              </label>
               <input
                 type="email"
                 {...register("email")}
@@ -317,7 +330,9 @@ const ClientManagement = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">Mobile:</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Mobile:
+              </label>
               <input
                 type="text"
                 {...register("mobile_number", { required: true })}
@@ -325,136 +340,156 @@ const ClientManagement = () => {
               />
             </div>
             <div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Category:</label>
-  <select
-            name="category"
-            // value={roleClient}
-            {...register("category", { required: true })}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-200"
-          >
-            <option value="">Select a category</option>
-            {roles
-              ?.filter((role) => role.name !== "admin") // Exclude the "admin" role
-              .map((role) => (
-                <option key={role.id} value={role.name}>
-                  {role.name}
+              <label className="block text-sm font-medium text-gray-700">
+                Category:
+              </label>
+              <select
+                name="category"
+                // value={roleClient}
+                {...register("category", { required: true })}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-200"
+              >
+                <option value="">Select a category</option>
+                {roles
+                  ?.filter((role) => role.name !== "admin") // Exclude the "admin" role
+                  .map((role) => (
+                    <option key={role.id} value={role.name}>
+                      {role.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Business Name:
+              </label>
+              <input
+                type="text"
+                {...register("business_name")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Address 1:
+              </label>
+              <input
+                type="text"
+                {...register("address_1")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Address 2:
+              </label>
+              <input
+                type="text"
+                {...register("address_2")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Landmark:
+              </label>
+              <input
+                type="text"
+                {...register("landmark")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Pincode:
+              </label>
+              <input
+                type="text"
+                {...register("pincode")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Country:
+              </label>
+              <input
+                type="text"
+                {...register("country")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                State:
+              </label>
+              <input
+                type="text"
+                {...register("state")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                City:
+              </label>
+              <input
+                type="text"
+                {...register("city")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Agreed to Terms:
+              </label>
+              <input
+                type="checkbox"
+                {...register("agreed_to_terms")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Contact Person:
+              </label>
+              <input
+                type="text"
+                {...register("contant_person")}
+                className="w-full border px-3 py-2"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Distributor ID:
+              </label>
+
+              <select
+                {...register("dist_id")}
+                // value={client.distributor_id}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-200"
+              >
+                <option value="" disabled>
+                  Select a Partner
                 </option>
-              ))}
-          </select>
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Business Name:</label>
-  <input
-    type="text"
-    {...register("business_name")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Address 1:</label>
-  <input
-    type="text"
-    {...register("address_1")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Address 2:</label>
-  <input
-    type="text"
-    {...register("address_2")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Landmark:</label>
-  <input
-    type="text"
-    {...register("landmark")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Pincode:</label>
-  <input
-    type="text"
-    {...register("pincode")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Country:</label>
-  <input
-    type="text"
-    {...register("country")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">State:</label>
-  <input
-    type="text"
-    {...register("state")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">City:</label>
-  <input
-    type="text"
-    {...register("city")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Agreed to Terms:</label>
-  <input
-    type="checkbox"
-    {...register("agreed_to_terms")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Contact Person:</label>
-  <input
-    type="text"
-    {...register("contant_person")}
-    className="w-full border px-3 py-2"
-  />
-</div>
-
-
-
-<div className="mb-4">
-  <label className="block text-sm font-medium text-gray-700">Distributor ID:</label>
-  
-
-<select
-          {...register("dist_id")}
-        // value={client.distributor_id}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring focus:ring-blue-200"
-          >
-            <option value="" disabled>
-              Select a Partner
-            </option>
-            {distributorsc.map((category, index) => (
-              <option key={index} value={category.user_id}>
-                {category.userdist.name} ({category.phone})
-              </option>
-            ))}
-          </select>
-</div>
-
+                {distributorsc.map((category, index) => (
+                  <option key={index} value={category.user_id}>
+                    {category.userdist.name} ({category.phone})
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <button
               type="submit"
@@ -497,31 +532,33 @@ const ClientManagement = () => {
                   Distributor:
                 </label>
                 <ReactSelect
-  options={distributors.map((dist) => ({
-    value: dist.user_id,
-    label: `${dist.userdist.name} (${dist.phone})`,
-  }))}
-  placeholder="Select a distributor"
-  onChange={(selectedOption) => {
-    console.log("Selected Distributor:", selectedOption); // Debugging
-    setValue("distributor_id", selectedOption ? selectedOption.value : ""); // Make sure it's "distributor_id"
-  }}
-  className="mb-4"
-/>
-
+                  options={distributors.map((dist) => ({
+                    value: dist.user_id,
+                    label: `${dist.userdist.name} (${dist.phone})`,
+                  }))}
+                  placeholder="Select a distributor"
+                  onChange={(selectedOption) => {
+                    console.log("Selected Distributor:", selectedOption); // Debugging
+                    setValue(
+                      "distributor_id",
+                      selectedOption ? selectedOption.value : ""
+                    ); // Make sure it's "distributor_id"
+                  }}
+                  className="mb-4"
+                />
               </div>
               <button
-  type="button"
-  className="bg-blue-500 text-white px-4 py-2 rounded"
-  onClick={() => onSubmitAssign({
-    client_id: selectedClient?.users.id,
-    distributor_id: getValues("distributor_id"), // Ensure it gets the value
-  })}
->
-  Test Assign
-</button>
-
-
+                type="button"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={() =>
+                  onSubmitAssign({
+                    client_id: selectedClient?.users.id,
+                    distributor_id: getValues("distributor_id"), // Ensure it gets the value
+                  })
+                }
+              >
+                Test Assign
+              </button>
             </form>
           )}
         </div>

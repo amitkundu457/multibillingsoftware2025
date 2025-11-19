@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Modal } from "react-responsive-modal";
@@ -17,8 +17,6 @@ const Customers = () => {
   const [customerTypeData, setCustomerTypeData] = useState([]);
   const [customerSubTypeData, setCustomerSubTypeData] = useState([]);
 
-  
-
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -31,7 +29,7 @@ const Customers = () => {
     defaultValues: {
       name: "",
       phone: "",
-      customerType: "",   
+      customerType: "",
       customerSubType: "",
       dob: "",
       anniversary: "",
@@ -41,10 +39,8 @@ const Customers = () => {
       pincode: "",
       state: "",
       country: "",
-      remark:"",
-      customerEnquiry:"",
-
-      
+      remark: "",
+      customerEnquiry: "",
     },
   });
   const notyf = new Notyf(); // Initialize Notyf
@@ -53,15 +49,18 @@ const Customers = () => {
   const fetchCustomers = async () => {
     try {
       const token = getCookie("access_token"); // Retrieve token
-      console.log("customber token",token)
-  
+      console.log("customber token", token);
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },
       };
-  
-      const { data } = await axios.get("  http://127.0.0.1:8000/api/customers", config);
+
+      const { data } = await axios.get(
+        "  https://apibrize.brizindia.com/api/customers",
+        config
+      );
       setCustomers(data);
     } catch (error) {
       notyf.error("Error fetching customers!");
@@ -69,50 +68,48 @@ const Customers = () => {
     }
   };
 
-
-
-
-  
-
   // Handle Create/Update
   const onSubmit = async (data) => {
     try {
-      console.log("onsubmit",data)
+      console.log("onsubmit", data);
       const token = getCookie("access_token"); // Retrieve token
       console.log(token);
-      
-  
+
       const payload = {
         ...data,
         customer_type: data.customerTypeData, // Mapping to backend's expected field
         customer_sub_type: data.customerSubTypeData || null, // Ensure the sub type is sent as null if not provided
       };
 
-      console.log("payload",payload)
-  
+      console.log("payload", payload);
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers
           "Content-Type": "application/json",
         },
       };
-  
+
       if (modalType === "create") {
-        await axios.post("  http://127.0.0.1:8000/api/customers", payload, config);
+        await axios.post(
+          "  https://apibrize.brizindia.com/api/customers",
+          payload,
+          config
+        );
         notyf.success("Customer created successfully!");
         fetchCustomers();
       } else if (modalType === "edit") {
-        console.log("updated.....",payload)
+        console.log("updated.....", payload);
         await axios.post(
-          `  http://127.0.0.1:8000/api/customers/${currentCustomer.id}`,
+          `  https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`,
           payload,
           config
         );
         notyf.success("Customer updated successfully!");
-        console.log("update user")
+        console.log("update user");
         fetchCustomers();
       }
-  
+
       fetchCustomers();
       closeModal();
     } catch (error) {
@@ -120,18 +117,21 @@ const Customers = () => {
       console.error("Error saving customer:", error);
     }
   };
-  
 
   // Handle Delete
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this customer?")) {
       try {
-        await axios.delete(`  http://127.0.0.1:8000/api/customers/${id}`);
+        await axios.delete(
+          `  https://apibrize.brizindia.com/api/customers/${id}`
+        );
         toast.success("Customer deleted successfully!");
         fetchCustomers();
-        console.log("customber deleted ")
+        console.log("customber deleted ");
       } catch (error) {
-       toast.error("Cannot Delete Customer because they have associated Orders.")
+        toast.error(
+          "Cannot Delete Customer because they have associated Orders."
+        );
         // notyf.error("Error deleting customer!");
         console.error("Error deleting customer:", error);
       }
@@ -157,7 +157,6 @@ const Customers = () => {
     fetchCustomers();
   }, []);
 
-
   useEffect(() => {
     if (!isModalOpen) {
       fetchCustomers();
@@ -166,15 +165,14 @@ const Customers = () => {
   // Fetch customer type data
   useEffect(() => {
     const token = getCookie("access_token"); // Retrieve token
-    console.log("customber token",token)
+    console.log("customber token", token);
     axios
-      .get(" http://127.0.0.1:8000/api/customerstype",
-        
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
+      .get(
+        " https://apibrize.brizindia.com/api/customerstype",
 
-
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       ) // Correct endpoint for customer types
       .then((response) => {
         console.log(response.data);
@@ -190,11 +188,9 @@ const Customers = () => {
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      .get("  http://127.0.0.1:8000/api/customersubtypes",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      ) // Correct endpoint for sub-types
+      .get("  https://apibrize.brizindia.com/api/customersubtypes", {
+        headers: { Authorization: `Bearer ${token}` },
+      }) // Correct endpoint for sub-types
       .then((response) => {
         setCustomerSubTypeData(response.data); // Ensure response is correctly formatted
       })
@@ -202,8 +198,6 @@ const Customers = () => {
         alert("Failed to fetch customer sub-types");
       });
   }, []);
-
-  
 
   return (
     <div className="p-6">
@@ -249,7 +243,7 @@ const Customers = () => {
               <td className="px-4 py-2 border border-gray-300">
                 {customer.state}
               </td>
-             
+
               <td className="px-4 py-2 border border-gray-300">
                 {customer.country}
               </td>
@@ -331,7 +325,7 @@ export default Customers;
 //   const { register, handleSubmit, reset } = useForm();
 
 //   const notyf = new Notyf();
-  
+
 //   const getCookie = (name) => {
 //     const value = `; ${document.cookie}`;
 //     const parts = value.split(`; ${name}=`);
@@ -346,7 +340,7 @@ export default Customers;
 //     setIsLoading(true);
 //     const token = getCookie("access_token");
 //     try {
-//       const { data } = await apiRequest("get", " http://127.0.0.1:8000/api/customers", null, token);
+//       const { data } = await apiRequest("get", " https://apibrize.brizindia.com/api/customers", null, token);
 //       setCustomers(data);
 //     } catch (error) {
 //       notyf.error("Error fetching customers!");
@@ -375,10 +369,10 @@ export default Customers;
 //     try {
 //       const token = getCookie("access_token");
 //       const payload = { ...data, customer_type: data.customerTypeData, customer_sub_type: data.customerSubTypeData || null };
-      
-//       const apiUrl = modalType === "create" ? " http://127.0.0.1:8000/api/customers" : ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`;
+
+//       const apiUrl = modalType === "create" ? " https://apibrize.brizindia.com/api/customers" : ` https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`;
 //       await apiRequest(modalType === "create" ? "post" : "put", apiUrl, payload, token);
-      
+
 //       notyf.success(`${modalType === "create" ? "Customer created" : "Customer updated"} successfully!`);
 //       fetchCustomers();
 //       closeModal();
@@ -392,7 +386,7 @@ export default Customers;
 //   const handleDelete = async (id) => {
 //     if (confirm("Are you sure you want to delete this customer?")) {
 //       try {
-//         await apiRequest("delete", ` http://127.0.0.1:8000/api/customers/${id}`, null, getCookie("access_token"));
+//         await apiRequest("delete", ` https://apibrize.brizindia.com/api/customers/${id}`, null, getCookie("access_token"));
 //         toast.success("Customer deleted successfully!");
 //         fetchCustomers();
 //       } catch (error) {
@@ -433,8 +427,8 @@ export default Customers;
 
 //   useEffect(() => {
 //     fetchCustomers();
-//     fetchData(" http://127.0.0.1:8000/api/customerstype", setCustomerTypeData);
-//     fetchData(" http://127.0.0.1:8000/api/customersubtypes", setCustomerSubTypeData);
+//     fetchData(" https://apibrize.brizindia.com/api/customerstype", setCustomerTypeData);
+//     fetchData(" https://apibrize.brizindia.com/api/customersubtypes", setCustomerSubTypeData);
 //   }, []);
 
 //   return (
@@ -510,9 +504,6 @@ export default Customers;
 
 // export default Customers;
 
-
-
-
 // // "use client";
 // // import React, { useEffect, useState } from "react";
 // // import axios from "axios";
@@ -554,7 +545,7 @@ export default Customers;
 
 // //   const { register, handleSubmit, reset, watch, setValue } = useForm();
 // //   const notyf = new Notyf();
-  
+
 // //   const selectedCountry = watch("country");
 
 // //   const getCookie = (name) => {
@@ -570,7 +561,7 @@ export default Customers;
 // //     setIsLoading(true);
 // //     const token = getCookie("access_token");
 // //     try {
-// //       const { data } = await apiRequest("get", " http://127.0.0.1:8000/api/customers", null, token);
+// //       const { data } = await apiRequest("get", " https://apibrize.brizindia.com/api/customers", null, token);
 // //       setCustomers(data);
 // //     } catch (error) {
 // //       notyf.error("Error fetching customers!");
@@ -625,10 +616,10 @@ export default Customers;
 // //     try {
 // //       const token = getCookie("access_token");
 // //       const payload = { ...data, customer_type: data.customerTypeData, customer_sub_type: data.customerSubTypeData || null };
-      
-// //       const apiUrl = modalType === "create" ? " http://127.0.0.1:8000/api/customers" : ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`;
+
+// //       const apiUrl = modalType === "create" ? " https://apibrize.brizindia.com/api/customers" : ` https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`;
 // //       await apiRequest(modalType === "create" ? "post" : "put", apiUrl, payload, token);
-      
+
 // //       notyf.success(`${modalType === "create" ? "Customer created" : "Customer updated"} successfully!`);
 // //       fetchCustomers();
 // //       closeModal();
@@ -641,7 +632,7 @@ export default Customers;
 // //   const handleDelete = async (id) => {
 // //     if (confirm("Are you sure you want to delete this customer?")) {
 // //       try {
-// //         await apiRequest("delete", ` http://127.0.0.1:8000/api/customers/${id}`, null, getCookie("access_token"));
+// //         await apiRequest("delete", ` https://apibrize.brizindia.com/api/customers/${id}`, null, getCookie("access_token"));
 // //         toast.success("Customer deleted successfully!");
 // //         fetchCustomers();
 // //       } catch (error) {
@@ -653,8 +644,8 @@ export default Customers;
 
 // //   useEffect(() => {
 // //     fetchCustomers();
-// //     fetchData(" http://127.0.0.1:8000/api/customerstype", setCustomerTypeData);
-// //     fetchData(" http://127.0.0.1:8000/api/customersubtypes", setCustomerSubTypeData);
+// //     fetchData(" https://apibrize.brizindia.com/api/customerstype", setCustomerTypeData);
+// //     fetchData(" https://apibrize.brizindia.com/api/customersubtypes", setCustomerSubTypeData);
 // //     const countryList = Country.getAllCountries();
 // //     setCountries(countryList);
 // //   }, []);
@@ -843,8 +834,6 @@ export default Customers;
 
 // // export default Customers;
 
-
-
 // "use client";
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
@@ -894,7 +883,7 @@ export default Customers;
 //     setIsLoading(true);
 //     try {
 //       const token = getCookie("access_token");
-//       const { data } = await apiRequest("get", " http://127.0.0.1:8000/api/customers", null, token);
+//       const { data } = await apiRequest("get", " https://apibrize.brizindia.com/api/customers", null, token);
 //       setCustomers(data);
 //     } catch (error) {
 //       notyf.error("Error fetching customers!");
@@ -943,8 +932,8 @@ export default Customers;
 //         customer_sub_type: data.customerSubTypeData || null,
 //       };
 //       const apiUrl = modalType === "create"
-//         ? " http://127.0.0.1:8000/api/customers"
-//         : ` http://127.0.0.1:8000/api/customers/${currentCustomer.id}`;
+//         ? " https://apibrize.brizindia.com/api/customers"
+//         : ` https://apibrize.brizindia.com/api/customers/${currentCustomer.id}`;
 
 //       await apiRequest(modalType === "create" ? "post" : "put", apiUrl, payload, token);
 //       notyf.success(`${modalType === "create" ? "Customer created" : "Customer updated"} successfully!`);
@@ -960,7 +949,7 @@ export default Customers;
 //     if (confirm("Are you sure you want to delete this customer?")) {
 //       try {
 //         const token = getCookie("access_token");
-//         await apiRequest("delete", ` http://127.0.0.1:8000/api/customers/${id}`, null, token);
+//         await apiRequest("delete", ` https://apibrize.brizindia.com/api/customers/${id}`, null, token);
 //         toast.success("Customer deleted successfully!");
 //         fetchCustomers();
 //       } catch (error) {
@@ -972,8 +961,8 @@ export default Customers;
 
 //   useEffect(() => {
 //     fetchCustomers();
-//     fetchData(" http://127.0.0.1:8000/api/customerstype", setCustomerTypeData);
-//     fetchData(" http://127.0.0.1:8000/api/customersubtypes", setCustomerSubTypeData);
+//     fetchData(" https://apibrize.brizindia.com/api/customerstype", setCustomerTypeData);
+//     fetchData(" https://apibrize.brizindia.com/api/customersubtypes", setCustomerSubTypeData);
 //     setCountries(Country.getAllCountries());
 //   }, []);
 

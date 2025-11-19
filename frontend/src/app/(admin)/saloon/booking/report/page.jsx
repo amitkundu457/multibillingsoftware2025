@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -9,14 +8,18 @@ const ServiceCell = ({ serviceString }) => {
   const services = serviceString?.split(",") || [];
   const [showAll, setShowAll] = useState(false);
 
-  if (!serviceString) return <td className="px-4 py-2 text-sm text-gray-800">n/a</td>;
+  if (!serviceString)
+    return <td className="px-4 py-2 text-sm text-gray-800">n/a</td>;
 
   return (
     <td className="px-4 py-2 text-sm text-gray-800">
       {showAll ? (
         <>
           {services.join(", ")}{" "}
-          <button onClick={() => setShowAll(false)} className="text-blue-500 underline text-xs">
+          <button
+            onClick={() => setShowAll(false)}
+            className="text-blue-500 underline text-xs"
+          >
             show less
           </button>
         </>
@@ -27,7 +30,10 @@ const ServiceCell = ({ serviceString }) => {
             <>
               {" "}
               ...{" "}
-              <button onClick={() => setShowAll(true)} className="text-blue-500 underline text-xs">
+              <button
+                onClick={() => setShowAll(true)}
+                className="text-blue-500 underline text-xs"
+              >
                 more
               </button>
             </>
@@ -41,7 +47,11 @@ const ServiceCell = ({ serviceString }) => {
 const BookingPage = () => {
   const [bookings, setBookings] = useState([]);
   const [filteredBookings, setFilteredBookings] = useState([]);
-  const [filters, setFilters] = useState({ fromDate: "", toDate: "", customerName: "" });
+  const [filters, setFilters] = useState({
+    fromDate: "",
+    toDate: "",
+    customerName: "",
+  });
   const [showModal, setShowModal] = useState(false);
   const initialFormData = {
     id: null,
@@ -53,7 +63,7 @@ const BookingPage = () => {
     customer_name: "",
     address: "",
     source: "",
-    service:"",
+    service: "",
     out_of_salon: false,
     rate: 0,
     discount: 0,
@@ -62,7 +72,6 @@ const BookingPage = () => {
     card_payment: 0,
     upi_payment: 0,
     coupon_amount: 0,
-   
   };
   const [formData, setFormData] = useState(initialFormData);
 
@@ -72,9 +81,11 @@ const BookingPage = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/bookings");
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/bookings"
+      );
       setBookings(response.data);
-      console.log("booking get api",response)
+      console.log("booking get api", response);
       setFilteredBookings(response.data);
     } catch (error) {
       console.error("Error fetching bookings:", error);
@@ -83,7 +94,10 @@ const BookingPage = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleFilterChange = (e) => {
@@ -97,7 +111,10 @@ const BookingPage = () => {
       return (
         (!filterValues.fromDate || b.booking_date >= filterValues.fromDate) &&
         (!filterValues.toDate || b.booking_date <= filterValues.toDate) &&
-        (!filterValues.customerName || b.customer_name.toLowerCase().includes(filterValues.customerName.toLowerCase()))
+        (!filterValues.customerName ||
+          b.customer_name
+            .toLowerCase()
+            .includes(filterValues.customerName.toLowerCase()))
       );
     });
     setFilteredBookings(filtered);
@@ -107,9 +124,15 @@ const BookingPage = () => {
     e.preventDefault();
     try {
       if (formData.id) {
-        await axios.put(`  http://127.0.0.1:8000/api/bookings/${formData.id}`, formData);
+        await axios.put(
+          `  https://apibrize.brizindia.com/api/bookings/${formData.id}`,
+          formData
+        );
       } else {
-        const response = await axios.post("  http://127.0.0.1:8000/api/bookings", formData);
+        const response = await axios.post(
+          "  https://apibrize.brizindia.com/api/bookings",
+          formData
+        );
         setBookings([...bookings, response.data]);
         setFilteredBookings([...filteredBookings, response.data]);
       }
@@ -122,7 +145,7 @@ const BookingPage = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`  http://127.0.0.1:8000/api/bookings/${id}`);
+      await axios.delete(`  https://apibrize.brizindia.com/api/bookings/${id}`);
       fetchBookings();
     } catch (error) {
       console.error("Error deleting booking:", error);
@@ -132,11 +155,38 @@ const BookingPage = () => {
   return (
     <div className="p-4">
       <div className="flex space-x-4 mb-4">
-        <input type="date" name="fromDate" value={filters.fromDate} onChange={handleFilterChange} className="border p-2" />
-        <input type="date" name="toDate" value={filters.toDate} onChange={handleFilterChange} className="border p-2" />
-        <input type="text" name="customerName" value={filters.customerName} onChange={handleFilterChange} placeholder="Customer Name" className="border p-2" />
+        <input
+          type="date"
+          name="fromDate"
+          value={filters.fromDate}
+          onChange={handleFilterChange}
+          className="border p-2"
+        />
+        <input
+          type="date"
+          name="toDate"
+          value={filters.toDate}
+          onChange={handleFilterChange}
+          className="border p-2"
+        />
+        <input
+          type="text"
+          name="customerName"
+          value={filters.customerName}
+          onChange={handleFilterChange}
+          placeholder="Customer Name"
+          className="border p-2"
+        />
       </div>
-      <button onClick={() => { setFormData(initialFormData); setShowModal(true); }} className="bg-green-500 text-white p-3 rounded-full fixed bottom-10 right-10">+</button>
+      <button
+        onClick={() => {
+          setFormData(initialFormData);
+          setShowModal(true);
+        }}
+        className="bg-green-500 text-white p-3 rounded-full fixed bottom-10 right-10"
+      >
+        +
+      </button>
       <table className="w-full border-collapse border border-gray-300 mt-4">
         <thead>
           <tr className="bg-gray-200">
@@ -159,22 +209,46 @@ const BookingPage = () => {
               <td className="border p-2">{booking.booking_date}</td>
               <td className="border p-2">{booking.booking_time}</td>
               <td className="border p-2">{booking.entry_date}</td>
-        
+
               <td className="border p-2">{booking.customer_name}</td>
               <td className="border p-2">{booking.phone}</td>
               <td className="border p-2">{booking.rate}</td>
-              <td className="border p-2"> <ServiceCell serviceString={booking.service} /></td>
               <td className="border p-2">
-                <button onClick={() => { setFormData(booking); setShowModal(true); }} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</button>
-                <button onClick={() => handleDelete(booking.id)} className="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                {" "}
+                <ServiceCell serviceString={booking.service} />
+              </td>
+              <td className="border p-2">
+                <button
+                  onClick={() => {
+                    setFormData(booking);
+                    setShowModal(true);
+                  }}
+                  className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(booking.id)}
+                  className="bg-red-500 text-white px-2 py-1 rounded"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <Modal open={showModal} onClose={() => setShowModal(false)} center classNames={{ modal: "rounded-lg p-6 bg-white shadow-lg w-[600px]" }}>
-  <form onSubmit={handleSubmit} className="p-6 bg-white space-y-4 grid grid-cols-2 gap-4">
-    {/* {Object.keys(initialFormData).map((key) => (
+      <Modal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        center
+        classNames={{ modal: "rounded-lg p-6 bg-white shadow-lg w-[600px]" }}
+      >
+        <form
+          onSubmit={handleSubmit}
+          className="p-6 bg-white space-y-4 grid grid-cols-2 gap-4"
+        >
+          {/* {Object.keys(initialFormData).map((key) => (
       <div key={key} className="col-span-2 md:col-span-1">
         <label className="block text-gray-700 text-sm font-bold mb-1">{key.replace("_", " ").toUpperCase()}</label>
         <input
@@ -188,54 +262,61 @@ const BookingPage = () => {
         />
       </div>
     ))} */}
-   {Object.keys(initialFormData).map((key) => {
-  if (key === "id" || key === "booking_no") return null;
+          {Object.keys(initialFormData).map((key) => {
+            if (key === "id" || key === "booking_no") return null;
 
-  // Compute display label
-  let label = key.replace("_", " ").toUpperCase();
-  if (key === "rate") label = "Amount";
+            // Compute display label
+            let label = key.replace("_", " ").toUpperCase();
+            if (key === "rate") label = "Amount";
 
-  // Determine input type
-  let inputType = typeof formData[key] === "number" ? "number" : "text";
-  if (label === "ENTRY DATE" || label === "BOOKING DATE") inputType = "date";
-  if (label === "BOOKING TIME") inputType = "time";
+            // Determine input type
+            let inputType =
+              typeof formData[key] === "number" ? "number" : "text";
+            if (label === "ENTRY DATE" || label === "BOOKING DATE")
+              inputType = "date";
+            if (label === "BOOKING TIME") inputType = "time";
 
-  // Special fields that shouldn't be required
-  const isOptionalField = ["ENTRY DATE", "BOOKING NO", "BOOKING DATE", "BOOKING TIME"].includes(label);
+            // Special fields that shouldn't be required
+            const isOptionalField = [
+              "ENTRY DATE",
+              "BOOKING NO",
+              "BOOKING DATE",
+              "BOOKING TIME",
+            ].includes(label);
 
-  // Handle OUT_OF_SALON logic
-  let value = formData[key];
-  if (key === "out_of_salon" && formData[key] === 1) return null
-  return (
-    <div key={key} className="col-span-2 md:col-span-1">
-      <label className="block text-gray-700 text-sm font-bold mb-1">
-        {label}
-      </label>
-      <input
-        type={inputType}
-        name={key}
-        value={value}
-        onChange={handleChange}
-        placeholder={label}
-        className="border px-4 py-2 w-full rounded-lg focus:ring focus:ring-blue-300"
-        {...(!isOptionalField && { required: true })}
-      />
-    </div>
-  );
-})}
+            // Handle OUT_OF_SALON logic
+            let value = formData[key];
+            if (key === "out_of_salon" && formData[key] === 1) return null;
+            return (
+              <div key={key} className="col-span-2 md:col-span-1">
+                <label className="block text-gray-700 text-sm font-bold mb-1">
+                  {label}
+                </label>
+                <input
+                  type={inputType}
+                  name={key}
+                  value={value}
+                  onChange={handleChange}
+                  placeholder={label}
+                  className="border px-4 py-2 w-full rounded-lg focus:ring focus:ring-blue-300"
+                  {...(!isOptionalField && { required: true })}
+                />
+              </div>
+            );
+          })}
 
-
-    <div className="col-span-2">
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-600 transition">Submit</button>
-    </div>
-  </form>
-</Modal>
-
+          <div className="col-span-2">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full hover:bg-blue-600 transition"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
 
 export default BookingPage;
-
-
- 

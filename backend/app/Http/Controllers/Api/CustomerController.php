@@ -121,11 +121,11 @@ public function index(Request $request)
     $customer = JWTAuth::parseToken()->authenticate();
 
     // Optional: start and end date from query
-    $start = $request->query('start_date') 
-                ? Carbon::parse($request->query('start_date'))->startOfDay() 
+    $start = $request->query('start_date')
+                ? Carbon::parse($request->query('start_date'))->startOfDay()
                 : Carbon::now()->subDays(30)->startOfDay();
-    $end = $request->query('end_date') 
-                ? Carbon::parse($request->query('end_date'))->endOfDay() 
+    $end = $request->query('end_date')
+                ? Carbon::parse($request->query('end_date'))->endOfDay()
                 : Carbon::now()->endOfDay();
 
     $customers = Customer::join('users', 'users.id', '=', 'customers.user_id')
@@ -189,7 +189,75 @@ public function index(Request $request)
 
 
 
+public function customerList(Request $request)
+{
+    $customer = JWTAuth::parseToken()->authenticate();
 
+    // Optional: start and end date from query
+    $start = $request->query('start_date')
+                ? Carbon::parse($request->query('start_date'))->startOfDay()
+                : Carbon::now()->subDays(30)->startOfDay();
+    $end = $request->query('end_date')
+                ? Carbon::parse($request->query('end_date'))->endOfDay()
+                : Carbon::now()->endOfDay();
+
+    $customers = Customer::join('users', 'users.id', '=', 'customers.user_id')
+        ->leftJoin('orders', function ($join) use ($start, $end) {
+            $join->on('orders.customer_id', '=', 'customers.user_id')
+                 ->where('orders.order_slip', 0)
+                 ->where('orders.bill_inv', 0)
+                 ->whereBetween('orders.created_at', [$start, $end]);
+        })
+        ->where('customers.created_by', $customer->id)
+        ->groupBy(
+            'users.name',
+            'users.id',
+            'customers.dob',
+            'customers.phone',
+            'customers.customer_type',
+            'customers.customer_sub_type',
+            'users.email',
+            'customers.anniversary',
+            'customers.gender',
+            'customers.pincode',
+            'customers.gstNo',
+            'customers.state',
+            'customers.country',
+            'customers.address',
+            'customers.remarke',
+            'customers.visit_source',
+            'customers.created_at',
+            'customers.visit_count',
+        )
+        ->select(
+            'users.name as customer_name',
+            'users.id',
+            'users.name',
+            'customers.dob',
+            'customers.phone',
+            'customers.visit_count',
+            'customers.customer_type',
+            'customers.customer_sub_type',
+            'users.email',
+            'customers.anniversary',
+            'customers.gender',
+            'customers.pincode',
+            'customers.gstNo',
+            'customers.state',
+            'customers.country',
+            'customers.address',
+            'customers.remarke',
+            'customers.visit_source',
+            'customers.created_at',
+            DB::raw('COUNT(orders.id) as total_orders'),
+            DB::raw('GROUP_CONCAT(orders.id) as order_ids'),
+            DB::raw('GROUP_CONCAT(orders.billno) as order_billnos'),
+            DB::raw('GROUP_CONCAT(orders.total_price) as order_totals')
+        )
+        ->get();
+
+    return response()->json($customers, 200);
+}
 
 
 
@@ -291,6 +359,7 @@ public function customerequires()
 
 public function searchByPhoneResto(Request $request)
     {
+        $admin=JWTAuth::parseToken()->authenticate();
         $phone = $request->query('phone');
 
         if (!$phone) {
@@ -300,6 +369,7 @@ public function searchByPhoneResto(Request $request)
         $customer = Customer::join('users', 'users.id', '=', 'customers.user_id')
             ->select('users.name', 'users.id','customers.id', 'customers.address', 'customers.phone')
             ->where('customers.phone', $phone)
+            ->where('created_by',$admin->id)
             ->first();
 
         if (!$customer) {
@@ -311,6 +381,7 @@ public function searchByPhoneResto(Request $request)
 
 public function searchByPhone(Request $request)
 {
+    $admin=JWTAuth::parseToken()->authenticate();
     $phone = $request->query('phone');
 
     if (!$phone) {
@@ -319,6 +390,7 @@ public function searchByPhone(Request $request)
 
     $customer = Customer::join('users', 'users.id', '=', 'customers.user_id')
         ->where('customers.phone', $phone)
+        ->where('created_by',$admin->id)
         ->select(
             'customers.id as customer_id',
             'users.name',

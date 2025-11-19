@@ -90,15 +90,6 @@
 //     }
 //   };
 
-
-
-
-
-
-
-
-
-
 //   async function groupDataFunction() {
 //     const groupDatas = await getAccountGroup();
 //     setGroupData(groupDatas.data);
@@ -189,7 +180,7 @@
 //       return;
 //     }
 //     axios
-//       .get(" http://127.0.0.1:8000/api/customers",
+//       .get(" https://apibrize.brizindia.com/api/customers",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -218,7 +209,7 @@
 //     if (selectedItem) {
 //       axios
 //         .put(
-//           ` http://127.0.0.1:8000/api/account-masters/${selectedItem.id}`,
+//           ` https://apibrize.brizindia.com/api/account-masters/${selectedItem.id}`,
 //           accountmasterdata
 //         )
 //         .then(() => {
@@ -231,7 +222,7 @@
 //         });
 //     } else {
 //       axios
-//         .post(" http://127.0.0.1:8000/api/account-masters", accountmasterdata,
+//         .post(" https://apibrize.brizindia.com/api/account-masters", accountmasterdata,
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -587,7 +578,7 @@
 //   const data = { name: newAccountType };
 
 //   try {
-//     const response = await fetch(" http://127.0.0.1:8000/api/account-types", {
+//     const response = await fetch(" https://apibrize.brizindia.com/api/account-types", {
 //       method: "POST",
 //       headers: {
 //         "Content-Type": "application/json",
@@ -624,7 +615,7 @@
 //   if (selectedCity) data.city = selectedCity.value;
 
 //   try {
-//     const response = await axios.post(" http://127.0.0.1:8000/api/account-masters", data, {
+//     const response = await axios.post(" https://apibrize.brizindia.com/api/account-masters", data, {
 //       headers: {
 //         "Content-Type": "application/json",
 //         Authorization: "Bearer YOUR_ACCESS_TOKEN"
@@ -834,7 +825,6 @@
 
 //  export default AccountForm;
 
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft, FaPlus } from "react-icons/fa";
@@ -842,9 +832,7 @@ import { ImCross } from "react-icons/im";
 import axios from "axios";
 import { State, City } from "country-state-city";
 
-import {
-  getAccountGroup
-} from "@/app/components/config";
+import { getAccountGroup } from "@/app/components/config";
 
 export const Model = ({ onClose }) => (
   <div
@@ -898,7 +886,9 @@ const AccountForm = ({ closeModel, selectedItem, fetchData }) => {
   const selectedCountry = "IN";
 
   const getToken = () => {
-    const cookie = document.cookie.split("; ").find((row) => row.startsWith("access_token="));
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
     return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
   };
 
@@ -924,7 +914,10 @@ const AccountForm = ({ closeModel, selectedItem, fetchData }) => {
 
   useEffect(() => {
     if (selectedState) {
-      const citiesList = City.getCitiesOfState(selectedCountry, selectedState.value).map((city) => ({
+      const citiesList = City.getCitiesOfState(
+        selectedCountry,
+        selectedState.value
+      ).map((city) => ({
         value: city.name,
         label: city.name,
       }));
@@ -965,16 +958,20 @@ const AccountForm = ({ closeModel, selectedItem, fetchData }) => {
     try {
       if (selectedItem) {
         await axios.put(
-          ` http://127.0.0.1:8000/api/account-masters/${selectedItem.id}`,
+          ` https://apibrize.brizindia.com/api/account-masters/${selectedItem.id}`,
           accountData
         );
         alert("Data updated successfully");
         fetchData();
         closeModel();
       } else {
-        await axios.post(" http://127.0.0.1:8000/api/account-masters", accountData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.post(
+          " https://apibrize.brizindia.com/api/account-masters",
+          accountData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         alert("Data submitted successfully");
         closeModel();
         setAccountData({
@@ -1009,41 +1006,108 @@ const AccountForm = ({ closeModel, selectedItem, fetchData }) => {
 
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input name="account_name" value={accountData.account_name} onChange={handleChange} placeholder="Account Name" className="border border-gray-300 p-2 rounded w-full" />
-            <select name="account_group_id" value={accountData.account_group_id} onChange={handleChange} className="border border-gray-300 p-2 rounded w-full">
-              <option value="" disabled>Select Group</option>
+            <input
+              name="account_name"
+              value={accountData.account_name}
+              onChange={handleChange}
+              placeholder="Account Name"
+              className="border border-gray-300 p-2 rounded w-full"
+            />
+            <select
+              name="account_group_id"
+              value={accountData.account_group_id}
+              onChange={handleChange}
+              className="border border-gray-300 p-2 rounded w-full"
+            >
+              <option value="" disabled>
+                Select Group
+              </option>
               {groupData.map((grp) => (
-                <option key={grp.id} value={grp.id}>{grp.name}</option>
+                <option key={grp.id} value={grp.id}>
+                  {grp.name}
+                </option>
               ))}
             </select>
-            <input name="gstin" value={accountData.gstin} onChange={handleChange} placeholder="GSTIN" className="border border-gray-300 p-2 rounded w-full" />
-            <input name="phone" value={accountData.phone} onChange={handleChange} placeholder="Phone No" className="border border-gray-300 p-2 rounded w-full" />
+            <input
+              name="gstin"
+              value={accountData.gstin}
+              onChange={handleChange}
+              placeholder="GSTIN"
+              className="border border-gray-300 p-2 rounded w-full"
+            />
+            <input
+              name="phone"
+              value={accountData.phone}
+              onChange={handleChange}
+              placeholder="Phone No"
+              className="border border-gray-300 p-2 rounded w-full"
+            />
 
-            <select value={selectedCity?.value || ""} onChange={(e) => setSelectedCity(cities.find((c) => c.value === e.target.value))} className="border border-gray-300 p-2 rounded w-full">
+            <select
+              value={selectedCity?.value || ""}
+              onChange={(e) =>
+                setSelectedCity(cities.find((c) => c.value === e.target.value))
+              }
+              className="border border-gray-300 p-2 rounded w-full"
+            >
               <option value="">Select City</option>
               {cities.map((city) => (
-                <option key={city.value} value={city.value}>{city.label}</option>
+                <option key={city.value} value={city.value}>
+                  {city.label}
+                </option>
               ))}
             </select>
 
-            <select value={selectedState?.value || ""} onChange={(e) => setSelectedState(states.find((s) => s.value === e.target.value))} className="border border-gray-300 p-2 rounded w-full">
+            <select
+              value={selectedState?.value || ""}
+              onChange={(e) =>
+                setSelectedState(states.find((s) => s.value === e.target.value))
+              }
+              className="border border-gray-300 p-2 rounded w-full"
+            >
               <option value="">Select State</option>
               {states.map((state) => (
-                <option key={state.value} value={state.value}>{state.label}</option>
+                <option key={state.value} value={state.value}>
+                  {state.label}
+                </option>
               ))}
             </select>
 
-            <input name="contact_person" value={accountData.contact_person} onChange={handleChange} placeholder="Contact Person" className="border border-gray-300 p-2 rounded w-full" />
-            <input name="blance" value={accountData.blance} onChange={handleChange} placeholder="Balance" className="border border-gray-300 p-2 rounded w-full" />
+            <input
+              name="contact_person"
+              value={accountData.contact_person}
+              onChange={handleChange}
+              placeholder="Contact Person"
+              className="border border-gray-300 p-2 rounded w-full"
+            />
+            <input
+              name="blance"
+              value={accountData.blance}
+              onChange={handleChange}
+              placeholder="Balance"
+              className="border border-gray-300 p-2 rounded w-full"
+            />
           </div>
 
           <div className="flex justify-between items-center mt-4">
             <label className="flex items-center gap-2 text-gray-700">
               <span>Is Active?</span>
-              <input type="checkbox" checked={accountData.status} onChange={() => setAccountData({ ...accountData, status: !accountData.status })} />
+              <input
+                type="checkbox"
+                checked={accountData.status}
+                onChange={() =>
+                  setAccountData({
+                    ...accountData,
+                    status: !accountData.status,
+                  })
+                }
+              />
             </label>
 
-            <button onClick={submitData} className="px-6 py-2 bg-blue-600 text-white rounded-md">
+            <button
+              onClick={submitData}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md"
+            >
               {selectedItem ? "Update" : "Submit"}
             </button>
           </div>

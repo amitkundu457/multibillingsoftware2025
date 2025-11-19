@@ -118,9 +118,9 @@ public function billingReportOnPurchase(Request $request)
     $customer = JWTAuth::parseToken()->authenticate();
 
     $query = Order::join('order_details', 'order_details.order_id', '=', 'orders.id')
-        ->join('users', 'users.id', '=', 'orders.customer_id')
-        ->join('customers', 'users.id', '=', 'customers.user_id')
-        ->join('product_services', 'product_services.id', '=', 'order_details.product_id')
+        ->leftJoin('users', 'users.id', '=', 'orders.customer_id') // ✅ LEFT JOIN instead of JOIN
+        ->leftJoin('customers', 'users.id', '=', 'customers.user_id') // ✅ Keep LEFT JOIN
+        // ->join('product_services', 'product_services.id', '=', 'order_details.product_id')
         ->select(
             'orders.billno',
             'orders.date as bill_date',
@@ -133,7 +133,8 @@ public function billingReportOnPurchase(Request $request)
             DB::raw('MIN(orders.created_at) as order_date'),
             DB::raw('MAX(orders.id) as pdf_id')
         )
-        ->where('product_services.created_by', $customer->id);
+        // ->where('product_services.created_by', $customer->id);
+         ->where('orders.created_by', $customer->id);
 
     // ✅ Apply filters
     if ($request->has('start_date') && $request->has('end_date')) {
@@ -153,6 +154,7 @@ public function billingReportOnPurchase(Request $request)
 
     return response()->json($reports);
 }
+
 
 
 

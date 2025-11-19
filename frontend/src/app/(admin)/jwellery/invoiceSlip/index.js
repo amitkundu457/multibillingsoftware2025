@@ -13,49 +13,76 @@ const Invoice = ({ data, logoUrl, taxes = [], discount = 0 }) => {
   console.log(data);
   console.log(("compnay form invoiceTable", companyName));
 
-
-  //calcualtion 
+  //calcualtion
   const words = [
-    '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
-    'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
-    'Seventeen', 'Eighteen', 'Nineteen'
+    "",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
   ];
-  
-  const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-  
+
+  const tens = [
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety",
+  ];
+
   function convertToWords(num) {
-    if (num === 0) return 'Zero';
-  
+    if (num === 0) return "Zero";
+
     function numToWords(n, s) {
-      let str = '';
+      let str = "";
       if (n > 19) {
-        str += tens[Math.floor(n / 10)] + ' ' + words[n % 10];
+        str += tens[Math.floor(n / 10)] + " " + words[n % 10];
       } else {
         str += words[n];
       }
-  
-      if (n !== 0) str += ' ' + s + ' ';
+
+      if (n !== 0) str += " " + s + " ";
       return str;
     }
-  
-    let output = '';
-    output += numToWords(Math.floor(num / 10000000), 'Crore');
-    output += numToWords(Math.floor((num / 100000) % 100), 'Lakh');
-    output += numToWords(Math.floor((num / 1000) % 100), 'Thousand');
-    output += numToWords(Math.floor((num / 100) % 10), 'Hundred');
-  
-    if (num > 100 && num % 100 > 0) output += 'and ';
-    output += numToWords(num % 100, '');
-  
+
+    let output = "";
+    output += numToWords(Math.floor(num / 10000000), "Crore");
+    output += numToWords(Math.floor((num / 100000) % 100), "Lakh");
+    output += numToWords(Math.floor((num / 1000) % 100), "Thousand");
+    output += numToWords(Math.floor((num / 100) % 10), "Hundred");
+
+    if (num > 100 && num % 100 > 0) output += "and ";
+    output += numToWords(num % 100, "");
+
     return output.trim();
   }
-  
+
   const getAmountInWords = (amount) => {
     const rounded = Math.floor(amount);
     const capitalized = convertToWords(rounded);
     return `${capitalized} Only`;
   };
-  
+
   //token
   const getToken = () => {
     const cookie = document.cookie
@@ -172,7 +199,7 @@ const Invoice = ({ data, logoUrl, taxes = [], discount = 0 }) => {
       }
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/masterlogobill",
+          " https://apibrize.brizindia.com/api/masterlogobill",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -207,7 +234,6 @@ const Invoice = ({ data, logoUrl, taxes = [], discount = 0 }) => {
   return (
     // <div className="p-6 border mt-4 w-full border-gray-800 max-w-2xl mx-auto font-sans text-xs">
     <div className="p-6 border mt-4 w-full border-gray-800  mx-auto font-sans text-xs">
-
       {/* Branding Section */}
       <div className="mb-6 flex justify-between items-center">
         <div className="w-1/3">
@@ -434,8 +460,9 @@ const Invoice = ({ data, logoUrl, taxes = [], discount = 0 }) => {
       <div className="text-center text-xs mb-6">
         <div className="font-bold text-[14px]">
           Total Amount (in words):{" "}
-          
-          <span className="font-normal text-[13px]">{getAmountInWords(grandTotal)}</span>
+          <span className="font-normal text-[13px]">
+            {getAmountInWords(grandTotal)}
+          </span>
         </div>
         {/* Thank You Section */}
         <div className="mt-6 font-semibold text-lg text-green-600">

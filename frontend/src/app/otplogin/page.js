@@ -30,7 +30,7 @@
 
 //     setLoading(true);
 //     try {
-//       const response = await axios.post("  http://127.0.0.1:8000/api/send-otp", {
+//       const response = await axios.post("  https://apibrize.brizindia.com/api/send-otp", {
 //         phone,
 //       });
 
@@ -51,7 +51,7 @@
 
 //     setLoading(true);
 //     try {
-//       const response = await axios.post("  http://127.0.0.1:8000/api/verify-otp", {
+//       const response = await axios.post("  https://apibrize.brizindia.com/api/verify-otp", {
 //         phone,
 //         otp,
 //       });
@@ -70,8 +70,6 @@
 //   };
 
 //   return (
-  
-
 
 // <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-purple-400 to-purple-600 p-4">
 //       <div className="bg-white  rounded-lg flex w-full max-w-4xl">
@@ -119,9 +117,8 @@
 //           </>
 //         )}
 
-       
 //       </div>
-      
+
 //     </div>
 //     <Link href="/login" className="mt-4 ml-4">Goto email login</Link>
 //         </div>
@@ -129,7 +126,7 @@
 //         {/* Right Side - Illustration */}
 //         <div className="w-1/2 flex justify-center items-center p-8">
 //           <img
-//             src="  http://127.0.0.1:8000/undraw_thought-process_pavs.png"
+//             src="  https://apibrize.brizindia.com/undraw_thought-process_pavs.png"
 //             className="w-full"
 //             alt="Illustration"
 //           />
@@ -138,8 +135,6 @@
 //     </div>
 //   );
 // }
-
-
 
 "use client";
 
@@ -176,9 +171,12 @@ export default function OtpLogin() {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/send-otp", {
-        phone,
-      });
+      const response = await axios.post(
+        "https://apibrize.brizindia.com/api/send-otp",
+        {
+          phone,
+        }
+      );
 
       toast.success(response.data.message);
       setStep(2); // Go to OTP step
@@ -202,15 +200,18 @@ export default function OtpLogin() {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/verify-otp", {
-        phone,
-        otp,
-      });
+      const response = await axios.post(
+        "https://apibrize.brizindia.com/api/verify-otp",
+        {
+          phone,
+          otp,
+        }
+      );
 
       // Set access token cookie
       Cookies.set("access_token", response.data.token, { expires: 7 });
       toast.success("Login successful");
-      
+
       // Force a full page reload to reset the application state
       window.location.href = "/dashboard";
     } catch (error) {
@@ -254,12 +255,11 @@ export default function OtpLogin() {
                 Welcome Back
               </h1>
               <p className="text-center text-gray-600 mb-8">
-                {step === 1 
-                  ? "Enter your phone number to receive an OTP" 
-                  : "Enter the OTP sent to your phone"
-                }
+                {step === 1
+                  ? "Enter your phone number to receive an OTP"
+                  : "Enter the OTP sent to your phone"}
               </p>
-              
+
               <h2 className="text-xl font-bold text-center mb-6">
                 {step === 1 ? "Phone Verification" : "OTP Verification"}
               </h2>
@@ -267,14 +267,19 @@ export default function OtpLogin() {
               {step === 1 ? (
                 <>
                   <div className="mb-4">
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Phone Number
                     </label>
                     <input
                       id="phone"
                       type="tel"
                       value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                      onChange={(e) =>
+                        setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
+                      }
                       onKeyPress={handleKeyPress}
                       placeholder="10-digit phone number"
                       className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -295,14 +300,19 @@ export default function OtpLogin() {
               ) : (
                 <>
                   <div className="mb-4">
-                    <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label
+                      htmlFor="otp"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
                       Verification Code
                     </label>
                     <input
                       id="otp"
                       type="text"
                       value={otp}
-                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      onChange={(e) =>
+                        setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))
+                      }
                       onKeyPress={handleKeyPress}
                       placeholder="Enter 6-digit OTP"
                       className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -319,18 +329,18 @@ export default function OtpLogin() {
                   >
                     {loading ? "Verifying..." : "Verify OTP"}
                   </button>
-                  
+
                   <div className="text-center mt-4">
-                    <button 
+                    <button
                       onClick={() => setStep(1)}
                       className="text-sm text-purple-600 hover:underline"
                     >
                       Change phone number
                     </button>
                   </div>
-                  
+
                   <div className="text-center mt-2">
-                    <button 
+                    <button
                       onClick={sendOtp}
                       className="text-sm text-gray-600 hover:underline"
                     >
@@ -341,8 +351,8 @@ export default function OtpLogin() {
               )}
 
               <div className="mt-6 pt-4 border-t border-gray-200">
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   className="block text-center text-sm text-purple-600 hover:underline"
                 >
                   Go to email login
@@ -353,8 +363,6 @@ export default function OtpLogin() {
         </div>
 
         {/* Illustration Section */}
-       
-       
       </div>
     </div>
   );

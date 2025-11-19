@@ -1,4 +1,4 @@
- 'use client';
+"use client";
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -18,16 +18,17 @@ const ParcelKOT = () => {
     return null;
   };
   useEffect(() => {
-        const token = getCookie("access_token");
+    const token = getCookie("access_token");
 
     const fetchKOT = async () => {
       try {
-        const response = await fetch(` http://127.0.0.1:8000/api/parcel-kot/${parcel_order_id}`,
+        const response = await fetch(
+          ` https://apibrize.brizindia.com/api/parcel-kot/${parcel_order_id}`,
           {
-             headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-             }
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
         );
         const data = await response.json();
@@ -50,24 +51,25 @@ const ParcelKOT = () => {
   const handlePrint = () => {
     const printContent = kotRef.current;
     if (!printContent) {
-      alert('KOT content not loaded yet!');
+      alert("KOT content not loaded yet!");
       return;
     }
 
     // Create a hidden iframe
-    const iframe = document.createElement('iframe');
-    iframe.style.position = 'fixed';
-    iframe.style.right = '0';
-    iframe.style.bottom = '0';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.style.border = '0';
-    iframe.style.visibility = 'hidden';
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "fixed";
+    iframe.style.right = "0";
+    iframe.style.bottom = "0";
+    iframe.style.width = "0";
+    iframe.style.height = "0";
+    iframe.style.border = "0";
+    iframe.style.visibility = "hidden";
     document.body.appendChild(iframe);
 
     const contentClone = printContent.cloneNode(true);
-    const printHiddenElements = contentClone.querySelectorAll('.print\\:hidden');
-    printHiddenElements.forEach(el => el.remove());
+    const printHiddenElements =
+      contentClone.querySelectorAll(".print\\:hidden");
+    printHiddenElements.forEach((el) => el.remove());
 
     const thermalStyles = `
       @page {
@@ -139,7 +141,7 @@ const ParcelKOT = () => {
     iframe.contentDocument.write(`
       <html>
         <head>
-          <title>KOT - Order #${kotData?.order_id || ''}</title>
+          <title>KOT - Order #${kotData?.order_id || ""}</title>
           <style>
             ${thermalStyles}
           </style>
@@ -162,68 +164,75 @@ const ParcelKOT = () => {
     iframe.contentDocument.close();
   };
 
-  if (loading) return <div className="text-center mt-4 text-sm">Loading KOT...</div>;
-  if (!kotData) return <div className="text-center mt-4 text-sm">No KOT found for Parcel Order ID: {parcel_order_id}</div>;
+  if (loading)
+    return <div className="text-center mt-4 text-sm">Loading KOT...</div>;
+  if (!kotData)
+    return (
+      <div className="text-center mt-4 text-sm">
+        No KOT found for Parcel Order ID: {parcel_order_id}
+      </div>
+    );
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-6 min-h-screen bg-gray-100 p-4">
-  {/* KOT Content */}
-  <div
-    ref={kotRef}
-    className="w-[260px] font-mono text-sm text-black bg-white p-3 shadow-md border border-gray-300 font-bold"
-  >
-    {/* Header */}
-    <div className="text-center mb-2">
-      <div className="text-[14px] uppercase">{kotData.clientuser.name}</div>
-      <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center mx-auto mt-1 mb-1">
-        {kotData.token}
+      {/* KOT Content */}
+      <div
+        ref={kotRef}
+        className="w-[260px] font-mono text-sm text-black bg-white p-3 shadow-md border border-gray-300 font-bold"
+      >
+        {/* Header */}
+        <div className="text-center mb-2">
+          <div className="text-[14px] uppercase">{kotData.clientuser.name}</div>
+          <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center mx-auto mt-1 mb-1">
+            {kotData.token}
+          </div>
+          <div className="text-[12px]">Kitchen Order Ticket</div>
+        </div>
+
+        {/* Order Info */}
+        <div className="text-[12px] leading-tight space-y-1">
+          <p>Date: {kotData.date}</p>
+
+          <p>Order ID: {kotData.order_id}</p>
+          <p>Customer: {kotData.user.name}</p>
+        </div>
+
+        {/* Items */}
+        <div className="border-t border-dashed border-black mt-2 pt-2">
+          <table className="w-full text-[12px]">
+            <thead>
+              <tr className="border-b border-black">
+                <th className="text-left pb-1">Item</th>
+                <th className="text-right pb-1">Qty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {kotData.items.map((item, idx) => (
+                <tr key={idx} className="border-b border-dashed border-black">
+                  <td className="py-1">{item.product_name}</td>
+                  <td className="py-1 text-right">{item.quantity}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-[11px] mt-3">
+          Thank you! Please Visit again.
+        </p>
       </div>
-      <div className="text-[12px]">Kitchen Order Ticket</div>
+
+      {/* Print Button */}
+      <div className="print:hidden">
+        <button
+          onClick={handlePrint}
+          className="bg-black text-white text-sm px-4 py-2 rounded hover:bg-gray-800 font-bold"
+        >
+          Print KOT
+        </button>
+      </div>
     </div>
-
-    {/* Order Info */}
-    <div className="text-[12px] leading-tight space-y-1">
-            <p>Date: {kotData.date}</p>
-
-      <p>Order ID: {kotData.order_id}</p>
-      <p>Customer: {kotData.user.name}</p>
-    </div>
-
-    {/* Items */}
-    <div className="border-t border-dashed border-black mt-2 pt-2">
-      <table className="w-full text-[12px]">
-        <thead>
-          <tr className="border-b border-black">
-            <th className="text-left pb-1">Item</th>
-            <th className="text-right pb-1">Qty</th>
-          </tr>
-        </thead>
-        <tbody>
-          {kotData.items.map((item, idx) => (
-            <tr key={idx} className="border-b border-dashed border-black">
-              <td className="py-1">{item.product_name}</td>
-              <td className="py-1 text-right">{item.quantity}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-
-    {/* Footer */}
-    <p className="text-center text-[11px] mt-3">Thank you! Please Visit again.</p>
-  </div>
-
-  {/* Print Button */}
-  <div className="print:hidden">
-    <button
-      onClick={handlePrint}
-      className="bg-black text-white text-sm px-4 py-2 rounded hover:bg-gray-800 font-bold"
-    >
-      Print KOT
-    </button>
-  </div>
-</div>
-
   );
 };
 

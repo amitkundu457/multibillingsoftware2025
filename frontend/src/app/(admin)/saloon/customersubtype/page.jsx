@@ -27,31 +27,28 @@ export const Model = ({ onClose, onSave, editData }) => {
     }
   };
 
-
-
-
-
-
   //fetch customer type data
-const featchcustomber=async()=>{
-  const token = getToken();
+  const featchcustomber = async () => {
+    const token = getToken();
     if (!token) {
       notifyTokenMissing();
       return;
     }
-  const newdata=await axios.get(" http://127.0.0.1:8000/api/customerstype",
-    
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
-  ).then((response) => {
-//     console.log(response.data?.data);
-// const data=Array.isArray(response.data?.data) ? response.data : [response.data?.data];
-    setCustomerType(response.data?.data);
-  });
-  console.log("newdata",newdata)
+    const newdata = await axios
+      .get(
+        " https://apibrize.brizindia.com/api/customerstype",
 
-}
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        //     console.log(response.data?.data);
+        // const data=Array.isArray(response.data?.data) ? response.data : [response.data?.data];
+        setCustomerType(response.data?.data);
+      });
+    console.log("newdata", newdata);
+  };
 
   useEffect(() => {
     featchcustomber();
@@ -76,7 +73,7 @@ const featchcustomber=async()=>{
 
     const apiCall = editData
       ? axios.post(
-          `  http://127.0.0.1:8000/api/customersubtypes/${editData.id}`,
+          `  https://apibrize.brizindia.com/api/customersubtypes/${editData.id}`,
           inputData,
           {
             headers: {
@@ -85,12 +82,16 @@ const featchcustomber=async()=>{
             },
           }
         )
-      : axios.post("  http://127.0.0.1:8000/api/customersubtypes", inputData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+      : axios.post(
+          "  https://apibrize.brizindia.com/api/customersubtypes",
+          inputData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
     apiCall
       .then((response) => {
@@ -179,13 +180,6 @@ const Page = () => {
     }
   };
 
-
-
-
-
-
-
-
   const fetchData = () => {
     const token = getToken();
     if (!token) {
@@ -194,14 +188,12 @@ const Page = () => {
     }
 
     axios
-      .get("  http://127.0.0.1:8000/api/customersubtypes",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .get("  https://apibrize.brizindia.com/api/customersubtypes", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         setData(response.data);
-        console.log("response.data",response.data)
+        console.log("response.data", response.data);
       })
       .catch(() => {
         alert("Failed to fetch data");
@@ -219,7 +211,7 @@ const Page = () => {
       .split("=")[1];
 
     axios
-      .delete(`  http://127.0.0.1:8000/api/customersubtypes/${id}`, {
+      .delete(`  https://apibrize.brizindia.com/api/customersubtypes/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

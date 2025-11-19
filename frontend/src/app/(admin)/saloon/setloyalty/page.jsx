@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Import the React Icons
@@ -6,19 +6,21 @@ const Loyalty = () => {
   const [loyalty, setLoyalty] = useState([]); // Array to store tax data
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal open/close state
   const [isEditMode, setIsEditMode] = useState(false); // If editing an existing tax or adding a new one
-  const [modalData, setModalData] = useState({ 
+  const [modalData, setModalData] = useState({
     loyalty_balance: "",
-    set_loyalty_points:"",
+    set_loyalty_points: "",
     min_loyalty_required: "",
     min_bill_to_redeem: " ",
     max_loyalty_redeemable: "",
-    expiry: ""
+    expiry: "",
   }); // Modal form data
 
   // Fetch all loyalty from API
   const fetchloyalty = async () => {
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/loyalty/");
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/loyalty/"
+      );
       setLoyalty(response.data); // Assuming the data is under the 'data' key
     } catch (error) {
       console.error("Error fetching loyalty:", error);
@@ -41,7 +43,10 @@ const Loyalty = () => {
     if (isEditMode) {
       // Update existing tax
       try {
-        await axios.post(`  http://127.0.0.1:8000/api/loyalty/${modalData.id}`, modalData);
+        await axios.post(
+          `  https://apibrize.brizindia.com/api/loyalty/${modalData.id}`,
+          modalData
+        );
         fetchloyalty();
         setIsModalOpen(false);
       } catch (error) {
@@ -50,7 +55,10 @@ const Loyalty = () => {
     } else {
       // Create new tax
       try {
-        await axios.post("  http://127.0.0.1:8000/api/loyalty/", modalData);
+        await axios.post(
+          "  https://apibrize.brizindia.com/api/loyalty/",
+          modalData
+        );
         fetchloyalty();
         setIsModalOpen(false);
       } catch (error) {
@@ -62,7 +70,7 @@ const Loyalty = () => {
   // Delete tax
   const handleDeleteTax = async (id) => {
     try {
-      await axios.delete(`  http://127.0.0.1:8000/api/loyalty/${id}`);
+      await axios.delete(`  https://apibrize.brizindia.com/api/loyalty/${id}`);
       fetchloyalty();
     } catch (error) {
       console.error("Error deleting tax:", error);
@@ -90,7 +98,6 @@ const Loyalty = () => {
             <th className="px-4 py-2 text-left">Max Loyalty</th>
             <th className="px-4 py-2 text-left">Expiry</th>
             <th className="px-4 py-2 text-left">Actions</th>
-
           </tr>
         </thead>
         <tbody>
@@ -125,7 +132,9 @@ const Loyalty = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="3" className="text-center py-4">No loyalty available</td>
+              <td colSpan="3" className="text-center py-4">
+                No loyalty available
+              </td>
             </tr>
           )}
         </tbody>
@@ -135,64 +144,105 @@ const Loyalty = () => {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">{isEditMode ? "Edit Tax" : "Add Tax"}</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {isEditMode ? "Edit Tax" : "Add Tax"}
+            </h2>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Loyalty amount:</label>
+              <label className="block text-sm font-medium mb-2">
+                Loyalty amount:
+              </label>
               <input
                 type="number"
                 placeholder="Enter loyalty  Balance"
                 value={modalData.loyalty_balance}
-                onChange={(e) => setModalData({ ...modalData, loyalty_balance: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    loyalty_balance: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">set Loyalty Point:</label>
+              <label className="block text-sm font-medium mb-2">
+                set Loyalty Point:
+              </label>
               <input
                 type="number"
                 placeholder="Enter loyalty  Balance"
                 value={modalData.set_loyalty_points}
-                onChange={(e) => setModalData({ ...modalData, set_loyalty_points: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    set_loyalty_points: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Minimum value of invoice to redeem loyalty point</label>
+              <label className="block text-sm font-medium mb-2">
+                Minimum value of invoice to redeem loyalty point
+              </label>
               <input
                 type="number"
                 placeholder="enter value"
                 value={modalData.min_loyalty_required}
-                onChange={(e) => setModalData({ ...modalData, min_loyalty_required: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    min_loyalty_required: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Minimum value of invoice for get  point:</label>
+              <label className="block text-sm font-medium mb-2">
+                Minimum value of invoice for get point:
+              </label>
               <input
                 type="number"
                 placeholder="Enter value"
                 value={modalData.min_bill_to_redeem}
-                onChange={(e) => setModalData({ ...modalData, min_bill_to_redeem: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    min_bill_to_redeem: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">maximum loyalty to redeem:</label>
+              <label className="block text-sm font-medium mb-2">
+                maximum loyalty to redeem:
+              </label>
               <input
                 type="number"
                 placeholder="Enter value"
                 value={modalData.max_loyalty_redeemable}
-                onChange={(e) => setModalData({ ...modalData, max_loyalty_redeemable: e.target.value })}
+                onChange={(e) =>
+                  setModalData({
+                    ...modalData,
+                    max_loyalty_redeemable: e.target.value,
+                  })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Expiry date of loyalty</label>
+              <label className="block text-sm font-medium mb-2">
+                Expiry date of loyalty
+              </label>
               <input
                 type="date"
                 placeholder="select Days"
                 value={modalData.expiry}
-                onChange={(e) => setModalData({ ...modalData, expiry: e.target.value })}
+                onChange={(e) =>
+                  setModalData({ ...modalData, expiry: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

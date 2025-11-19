@@ -8,7 +8,7 @@ const LogoUploadModal = ({ open, onClose, masterId, currentLogo }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //token 
+  //token
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -23,12 +23,6 @@ const LogoUploadModal = ({ open, onClose, masterId, currentLogo }) => {
       console.error("Authentication token not found!");
     }
   };
-
-
-
-
-
-
 
   // Handle file selection
   const handleFileChange = (e) => {
@@ -52,23 +46,33 @@ const LogoUploadModal = ({ open, onClose, masterId, currentLogo }) => {
 
     try {
       let response;
-      const config = { headers: { "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`
-       } };
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
       if (masterId) {
         // Update the existing logo
-        response = await axios.put(`  http://127.0.0.1:8000/api/masterlogobill/${masterId}`, formData, config);
+        response = await axios.put(
+          `  https://apibrize.brizindia.com/api/masterlogobill/${masterId}`,
+          formData,
+          config
+        );
       } else {
         // Create a new record with the logo
-        response = await axios.post("  http://127.0.0.1:8000/api/masterlogobill", formData, config);
+        response = await axios.post(
+          "  https://apibrize.brizindia.com/api/masterlogobill",
+          formData,
+          config
+        );
       }
 
       alert(response.data.message);
-      
-      // Update the logo preview
-      onClose(response.data.data.logo_url); 
 
+      // Update the logo preview
+      onClose(response.data.data.logo_url);
     } catch (err) {
       setError("There was an error uploading the image.");
     } finally {
@@ -89,7 +93,11 @@ const LogoUploadModal = ({ open, onClose, masterId, currentLogo }) => {
       {error && <div style={{ color: "red" }}>{error}</div>}
       <div>
         {currentLogo && !logo && (
-          <img src={`  http://127.0.0.1:8000/${currentLogo}`} alt="Current Logo" style={{ maxWidth: "100px" }} />
+          <img
+            src={`  https://apibrize.brizindia.com/${currentLogo}`}
+            alt="Current Logo"
+            style={{ maxWidth: "100px" }}
+          />
         )}
         <input type="file" onChange={handleFileChange} accept="image/*" />
       </div>

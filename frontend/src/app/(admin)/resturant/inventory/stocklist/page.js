@@ -29,9 +29,12 @@ export default function StockListTable() {
       return;
     }
     try {
-      const { data } = await axios.get(" http://127.0.0.1:8000/api/stocks", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        " https://apibrize.brizindia.com/api/stocks",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setStocks(data?.stock || []);
     } catch (error) {
       console.error("Stock API Error:", error);
@@ -45,9 +48,12 @@ export default function StockListTable() {
       return;
     }
     try {
-      const { data } = await axios.get(" http://127.0.0.1:8000/api/purchase", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        " https://apibrize.brizindia.com/api/purchase",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setPurchase(data?.purchase || []);
       setTotalPurchase(data?.purchase.length || 0);
     } catch (error) {
@@ -104,16 +110,29 @@ export default function StockListTable() {
             <tbody>
               {stocks.length > 0 ? (
                 stocks.map((item, index) => (
-                  <tr key={index} className="border-b hover:bg-gray-100 transition">
-                    <td className="py-2 px-4 border">{item.product_service?.name || "N/A"}</td>
-                    <td className="py-2 px-4 border">{item.quantity || "N/A"}</td>
-                    <td className="py-2 px-4 border">{item.gross_weight || "0"}</td>
-                    <td className="py-2 px-4 border">{item.net_weight || "0"}</td>
+                  <tr
+                    key={index}
+                    className="border-b hover:bg-gray-100 transition"
+                  >
+                    <td className="py-2 px-4 border">
+                      {item.product_service?.name || "N/A"}
+                    </td>
+                    <td className="py-2 px-4 border">
+                      {item.quantity || "N/A"}
+                    </td>
+                    <td className="py-2 px-4 border">
+                      {item.gross_weight || "0"}
+                    </td>
+                    <td className="py-2 px-4 border">
+                      {item.net_weight || "0"}
+                    </td>
                     <td className="py-2 px-4 border">{item.rate || "N/A"}</td>
                     <td className="py-2 px-4 border">{item.mrp || "N/A"}</td>
                     <td className="py-2 px-4 border">
                       {item.product_service?.created_at
-                        ? new Date(item.product_service.created_at).toISOString().split("T")[0]
+                        ? new Date(item.product_service.created_at)
+                            .toISOString()
+                            .split("T")[0]
                         : "N/A"}
                     </td>
                   </tr>
@@ -150,22 +169,43 @@ export default function StockListTable() {
               {purchase.length > 0 ? (
                 purchase.map((item, index) =>
                   item.purchase_items.map((pItem, pIndex) => (
-                    <tr key={`${index}-${pIndex}`} className="border-b hover:bg-gray-100 transition">
-                      <td className="py-2 px-4 border">{pItem.product_name || "N/A"}</td>
+                    <tr
+                      key={`${index}-${pIndex}`}
+                      className="border-b hover:bg-gray-100 transition"
+                    >
+                      <td className="py-2 px-4 border">
+                        {pItem.product_name || "N/A"}
+                      </td>
                       <td className="py-2 px-4 border">{pItem.pcs || "N/A"}</td>
                       <td className="py-2 px-4 border">{pItem.gwt || "0"}</td>
                       <td className="py-2 px-4 border">{pItem.nwt || "0"}</td>
-                      <td className="py-2 px-4 border">{pItem.rate || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.other_chg || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.disc || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.disc_percent || "N/A"}</td>
+                      <td className="py-2 px-4 border">
+                        {pItem.rate || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.other_chg || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.disc || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.disc_percent || "N/A"}
+                      </td>
                       <td className="py-2 px-4 border">{pItem.gst || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.taxable || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.total_gst || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.net_amount || "N/A"}</td>
+                      <td className="py-2 px-4 border">
+                        {pItem.taxable || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.total_gst || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.net_amount || "N/A"}
+                      </td>
                       <td className="py-2 px-4 border">
                         {pItem.created_at
-                          ? new Date(pItem.created_at).toISOString().split("T")[0]
+                          ? new Date(pItem.created_at)
+                              .toISOString()
+                              .split("T")[0]
                           : "N/A"}
                       </td>
                     </tr>

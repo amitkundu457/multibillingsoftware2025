@@ -35,7 +35,7 @@ export default function Home() {
     }
     try {
       const response = await axios.get(
-        "  http://127.0.0.1:8000/api/product-service-groups",
+        "  https://apibrize.brizindia.com/api/product-service-groups",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -57,7 +57,7 @@ export default function Home() {
       // Update item
       try {
         const response = await axios.put(
-          `  http://127.0.0.1:8000/api/product-service-groups/${editingItem.id}`,
+          `  https://apibrize.brizindia.com/api/product-service-groups/${editingItem.id}`,
           data
         );
         const updatedItem = response.data;
@@ -76,13 +76,11 @@ export default function Home() {
       // Create new item
       try {
         const response = await axios.post(
-       
-          "  http://127.0.0.1:8000/api/product-service-groups",
+          "  https://apibrize.brizindia.com/api/product-service-groups",
           data,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
-        
         );
         setItems((prevItems) => [...prevItems, response.data]);
         fetchItems();
@@ -104,7 +102,7 @@ export default function Home() {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `  http://127.0.0.1:8000/api/product-service-groups/${id}`
+        `  https://apibrize.brizindia.com/api/product-service-groups/${id}`
       );
       if (response.status === 200) {
         setItems((prevItems) => prevItems.filter((item) => item.id !== id));

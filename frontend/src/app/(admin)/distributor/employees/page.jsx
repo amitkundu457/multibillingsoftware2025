@@ -12,7 +12,6 @@ export default function Employees() {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState(null);
 
-
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -27,11 +26,6 @@ export default function Employees() {
       console.error("Authentication token not found!");
     }
   };
-
-
-
-
-
 
   const {
     register,
@@ -52,12 +46,12 @@ export default function Employees() {
       return;
     }
 
-    const res = await axios.get("  http://127.0.0.1:8000/api/employees",
-      
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
+    const res = await axios.get(
+      "  https://apibrize.brizindia.com/api/employees",
 
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     setEmployees(res.data.employees);
   };
@@ -72,17 +66,18 @@ export default function Employees() {
     if (currentEmployee) {
       // Update existing employee
       await axios.post(
-        `  http://127.0.0.1:8000/api/employees/${currentEmployee.id}`,
+        `  https://apibrize.brizindia.com/api/employees/${currentEmployee.id}`,
         data
       );
     } else {
       // Create new employee
-      await axios.post("  http://127.0.0.1:8000/api/employees", data,
-        
-{
-  headers: { Authorization: `Bearer ${token}` },
-}
+      await axios.post(
+        "  https://apibrize.brizindia.com/api/employees",
+        data,
 
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
     }
     setModalOpen(false);
@@ -109,7 +104,9 @@ export default function Employees() {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`  http://127.0.0.1:8000/api/employees/delete/${id}`);
+    await axios.delete(
+      `  https://apibrize.brizindia.com/api/employees/delete/${id}`
+    );
     fetchEmployees();
   };
 

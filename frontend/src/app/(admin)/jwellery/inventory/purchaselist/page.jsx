@@ -1,4 +1,3 @@
-
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
@@ -31,9 +30,12 @@ export default function PurchaseListTable() {
       return;
     }
     try {
-      const { data } = await axios.get("http://127.0.0.1:8000/api/purchase", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.get(
+        "https://apibrize.brizindia.com/api/purchase",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setPurchase(data?.purchase || []);
     } catch (error) {
       console.error("Purchase API Error:", error);
@@ -61,12 +63,25 @@ export default function PurchaseListTable() {
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
     const filteredItems = getFilteredPurchaseItems();
-  
+
     autoTable(doc, {
-      head: [[
-        "Product", "PCS", "Gross Wgt", "Net Wgt", "Rate", "Other Chg",
-        "Disc", "Disc %", "GST", "Taxable", "Total GST", "Net Amt", "Date"
-      ]],
+      head: [
+        [
+          "Product",
+          "PCS",
+          "Gross Wgt",
+          "Net Wgt",
+          "Rate",
+          "Other Chg",
+          "Disc",
+          "Disc %",
+          "GST",
+          "Taxable",
+          "Total GST",
+          "Net Amt",
+          "Date",
+        ],
+      ],
       body: filteredItems.map((pItem) => [
         pItem.product_name || "N/A",
         pItem.pcs || "N/A",
@@ -85,13 +100,13 @@ export default function PurchaseListTable() {
           : "N/A",
       ]),
     });
-  
+
     doc.save("purchase_list.pdf");
   };
-  
+
   const handleDownloadExcel = () => {
     const filteredItems = getFilteredPurchaseItems();
-  
+
     const worksheet = XLSX.utils.json_to_sheet(
       filteredItems.map((pItem) => ({
         Product: pItem.product_name || "N/A",
@@ -111,28 +126,34 @@ export default function PurchaseListTable() {
           : "N/A",
       }))
     );
-  
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "PurchaseList");
-    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
     const data = new Blob([excelBuffer], { type: "application/octet-stream" });
     saveAs(data, "purchase_list.xlsx");
   };
-  
+
   const getFilteredPurchaseItems = () => {
     return purchase.flatMap((item) =>
       item.purchase_items.filter((pItem) => isWithinDateRange(pItem.created_at))
     );
   };
-  
 
   return (
     <div className="space-y-4">
-        <h1 className="bg-green-500 h-[60px] text-center text-3xl flex justify-center   w-full">Purchase List</h1>
+      <h1 className="bg-green-500 h-[60px] text-center text-3xl flex justify-center   w-full">
+        Purchase List
+      </h1>
       {/* Date Filter UI */}
       <div className="flex flex-wrap gap-4 items-center">
         <div>
-          <label className="block text-sm font-medium text-gray-700">From Date:</label>
+          <label className="block text-sm font-medium text-gray-700">
+            From Date:
+          </label>
           <input
             type="date"
             value={fromDate}
@@ -141,7 +162,9 @@ export default function PurchaseListTable() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">To Date:</label>
+          <label className="block text-sm font-medium text-gray-700">
+            To Date:
+          </label>
           <input
             type="date"
             value={toDate}
@@ -155,25 +178,22 @@ export default function PurchaseListTable() {
         >
           Reset
         </button>
-        <div className="flex gap-4" >
-   <button
-  onClick={handleDownloadPDF}
-  className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 mt-5"
->
-  Download PDF
-</button>
+        <div className="flex gap-4">
+          <button
+            onClick={handleDownloadPDF}
+            className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 mt-5"
+          >
+            Download PDF
+          </button>
 
-<button
-  onClick={handleDownloadExcel}
-  className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 mt-5"
->
-  Download Excel
-</button>
-
-   </div>
+          <button
+            onClick={handleDownloadExcel}
+            className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 mt-5"
+          >
+            Download Excel
+          </button>
+        </div>
       </div>
-
-  
 
       {/* Purchase Table */}
       <div className="overflow-x-auto">
@@ -201,19 +221,38 @@ export default function PurchaseListTable() {
                 item.purchase_items
                   .filter((pItem) => isWithinDateRange(pItem.created_at))
                   .map((pItem, pIndex) => (
-                    <tr key={`${index}-${pIndex}`} className="hover:bg-gray-100">
-                      <td className="py-2 px-4 border">{pItem.product_name || "N/A"}</td>
+                    <tr
+                      key={`${index}-${pIndex}`}
+                      className="hover:bg-gray-100"
+                    >
+                      <td className="py-2 px-4 border">
+                        {pItem.product_name || "N/A"}
+                      </td>
                       <td className="py-2 px-4 border">{pItem.pcs || "N/A"}</td>
                       <td className="py-2 px-4 border">{pItem.gwt || "0"}</td>
                       <td className="py-2 px-4 border">{pItem.nwt || "0"}</td>
-                      <td className="py-2 px-4 border">{pItem.rate || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.other_chg || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.disc || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.disc_percent || "N/A"}</td>
+                      <td className="py-2 px-4 border">
+                        {pItem.rate || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.other_chg || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.disc || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.disc_percent || "N/A"}
+                      </td>
                       <td className="py-2 px-4 border">{pItem.gst || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.taxable || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.total_gst || "N/A"}</td>
-                      <td className="py-2 px-4 border">{pItem.net_amount || "N/A"}</td>
+                      <td className="py-2 px-4 border">
+                        {pItem.taxable || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.total_gst || "N/A"}
+                      </td>
+                      <td className="py-2 px-4 border">
+                        {pItem.net_amount || "N/A"}
+                      </td>
                       <td className="py-2 px-4 border">
                         {pItem.created_at
                           ? new Date(pItem.created_at).toLocaleDateString()

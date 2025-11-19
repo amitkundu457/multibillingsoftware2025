@@ -35,7 +35,7 @@
 //     const fetchData = async () => {
 //       try {
 //         setLoading(true);
-//         const response = await axios.get(" http://127.0.0.1:8000/api/partyreport", {
+//         const response = await axios.get(" https://apibrize.brizindia.com/api/partyreport", {
 //           headers: { authorization: `Bearer ${token}` },
 //         });
 //         setData(response?.data);
@@ -265,8 +265,6 @@
 
 // export default Home;
 
-
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { FaFilePdf } from "react-icons/fa6";
@@ -301,9 +299,12 @@ const Page = () => {
   // Fetch Customers
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get(" http://127.0.0.1:8000/api/customers", {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/customers",
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
       setCustomers(res.data.customers);
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -314,9 +315,12 @@ const Page = () => {
   const fetchReportData = async () => {
     try {
       setLoading(true);
-      const result = await axios.get(" http://127.0.0.1:8000/api/agentsalesreport", {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const result = await axios.get(
+        " https://apibrize.brizindia.com/api/agentsalesreport",
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
       setData(result.data);
       setFilteredData(result.data);
     } catch (error) {
@@ -332,8 +336,10 @@ const Page = () => {
       const start = startDate ? new Date(startDate) : null;
       const end = endDate ? new Date(endDate) : null;
 
-      const matchDate = (!start || orderDate >= start) && (!end || orderDate <= end);
-      const matchCustomer = !selectedCustomer || item.customer_id == selectedCustomer;
+      const matchDate =
+        (!start || orderDate >= start) && (!end || orderDate <= end);
+      const matchCustomer =
+        !selectedCustomer || item.customer_id == selectedCustomer;
 
       return matchDate && matchCustomer;
     });

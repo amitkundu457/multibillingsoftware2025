@@ -17,4 +17,9 @@ class KarigariItem extends Model
 
         
     ];
+
+    public function karigar_list()
+    {
+        return $this->belongsTo(KarigarList::class, 'karigarlist_id');
+    }
 }

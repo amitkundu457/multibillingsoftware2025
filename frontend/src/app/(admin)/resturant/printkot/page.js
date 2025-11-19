@@ -25,11 +25,13 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const [taxes, setTaxes] = useState([]);
   const { data: logoUrl, error } = useSWR("logo", fetcher);
-  const { data: logoBillUrl, error: logoBillError } = useSWR("logoBill", fetcherBill);
+  const { data: logoBillUrl, error: logoBillError } = useSWR(
+    "logoBill",
+    fetcherBill
+  );
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [companyName, setCompanyName] = useState("");
-
 
   const getToken = () => {
     const cookie = document.cookie
@@ -46,15 +48,6 @@ const Page = () => {
     }
   };
 
-
-
-
-
-
-
-
-  
-
   useEffect(() => {
     fetchCompanyDetails();
     fetchTaxes();
@@ -68,11 +61,11 @@ const Page = () => {
     }
 
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/tax",
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/tax",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-        
       );
       console.log("Taxes API Response:", response);
       if (response.data && response.data.data) {
@@ -111,8 +104,10 @@ const Page = () => {
       const fetchInvoiceData = async () => {
         setLoading(true);
         try {
-          // not it;  http://127.0.0.1:8000/api/saloon-printbill/${id}
-          const response = await axios.get(` http://127.0.0.1:8000/api/kot/${id}/bill`);
+          // not it;  https://apibrize.brizindia.com/api/saloon-printbill/${id}
+          const response = await axios.get(
+            ` https://apibrize.brizindia.com/api/kot/${id}/bill`
+          );
           setInvoiceData(response.data);
         } catch (error) {
           console.error("Error fetching invoice data:", error);
@@ -135,10 +130,17 @@ const Page = () => {
   return (
     <div className="max-w-[60rem] mx-auto bg-white p-6 shadow-md">
       {/* <InvoiceHeader companyName={companyName} data={invoiceData} logoUrl={logoUrl} logoBillUrl={logoBillUrl} /> */}
-      <InvoiceTable orderId={id} taxes={taxes} data={invoiceData} logoUrl={logoUrl} logoBillUrl={logoBillUrl} companyName={companyName} />
+      <InvoiceTable
+        orderId={id}
+        taxes={taxes}
+        data={invoiceData}
+        logoUrl={logoUrl}
+        logoBillUrl={logoBillUrl}
+        companyName={companyName}
+      />
       {/* <InvoiceFooter data={invoiceData} taxes={taxes} companyName={companyName} /> */}
     </div>
-  );     
+  );
 };
 
 export default dynamic(() => Promise.resolve(Page), { ssr: false });

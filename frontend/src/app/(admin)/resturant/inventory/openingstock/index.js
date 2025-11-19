@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -48,7 +47,7 @@ const Page = () => {
 
     try {
       const res = await axios.get(
-        " http://127.0.0.1:8000/api/product-service-saloon?pro_ser_type=Product",
+        " https://apibrize.brizindia.com/api/product-service-saloon?pro_ser_type=Product",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -68,9 +67,12 @@ const Page = () => {
     }
 
     try {
-      const res = await axios.get(" http://127.0.0.1:8000/api/stock-List", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/stock-List",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       console.log("Fetched stocks:", res);
       setStocks(res.data.data || []);
     } catch (error) {
@@ -92,9 +94,13 @@ const Page = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(" http://127.0.0.1:8000/api/stock/add", manualForm, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.post(
+        " https://apibrize.brizindia.com/api/stock/add",
+        manualForm,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       fetchStocks();
       toast.success("Stock added successfully");
       setManualForm({
@@ -111,10 +117,8 @@ const Page = () => {
   };
 
   const handleCsvChange = (e) => {
-    
     setCsvFile(e.target.files[0]);
-  }
-
+  };
 
   const handleCsvUpload = async () => {
     const token = getToken();
@@ -122,40 +126,44 @@ const Page = () => {
       notifyTokenMissing();
       return;
     }
-  
+
     if (!csvFile) {
       toast.error("No file selected");
       return;
     }
-  
+
     // Optional: Check if file size is zero (empty file)
     if (csvFile.size === 0) {
       toast.error("Selected file is empty");
       return;
     }
-  
+
     const formData = new FormData();
     formData.append("file", csvFile);
     setLoading(true);
-  
+
     try {
-      const res = await axios.post(" http://127.0.0.1:8000/api/bulk-upload-stock", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.post(
+        " https://apibrize.brizindia.com/api/bulk-upload-stock",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("CSV uploaded successfully", res);
       fetchStocks();
       toast.success("CSV uploaded successfully");
-      setCsvFile(null);  // clear selected file after success
+      setCsvFile(null); // clear selected file after success
     } catch (err) {
       toast.error("Stock upload failed");
       console.error("CSV upload failed:", err);
     }
     setLoading(false);
   };
-  
+
   const handleEdit = async (id, updatedStock) => {
     const token = getToken();
     if (!token) {
@@ -165,9 +173,7 @@ const Page = () => {
 
     try {
       await axios.put(`/api/stock/${id}`, updatedStock, {
-       
-          headers: { Authorization: `Bearer ${token}` },
-     
+        headers: { Authorization: `Bearer ${token}` },
       });
       fetchStocks();
     } catch (err) {
@@ -184,11 +190,14 @@ const Page = () => {
 
     if (!confirm("Are you sure to delete this stock record?")) return;
     try {
-      await axios.delete(` http://127.0.0.1:8000/api/delete-stock/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      });
+      await axios.delete(
+        ` https://apibrize.brizindia.com/api/delete-stock/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       fetchStocks();
       toast.success("Stock deleted successfully");
     } catch (err) {
@@ -228,55 +237,54 @@ const Page = () => {
         <div className="flex w-[90%]  gap-3">
           <div>
             <label className="block mb-1">Product</label>
-          <select
-            name="product_service_id"
-            placeholder="Product ID"
-            value={manualForm.product_service_id}
-            onChange={handleManualChange}
-            className=" rounded p-1"
-          >
-            <option value="">Select Product</option>
-            {producstList.map((item) => (
-              <option value={item.id} key={item.id}>
-                {item.name} {"Id:"} {item.id}
-              </option>
-            ))}
-          </select>
-
+            <select
+              name="product_service_id"
+              placeholder="Product ID"
+              value={manualForm.product_service_id}
+              onChange={handleManualChange}
+              className=" rounded p-1"
+            >
+              <option value="">Select Product</option>
+              {producstList.map((item) => (
+                <option value={item.id} key={item.id}>
+                  {item.name} {"Id:"} {item.id}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block mb-1">Quantity</label>
-          <input
-            type="number"
-            name="quantity"
-            placeholder="Quantity"
-            value={manualForm.quantity}
-            onChange={handleManualChange}
-            className="border p-1 rounded"
-          />
+            <input
+              type="number"
+              name="quantity"
+              placeholder="Quantity"
+              value={manualForm.quantity}
+              onChange={handleManualChange}
+              className="border p-1 rounded"
+            />
           </div>
-         <div>
+          <div>
             <label className="block mb-1">Source</label>
-         <input
-            type="text"
-            name="source"
-            placeholder="Source"
-            value={manualForm.source}
-            onChange={handleManualChange}
-            className="border p-1 rounded"
-          />
-         </div>
-         <div>
-          <label className="block mb-1">Remarks</label>
-         <input
-            type="text"
-            name="remarks"
-            placeholder="Remarks"
-            value={manualForm.remarks}
-            onChange={handleManualChange}
-            className="border p-1 rounded"
-          />
-         </div>
+            <input
+              type="text"
+              name="source"
+              placeholder="Source"
+              value={manualForm.source}
+              onChange={handleManualChange}
+              className="border p-1 rounded"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Remarks</label>
+            <input
+              type="text"
+              name="remarks"
+              placeholder="Remarks"
+              value={manualForm.remarks}
+              onChange={handleManualChange}
+              className="border p-1 rounded"
+            />
+          </div>
         </div>
         <button
           type="submit"
@@ -316,74 +324,73 @@ const Page = () => {
 
       {/* Stock Table */}
       <div className="bg-white shadow rounded p-4 overflow-x-auto">
-  {/* Title outside the table */}
-  <h2 className="text-xl font-semibold mb-3">All Stock Records</h2>
+        {/* Title outside the table */}
+        <h2 className="text-xl font-semibold mb-3">All Stock Records</h2>
 
-  {/* Table */}
-  <table className="min-w-full w-full text-sm text-left border border-gray-300 border-collapse">
-    <thead className="bg-gray-200">
-      <tr>
-        <th className="px-4 py-2 border">#</th>
-        <th className="px-4 py-2 border">Product ID</th>
-        <th className="px-4 py-2 border">Quantity</th>
-        <th className="px-4 py-2 border">Source</th>
-        <th className="px-4 py-2 border">Remarks</th>
-        <th className="px-4 py-2 border">Date</th>
-        <th className="px-4 py-2 border">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {paginatedStocks.length > 0 ? (
-        paginatedStocks.map((item, index) => (
-          <tr key={item.id} className="border-t">
-            <td className="px-4 py-2 border">
-              {(currentPage - 1) * itemsPerPage + index + 1}
-            </td>
-            <td className="px-4 py-2 border">{item?.product?.name}</td>
-            <td className="px-4 py-2 border">{item.quantity}</td>
-            <td className="px-4 py-2 border">{item.source}</td>
-            <td className="px-4 py-2 border">{item.remarks}</td>
-            <td className="px-4 py-2 border">
-              {new Date(item.created_at).toLocaleString()}
-            </td>
-            <td className="px-4 py-2 border">
+        {/* Table */}
+        <table className="min-w-full w-full text-sm text-left border border-gray-300 border-collapse">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="px-4 py-2 border">#</th>
+              <th className="px-4 py-2 border">Product ID</th>
+              <th className="px-4 py-2 border">Quantity</th>
+              <th className="px-4 py-2 border">Source</th>
+              <th className="px-4 py-2 border">Remarks</th>
+              <th className="px-4 py-2 border">Date</th>
+              <th className="px-4 py-2 border">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedStocks.length > 0 ? (
+              paginatedStocks.map((item, index) => (
+                <tr key={item.id} className="border-t">
+                  <td className="px-4 py-2 border">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </td>
+                  <td className="px-4 py-2 border">{item?.product?.name}</td>
+                  <td className="px-4 py-2 border">{item.quantity}</td>
+                  <td className="px-4 py-2 border">{item.source}</td>
+                  <td className="px-4 py-2 border">{item.remarks}</td>
+                  <td className="px-4 py-2 border">
+                    {new Date(item.created_at).toLocaleString()}
+                  </td>
+                  <td className="px-4 py-2 border">
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-600 hover:underline"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="text-center py-4 text-gray-500">
+                  No stock records found.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-4 flex justify-center gap-2">
+            {Array.from({ length: totalPages }, (_, i) => (
               <button
-                onClick={() => handleDelete(item.id)}
-                className="text-red-600 hover:underline"
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-3 py-1 border rounded ${
+                  currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-white"
+                }`}
               >
-                Delete
+                {i + 1}
               </button>
-            </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan="7" className="text-center py-4 text-gray-500">
-            No stock records found.
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-
-  {/* Pagination */}
-  {totalPages > 1 && (
-    <div className="mt-4 flex justify-center gap-2">
-      {Array.from({ length: totalPages }, (_, i) => (
-        <button
-          key={i}
-          onClick={() => setCurrentPage(i + 1)}
-          className={`px-3 py-1 border rounded ${
-            currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-white"
-          }`}
-        >
-          {i + 1}
-        </button>
-      ))}
-    </div>
-  )}
-</div>
-
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

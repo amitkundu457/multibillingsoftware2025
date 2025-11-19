@@ -213,7 +213,7 @@ export default function EditBillPage() {
     (async () => {
       try {
         const res = await axios.get(
-          `http://127.0.0.1:8000/api/printbill/${id}`,
+          `https://apibrize.brizindia.com/api/printbill/${id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -328,7 +328,7 @@ export default function EditBillPage() {
       bill_inv,
       dateid: date,
       //customer id
-        customer_id: customer?.id || null,
+      customer_id: customer?.id || null,
       // order-level summary
       grossTotal: grossTotal,
       totalTax: Math.round(totalGst),
@@ -385,13 +385,17 @@ export default function EditBillPage() {
         price: n(p.price),
       })),
     };
-console.log("Saving payload:", payload);
+    console.log("Saving payload:", payload);
     setSaving(true);
     try {
       // ⚠️ Adjust the endpoint to your actual update route if different
-      await axios.put(`http://127.0.0.1:8000/api/updateCheckoutResto/${billId}`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `https://apibrize.brizindia.com/api/updateCheckoutResto/${billId}`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Bill updated successfully!");
     } catch (e) {
       console.error(e);

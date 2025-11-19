@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MdCelebration } from "react-icons/md";
 import axios from "axios";
 import useSWR from "swr";
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Birthday_and_Aniversary({ label }) {
   const [customers, setCustomers] = useState([]);
@@ -28,7 +28,6 @@ export default function Birthday_and_Aniversary({ label }) {
     return res.data;
   });
 
-  
   const roleToUrlMap = {
     admin: "admin",
     jwellery: "jwellery",
@@ -38,15 +37,18 @@ export default function Birthday_and_Aniversary({ label }) {
   };
 
   const productUrl = roleToUrlMap[!isLoading && user?.roles?.[0]?.name] || "";
-  console.log("pruddcturl2",productUrl);
+  console.log("pruddcturl2", productUrl);
 
   const fetchCustomers = async () => {
     try {
       const token = getCookie("access_token");
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const { data } = await axios.get(" http://127.0.0.1:8000/api/customers", config);
-      
+      const { data } = await axios.get(
+        " https://apibrize.brizindia.com/api/customers",
+        config
+      );
+
       console.log("Fetched Customers:", data); // Debugging log
       setCustomers(data);
     } catch (error) {
@@ -59,20 +61,22 @@ export default function Birthday_and_Aniversary({ label }) {
   }, []);
 
   // Get today's date in YYYY-MM-DD format
-const today = new Date();
-const todayMonthDay = `${today.getMonth() + 1}-${today.getDate()}`;
+  const today = new Date();
+  const todayMonthDay = `${today.getMonth() + 1}-${today.getDate()}`;
   // Count today's birthdays
-const todayBirthdays = customers.filter(customer => {
+  const todayBirthdays = customers.filter((customer) => {
     const dob = new Date(customer.dob);
     const dobMonthDay = `${dob.getMonth() + 1}-${dob.getDate()}`;
     return dobMonthDay === todayMonthDay;
-}).length;
+  }).length;
   // Count today's anniversaries
-const todayAnniversaries = customers.filter(customer => {
+  const todayAnniversaries = customers.filter((customer) => {
     const anniversary = new Date(customer.anniversary);
-    const AnniversaryMonthDay = `${anniversary.getMonth() + 1}-${anniversary.getDate()}`;
+    const AnniversaryMonthDay = `${
+      anniversary.getMonth() + 1
+    }-${anniversary.getDate()}`;
     return AnniversaryMonthDay === todayMonthDay;
-}).length;
+  }).length;
   return (
     <div className="p-4 bg-white shadow-md rounded-lg border border-gray-200">
       <div className="flex items-center justify-between">
@@ -88,19 +92,24 @@ const todayAnniversaries = customers.filter(customer => {
       <div className="mt-2 flex border-2 border-blue-500 rounded-lg p-10 justify-between">
         <div className="flex-col justify-between">
           <Link href={`/${productUrl}/birthday`} className="cursor-pointer  ">
-          <h3 className="text-sm text-gray-500  hover:text-green-500">Today Birthday</h3>
-          <p className="text-purple-600 text-lg font-bold">{todayBirthdays}</p>
+            <h3 className="text-sm text-gray-500  hover:text-green-500">
+              Today Birthday
+            </h3>
+            <p className="text-purple-600 text-lg font-bold">
+              {todayBirthdays}
+            </p>
           </Link>
-          
         </div>
 
         <div>
           <Link href={`/${productUrl}/birthday`} className="cursor-pointer  ">
-           <h3 className="text-sm text-gray-500 hover:text-green-500">Today Anniversary</h3>
-          <p className="text-teal-600 text-lg font-bold">{todayAnniversaries}</p>
-
+            <h3 className="text-sm text-gray-500 hover:text-green-500">
+              Today Anniversary
+            </h3>
+            <p className="text-teal-600 text-lg font-bold">
+              {todayAnniversaries}
+            </p>
           </Link>
-         
         </div>
       </div>
     </div>

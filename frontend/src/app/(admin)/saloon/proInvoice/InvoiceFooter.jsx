@@ -1,5 +1,3 @@
-
-
 // import React from "react";
 // import { toWords } from "number-to-words";
 // import { useState } from "react";
@@ -72,7 +70,7 @@
 
 //     try {
 //       const res = await axios.get(
-//         " http://127.0.0.1:8000/api/terms-condition-invoice",
+//         " https://apibrize.brizindia.com/api/terms-condition-invoice",
 //         {
 //           headers: { Authorization: `Bearer ${token}` },
 //         }
@@ -239,9 +237,12 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
     }
 
     try {
-      const res = await axios.get(" http://127.0.0.1:8000/api/terms-condition-invoice", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/terms-condition-invoice",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (res?.data?.length > 0) {
         setContent(res.data[0]?.content || "");
@@ -267,8 +268,10 @@ const InvoiceFooter = ({ data, taxes, companyName }) => {
           <ul className="ml-4 list-disc text-xs text-gray-600">
             {(data?.payments || []).map((payment, index) => (
               <li key={index}>
-                <span className="capitalize">{payment?.payment_method || "N/A"}</span>: ₹
-                {payment?.price || "0.00"}
+                <span className="capitalize">
+                  {payment?.payment_method || "N/A"}
+                </span>
+                : ₹{payment?.price || "0.00"}
               </li>
             ))}
           </ul>

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const InvoiceTable = ({ data, logoUrl, taxes, companyName,termCondition }) => {
+const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
   console.log(data);
   const [printType, setPrintType] = useState("thermal");
 
@@ -130,7 +130,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName,termCondition }) => {
     }
     try {
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/masterlogobill",
+        " https://apibrize.brizindia.com/api/masterlogobill",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -403,9 +403,8 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName,termCondition }) => {
           </table>
 
           {/* Footer */}
-           
+
           <div className="overflow-x-auto p-4">
-            
             {isSameState && (
               <table className="min-w-full border border-gray-300 text-center text-xs">
                 <thead className="bg-gray-200">
@@ -465,7 +464,6 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName,termCondition }) => {
               </table>
             )}
 
-            
             {/* isstate when true */}
             {!isSameState && (
               <table className="min-w-full border border-gray-300 text-center text-xs">
@@ -494,8 +492,6 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName,termCondition }) => {
                     totalTaxAmount += taxAmount;
 
                     return (
-
-                      
                       <tr key={index} className="border-b">
                         <td className="p-2 border">{invoice.hsn}</td>
                         <td className="p-2 border">{invoice.pro_total}</td>
@@ -527,37 +523,38 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName,termCondition }) => {
             )}
           </div>
 
-         <div className="space-y-2">
-  {data.saloon_payments.map((type, index) => (
-    <div
-      key={index}
-      className="flex justify-between items-center text-sm text-gray-800 bg-white border rounded-lg shadow-sm px-3 py-2 hover:bg-gray-50"
-    >
-       <span className="font-medium text-gray-900">{type.payment_method}</span>
-      <span className="font-semibold text-gray-600">₹{type.price}</span>
-    </div>
-  ))}
-</div>
+          <div className="space-y-2">
+            {data.saloon_payments.map((type, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center text-sm text-gray-800 bg-white border rounded-lg shadow-sm px-3 py-2 hover:bg-gray-50"
+              >
+                <span className="font-medium text-gray-900">
+                  {type.payment_method}
+                </span>
+                <span className="font-semibold text-gray-600">
+                  ₹{type.price}
+                </span>
+              </div>
+            ))}
+          </div>
 
-<div className="mt-6 border border-gray-300 rounded-lg p-4 bg-gray-50">
-  <h2 className="text-lg font-semibold mb-3 text-gray-800">Terms & Conditions</h2>
- <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
-  {termCondition.map((term, index) =>
-    term.content
-      .split('.')
-      .map((sentence, i) => sentence.trim())
-      .filter(Boolean)
-      .map((sentence, i) => (
-        <li key={`${index}-${i}`}>{sentence}.</li>
-      ))
-  )}
-</ul>
-
-</div>
-
-
-
-         
+          <div className="mt-6 border border-gray-300 rounded-lg p-4 bg-gray-50">
+            <h2 className="text-lg font-semibold mb-3 text-gray-800">
+              Terms & Conditions
+            </h2>
+            <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+              {termCondition.map((term, index) =>
+                term.content
+                  .split(".")
+                  .map((sentence, i) => sentence.trim())
+                  .filter(Boolean)
+                  .map((sentence, i) => (
+                    <li key={`${index}-${i}`}>{sentence}.</li>
+                  ))
+              )}
+            </ul>
+          </div>
 
           <p className="mt-4 text-center text-xs">THANK YOU FOR SHOPPING</p>
         </div>
@@ -843,7 +840,6 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName,termCondition }) => {
 
 
 </div> */}
-
 
           <p className="text-center text-sm font-semibold mt-4">
             ****THANK YOU. PLEASE VISIT AGAIN****

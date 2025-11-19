@@ -1,6 +1,3 @@
-
-
-
 // "use client";
 // import React, { useEffect, useState } from "react";
 // import { FaFilePdf } from "react-icons/fa6";
@@ -41,7 +38,7 @@
 //     const fetchData = async () => {
 //       try {
 //         const response = await axios.get(
-//           " http://127.0.0.1:8000/api/billingPurchase",
+//           " https://apibrize.brizindia.com/api/billingPurchase",
 //           {
 //             headers: { Authorization: `Bearer ${token}` },
 //           }
@@ -239,7 +236,7 @@
 //               {/* <th className="py-3 px-4 border-b">Bill Amt.</th>
 //               <th className="py-3 px-4 border-b">Qty</th> */}
 //               <th className="py-3 px-4 border-b">Billing Date</th>
-              
+
 //               <th className="py-3 px-4 border-b">Action</th>
 //             </tr>
 //           </thead>
@@ -253,7 +250,7 @@
 //                 {/* <td className="py-3 px-4 border-b">{item.total_price}</td>
 //                 <td className="py-3 px-4 border-b">{item.quantity}</td> */}
 //                 <td className="py-3 px-4 border-b">{item.bill_date}</td>
-                
+
 //                 <td className="py-3 px-4 border-b">
 //                   <a
 //                     href={`${reporturl}/jwellery/printinvoice/?id=${item.pdf_id}`}
@@ -274,8 +271,6 @@
 // };
 
 // export default BillWise;
-
-
 
 "use client";
 import React, { useEffect, useState } from "react";
@@ -317,12 +312,12 @@ const BillWise = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          " http://127.0.0.1:8000/api/parcel-billReport",
+          " https://apibrize.brizindia.com/api/parcel-billReport",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log(" response for billing",response);
+        console.log(" response for billing", response);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -332,7 +327,10 @@ const BillWise = () => {
     fetchData();
   }, [token]);
   useEffect(() => {
-    console.log("All bill_inv values:", data.map((item) => item.bill_inv));
+    console.log(
+      "All bill_inv values:",
+      data.map((item) => item.bill_inv)
+    );
   }, [data]);
   const filteredData = data
     .filter((item) => item.order_slip !== 1)
@@ -348,7 +346,7 @@ const BillWise = () => {
         item.billno?.toLowerCase().includes(lowerQuery) ||
         item.customer_name?.toLowerCase().includes(lowerQuery) ||
         item.customer_phone?.toLowerCase().includes(lowerQuery);
-        const matchesFilter =
+      const matchesFilter =
         filterType === "All"
           ? true
           : filterType === "Invoice"
@@ -516,7 +514,7 @@ const BillWise = () => {
               {/* <th className="py-3 px-4 border-b">Bill Amt.</th>
               <th className="py-3 px-4 border-b">Qty</th> */}
               <th className="py-3 px-4 border-b">Billing Date</th>
-              
+
               <th className="py-3 px-4 border-b">Action</th>
             </tr>
           </thead>
@@ -525,11 +523,19 @@ const BillWise = () => {
               <tr key={index} className="hover:bg-gray-50">
                 <td className="py-3 px-4 border-b">{index + 1}</td>
                 <td className="py-3 px-4 border-b">{item?.booking_id}</td>
-                <td className="py-3 px-4 border-b">{item?.customer_details?.userc?.name}</td>
-                <td className="py-3 px-4 border-b">{item?.customer_details?.phone}</td>
+                <td className="py-3 px-4 border-b">
+                  {item?.customer_details?.userc?.name}
+                </td>
+                <td className="py-3 px-4 border-b">
+                  {item?.customer_details?.phone}
+                </td>
                 {/* <td className="py-3 px-4 border-b">{item.total_price}</td>
                 <td className="py-3 px-4 border-b">{item.quantity}</td> */}
-                <td className="py-3 px-4 border-b">{new Date(item.booking?.created_at).toLocaleDateString("en-GB")}</td>
+                <td className="py-3 px-4 border-b">
+                  {new Date(item.booking?.created_at).toLocaleDateString(
+                    "en-GB"
+                  )}
+                </td>
                 {/* printparcelbill */}
                 <td className="py-3 px-4 border-b">
                   <a

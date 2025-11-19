@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -21,12 +21,21 @@ const categories = [
   "parcel billing",
   "Registered Customer",
   "follow-Up_Reminder",
-  "BULK_SMS"
+  "BULK_SMS",
+  "Advanced Birthday",
+  "Advanced Anniversary",
 ];
 
 const makeEmptyMessages = () =>
   categories.reduce((acc, key) => {
-    acc[key] = { enabled: true, text: "", id: null, templateId: "", saving: false, saved: false };
+    acc[key] = {
+      enabled: true,
+      text: "",
+      id: null,
+      templateId: "",
+      saving: false,
+      saved: false,
+    };
     return acc;
   }, {});
 
@@ -49,7 +58,12 @@ export default function MessageSettingsPage() {
       setLoadingCredentials(true);
       const token = getCookie("access_token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.get("http://127.0.0.1:8000/api/sms-credentials", { headers });
+      const res = await axios.get(
+        "https://apibrize.brizindia.com/api/sms-credentials",
+        {
+          headers,
+        }
+      );
       setCredentials(res.data || []);
       if (!selectedCredentialId && res.data?.length > 0) {
         setSelectedCredentialId(res.data[0].id);
@@ -76,15 +90,22 @@ export default function MessageSettingsPage() {
       setLoadingMessages(true);
       const token = getCookie("access_token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.get("http://127.0.0.1:8000/api/sms-settings", { headers });
+      const res = await axios.get(
+        "https://apibrize.brizindia.com/api/sms-settings",
+        {
+          headers,
+        }
+      );
 
       const fetched = res.data || [];
 
       const mapped = categories.reduce((acc, key) => {
         // try to match status with case-insensitive check and check credential id
         const match = fetched.find((item) => {
-          const statusMatch = String(item.status).toLowerCase() === String(key).toLowerCase();
-          const credentialMatch = String(item.sms_credential_id) === String(credentialId);
+          const statusMatch =
+            String(item.status).toLowerCase() === String(key).toLowerCase();
+          const credentialMatch =
+            String(item.sms_credential_id) === String(credentialId);
           return statusMatch && credentialMatch;
         });
 
@@ -156,17 +177,22 @@ export default function MessageSettingsPage() {
       if (currentData.id) {
         // Update existing
         res = await axios.put(
-          `http://127.0.0.1:8000/api/sms-settings/${currentData.id}`,
+          `https://apibrize.brizindia.com/api/sms-settings/${currentData.id}`,
           payload,
           { headers }
         );
       } else {
         // Create new
-        res = await axios.post("http://127.0.0.1:8000/api/sms-settings", payload, { headers });
+        res = await axios.post(
+          "https://apibrize.brizindia.com/api/sms-settings",
+          payload,
+          { headers }
+        );
       }
 
       // extract id (API shape may vary)
-      const newId = res?.data?.data?.id ?? res?.data?.id ?? currentData.id ?? null;
+      const newId =
+        res?.data?.data?.id ?? res?.data?.id ?? currentData.id ?? null;
 
       setMessages((prev) => ({
         ...prev,
@@ -213,14 +239,14 @@ export default function MessageSettingsPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-10 p-4 bg-white rounded-lg shadow">
+    <div className="max-w-6xl p-4 mx-auto mt-10 bg-white rounded-lg shadow">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">SMS Template Settings</h2>
         {/* <div className="flex items-center gap-2">
           <select
             value={selectedCredentialId ?? ""}
             onChange={(e) => setSelectedCredentialId(e.target.value ? Number(e.target.value) : null)}
-            className="border rounded p-2 text-sm"
+            className="p-2 text-sm border rounded"
             disabled={loadingCredentials}
           >
             <option value="">Select SMS Provider</option>
@@ -244,14 +270,14 @@ export default function MessageSettingsPage() {
       {loadingMessages ? (
         <div>Loading templates...</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {categories.map((key) => (
-            <div key={key} className="border p-3 rounded shadow-sm">
-              <label className="block text-sm font-medium mb-1">{key}</label>
+            <div key={key} className="p-3 border rounded shadow-sm">
+              <label className="block mb-1 text-sm font-medium">{key}</label>
 
               <textarea
                 rows={3}
-                className="w-full border border-gray-300 rounded p-2 text-sm mb-2"
+                className="w-full p-2 mb-2 text-sm border border-gray-300 rounded"
                 value={messages[key]?.text}
                 onChange={(e) => handleTextChange(key, e.target.value)}
                 placeholder={`Enter message for ${key}`}
@@ -259,7 +285,7 @@ export default function MessageSettingsPage() {
 
               <input
                 type="text"
-                className="w-full border border-gray-300 rounded p-2 text-sm mb-2"
+                className="w-full p-2 mb-2 text-sm border border-gray-300 rounded"
                 placeholder="Enter Template ID"
                 value={messages[key]?.templateId}
                 onChange={(e) => handleTemplateChange(key, e.target.value)}
@@ -269,13 +295,19 @@ export default function MessageSettingsPage() {
                 <button
                   onClick={() => saveMessage(key)}
                   disabled={messages[key]?.saving}
-                  className={`px-3 py-1 rounded text-white text-sm ${messages[key]?.saving ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"}`}
+                  className={`px-3 py-1 rounded text-white text-sm ${
+                    messages[key]?.saving
+                      ? "bg-gray-400"
+                      : "bg-green-600 hover:bg-green-700"
+                  }`}
                 >
                   {messages[key]?.saving ? "Saving..." : "Save"}
                 </button>
 
                 <div className="text-sm">
-                  {messages[key]?.saved && <span className="text-green-600">Saved ✓</span>}
+                  {messages[key]?.saved && (
+                    <span className="text-green-600">Saved ✓</span>
+                  )}
                 </div>
               </div>
             </div>

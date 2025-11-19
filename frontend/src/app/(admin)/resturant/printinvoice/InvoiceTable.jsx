@@ -1,16 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-  
-
 
 const InvoiceTable = ({ table_no, logoUrl, taxes, companyName }) => {
-   
   const [bill, setBill] = useState(null);
 
-   useEffect(() => {
+  useEffect(() => {
     if (table_no) {
-      fetch(` http://127.0.0.1:8000/api/kot-orders/bill`, {
+      fetch(` https://apibrize.brizindia.com/api/kot-orders/bill`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -26,18 +23,26 @@ const InvoiceTable = ({ table_no, logoUrl, taxes, companyName }) => {
 
   if (!table_no) return <p>Please provide a table number.</p>;
   if (!bill) return <p>Loading bill for table {table_no}...</p>;
-  
- const cgst = (bill.gst / 2).toFixed(2);
+
+  const cgst = (bill.gst / 2).toFixed(2);
   const sgst = (bill.gst / 2).toFixed(2);
 
-   return (
-     <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200 font-sans text-gray-800">
+  return (
+    <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200 font-sans text-gray-800">
       {/* --- Header --- */}
       <div className="text-center border-b border-gray-300 pb-6 mb-6">
-        <h1 className="text-3xl font-bold text-indigo-700">The Gourmet Kitchen</h1>
-        <p className="text-sm text-gray-500">12-A, Central Plaza, Food Street, New City - 445566</p>
-        <p className="text-sm text-gray-500">Phone: +91-9876543210 | GSTIN: 22AAAAA0000A1Z5</p>
-        <h2 className="mt-4 text-xl font-semibold text-slate-600">Bill for Table No: {table_no}</h2>
+        <h1 className="text-3xl font-bold text-indigo-700">
+          The Gourmet Kitchen
+        </h1>
+        <p className="text-sm text-gray-500">
+          12-A, Central Plaza, Food Street, New City - 445566
+        </p>
+        <p className="text-sm text-gray-500">
+          Phone: +91-9876543210 | GSTIN: 22AAAAA0000A1Z5
+        </p>
+        <h2 className="mt-4 text-xl font-semibold text-slate-600">
+          Bill for Table No: {table_no}
+        </h2>
       </div>
 
       {/* --- Table --- */}
@@ -58,7 +63,9 @@ const InvoiceTable = ({ table_no, logoUrl, taxes, companyName }) => {
               <td className="p-2 border">{item.product_name}</td>
               <td className="p-2 border text-right">{item.quantity}</td>
               <td className="p-2 border text-right">₹{item.product_price}</td>
-              <td className="p-2 border text-right">₹{item.total.toFixed(2)}</td>
+              <td className="p-2 border text-right">
+                ₹{item.total.toFixed(2)}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -69,7 +76,9 @@ const InvoiceTable = ({ table_no, logoUrl, taxes, companyName }) => {
         <p className="text-gray-600">Subtotal: ₹{bill.subtotal.toFixed(2)}</p>
         <p className="text-gray-600">CGST (9%): ₹{cgst}</p>
         <p className="text-gray-600">SGST (9%): ₹{sgst}</p>
-        <p className="text-lg font-bold text-indigo-700">Grand Total: ₹{bill.grand_total.toFixed(2)}</p>
+        <p className="text-lg font-bold text-indigo-700">
+          Grand Total: ₹{bill.grand_total.toFixed(2)}
+        </p>
       </div>
 
       {/* --- Footer --- */}

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaEdit, FaTrashAlt } from "react-icons/fa"; // Import the React Icons
@@ -14,7 +14,9 @@ const TermsConditionPage = () => {
   // Fetch all terms conditions from API
   const fetchTermsConditions = async () => {
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/terms-condition");
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/terms-condition"
+      );
       setTermsConditions(response.data); // Assuming the data is under the 'data' key
     } catch (error) {
       console.error("Error fetching terms conditions:", error);
@@ -35,34 +37,39 @@ const TermsConditionPage = () => {
 
   // Save term (either create or update)
   const handleSaveTerm = async () => {
-    if (isEditMode && termsConditions.length==1 ) {
+    if (isEditMode && termsConditions.length == 1) {
       // Update existing term
       try {
-        await axios.put(`  http://127.0.0.1:8000/api/terms-condition/${modalData.id}`, modalData);
+        await axios.put(
+          `  https://apibrize.brizindia.com/api/terms-condition/${modalData.id}`,
+          modalData
+        );
         fetchTermsConditions();
         setIsModalOpen(false);
       } catch (error) {
         console.error("Error updating term:", error);
       }
-    } else  if(termsConditions.length==0){
+    } else if (termsConditions.length == 0) {
       // Create new term
       try {
-        await axios.post("  http://127.0.0.1:8000/api/terms-condition", modalData);
+        await axios.post(
+          "  https://apibrize.brizindia.com/api/terms-condition",
+          modalData
+        );
         fetchTermsConditions();
         setIsModalOpen(false);
       } catch (error) {
-       
         console.error("Error adding term:", error);
       }
     }
-     
-     
   };
 
   // Delete term
   const handleDeleteTerm = async (id) => {
     try {
-      await axios.delete(`  http://127.0.0.1:8000/api/terms-condition/${id}`);
+      await axios.delete(
+        `  https://apibrize.brizindia.com/api/terms-condition/${id}`
+      );
       fetchTermsConditions();
     } catch (error) {
       console.error("Error deleting term:", error);
@@ -72,16 +79,15 @@ const TermsConditionPage = () => {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">Terms and Conditions</h1>
-      
-     
+
       {termsConditions.length === 0 ? (
-      <button
-        onClick={() => openModal()}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        + Add Term
-      </button>
-    ) : null}
+        <button
+          onClick={() => openModal()}
+          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          + Add Term
+        </button>
+      ) : null}
 
       <table className="w-full border-collapse table-auto">
         <thead>
@@ -133,31 +139,37 @@ const TermsConditionPage = () => {
               {isEditMode ? "Edit Term" : "Add Term"}
             </h2>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Term Name</label>
+              <label className="block text-sm font-medium mb-2">
+                Term Name
+              </label>
               <input
                 type="text"
                 placeholder="Enter Term Name"
                 value={modalData.name}
-                onChange={(e) => setModalData({ ...modalData, name: e.target.value })}
+                onChange={(e) =>
+                  setModalData({ ...modalData, name: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Description</label>
+              <label className="block text-sm font-medium mb-2">
+                Description
+              </label>
               <div className="w-full max-w-4xl h-[400px] overflow-y-auto">
-              <CKEditor
-                editor={ClassicEditor}
-                data={modalData.description}
-                onReady={(editor) => {
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={modalData.description}
+                  onReady={(editor) => {
                     // Apply inline styles if needed
                     editor.ui.view.editable.element.style.minHeight = "300px"; // Height in pixels
                     editor.ui.view.editable.element.style.width = "100%"; // Full width
                   }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  setModalData({ ...modalData, description: data });
-                }}
-              />
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    setModalData({ ...modalData, description: data });
+                  }}
+                />
               </div>
             </div>
             <div className="flex justify-between">

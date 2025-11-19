@@ -417,7 +417,6 @@
 
 // export default ItemManagement;
 
-
 // "use client";
 
 // import React, { useState, useEffect } from "react";
@@ -486,7 +485,7 @@
 //     if (!token) return;
 
 //     axios
-//       .get(" http://127.0.0.1:8000/api/ratemasterget", {
+//       .get(" https://apibrize.brizindia.com/api/ratemasterget", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
 //       .then((response) => {
@@ -559,7 +558,7 @@
 
 //   const fetchTaxes = async () => {
 //     try {
-//       const response = await axios.get(" http://127.0.0.1:8000/api/tax", {
+//       const response = await axios.get(" https://apibrize.brizindia.com/api/tax", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       setTaxes(response.data.data);
@@ -597,7 +596,7 @@
 
 //       if (currentItem) {
 //         await axios.post(
-//           ` http://127.0.0.1:8000/api/product-services/${currentItem.id}?_method=POST`,
+//           ` https://apibrize.brizindia.com/api/product-services/${currentItem.id}?_method=POST`,
 //           formDataToSend,
 //           {
 //             headers: {
@@ -607,7 +606,7 @@
 //           }
 //         );
 //       } else {
-//         await axios.post(" http://127.0.0.1:8000/api/product-services", formDataToSend, {
+//         await axios.post(" https://apibrize.brizindia.com/api/product-services", formDataToSend, {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
 //             "Content-Type": "multipart/form-data",
@@ -887,8 +886,6 @@
 
 // export default ItemManagement;
 
-
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -958,9 +955,12 @@ const ItemManagement = () => {
     }
 
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/type", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/type",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setCategory(response.data);
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -999,7 +999,7 @@ const ItemManagement = () => {
     }
 
     axios
-      .get("  http://127.0.0.1:8000/api/ratemasterget", {
+      .get("  https://apibrize.brizindia.com/api/ratemasterget", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -1024,7 +1024,7 @@ const ItemManagement = () => {
 
   // const FetchRateMaster=()=>{
   //   axios
-  //     .get("  http://127.0.0.1:8000/api/ratemasterget")
+  //     .get("  https://apibrize.brizindia.com/api/ratemasterget")
   //     .then((response) => {
   //       setRateMaster(response.data);
   //     })
@@ -1042,14 +1042,13 @@ const ItemManagement = () => {
 
     try {
       // const response = await getProductService();
-      const response=await axios.get(" http://127.0.0.1:8000/api/product-and-service",
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/product-and-service",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-        
-
-      )
-      console.log("data saloon product",response)
+      );
+      console.log("data saloon product", response);
       setItems(response.data); // Assuming the API returns an array
       setLoading(false);
     } catch (err) {
@@ -1070,7 +1069,7 @@ const ItemManagement = () => {
   const fetchItemscompany = async () => {
     try {
       const response = await getcompany();
-      console.log("company",response)
+      console.log("company", response);
       setCompany(response.data);
     } catch (error) {
       console.error("Error fetching items:", error);
@@ -1104,10 +1103,13 @@ const ItemManagement = () => {
       return;
     }
     try {
-      const response = await axios.get("  http://127.0.0.1:8000/api/tax", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("text list",response);
+      const response = await axios.get(
+        "  https://apibrize.brizindia.com/api/tax",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("text list", response);
       setTaxes(response.data.data); // Assuming the data is under the 'data' key
     } catch (error) {
       console.error("Error fetching taxes:", error);
@@ -1156,21 +1158,24 @@ const ItemManagement = () => {
       if (currentItem) {
         // Update an existing item using updateProductService
         // await updateProductService(currentItem.id, formDataToSend);
-        await axios.post(` http://127.0.0.1:8000/api/update-product/${currentItem.id}`,formDataToSend,
+        await axios.post(
+          ` https://apibrize.brizindia.com/api/update-product/${currentItem.id}`,
+          formDataToSend,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
-        )
+        );
         fetchData();
-       
       } else {
         // Create a new item using createProductService Saloon-product-services
         // const response = await createProductService(formDataToSend);
-        await axios.post(` http://127.0.0.1:8000/api/Saloon-product-services`,formDataToSend,
+        await axios.post(
+          ` https://apibrize.brizindia.com/api/Saloon-product-services`,
+          formDataToSend,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
-        )
+        );
         fetchData();
         // Add the new item to the state
         // setItems((prev) => [...prev, response.data]);
@@ -1187,11 +1192,11 @@ const ItemManagement = () => {
 
   const handleEdit = (item) => {
     setCurrentItem(item);
-    console.log("itenm update",item)
+    console.log("itenm update", item);
     setFormData({
       ...item, // Spread the existing item data to populate the form
       // image: null, // Keep image as null (or you can show current image in the form)
-      image: item.image || null,  
+      image: item.image || null,
     });
     setOpenModal(true);
   };
@@ -1402,13 +1407,11 @@ const ItemManagement = () => {
                 className="border border-gray-300 p-2 rounded w-full"
               >
                 <option value="">Select tax</option>
-                {
-                  taxes.map((tex ,index)=>(
-                    <option value={tex.amount} key={index}>{tex.amount}%</option>
-                  ))
-                }
-
-        
+                {taxes.map((tex, index) => (
+                  <option value={tex.amount} key={index}>
+                    {tex.amount}%
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -1416,15 +1419,17 @@ const ItemManagement = () => {
             <div className="flex flex-col ">
               <label>Barnd</label>
               <select
-              value={formData.brand || ""}
-              name="brand"
-              className=" border rounded w-full border-gray-300"
-              onChange={handleInputChange}
+                value={formData.brand || ""}
+                name="brand"
+                className=" border rounded w-full border-gray-300"
+                onChange={handleInputChange}
               >
-                <option value=''>Select Brand</option>
-                {
-                  company.map((c)=>(<option value={c.id} key={c.id}>{c.name}</option>))
-                }
+                <option value="">Select Brand</option>
+                {company.map((c) => (
+                  <option value={c.id} key={c.id}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
             </div>
 

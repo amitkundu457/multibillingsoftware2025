@@ -30,14 +30,6 @@ const ItemManagement = () => {
   const [type, setItemstype] = useState([]);
   const [taxes, setTaxes] = useState([]);
 
-
-
-  
-
-
-
-
-
   const [formData, setFormData] = useState({
     name: "",
     type: "",
@@ -58,7 +50,8 @@ const ItemManagement = () => {
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift());
+    if (parts.length === 2)
+      return decodeURIComponent(parts.pop().split(";").shift());
     return null;
   };
 
@@ -74,7 +67,7 @@ const ItemManagement = () => {
     if (!token) return;
 
     axios
-      .get(" http://127.0.0.1:8000/api/ratemasterget", {
+      .get(" https://apibrize.brizindia.com/api/ratemasterget", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -147,9 +140,12 @@ const ItemManagement = () => {
 
   const fetchTaxes = async () => {
     try {
-      const response = await axios.get(" http://127.0.0.1:8000/api/tax", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/tax",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setTaxes(response.data.data);
     } catch (error) {
       console.error("Error fetching taxes:", error);
@@ -185,7 +181,7 @@ const ItemManagement = () => {
 
       if (currentItem) {
         await axios.post(
-          ` http://127.0.0.1:8000/api/product-services/${currentItem.id}?_method=POST`,
+          ` https://apibrize.brizindia.com/api/product-services/${currentItem.id}?_method=POST`,
           formDataToSend,
           {
             headers: {
@@ -195,12 +191,16 @@ const ItemManagement = () => {
           }
         );
       } else {
-        await axios.post(" http://127.0.0.1:8000/api/product-services", formDataToSend, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        await axios.post(
+          " https://apibrize.brizindia.com/api/product-services",
+          formDataToSend,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
       }
 
       fetchData();
@@ -249,7 +249,9 @@ const ItemManagement = () => {
   };
 
   if (!token) {
-    return <div className="p-4 text-red-500">Authentication token not found!</div>;
+    return (
+      <div className="p-4 text-red-500">Authentication token not found!</div>
+    );
   }
 
   return (

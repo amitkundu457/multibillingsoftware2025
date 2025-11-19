@@ -39,6 +39,7 @@ class SmsController extends Controller
 
 
          SendBulkSmsJob::dispatch($customers);
+         Log::info('Bulk SMS Customers,,,,: ');
 
      return response()->json([
         'success' => true,

@@ -14,7 +14,7 @@ import Printbill from "@/app/(admin)/jwellery/invoice/printbill";
 import FamilyBookingModal from "./familyBookingModal";
 import ParcelModal from "./parcelModal";
 import { MdTableBar } from "react-icons/md";
-import { MdOutlineTableBar } from "react-icons/md";       // Material Icons (restaurant-specific)
+import { MdOutlineTableBar } from "react-icons/md"; // Material Icons (restaurant-specific)
 import { LuRefreshCcw } from "react-icons/lu";
 
 // ShowProduct Component (with quantity control)
@@ -100,14 +100,16 @@ const Page = () => {
   };
 
   useEffect(() => {
- 
     const fetchItems = async () => {
       const token = getCookie("access_token");
 
       try {
-        const response = await axios.get(" http://127.0.0.1:8000/api/type", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          " https://apibrize.brizindia.com/api/type",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setItemsCategory(response.data);
       } catch (error) {
         console.error("Error fetching items:", error);
@@ -115,7 +117,7 @@ const Page = () => {
     };
 
     fetchItems();
-  }, [ ]);
+  }, []);
 
   const handleParcelSearchOrder = async () => {
     const token = getCookie("access_token");
@@ -127,7 +129,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        ` http://127.0.0.1:8000/api/parcel-order/${parcelOrderId}/grand-total`,
+        ` https://apibrize.brizindia.com/api/parcel-order/${parcelOrderId}/grand-total`,
         {
           method: "GET",
           headers: {
@@ -168,7 +170,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        ` http://127.0.0.1:8000/api/parcel-payments`,
+        ` https://apibrize.brizindia.com/api/parcel-payments`,
         {
           method: "POST",
           headers: {
@@ -185,15 +187,14 @@ const Page = () => {
         }
       );
       console.log("response", response);
-              alert("✅ Payment submitted successfully!");
-
+      alert("✅ Payment submitted successfully!");
 
       const result = await response.json();
 
       if (response.status == 200) {
         setParcelOrderId(""); // Clear parcel order ID
-      setPaymentInputs([]); // Clear payment inputs
-      setParcelOrderDetails(null); // Clear order details
+        setPaymentInputs([]); // Clear payment inputs
+        setParcelOrderDetails(null); // Clear order details
         GenerateParcelBillFunction();
         setIsParcelBillModalOpen(false);
         // Optionally reset state
@@ -230,7 +231,7 @@ const Page = () => {
   useEffect(() => {
     if (familyBookingId) {
       fetch(
-        ` http://127.0.0.1:8000/api/family-booking-grand-total/${familyBookingId}`
+        ` https://apibrize.brizindia.com/api/family-booking-grand-total/${familyBookingId}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -269,7 +270,7 @@ const Page = () => {
       };
 
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/family-booking-payments", // Replace with your real API route
+        " https://apibrize.brizindia.com/api/family-booking-payments", // Replace with your real API route
         payload,
         {
           headers: {
@@ -281,11 +282,11 @@ const Page = () => {
       console.log("Payment stored:", response.data);
       alert("Payment saved successfully!");
       setfamilyBookingId(""); // Reset family booking ID
-    setPaymentInputsOfFamily([]); // Reset payment inputs
-    setGrandTotalOfFamily(0); // Reset grand total
-       GenerateBillFunction();
+      setPaymentInputsOfFamily([]); // Reset payment inputs
+      setGrandTotalOfFamily(0); // Reset grand total
+      GenerateBillFunction();
       setIsBillModalOpen(false); // close modal
-     } catch (error) {
+    } catch (error) {
       console.error(
         "Error saving payment:",
         error.response?.data || error.message
@@ -317,14 +318,17 @@ const Page = () => {
     if (!newTableNo.trim()) return;
 
     try {
-      const res = await fetch(" http://127.0.0.1:8000/api/kot-tables", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ table_no: newTableNo.trim() }),
-      });
+      const res = await fetch(
+        " https://apibrize.brizindia.com/api/kot-tables",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ table_no: newTableNo.trim() }),
+        }
+      );
 
       const data = await res.json();
 
@@ -343,13 +347,13 @@ const Page = () => {
     }
   };
 
-  // Fetch data from API  http://127.0.0.1:8000/api/product-and-service
+  // Fetch data from API  https://apibrize.brizindia.com/api/product-and-service
 
   useEffect(() => {
     const token = getCookie("access_token");
     axios
-      // .get("  http://127.0.0.1:8000/api/product-services",{headers: {
-      .get("  http://127.0.0.1:8000/api/product-and-service", {
+      // .get("  https://apibrize.brizindia.com/api/product-services",{headers: {
+      .get("  https://apibrize.brizindia.com/api/product-and-service", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -371,11 +375,14 @@ const Page = () => {
     const token = getCookie("access_token");
 
     try {
-      const res = await axios.get(" http://127.0.0.1:8000/api/kot-tables", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        " https://apibrize.brizindia.com/api/kot-tables",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setTables(res.data.tables);
     } catch (err) {
       console.error("Error fetching tables:", err);
@@ -454,7 +461,7 @@ const Page = () => {
 
   //   try {
 
-  //     const response =  await axios.post(' http://127.0.0.1:8000/api/kot-orders',payload,{
+  //     const response =  await axios.post(' https://apibrize.brizindia.com/api/kot-orders',payload,{
   //       headers:{
   //         "Content-Type":"application/json",
   //         Authorization: `Bearer ${token}`,
@@ -486,7 +493,7 @@ const Page = () => {
 
     try {
       const response = await axios.post(
-        " http://127.0.0.1:8000/api/kot-orders",
+        " https://apibrize.brizindia.com/api/kot-orders",
         payload,
         {
           headers: {
@@ -608,8 +615,8 @@ const Page = () => {
   const closeParcelModal = () => {
     setIsParcelBillModalOpen(false);
     setParcelOrderId("");
-   setPaymentInputs([]); // Reset payment inputs
-  setParcelOrderDetails(null); // Reset order details
+    setPaymentInputs([]); // Reset payment inputs
+    setParcelOrderDetails(null); // Reset order details
   };
 
   return (
@@ -776,7 +783,6 @@ const Page = () => {
 
       {/* show table icon  */}
       <div className="p-6">
-         
         <div>
           <h2 className="text-2xl font-semibold mb-4 text-gray-800 flex justify-end items-center">
             {/* Choose a Table */}
@@ -787,21 +793,21 @@ const Page = () => {
               Add Table
             </button>
             <div
-                    onClick={() => {
-                      window.location.reload();
-                    }}
-                    className="flex flex-col items-center text-blue-600 cursor-pointer"
-                  >
-                    <LuRefreshCcw size={20} />
-                    <span className="text-xs">Refresh</span>
-                  </div>
+              onClick={() => {
+                window.location.reload();
+              }}
+              className="flex flex-col items-center text-blue-600 cursor-pointer"
+            >
+              <LuRefreshCcw size={20} />
+              <span className="text-xs">Refresh</span>
+            </div>
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-           {tables.map((table) =>
-  table && table.table_no ? (
-    <button
-      key={table.id}
-      className={`relative flex flex-col items-center justify-center w-32 h-32 rounded-2xl shadow-lg font-semibold transition-all duration-300
+            {tables.map((table) =>
+              table && table.table_no ? (
+                <button
+                  key={table.id}
+                  className={`relative flex flex-col items-center justify-center w-32 h-32 rounded-2xl shadow-lg font-semibold transition-all duration-300
         ${
           selectedTable === table.table_no
             ? "bg-gradient-to-br from-red-500 to-red-700 text-white scale-105"
@@ -811,18 +817,20 @@ const Page = () => {
             ? "bg-gradient-to-br from-green-400 to-green-600 text-white hover:scale-105"
             : "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white hover:scale-105"
         }`}
-    >
-      {/* Table Icon */}
-      <MdOutlineTableBar size={42} className="mb-2 drop-shadow-lg" />
+                >
+                  {/* Table Icon */}
+                  <MdOutlineTableBar
+                    size={42}
+                    className="mb-2 drop-shadow-lg"
+                  />
 
-      {/* Table Number */}
-      <span className="text-lg tracking-wide">{table.table_no}</span>
-
-      
-    </button>
-  ) : null
-)}
-
+                  {/* Table Number */}
+                  <span className="text-lg tracking-wide">
+                    {table.table_no}
+                  </span>
+                </button>
+              ) : null
+            )}
           </div>
         </div>
 
@@ -838,7 +846,7 @@ const Page = () => {
               >
                 <p className="text-center font-semibold mb-2">{item.name}</p>
                 <img
-                  src={` http://127.0.0.1:8000/${item.image}`}
+                  src={` https://apibrize.brizindia.com/${item.image}`}
                   alt={item.name}
                   className="w-full h-32 object-cover rounded-lg mb-2"
                 />

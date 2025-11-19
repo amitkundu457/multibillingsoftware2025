@@ -71,7 +71,7 @@ export default function InvoicePage() {
 
   const [dateid, setDateid] = useState(today);
   const [barcode, setBarcode] = useState("");
-    const [modalBarcode, setModalBarcode] = useState("");
+  const [modalBarcode, setModalBarcode] = useState("");
 
   const [productList, setProductList] = useState([]);
   const [checkRender, setCheckRender] = useState(false);
@@ -105,7 +105,6 @@ export default function InvoicePage() {
     ad_wgt: "",
   });
 
-
   const emptyProductDetails = {
     grossWeight: "",
     netWeight: "",
@@ -129,11 +128,11 @@ export default function InvoicePage() {
   };
 
   const [isEditable, setIsEditable] = useState(true);
-   useEffect(() => {
+  useEffect(() => {
     if (barcode) {
       handleSearchBarCode(barcode);
     }
-  }, [barcode,modalBarcode]);
+  }, [barcode, modalBarcode]);
 
   const handleSearchBarCode = async () => {
     if (!barcode.trim()) {
@@ -146,8 +145,10 @@ export default function InvoicePage() {
     console.log("barcode all ", foundProduct);
 
     if (foundProduct) {
- const matchedItems = items.filter(item => item.id === foundProduct.item_id);
-setFilteredItems(matchedItems);
+      const matchedItems = items.filter(
+        (item) => item.id === foundProduct.item_id
+      );
+      setFilteredItems(matchedItems);
 
       // Auto-fill details if found
       setProductDetails((prevDetails) => ({
@@ -202,7 +203,7 @@ setFilteredItems(matchedItems);
         description: "",
       });
       setIsEditable(true);
-     // setError("Product not found. Enter details manually.");
+      // setError("Product not found. Enter details manually.");
     }
   };
 
@@ -448,11 +449,14 @@ setFilteredItems(matchedItems);
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
-      const response = await axios.get(" http://127.0.0.1:8000/api/barcodes", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/barcodes",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setAllProducts(response.data);
       return response.data; // Return the fetched data
@@ -464,7 +468,7 @@ setFilteredItems(matchedItems);
     try {
       const token = getCookie("access_token");
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/billcountnumber",
+        " https://apibrize.brizindia.com/api/billcountnumber",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -501,7 +505,7 @@ setFilteredItems(matchedItems);
       console.log("token", token);
 
       const response = await axios.get(
-        " http://127.0.0.1:8000/api/stockDetails",
+        " https://apibrize.brizindia.com/api/stockDetails",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -524,7 +528,7 @@ setFilteredItems(matchedItems);
 
   useEffect(() => {
     axios
-      .get("  http://127.0.0.1:8000/api/redeem-setup")
+      .get("  https://apibrize.brizindia.com/api/redeem-setup")
       .then((response) => {
         if (response.data.length > 0) {
           setLoyaltyData(response.data[0]); // Assuming you only need the first item
@@ -558,7 +562,7 @@ setFilteredItems(matchedItems);
   const handleSearchOrder = async () => {
     try {
       const res = await axios.get(
-        ` http://127.0.0.1:8000/api/orders/search?billno=${orderSearchId}`
+        ` https://apibrize.brizindia.com/api/orders/search?billno=${orderSearchId}`
       );
       console.log("orderDetails", res);
       const orderDetailsData = res.data?.data[0];
@@ -585,7 +589,7 @@ setFilteredItems(matchedItems);
     if (customerDetails.id) {
       axios
         .get(
-          `  http://127.0.0.1:8000/api/customer-redeem-point/${customerDetails.id}`
+          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -649,9 +653,12 @@ setFilteredItems(matchedItems);
 
   const fetchEmployees = async () => {
     const token = getCookie("access_token");
-    const res = await axios.get("  http://127.0.0.1:8000/api/employees", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await axios.get(
+      "  https://apibrize.brizindia.com/api/employees",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     setSalesperson(res.data.employees);
   };
 
@@ -678,7 +685,7 @@ setFilteredItems(matchedItems);
     }
   };
   const openModal = (item) => {
-    console.log("prodccut items stock lists",item)
+    console.log("prodccut items stock lists", item);
     setCheckRender(!checkRender);
     console.log("productList", productList);
     const matchingProduct = productList.find(
@@ -727,7 +734,6 @@ setFilteredItems(matchedItems);
     calculateTotals(updatedProducts);
   };
 
-  
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -782,13 +788,10 @@ setFilteredItems(matchedItems);
     setTotals(null);
   };
 
- 
-
   // let totalgstCount = 0;
   // let totalquantity = 0;
   let newGstCount = 0;
   let newTotalQty = 0;
-  
 
   const calculateTotals = (products) => {
     let gross = 0;
@@ -799,7 +802,7 @@ setFilteredItems(matchedItems);
     const productWiseTotals = [];
 
     products.forEach((product) => {
-      console.log("product check",product)
+      console.log("product check", product);
       const goldValue = product.rate * product.netWeight;
       const hallmarkCharge = Number(product.hallmarkCharge) || 0;
       const wastageValue = Number(product.wastageCharge) || 0;
@@ -851,7 +854,6 @@ setFilteredItems(matchedItems);
         }
       }
 
-      
       // const rateTotal =
       //   product.rate * product.netWeight * product.pcs +
       //   wastageValue +
@@ -861,7 +863,7 @@ setFilteredItems(matchedItems);
 
       let rateTotal = 0;
       let gstOnGold = 0;
-      
+
       if (product?.mrp > 0) {
         console.log("Using MRP for calculation");
         rateTotal = Number(product.mrp) * product.pcs;
@@ -875,13 +877,14 @@ setFilteredItems(matchedItems);
           otherCharge +
           makingTotalRs;
 
-          console.log("Using normal rate calculation",rateTotal);
-      
+        console.log("Using normal rate calculation", rateTotal);
+
         gstOnGold =
-          (product.rate * product.netWeight * product.pcs * product.tax_rate) / 100;
+          (product.rate * product.netWeight * product.pcs * product.tax_rate) /
+          100;
       }
-      console.log("gstOnGold",gstOnGold)
-      console.log("Using normal rate calculation3",rateTotal);
+      console.log("gstOnGold", gstOnGold);
+      console.log("Using normal rate calculation3", rateTotal);
       const productDiscount = product.discountPercent / 100;
       const AdjustedMaking = product.making - productDiscount;
 
@@ -892,10 +895,7 @@ setFilteredItems(matchedItems);
       //   (product.rate * product.netWeight * product.pcs * product.tax_rate) /
       //   100;
 
-      
-       
-
-console.log("ratetoal",rateTotal);
+      console.log("ratetoal", rateTotal);
 
       const productTotal = rateTotal + stoneTotal + diamondTotal;
       console.log("grosstotal", productTotal);
@@ -931,7 +931,7 @@ console.log("ratetoal",rateTotal);
         gstOnGold: gstOnGold.toFixed(2),
         mkg_chg_RS_P: makingTotalRs.toFixed(2),
         gstOnMaking: gstOnMaking.toFixed(2),
-        fixed_amt:product?.mrp || 0,
+        fixed_amt: product?.mrp || 0,
         total: productTotal.toFixed(2),
       });
 
@@ -947,7 +947,6 @@ console.log("ratetoal",rateTotal);
     setTotalGstCount(newGstCount.toFixed(2));
     setTotalQuantity(newTotalQty);
   };
-
 
   const openCheckout = () => {
     setCheckoutOpen(true);
@@ -1054,7 +1053,7 @@ console.log("ratetoal",rateTotal);
         product_id: product.product_id,
         diamondDetails: product.diamondWeight,
         diamondValue: product.diamondValue,
-        fixed_amt:product?.mrp,
+        fixed_amt: product?.mrp,
         // qty: product.qty,
         qty: product.pcs,
         // grm: product.grm,
@@ -1088,14 +1087,14 @@ console.log("ratetoal",rateTotal);
       additionDetail: additionDetail || "",
       minAdjAmt: Number(adjustAmount) || 0,
       minAdAmt: Number(advanceMoney) || 0,
-       phone_no:phoneNumber?? "",
-         status: "jwellery billing",
-        sms_credential_id: 1,
+      phone_no: phoneNumber ?? "",
+      status: "jwellery billing",
+      sms_credential_id: 1,
     };
     console.log("payload", payload);
     try {
       const response = await axios.post(
-        "  http://127.0.0.1:8000/api/order",
+        "  https://apibrize.brizindia.com/api/order",
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -1130,8 +1129,6 @@ console.log("ratetoal",rateTotal);
       if (printConfirmation) {
         Printbill(response.data.order_id, response.data.bill_inv); // Call the direct print function
       }
-                 
-
     } catch (error) {
       notyf.error("Failed to place order. Please try again.");
     }
@@ -1153,11 +1150,10 @@ console.log("ratetoal",rateTotal);
 
     // Open the URL in a new tab
     window.open(printUrl, "_blank");
-      
   };
   // const handleSendSms = async () => {
-  //   try { 
-  //     await axios.post(" http://127.0.0.1:8000/api/send-jwel-billing-sms", {
+  //   try {
+  //     await axios.post(" https://apibrize.brizindia.com/api/send-jwel-billing-sms", {
   //       phone_no:phoneNumber?? "",
   //        status: "jwellery billing",
   //       sms_credential_id: 1,
@@ -1184,7 +1180,7 @@ console.log("ratetoal",rateTotal);
 
     try {
       const response = await axios.put(
-        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -1208,7 +1204,7 @@ console.log("ratetoal",rateTotal);
 
     try {
       const response = await axios.post(
-        `  http://127.0.0.1:8000/api/customer-redeem-point/${customerId}`,
+        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
     } catch (error) {
@@ -1524,7 +1520,7 @@ console.log("ratetoal",rateTotal);
                 <input
                   type="text"
                   value={barcode}
-                onChange={(e) => setBarcode(e.target.value.trim())}
+                  onChange={(e) => setBarcode(e.target.value.trim())}
                   placeholder="Enter Barcode number"
                   className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
                 />
@@ -1592,7 +1588,10 @@ console.log("ratetoal",rateTotal);
         <aside className="w-1/4 bg-gray-100 p-4 relative h-full">
           <div className="mb-16 overflow-y-auto h-[20rem]">
             {addedProducts.map((product, index) => (
-              <div key={index} className=" border flex justify-between items-center p-2 rounded mb-2">
+              <div
+                key={index}
+                className=" border flex justify-between items-center p-2 rounded mb-2"
+              >
                 <div className=" p-2 rounded mb-2 ">
                   {product.name && <p className="font-bold">{product.name}</p>}
 
@@ -1727,7 +1726,7 @@ console.log("ratetoal",rateTotal);
               <p>Discount:</p>
               <p>₹{discountTotal}</p>
             </div>
-          
+
             {addition > 0 && (
               <div className="flex justify-between">
                 <p>AddtionRs:</p>
@@ -1764,7 +1763,6 @@ console.log("ratetoal",rateTotal);
       {/* Modal */}
       {selectedItem && (
         <Modal open={isOpen} onClose={() => closeModal()} center>
-          
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <h2 className="text-lg font-bold">{selectedItem.name}</h2>
 
@@ -1772,8 +1770,6 @@ console.log("ratetoal",rateTotal);
               <div className="flex gap-2">
                 <input
                   type="text"
-                  
-
                   value={modalBarcode}
                   onChange={(e) => setModalBarcode(barcode)}
                   placeholder="Enter Barcode number"
@@ -1936,15 +1932,15 @@ console.log("ratetoal",rateTotal);
                 />
               </div>
               <div>
-    <label>Fixed</label>
-    <input
-      name="mrp"
-      value={selectedItem.mrp}
-      readOnly
-      type="number"
-      className="w-full p-2 rounded border"
-    />
-  </div>
+                <label>Fixed</label>
+                <input
+                  name="mrp"
+                  value={selectedItem.mrp}
+                  readOnly
+                  type="number"
+                  className="w-full p-2 rounded border"
+                />
+              </div>
               <div>
                 <label>Pcs</label>
                 <input
@@ -2566,7 +2562,7 @@ console.log("ratetoal",rateTotal);
 
                   {/* GSTIN */}
                   <div className="flex items-center space-x-2">
-                  <input
+                    <input
                       type="text"
                       readOnly
                       value={customerDetails.gstNo}
