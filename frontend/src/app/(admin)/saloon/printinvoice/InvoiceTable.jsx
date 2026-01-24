@@ -156,8 +156,8 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
 
   return (
     <div>
-      <div className="fixed top-16 right-4 bg-white p-3 rounded-lg shadow-lg border border-gray-300">
-        <label className="text-sm font-medium mb-1 block">
+      <div className="fixed p-3 bg-white border border-gray-300 rounded-lg shadow-lg top-16 right-4">
+        <label className="block mb-1 text-sm font-medium">
           Select Print Type:
         </label>
         <select
@@ -184,7 +184,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
               <img
                 src={fetchedLogoUrl}
                 alt="Company Logo"
-                className="w-full h-full object-contain"
+                className="object-contain w-full h-full"
               />
             </div>
           )}
@@ -239,85 +239,85 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
           </div>
 
           {/* Table Header */}
-          <table className="w-full mt-4 border-collapse border border-gray-400 text-xs">
+          <table className="w-full mt-4 text-xs border border-collapse border-gray-400">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border border-gray-400 p-2">SN</th>
-                <th className="border border-gray-400 p-2">Item Name</th>
-                <th className="border border-gray-400 p-2">Qty</th>
-                <th className="border border-gray-400 p-2">Amount</th>
-                <th className="border border-gray-400 p-2">gst</th>
-                <th className="border border-gray-400 p-2">Amount</th>
+                <th className="p-2 border border-gray-400">SN</th>
+                <th className="p-2 border border-gray-400">Item Name</th>
+                <th className="p-2 border border-gray-400">Qty</th>
+                <th className="p-2 border border-gray-400">Amount</th>
+                <th className="p-2 border border-gray-400">gst</th>
+                <th className="p-2 border border-gray-400">Amount</th>
               </tr>
             </thead>
             <tbody>
               {data.saloon_details.map((invoice, index) => (
                 <tr key={index} className="text-center">
-                  <td className="border border-gray-400 p-2">{index + 1}</td>
-                  <td className="border border-gray-400 p-2">
+                  <td className="p-2 border border-gray-400">{index + 1}</td>
+                  <td className="p-2 border border-gray-400">
                     {invoice.product_name}
                   </td>
-                  <td className="border border-gray-400 p-2">{invoice.qty}</td>
-                  <td className="border border-gray-400 p-2">{invoice.rate}</td>
-                  <td className="border border-gray-400 p-2">
+                  <td className="p-2 border border-gray-400">{invoice.qty}</td>
+                  <td className="p-2 border border-gray-400">{invoice.rate}</td>
+                  <td className="p-2 border border-gray-400">
                     {invoice.tax_rate}%
                   </td>
-                  <td className="border border-gray-400 p-2">
+                  <td className="p-2 border border-gray-400">
                     {invoice.pro_total}
                   </td>
                 </tr>
               ))}
               <tr>
-                <td className=" border-gray-400 p-2"></td>
-                <td className=" border-gray-400 p-2"></td>
-                <td className=" border-gray-400 p-2"></td>
+                <td className="p-2 border-gray-400 "></td>
+                <td className="p-2 border-gray-400 "></td>
+                <td className="p-2 border-gray-400 "></td>
 
-                <td className=" border-gray-400 p-2"></td>
-                <td className=" border-gray-400 p-2"></td>
-                <td className=" border-gray-400 p-2">
-                  <p className="text-lg font-bold pl-16"></p>
+                <td className="p-2 border-gray-400 "></td>
+                <td className="p-2 border-gray-400 "></td>
+                <td className="p-2 border-gray-400 ">
+                  <p className="pl-16 text-lg font-bold"></p>
                 </td>
               </tr>
 
               <tr>
-                <td className="border border-gray-400 p-2">Gross Total</td>
-                <td className="border border-gray-400 p-2"></td>
-                <td className="border border-gray-400 p-2"></td>
+                <td className="p-2 border border-gray-400">Gross Total</td>
+                <td className="p-2 border border-gray-400"></td>
+                <td className="p-2 border border-gray-400"></td>
 
-                <td className="border border-gray-400 p-2"></td>
-                <td className="border border-gray-400 p-2"></td>
-                <td className="border border-gray-400 p-2">
-                  <p className="text-xs pl-16">
+                <td className="p-2 border border-gray-400"></td>
+                <td className="p-2 border border-gray-400"></td>
+                <td className="p-2 border border-gray-400">
+                  <p className="pl-16 text-xs">
                     ₹{totals.totalTaxabletttAmount}
                   </p>
                 </td>
               </tr>
               {data.totalDiscount > 0 && (
                 <tr>
-                  <td className="border border-gray-400 p-2">Discount</td>
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2"></td>
+                  <td className="p-2 border border-gray-400">Discount</td>
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="p-2 border border-gray-400"></td>
 
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2">
-                    <p className="text-xs pl-16">-₹{data.totalDiscount}</p>
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="p-2 border border-gray-400">
+                    <p className="pl-16 text-xs">-₹{data.totalDiscount}</p>
                   </td>
                 </tr>
               )}
               {data.membDiscount > 0 && (
                 <tr>
-                  <td className="border border-gray-400 p-2">
+                  <td className="p-2 border border-gray-400">
                     {" "}
                     Membership Disc:
                   </td>
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2 items-center"></td>
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="items-center p-2 border border-gray-400"></td>
 
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2">
-                    <p className="text-xs  pl-16 ">
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="p-2 border border-gray-400">
+                    <p className="pl-16 text-xs ">
                       <div>
                         -₹
                         {((data.gross_total * data.membDiscount) / 100).toFixed(
@@ -334,14 +334,14 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
               {/* cgst and sgst */}
               {!isSameState && (
                 <tr>
-                  <td className="border border-gray-400 p-2">@igst</td>
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2"></td>
+                  <td className="p-2 border border-gray-400">@igst</td>
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="p-2 border border-gray-400"></td>
 
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2"></td>
-                  <td className="border border-gray-400 p-2">
-                    <p className="text-xs pl-16">
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="p-2 border border-gray-400"></td>
+                  <td className="p-2 border border-gray-400">
+                    <p className="pl-16 text-xs">
                       ₹{totals.totalTaxtttAmount.toFixed(2)}
                     </p>
                   </td>
@@ -353,25 +353,25 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
               {isSameState && (
                 <>
                   <tr>
-                    <td className="border border-gray-400 p-2">@cgst</td>
-                    <td className="border border-gray-400 p-2"></td>
-                    <td className="border border-gray-400 p-2"></td>
-                    <td className="border border-gray-400 p-2"></td>
-                    <td className="border border-gray-400 p-2"></td>
-                    <td className="border border-gray-400 p-2">
-                      <p className="text-xs pl-16">
+                    <td className="p-2 border border-gray-400">@cgst</td>
+                    <td className="p-2 border border-gray-400"></td>
+                    <td className="p-2 border border-gray-400"></td>
+                    <td className="p-2 border border-gray-400"></td>
+                    <td className="p-2 border border-gray-400"></td>
+                    <td className="p-2 border border-gray-400">
+                      <p className="pl-16 text-xs">
                         ₹{(totals.totalTaxtttAmount / 2).toFixed(2)}
                       </p>
                     </td>
                   </tr>
                   <tr>
-                    <td className="border border-gray-400 p-2">@sgst</td>
-                    <td className="border border-gray-400 p-2"></td>
-                    <td className="border border-gray-400 p-2"></td>
-                    <td className="border border-gray-400 p-2"></td>
-                    <td className="border border-gray-400 p-2"></td>
-                    <td className="border border-gray-400 p-2">
-                      <p className="text-xs pl-16">
+                    <td className="p-2 border border-gray-400">@sgst</td>
+                    <td className="p-2 border border-gray-400"></td>
+                    <td className="p-2 border border-gray-400"></td>
+                    <td className="p-2 border border-gray-400"></td>
+                    <td className="p-2 border border-gray-400"></td>
+                    <td className="p-2 border border-gray-400">
+                      <p className="pl-16 text-xs">
                         ₹{(totals.totalTaxtttAmount / 2).toFixed(2)}
                       </p>
                     </td>
@@ -380,20 +380,21 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
               )}
 
               <tr>
-                <td className="border border-gray-400 p-2"> Total:</td>
-                <td className="border border-gray-400 p-2"></td>
-                <td className="border border-gray-400 p-2 items-center">
+                <td className="p-2 border border-gray-400"> Total:</td>
+                <td className="p-2 border border-gray-400"></td>
+                <td className="items-center p-2 border border-gray-400">
                   {totals.totalqty}
                 </td>
 
-                <td className="border border-gray-400 p-2"></td>
-                <td className="border border-gray-400 p-2"></td>
-                <td className="border border-gray-400 p-2">
-                  <p className="text-xs pl-16">
+                <td className="p-2 border border-gray-400"></td>
+                <td className="p-2 border border-gray-400"></td>
+                <td className="p-2 border border-gray-400">
+                  <p className="pl-16 text-xs">
                     ₹
                     {(
                       (Number(totals?.totalTaxabletttAmount) || 0) +
                       (Number(totals?.totalTaxtttAmount) || 0) -
+                      Number(data?.new_loyalty_cashback) -
                       (Number(data?.totalDiscount) || 0)
                     ).toFixed(2)}
                   </p>
@@ -404,9 +405,9 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
 
           {/* Footer */}
 
-          <div className="overflow-x-auto p-4">
+          <div className="p-4 overflow-x-auto">
             {isSameState && (
-              <table className="min-w-full border border-gray-300 text-center text-xs">
+              <table className="min-w-full text-xs text-center border border-gray-300">
                 <thead className="bg-gray-200">
                   <tr className="border-b">
                     <th className="p-2 border">HSN/SAC</th>
@@ -454,9 +455,9 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
                     <td className="p-2 border">{totalSgstAmount.toFixed(2)}</td>
                     <td className="p-2 border">{totalTaxAmount.toFixed(2)}</td>
                   </tr>
-                  {/* <tr className="font-bold border-t border-dashed text-lg">
+                  {/* <tr className="text-lg font-bold border-t border-dashed">
                   <td className="p-4 text-left">Grand Total</td>
-                  <td className="text-right p-4" colSpan="6">
+                  <td className="p-4 text-right" colSpan="6">
                     ₹{(data.total_payment + totalTaxAmount).toFixed(2)}
                   </td>
                 </tr> */}
@@ -466,7 +467,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
 
             {/* isstate when true */}
             {!isSameState && (
-              <table className="min-w-full border border-gray-300 text-center text-xs">
+              <table className="min-w-full text-xs text-center border border-gray-300">
                 <thead className="bg-gray-200">
                   <tr className="border-b">
                     <th className="p-2 border">HSN/SAC</th>
@@ -512,9 +513,9 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
                     {/* <td className="p-2 border">{totalSgstAmount}</td> */}
                     <td className="p-2 border">{totalTaxAmount}</td>
                   </tr>
-                  {/* <tr className="font-bold border-t border-dashed text-lg">
+                  {/* <tr className="text-lg font-bold border-t border-dashed">
                   <td className="p-4 text-left">Grand Total</td>
-                  <td className="text-right p-4" colSpan="6">
+                  <td className="p-4 text-right" colSpan="6">
                     ₹{(data.total_payment + totalTaxAmount).toFixed(2)}
                   </td>
                 </tr> */}
@@ -527,7 +528,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
             {data.saloon_payments.map((type, index) => (
               <div
                 key={index}
-                className="flex justify-between items-center text-sm text-gray-800 bg-white border rounded-lg shadow-sm px-3 py-2 hover:bg-gray-50"
+                className="flex items-center justify-between px-3 py-2 text-sm text-gray-800 bg-white border rounded-lg shadow-sm hover:bg-gray-50"
               >
                 <span className="font-medium text-gray-900">
                   {type.payment_method}
@@ -539,11 +540,11 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
             ))}
           </div>
 
-          <div className="mt-6 border border-gray-300 rounded-lg p-4 bg-gray-50">
-            <h2 className="text-lg font-semibold mb-3 text-gray-800">
+          <div className="p-4 mt-6 border border-gray-300 rounded-lg bg-gray-50">
+            <h2 className="mb-3 text-lg font-semibold text-gray-800">
               Terms & Conditions
             </h2>
-            <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+            <ul className="space-y-1 text-sm text-gray-700 list-disc list-inside">
               {termCondition.map((term, index) =>
                 term.content
                   .split(".")
@@ -556,17 +557,17 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
             </ul>
           </div>
 
-          <p className="mt-4 text-center text-xs">THANK YOU FOR SHOPPING</p>
+          <p className="mt-4 text-xs text-center">THANK YOU FOR SHOPPING</p>
         </div>
       ) : printType == "thermal" ? (
-        <div className="max-w-md mx-auto bg-white p-6 shadow-lg border rounded-lg">
+        <div className="max-w-md p-6 mx-auto bg-white border rounded-lg shadow-lg">
           {/* logo */}
           {fetchedLogoUrl && (
-            <div className=" mx-auto rounded-md w-20 h-10 mb-4">
+            <div className="w-20 h-10 mx-auto mb-4 rounded-md ">
               <img
                 src={fetchedLogoUrl}
                 alt="Company Logo"
-                className="w-full rounded-sm h-full object-contain"
+                className="object-contain w-full h-full rounded-sm"
               />
             </div>
           )}
@@ -615,11 +616,11 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
             </p>
           </div>
 
-          <table className="w-full mt-4 border text-xs">
+          <table className="w-full mt-4 text-xs border">
             <thead>
               <tr className="border-b">
-                <th className="text-left p-2">Service & Product</th>
-                {/* <th className="text-left p-2">stylist</th> */}
+                <th className="p-2 text-left">Service & Product</th>
+                {/* <th className="p-2 text-left">stylist</th> */}
                 <th className="p-2">Amount</th>
                 <th className="p-2">Qty</th>
                 <th className="p-2">Total</th>
@@ -640,31 +641,31 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
 
           {data.saloon_details.length > 0 && (
             <>
-              <div className="font-semibold border-t border-dashed mt-5 text-xs flex justify-between px-1">
+              <div className="flex justify-between px-1 mt-5 text-xs font-semibold border-t border-dashed">
                 <div>Total Amount (Before Discount)</div>
                 <div>₹{data.gross_total}</div>
               </div>
 
               {isSameState ? (
                 <>
-                  <div className="border-t border-dashed mt-2 text-xs flex justify-between px-1">
+                  <div className="flex justify-between px-1 mt-2 text-xs border-t border-dashed">
                     <div>CGST</div>
                     <div>₹{(totals.totalTaxtttAmount / 2).toFixed(2)}</div>
                   </div>
-                  <div className="border-t border-dashed mt-2 text-xs flex justify-between px-1">
+                  <div className="flex justify-between px-1 mt-2 text-xs border-t border-dashed">
                     <div>SGST</div>
                     <div>₹{(totals.totalTaxtttAmount / 2).toFixed(2)}</div>
                   </div>
                 </>
               ) : (
-                <div className="border-t border-dashed mt-2 text-xs flex justify-between px-1">
+                <div className="flex justify-between px-1 mt-2 text-xs border-t border-dashed">
                   <div>IGST</div>
                   <div>₹{totals.totalTaxtttAmount.toFixed(2)}</div>
                 </div>
               )}
 
               {data.membDiscount > 0 && (
-                <div className="text-xs border-t border-dashed mt-2 flex justify-between px-1 text-red-500">
+                <div className="flex justify-between px-1 mt-2 text-xs text-red-500 border-t border-dashed">
                   <div>Membership Discount (if applicable)</div>
                   <div>
                     -₹
@@ -674,19 +675,26 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
               )}
 
               {data?.totalDiscount > 0 && (
-                <div className="text-xs border-t border-dashed mt-2 flex justify-between px-1 text-red-500">
+                <div className="flex justify-between px-1 mt-2 text-xs text-red-500 border-t border-dashed">
                   <div>Discount: </div>
                   <div>-₹{data?.totalDiscount}</div>
                 </div>
               )}
 
-              <div className="font-semibold border-t border-dashed mt-5 text-xs flex justify-between px-1">
+              {data?.new_loyalty_cashback > 0 && (
+                <div className="flex justify-between px-1 mt-2 text-xs text-red-500 border-t border-dashed">
+                  <div>Loyalty Cashback:-₹{data?.new_loyalty_cashback}</div>
+                </div>
+              )}
+
+              <div className="flex justify-between px-1 mt-5 text-xs font-semibold border-t border-dashed">
                 <div>Net Amount</div>
                 <div>
                   ₹
                   {(
                     Number(data.gross_total) +
                     Number(totals.totalTaxtttAmount) -
+                    Number(data?.new_loyalty_cashback) -
                     (Number(data?.totalDiscount) || 0)
                   ).toFixed(2) -
                     ((data.gross_total * data.membDiscount) / 100).toFixed(2)}
@@ -696,20 +704,20 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
             </>
           )}
 
-          <div className="mt-4 border-t pt-4">
+          <div className="pt-4 mt-4 border-t">
             {/* Additional details if needed */}
           </div>
 
-          <div className="max-w-md mx-auto bg-white p-4 shadow-lg border rounded-lg font-mono text-xs">
+          <div className="max-w-md p-4 mx-auto font-mono text-xs bg-white border rounded-lg shadow-lg">
             {isSameState ? (
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-dashed">
-                    <th className="text-left p-1">HSN/SAC</th>
-                    <th className="text-right p-1">Taxable</th>
-                    <th className="text-right p-1">CGST</th>
-                    <th className="text-right p-1">SGST</th>
-                    <th className="text-right p-1">Total Tax</th>
+                    <th className="p-1 text-left">HSN/SAC</th>
+                    <th className="p-1 text-right">Taxable</th>
+                    <th className="p-1 text-right">CGST</th>
+                    <th className="p-1 text-right">SGST</th>
+                    <th className="p-1 text-right">Total Tax</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -728,14 +736,14 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
                     return (
                       <tr key={index} className="border-b border-dashed">
                         <td className="p-1">{invoice.hsn}</td>
-                        <td className="text-right p-1">{invoice.pro_total}</td>
-                        <td className="text-right p-1">
+                        <td className="p-1 text-right">{invoice.pro_total}</td>
+                        <td className="p-1 text-right">
                           {cgstAmount.toFixed(2)}
                         </td>
-                        <td className="text-right p-1">
+                        <td className="p-1 text-right">
                           {sgstAmount.toFixed(2)}
                         </td>
-                        <td className="text-right p-1">
+                        <td className="p-1 text-right">
                           {taxAmount.toFixed(2)}
                         </td>
                       </tr>
@@ -743,16 +751,16 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
                   })}
                   <tr className="font-semibold border-t border-dashed">
                     <td className="p-1">Total</td>
-                    <td className="text-right p-1">
+                    <td className="p-1 text-right">
                       {totalTaxableAmount.toFixed(2)}
                     </td>
-                    <td className="text-right p-1">
+                    <td className="p-1 text-right">
                       {totalCgstAmount.toFixed(2)}
                     </td>
-                    <td className="text-right p-1">
+                    <td className="p-1 text-right">
                       {totalSgstAmount.toFixed(2)}
                     </td>
-                    <td className="text-right p-1">
+                    <td className="p-1 text-right">
                       {totalTaxAmount.toFixed(2)}
                     </td>
                   </tr>
@@ -762,11 +770,11 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-dashed">
-                    <th className="text-left p-1">HSN/SAC</th>
-                    <th className="text-right p-1">Taxable</th>
-                    <th className="text-right p-1">IGST Rate</th>
-                    <th className="text-right p-1">IGST Amt</th>
-                    <th className="text-right p-1">Total Tax</th>
+                    <th className="p-1 text-left">HSN/SAC</th>
+                    <th className="p-1 text-right">Taxable</th>
+                    <th className="p-1 text-right">IGST Rate</th>
+                    <th className="p-1 text-right">IGST Amt</th>
+                    <th className="p-1 text-right">Total Tax</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -779,12 +787,12 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
                     return (
                       <tr key={index} className="border-b border-dashed">
                         <td className="p-1">{invoice.hsn}</td>
-                        <td className="text-right p-1">{invoice.pro_total}</td>
-                        <td className="text-right p-1">{invoice.tax_rate}%</td>
-                        <td className="text-right p-1">
+                        <td className="p-1 text-right">{invoice.pro_total}</td>
+                        <td className="p-1 text-right">{invoice.tax_rate}%</td>
+                        <td className="p-1 text-right">
                           {igstAmount.toFixed(2)}
                         </td>
-                        <td className="text-right p-1">
+                        <td className="p-1 text-right">
                           {igstAmount.toFixed(2)}
                         </td>
                       </tr>
@@ -792,14 +800,14 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
                   })}
                   <tr className="font-semibold border-t border-dashed">
                     <td className="p-1">Total</td>
-                    <td className="text-right p-1">
+                    <td className="p-1 text-right">
                       {totalTaxableAmount.toFixed(2)}
                     </td>
-                    <td className="text-right p-1">-</td>
-                    <td className="text-right p-1">
+                    <td className="p-1 text-right">-</td>
+                    <td className="p-1 text-right">
                       {totalTaxAmount.toFixed(2)}
                     </td>
-                    <td className="text-right p-1">
+                    <td className="p-1 text-right">
                       {totalTaxAmount.toFixed(2)}
                     </td>
                   </tr>
@@ -812,7 +820,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
             {data.saloon_payments.map((type, index) => (
               <div
                 key={index}
-                className="flex justify-between items-center text-sm text-gray-800 bg-white border rounded-lg shadow-sm px-3 py-2 hover:bg-gray-50"
+                className="flex items-center justify-between px-3 py-2 text-sm text-gray-800 bg-white border rounded-lg shadow-sm hover:bg-gray-50"
               >
                 <span className="font-medium text-gray-900">
                   {type.payment_method}
@@ -824,9 +832,9 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
               </div>
             ))}
           </div>
-          {/* <div className="mt-6 border border-gray-300 rounded-lg p-4 bg-gray-50">
-  <h2 className="text-lg font-semibold mb-3 text-gray-800">Terms & Conditions</h2>
- <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
+          {/* <div className="p-4 mt-6 border border-gray-300 rounded-lg bg-gray-50">
+  <h2 className="mb-3 text-lg font-semibold text-gray-800">Terms & Conditions</h2>
+ <ul className="space-y-1 text-sm text-gray-700 list-disc list-inside">
   {termCondition.flatMap((term, index) => 
     term.content
       .split('.')
@@ -841,7 +849,7 @@ const InvoiceTable = ({ data, logoUrl, taxes, companyName, termCondition }) => {
 
 </div> */}
 
-          <p className="text-center text-sm font-semibold mt-4">
+          <p className="mt-4 text-sm font-semibold text-center">
             ****THANK YOU. PLEASE VISIT AGAIN****
           </p>
         </div>

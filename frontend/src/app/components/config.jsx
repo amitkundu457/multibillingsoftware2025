@@ -224,8 +224,24 @@ export const getphoneSearch = (phone) => {
 
 //resturant state
 
-export const getphoneSearchrest = (phone) =>
-  apiClient.get(`customers/searchres`, { params: { phone } });
+// export const getphoneSearchrest = (phone) =>
+//   apiClient.get(`customers/searchres`, { params: { phone } });
+
+export const getphoneSearchrest = (phone) => {
+  const token = getCookie("access_token");
+
+  if (!token) {
+    console.error("No access token found");
+    return Promise.reject("No access token found");
+  }
+
+  return apiClient.get("customers/searchres", {
+    params: { phone },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
 export const getBillno = () => {
   const token = getCookie("access_token");

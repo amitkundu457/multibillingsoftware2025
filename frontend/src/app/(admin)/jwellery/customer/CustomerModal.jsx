@@ -28,13 +28,16 @@ const CustomerModal = ({
   const [smsModal, setSmsModal] = useState(false);
   const [newCustomer, setNewCustomer] = useState(null); // holds added customer data
   const [customerData, setCustomerData] = useState(null);
-
+  const [refreshPhone, setRefreshPhone] = useState(false);
   // const[CustomerEnquiry ,setEnuiry]=useState("");
 
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
 
+  const [selectedStage, setSelectedStage] = useState("");
+  const [amount, setAmount] = useState("");
+  // const [loading, setLoading] = useState(false);
   const getToken = () => {
     const cookie = document.cookie
       .split("; ")
@@ -326,7 +329,7 @@ const CustomerModal = ({
     }, 800);
 
     return () => clearTimeout(delayDebounce);
-  }, [phone, setValue, modalType]);
+  }, [phone, refreshPhone, setValue, modalType]);
 
   return (
     <>
@@ -335,6 +338,205 @@ const CustomerModal = ({
           <h2 className="mb-4 text-2xl font-bold">
             {modalType === "create" ? "Add Customerss" : "Edit Customer"}
           </h2>
+          {/* Loyalty Info (Only when customer found via phone search) */}
+
+          {/* {customerData?.loyalty?.length > 0 && (
+            <div className="p-4 mb-4 border border-green-300 rounded-md bg-green-50">
+              <h3 className="mb-2 text-sm font-semibold text-green-700">
+                Loyalty Details
+              </h3>
+
+              <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
+                <div>
+                  <span className="text-gray-500">Total Loyalty Points</span>
+                  <p className="font-semibold text-gray-800">
+                    {customerData?.loyalty[0]?.redeem_points}
+                  </p>
+                </div>
+              </div>
+
+              {customerData?.stage?.length > 0 &&
+                (() => {
+                  const redeemPoints = customerData?.loyalty[0]?.redeem_points;
+
+                  const sortedStages = [...customerData?.stage].sort(
+                    (a, b) => a.loyalty_balance - b.loyalty_balance
+                  );
+
+                  const unlockedStages = sortedStages?.filter(
+                    (s) => redeemPoints >= s.loyalty_balance
+                  );
+
+                  const currentStage = unlockedStages.at(-1);
+
+                  return (
+                    <>
+                      <p className="mb-2 text-xs font-semibold text-green-700">
+                        🎯 Stage Progress
+                      </p>
+
+                      <div className="space-y-2">
+                        {sortedStages.map((stage, index) => {
+                          const unlocked =
+                            redeemPoints >= stage?.loyalty_balance;
+
+                          return (
+                            <div
+                              key={stage.id}
+                              className={`flex items-center justify-between p-3 rounded-md border
+                    ${
+                      unlocked
+                        ? "bg-green-600 text-white border-green-700"
+                        : "bg-white text-gray-500 border-gray-300"
+                    }`}
+                            >
+                              <div>
+                                <p className="text-sm font-semibold capitalize">
+                                  {index + 1}.{" "}
+                                  {stage.category.replace("_", " ")}
+                                </p>
+                                <p className="text-xs">
+                                  Required: {stage.loyalty_balance} pts
+                                </p>
+                              </div>
+
+                              <div className="text-xs text-right">
+                                <p>🎁 Redeem Amount ₹{stage.cashback}</p>
+                                <p>⭐ {stage.set_loyalty_points} ₹ per Point</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {currentStage && (
+                        <p className="mt-3 text-xs font-semibold text-green-700">
+                          ✅ Customer eligible up to{" "}
+                          <span className="uppercase">
+                            {currentStage.category.replace("_", " ")}
+                          </span>
+                        </p>
+                      )}
+                    </>
+                  );
+                })()}
+            </div>
+          )}
+           */}
+
+          {/* {customerData?.stage?.length > 0 && (
+            <div className="p-4 mt-5 bg-white border border-green-300 rounded-md">
+              <h4 className="mb-3 text-sm font-semibold text-green-700">
+                🔁 Redeem / Add Loyalty Points
+              </h4>
+
+              {(() => {
+                const redeemPoints = customerData?.loyalty[0]?.redeem_points;
+
+                // Stages user can access
+                const accessibleStages = customerData?.stage?.filter(
+                  (stage) => redeemPoints >= stage?.loyalty_balance
+                );
+
+                // ✅ Selected stage object
+                const selectedStageData = accessibleStages.find(
+                  (stage) => stage.category === selectedStage
+                );
+
+                // ✅ Cashback of selected stage
+                const cashback = selectedStageData?.cashback ?? 0;
+
+                // ✅ Amount validation
+                const isAmountValid =
+                  selectedStage && amount && Number(amount) >= Number(cashback);
+
+                return (
+                  <>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                      
+                      <select
+                        value={selectedStage}
+                        onChange={(e) => setSelectedStage(e.target.value)}
+                        className="p-2 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-green-500"
+                      >
+                        <option value="">Select Stage</option>
+                        {accessibleStages.map((stage) => (
+                          <option key={stage.category} value={stage.category}>
+                            {stage.category.replace("_", " ").toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+
+                      
+                      <div>
+                        <input
+                          type="number"
+                          placeholder="Enter Amount ₹"
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                          className="w-full p-2 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-green-500"
+                        />
+
+                        
+                        {selectedStage && amount && !isAmountValid && (
+                          <p className="mt-1 text-xs text-red-600">
+                            ⚠ Amount must be greater than or equal to ₹
+                            {cashback}
+                          </p>
+                        )}
+                      </div>
+
+                      
+                      <button
+                        disabled={
+                          !selectedStage || !amount || !isAmountValid || loading
+                        }
+                        onClick={async () => {
+                          try {
+                            setLoading(true);
+                            const token = getCookie("access_token");
+
+                            await axios.post(
+                              "https://apibrize.brizindia.com/api/loyalty/redeem-stage",
+                              {
+                                customer_id:
+                                  customerData.loyalty[0].customer_id,
+                                stage_category: selectedStage,
+                                amount: amount,
+                              },
+                              {
+                                headers: {
+                                  Authorization: `Bearer ${token}`,
+                                },
+                              }
+                            );
+
+                            alert("Loyalty points updated successfully ✅");
+                            setSelectedStage("");
+                            setAmount("");
+                            setRefreshPhone((refreshPhone) => !refreshPhone);
+                          } catch (err) {
+                            alert("Something went wrong ❌");
+                          } finally {
+                            setLoading(false);
+                          }
+                        }}
+                        className="px-4 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700 disabled:opacity-50"
+                      >
+                        {loading ? "Processing..." : "Apply"}
+                      </button>
+                    </div>
+
+                    <p className="mt-2 text-xs text-gray-500">
+                      ℹ Loyalty balance will be adjusted based on selected stage
+                      & amount.
+                    </p>
+                  </>
+                );
+              })()}
+            </div>
+          )} */}
+
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex space-x-3">
               <div className="flex justify-between w-full">

@@ -82,6 +82,9 @@ export default function InvoicePage() {
   const [totalGstCount, setTotalGstCount] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
 
+  //new for customer features like add if not found
+  const [customerFound, setCustomerFound] = useState(false);
+
   const [productDetails, setProductDetails] = useState({
     grossWeight: "",
     netWeight: "",
@@ -262,10 +265,25 @@ export default function InvoicePage() {
   const [ad_wgt, setAd_wgt] = useState(null);
   const [pcss, setPcs] = useState(null);
 
+  // const [customerDetails, setCustomerDetails] = useState({
+  //   name: "",
+  //   address: "",
+  //   gstin: "",
+  // });
+
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
     address: "",
     gstin: "",
+    email: "",
+    gender: "",
+    dob: "",
+    anniversary: "",
+    // city: "",
+    // state: "",
+    // country: "IN",
+    // pincode: "",
+    // remarke: "",
   });
 
   const [orderDetails, setOrderDetails] = useState({
@@ -446,6 +464,115 @@ export default function InvoicePage() {
     return null;
   };
 
+  const emptyCustomer = {
+    id: "",
+    name: "",
+    address: "",
+    gstin: "",
+    email: "",
+    gender: "",
+    dob: "",
+    anniversary: "",
+  };
+
+  useEffect(() => {
+    if (phoneNumber.length === 10) {
+      fetchCustomerByPhone();
+    }
+  }, [phoneNumber]);
+
+  const fetchCustomerByPhone = async () => {
+    try {
+      setLoading(true);
+      const token = getCookie("access_token");
+      const res = await getphoneSearch(phoneNumber);
+      // const res = await axios.get(
+      //   `https://apibrize.brizindia.com/api/customers?phone=${phoneNumber}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+      const customer = res.data;
+      // setNewRedeemPoints(customer.loyalty?.[0]?.redeem_points || 0);
+      // setNewStages(customer.stage || []);
+      console.log("custormer fetch", res.data);
+      if (res.data) {
+        setCustomerDetails({
+          name: res.data.name || "",
+          address: res.data.address || "",
+          gstin: res.data.gstNo || "",
+          email: res.data.email || "",
+          gender: res.data.gender || "",
+          dob: res.data.dob || "",
+          id: customer.id || "",
+          anniversary: res.data.anniversary || "",
+          // city: res.data.city || "",
+          // state: res.data.state || "",
+          // country: res.data.country || "IN",
+          // pincode: res.data.pincode || "",
+          // remarke: res.data.remarke || "",
+        });
+
+        setCustomerFound(true);
+      }
+    } catch (error) {
+      // ❌ customer nahi mila → manual entry
+      setCustomerFound(false);
+      setCustomerDetails(emptyCustomer);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateCustomer = async () => {
+    const token = getCookie("access_token");
+
+    const payload = {
+      phone: phoneNumber,
+      name: customerDetails.name,
+      address: customerDetails.address,
+      gstNo: customerDetails.gstin,
+      email: customerDetails.email,
+      gender: customerDetails.gender,
+      dob: customerDetails.dob,
+      anniversary: customerDetails.anniversary,
+      city: customerDetails.city || "",
+      state: customerDetails.state || "",
+      country: "IN",
+      pincode: customerDetails.pincode || "",
+      remarke: customerDetails.remarke || "",
+
+      customerTypeData: "",
+      customerSubTypeData: "",
+      customerEnquiry: "customer",
+      visit_source: "",
+    };
+
+    const res = await axios.post(
+      "https://apibrize.brizindia.com/api/customers",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("create customer", res);
+    setCustomerDetails((prev) => ({
+      ...prev,
+      id: res.data.customer.user_id, // ✅ users.id (MOST IMPORTANT)
+      name: res.data.user.name || "",
+      address: res.data.customer.address || "",
+      gstin: res.data.customer.gstNo || "",
+    }));
+
+    // setCustomerDetails(res.data.customer);
+    console.log("create customer response", res);
+    setCustomerFound(true);
+  };
+
   const fetchBarCodeData = async () => {
     try {
       const token = getCookie("access_token");
@@ -526,38 +653,38 @@ export default function InvoicePage() {
   // Runs only when these dependencies change
   //loyalty point rewards setup and redeem setup
 
-  useEffect(() => {
-    axios
-      .get("  https://apibrize.brizindia.com/api/redeem-setup")
-      .then((response) => {
-        if (response.data.length > 0) {
-          setLoyaltyData(response.data[0]); // Assuming you only need the first item
-        } else {
-          console.warn("No data received from API");
-        }
-      })
-      .catch((error) => {
-        // alert("Error fetching data. Check console for details.");
-        console.error("API Fetch Error:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("  https://apibrize.brizindia.com/api/redeem-setup")
+  //     .then((response) => {
+  //       if (response.data.length > 0) {
+  //         setLoyaltyData(response.data[0]); // Assuming you only need the first item
+  //       } else {
+  //         console.warn("No data received from API");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       // alert("Error fetching data. Check console for details.");
+  //       console.error("API Fetch Error:", error);
+  //     });
+  // }, []);
 
-  const handleSearch = async () => {
-    try {
-      const response = await getphoneSearch(phoneNumber);
-      const customer = response.data;
-      setCustomerDetails({
-        name: customer.name || "",
-        id: customer.id || "",
-        address: customer.address || "",
-        // gstin: customer.gstin || "",
-        gstNo: customer.gstNo || "",
-      });
-    } catch (error) {
-      console.error("Error fetching customer details:", error);
-      alert("Customer not found");
-    }
-  };
+  // const handleSearch = async () => {
+  //   try {
+  //     const response = await getphoneSearch(phoneNumber);
+  //     const customer = response.data;
+  //     setCustomerDetails({
+  //       name: customer.name || "",
+  //       id: customer.id || "",
+  //       address: customer.address || "",
+  //       // gstin: customer.gstin || "",
+  //       gstNo: customer.gstNo || "",
+  //     });
+  //   } catch (error) {
+  //     console.error("Error fetching customer details:", error);
+  //     alert("Customer not found");
+  //   }
+  // };
 
   const handleSearchOrder = async () => {
     try {
@@ -589,7 +716,7 @@ export default function InvoicePage() {
     if (customerDetails.id) {
       axios
         .get(
-          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
+          `https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
         )
         .then((response) => {
           if (response.data && Array.isArray(response.data)) {
@@ -1117,7 +1244,9 @@ export default function InvoicePage() {
       setTotalGstCount(0);
       // setAllProductsGstAmount(0);
       setAddition(0);
-
+      setCustomerDetails(emptyCustomer);
+      setPhoneNumber("");
+      setCustomerFound(false);
       closeCheckout();
       updateRedeemPoint(customerDetails.id, usingLoyaltyPoints, token);
       // Show confirmation dialog for printing the bill
@@ -1249,25 +1378,25 @@ export default function InvoicePage() {
   };
 
   return (
-    <div className="flex flex-col h-full absolute top-0 overflow-auto  right-0 bottom-0 left-0 bg-white">
-      <div className="bg-green-700 text-center p-3 text-white">
+    <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col h-full overflow-auto bg-white">
+      <div className="p-3 text-center text-white bg-green-700">
         Invoice
-        {/* <button className="text-white text-lg">
+        {/* <button className="text-lg text-white">
           <span>&larr;</span>
         </button> */}
         {/* <span className="text-lg font-semibold">Invoice</span> */}
       </div>
-      <div className="bg-white-700 text-white p-2 flex justify-between items-center">
+      <div className="flex items-center justify-between p-2 text-white bg-white-700">
         {/* Left Section */}
         <div className="flex items-center space-x-2">
-          <button className="text-white text-lg">
+          <button className="text-lg text-white">
             <span>&larr;</span>
           </button>
           {/* <span className="text-lg font-semibold">Invoice</span> */}
         </div>
 
         {/* Middle Section */}
-        <div className="bg-white p-3 shadow flex space-x-4 items-center text-black rounded-md">
+        <div className="flex items-center p-3 space-x-4 text-black bg-white rounded-md shadow">
           <Link
             href="/dashboard"
             className="flex flex-col items-center text-blue-600"
@@ -1303,7 +1432,7 @@ export default function InvoicePage() {
 
         {/* Right Section */}
         <div className="flex items-center space-x-2">
-          <div className="text-white text-sm">
+          <div className="text-sm text-white">
             {/* <div>
               Line: <span className="font-semibold">0</span>
             </div> */}
@@ -1312,18 +1441,18 @@ export default function InvoicePage() {
             </div> */}
           </div>
           <button
-            className="bg-green-500 text-white px-4 py-1 rounded flex items-center space-x-1"
+            className="flex items-center px-4 py-1 space-x-1 text-white bg-green-500 rounded"
             onClick={() => setDiscModalOpen(true)}
           >
             % Disc
           </button>
-          {/* <button className="bg-orange-500 text-white px-4 py-1 rounded flex items-center space-x-1">
+          {/* <button className="flex items-center px-4 py-1 space-x-1 text-white bg-orange-500 rounded">
             <span>Checkout</span>
             <BiChevronRight size={20} />
             <span>&#8377;0</span>
           </button> */}
           <button
-            className="text-black hidden"
+            className="hidden text-black"
             onClick={() => setConfirmModalOpen(true)}
           >
             <AiOutlineClose size={20} />
@@ -1337,47 +1466,47 @@ export default function InvoicePage() {
             onClick={() => setDiscModalOpen(false)}
           >
             <div
-              className="bg-white p-4 rounded shadow-lg w-96 text-black"
+              className="p-4 text-black bg-white rounded shadow-lg w-96"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="bg-green-600 text-white p-2 text-center">
+              <h2 className="p-2 text-center text-white bg-green-600">
                 Additional Disc / Addon
               </h2>
               <div className="p-4">
                 <label>Disc%</label>
                 <input
                   type="number"
-                  className="w-full border p-2 rounded mb-2"
+                  className="w-full p-2 mb-2 border rounded"
                   value={discountPercent}
                   onChange={(e) => setDiscountPercent(Number(e.target.value))}
                 />
                 <label>Disc (Rs)</label>
                 <input
                   type="number"
-                  className="w-full border p-2 rounded mb-2"
+                  className="w-full p-2 mb-2 border rounded"
                   value={discountRs}
                   onChange={(e) => setDiscountRs(Number(e.target.value))}
                 />
                 <label>Addition (Rs)</label>
                 <input
                   type="number"
-                  className="w-full border p-2 rounded mb-2"
+                  className="w-full p-2 mb-2 border rounded"
                   value={addition}
                   onChange={(e) => setAddition(Number(e.target.value))}
                 />
 
                 {/* <label>Addition Detail</label>
-                <textarea className="w-full border p-2 rounded mb-4"></textarea> */}
+                <textarea className="w-full p-2 mb-4 border rounded"></textarea> */}
 
                 <label>Addition Detail</label>
                 <textarea
-                  className="w-full border p-2 rounded mb-4"
+                  className="w-full p-2 mb-4 border rounded"
                   value={additionDetail}
                   onChange={(e) => setAdditionDetail(e.target.value)}
                 />
 
                 <button
-                  className="bg-green-500 text-white px-4 py-2 rounded w-full"
+                  className="w-full px-4 py-2 text-white bg-green-500 rounded"
                   // onClick={() => {
                   //   let percentDiscount = (grossTotal * discountPercent) / 100;
                   //   let totalDiscount = percentDiscount + discountRs - addition;
@@ -1402,18 +1531,18 @@ export default function InvoicePage() {
             onClick={() => setConfirmModalOpen(false)}
           >
             <div
-              className="bg-white p-4 rounded shadow-lg w-80 text-center text-black"
+              className="p-4 text-center text-black bg-white rounded shadow-lg w-80"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-lg font-semibold mb-4">Are you sure?</h2>
+              <h2 className="mb-4 text-lg font-semibold">Are you sure?</h2>
               <div className="flex justify-center space-x-4">
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  className="px-4 py-2 text-white bg-red-500 rounded"
                   onClick={() => setConfirmModalOpen(false)}
                 >
                   Cancel
                 </button>
-                <button className="bg-green-500 text-white px-4 py-2 rounded">
+                <button className="px-4 py-2 text-white bg-green-500 rounded">
                   Confirm
                 </button>
               </div>
@@ -1424,15 +1553,15 @@ export default function InvoicePage() {
 
       <main className="flex flex-1">
         <div className="">
-          <div className="flex flex-wrap items-center gap-4 bg-white p-4 border rounded">
+          <div className="flex flex-wrap items-center gap-4 p-4 bg-white border rounded">
             <select
               name="salesman_id"
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
               onChange={(e) => setSalesmanId(e.target.value)}
             >
               <option>Select salesman</option>
               {salesperson.map((sales) => (
-                <option key={sales.id} value={sales.id}>
+                <option key={sales.id ?? index} value={sales.id}>
                   {sales.name}
                 </option>
               ))}
@@ -1441,7 +1570,7 @@ export default function InvoicePage() {
 
             <select
               name="bill_inv"
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
               onChange={(e) => setbillinv(e.target.value)}
             >
               <option value="0"> TAX INVOICE</option>
@@ -1453,15 +1582,15 @@ export default function InvoicePage() {
               type="text"
               placeholder="Bill No"
               value={billNo}
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
             /> */}
-            <div className="border border-black  rounded px-4 py-2 ml-2">
+            <div className="px-4 py-2 ml-2 border border-black rounded">
               <label>Bill No:/{billcounts.bill_count}</label>
               {/* {billCount?.bill_count ?? "Loading..."} */}
             </div>
 
             {/* Date Picker */}
-            <div className="flex items-center border rounded px-4 py-2">
+            <div className="flex items-center px-4 py-2 border rounded">
               <input
                 type="date"
                 name="date"
@@ -1481,11 +1610,11 @@ export default function InvoicePage() {
               name="caregory"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
             >
               <option value="">Select Category</option>
-              {company.map((categry) => (
-                <option key={categry.id} value={categry.id}>
+              {company.map((categry, index) => (
+                <option key={categry.id ?? index} value={categry.id}>
                   {categry.name}
                 </option>
               ))}
@@ -1497,7 +1626,7 @@ export default function InvoicePage() {
               <input
                 type="text"
                 placeholder="Search Item"
-                className="border rounded px-4 py-2 ml-2"
+                className="px-4 py-2 ml-2 border rounded"
               />
             </div>
 
@@ -1522,34 +1651,34 @@ export default function InvoicePage() {
                   value={barcode}
                   onChange={(e) => setBarcode(e.target.value.trim())}
                   placeholder="Enter Barcode number"
-                  className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+                  className="w-full p-2 bg-red-100 border border-red-500 rounded outline-none focus:border-red-700"
                 />
 
                 {/* <button
                   type="button"
                   onClick={handleSearchBarCode}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
                 >
                   Search
                 </button> */}
               </div>
             )}
             {/* <span>
-              <span className="text-blue-950 text-lg font-bold">
+              <span className="text-lg font-bold text-blue-950">
                 {" "}
                 Total Coin
               </span>
               :{" "}
-              <span className="text-orange-900 text-lg font-bold">{coin}</span>
+              <span className="text-lg font-bold text-orange-900">{coin}</span>
             </span> */}
           </div>
 
           {/* //fetch product and  */}
-          <div className="flex-1 grid grid-cols-7 gap-4 p-4 overflow-y-auto">
+          <div className="grid flex-1 grid-cols-7 gap-4 p-4 overflow-y-auto">
             {filteredItems.length > 0 ? (
-              filteredItems.map((item) => (
+              filteredItems.map((item, index) => (
                 <div
-                  key={item.code}
+                  key={item.code ?? index}
                   className="border border-blue-500 h-[200px] rounded-lg p-2 flex flex-col items-center text-center cursor-pointer overflow-hidden"
                   onClick={() => openModal(item)}
                 >
@@ -1559,15 +1688,15 @@ export default function InvoicePage() {
                       <img
                         src={`${baseImageURL}/storage/${item.image}`}
                         alt={item.code}
-                        className="h-full object-contain"
+                        className="object-contain h-full"
                       />
                     ) : (
-                      <span className="text-gray-400 text-sm">No Image</span>
+                      <span className="text-sm text-gray-400">No Image</span>
                     )}
                   </div>
 
                   {/* Name */}
-                  <p className="mt-1 text-sm font-semibold truncate w-full">
+                  <p className="w-full mt-1 text-sm font-semibold truncate">
                     {item.name || "No Type"}
                   </p>
 
@@ -1585,14 +1714,14 @@ export default function InvoicePage() {
         </div>
 
         {/* Right Sidebar */}
-        <aside className="w-1/4 bg-gray-100 p-4 relative h-full">
+        <aside className="relative w-1/4 h-full p-4 bg-gray-100">
           <div className="mb-16 overflow-y-auto h-[20rem]">
             {addedProducts.map((product, index) => (
               <div
                 key={index}
-                className=" border flex justify-between items-center p-2 rounded mb-2"
+                className="flex items-center justify-between p-2 mb-2 border rounded "
               >
-                <div className=" p-2 rounded mb-2 ">
+                <div className="p-2 mb-2 rounded ">
                   {product.name && <p className="font-bold">{product.name}</p>}
 
                   {product.description && (
@@ -1751,7 +1880,7 @@ export default function InvoicePage() {
             {/*    <p>₹{makingtotal}</p>*/}
             {/*</div>*/}
             <button
-              className="w-full bg-green-500 text-white p-4 rounded mt-4 text-xl font-semibold"
+              className="w-full p-4 mt-4 text-xl font-semibold text-white bg-green-500 rounded"
               onClick={openCheckout}
             >
               Checkout
@@ -1773,13 +1902,13 @@ export default function InvoicePage() {
                   value={modalBarcode}
                   onChange={(e) => setModalBarcode(barcode)}
                   placeholder="Enter Barcode number"
-                  className="w-full p-2 border border-red-500 bg-red-100 rounded outline-none focus:border-red-700"
+                  className="w-full p-2 bg-red-100 border border-red-500 rounded outline-none focus:border-red-700"
                 />
 
                 {/* <button
                   type="button"
                   onClick={handleSearchBarCode}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
                 >
                   Search
                 </button> */}
@@ -1803,7 +1932,7 @@ export default function InvoicePage() {
                     })
                   }
                   readOnly={!isEditable}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
 
                 <input
@@ -1824,7 +1953,7 @@ export default function InvoicePage() {
                     }
                   }}
                   readOnly={!isEditable}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
                 {/* product id pass(dont touch below) */}
 
@@ -1839,7 +1968,7 @@ export default function InvoicePage() {
                     })
                   }
                   readOnly={!isEditable}
-                  className="w-full p-2 rounded border hidden"
+                  className="hidden w-full p-2 border rounded"
                 />
 
                 {/* add quntiy */}
@@ -1856,7 +1985,7 @@ export default function InvoicePage() {
                   }
                   // readOnly={!isEditable}
 
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
               </div>
               <div>
@@ -1866,7 +1995,7 @@ export default function InvoicePage() {
                   type="number"
                   // readOnly
                   value={productDetails.netWeight}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onChange={(e) => {
                     const newNetWeight = Number(e.target.value) || 0;
 
@@ -1902,7 +2031,7 @@ export default function InvoicePage() {
                   type="number"
                   // readOnly
                   value={productDetails.ad_wgt}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onChange={(e) => {
                     const ad_wgt = Number(e.target.value) || 0;
                     setAd_wgt(ad_wgt);
@@ -1928,7 +2057,7 @@ export default function InvoicePage() {
                   name="rate"
                   value={selectedItem.rate}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -1938,7 +2067,7 @@ export default function InvoicePage() {
                   value={selectedItem.mrp}
                   readOnly
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -1949,7 +2078,7 @@ export default function InvoicePage() {
                   onWheel={(e) => e.target.blur()}
                   defaultValue={0}
                   value={productDetails.pcs}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onChange={(e) => {
                     const newPcs = Number(e.target.value) || 0;
                     setPcs(newPcs);
@@ -1977,7 +2106,7 @@ export default function InvoicePage() {
                   onWheel={(e) => e.target.blur()}
                   defaultValue={0}
                   value={productDetails.description}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   placeholder="Product Description"
                   onChange={(e) => {
                     // const newPcs = Number(e.target.value) || 0;
@@ -2003,7 +2132,7 @@ export default function InvoicePage() {
                     updateTotal(newGrm, making,netWt,pcss);
                   }}
                   // defaultValue={}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div> */}
 
@@ -2014,7 +2143,7 @@ export default function InvoicePage() {
                   type="number"
                   value={total}
                   readOnly
-                  className="border rounded p-2 w-full bg-gray-100 font-bold"
+                  className="w-full p-2 font-bold bg-gray-100 border rounded"
                 />
               </div> */}
               <div>
@@ -2023,7 +2152,7 @@ export default function InvoicePage() {
                   name="making"
                   type="number"
                   value={productDetails.making}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onWheel={(e) => e.target.blur()}
                   onChange={(e) => {
                     const newMaking = Number(e.target.value);
@@ -2069,7 +2198,7 @@ export default function InvoicePage() {
                       makingInRs: e.target.value,
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
 
@@ -2079,7 +2208,7 @@ export default function InvoicePage() {
                   name="making"
                   type="number"
                   value={productDetails.making}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onChange={(e) => {
                     const newMaking = Number(e.target.value);
 
@@ -2132,7 +2261,7 @@ export default function InvoicePage() {
 
                     setMaking(0); // clear % value
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div> */}
 
@@ -2142,7 +2271,7 @@ export default function InvoicePage() {
                   name="making_dsc"
                   type="number"
                   value={productDetails.making_dsc}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onWheel={(e) => e.target.blur()}
                   onChange={(e) => {
                     setProductDetails({
@@ -2159,7 +2288,7 @@ export default function InvoicePage() {
                   name="making_gst_percentage"
                   type="number"
                   value={productDetails.making_gst_percentage}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                   onWheel={(e) => e.target.blur()}
                   onChange={(e) => {
                     setProductDetails({
@@ -2175,7 +2304,7 @@ export default function InvoicePage() {
                   name="diamondWeight"
                   value={productDetails.diamondDetails}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="diamondWeight"
@@ -2193,7 +2322,7 @@ export default function InvoicePage() {
                       });
                     }
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -2202,7 +2331,7 @@ export default function InvoicePage() {
                   name="diamondValue"
                   value={productDetails.diamondValue}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="diamondValue"
@@ -2215,7 +2344,7 @@ export default function InvoicePage() {
                       diamondValue: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -2224,7 +2353,7 @@ export default function InvoicePage() {
                   name="stoneWeight"
                   type="number"
                   value={productDetails.stoneDetails}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="stoneWeight"
@@ -2237,7 +2366,7 @@ export default function InvoicePage() {
                       stoneDetails: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -2246,7 +2375,7 @@ export default function InvoicePage() {
                   name="stoneValue"
                   value={productDetails.stoneValue}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
 
                 <input
@@ -2260,7 +2389,7 @@ export default function InvoicePage() {
                       stoneValue: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -2269,7 +2398,7 @@ export default function InvoicePage() {
                   name="huid"
                   type="text"
                   value={productDetails.huid}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
 
                 <input
@@ -2282,7 +2411,7 @@ export default function InvoicePage() {
                       huid: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -2291,7 +2420,7 @@ export default function InvoicePage() {
                   name="hallmark"
                   value={productDetails.hallmark}
                   type="text"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="hallmark"
@@ -2303,7 +2432,7 @@ export default function InvoicePage() {
                       hallmark: e.target.value,
                     })
                   }
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -2329,7 +2458,7 @@ export default function InvoicePage() {
                       hallmarkCharge: e.target.value, // ✅ update the input value in state
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
@@ -2350,7 +2479,7 @@ export default function InvoicePage() {
                       newWastageCharge
                     );
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 <input
                   name="wastageCharge"
@@ -2373,7 +2502,7 @@ export default function InvoicePage() {
                       wastageCharge: e.target.value, // ✅ keeps input editable
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
 
@@ -2396,7 +2525,7 @@ export default function InvoicePage() {
                       newOtherCharges
                     );
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
                 {/* <input
                   name="otherCharge"
@@ -2419,7 +2548,7 @@ export default function InvoicePage() {
                       otherCharge: e.target.value, // ✅ Keep the input value updated
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 /> */}
 
                 <input
@@ -2444,7 +2573,7 @@ export default function InvoicePage() {
                       otherCharge: newOtherCharges, // store as number for consistency
                     });
                   }}
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
 
@@ -2456,13 +2585,13 @@ export default function InvoicePage() {
             value={total}
            
             readOnly
-            className="border rounded p-2 w-full bg-gray-100 font-bold"
+            className="w-full p-2 font-bold bg-gray-100 border rounded"
           />
         </div> */}
             </div>
             <button
               type="submit"
-              className="w-full bg-green-500 text-white p-2 rounded mt-4"
+              className="w-full p-2 mt-4 text-white bg-green-500 rounded"
             >
               Add Product
             </button>
@@ -2484,41 +2613,46 @@ export default function InvoicePage() {
           {modalStep === 1 && (
             <>
               <h2 className="text-lg font-bold">Customer Details</h2>
-              <div className="flex flex-col justify-center items-center rounded-sm">
+              <div className="flex flex-col items-center justify-center rounded-sm">
                 <form
-                  className="w-full space-y-4 p-4 bg-white shadow-md rounded-md"
+                  className="w-full p-4 space-y-4 bg-white rounded-md shadow-md"
                   onSubmit={handleNextStep}
                 >
-                  {/* Phone No Input */}
                   <div className="flex items-center space-x-2">
                     <input
                       type="text"
                       value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      placeholder="Type phone then press enter"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      maxLength={10}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setPhoneNumber(value);
+                      }}
+                      placeholder="Phone Number"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md"
                     />
-                    <button
-                      type="button"
-                      onClick={handleSearch}
-                      className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
-                    >
-                      <IoIosSearch />
-                    </button>
 
-                    {/* //customer register model */}
                     <button
                       type="button"
                       onClick={handleOpenModal}
-                      className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
+                      className="p-3 text-white bg-green-500 rounded-full hover:bg-green-600"
                     >
-                      <FaPlus />
+                      +
                     </button>
-                    {/* Conditionally Render the QuickCustomerRegister Component */}
                   </div>
 
-                  {/* Customer Name */}
-                  <div className="flex items-center space-x-2">
+                  {/* Customer Status */}
+                  {customerFound !== null && (
+                    <p
+                      className={`text-sm font-semibold ${
+                        customerFound ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {customerFound ? "Existing Customer" : "New Customer"}
+                    </p>
+                  )}
+
+                  {/* Name & ID */}
+                  <div className="flex space-x-2">
                     <input
                       type="text"
                       value={customerDetails.name}
@@ -2529,21 +2663,77 @@ export default function InvoicePage() {
                         }))
                       }
                       placeholder="Customer Name"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md"
                     />
+                  </div>
 
-                    <input
-                      type="text"
-                      value={customerDetails.id}
-                      onChange={(e) =>
-                        setCustomerDetails((prev) => ({
-                          ...prev,
-                          id: e.target.value,
-                        }))
-                      }
-                      placeholder="Customer ID"
-                      className="flex-1 hidden border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
-                    />
+                  {/* Email */}
+                  <input
+                    type="email"
+                    value={customerDetails.email}
+                    onChange={(e) =>
+                      setCustomerDetails((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
+                    placeholder="Email"
+                    className="w-full p-4 text-sm border border-green-500 rounded-md"
+                  />
+
+                  {/* Gender */}
+                  <select
+                    value={customerDetails.gender}
+                    onChange={(e) =>
+                      setCustomerDetails((prev) => ({
+                        ...prev,
+                        gender: e.target.value,
+                      }))
+                    }
+                    className="w-full p-4 text-sm border border-green-500 rounded-md"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+
+                  <div className="flex space-x-4">
+                    {/* DOB */}
+                    <div className="flex-1">
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        Date of Birth
+                      </label>
+                      <input
+                        type="date"
+                        value={customerDetails.dob}
+                        onChange={(e) =>
+                          setCustomerDetails((prev) => ({
+                            ...prev,
+                            dob: e.target.value,
+                          }))
+                        }
+                        className="w-full p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300"
+                      />
+                    </div>
+
+                    {/* Anniversary */}
+                    <div className="flex-1">
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        Anniversary Date
+                      </label>
+                      <input
+                        type="date"
+                        value={customerDetails.anniversary}
+                        onChange={(e) =>
+                          setCustomerDetails((prev) => ({
+                            ...prev,
+                            anniversary: e.target.value,
+                          }))
+                        }
+                        className="w-full p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300"
+                      />
+                    </div>
                   </div>
 
                   {/* Address */}
@@ -2556,125 +2746,47 @@ export default function InvoicePage() {
                       }))
                     }
                     placeholder="Address"
-                    className="w-full border border-green-500 rounded-md p-2 text-sm focus:ring focus:ring-green-300 focus:outline-none"
-                    rows="2"
-                  ></textarea>
+                    rows={2}
+                    className="w-full p-3 text-sm border border-green-500 rounded-md"
+                  />
 
                   {/* GSTIN */}
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="text"
-                      readOnly
-                      value={customerDetails.gstNo}
-                      onChange={(e) =>
-                        setCustomerDetails((prev) => ({
-                          ...prev,
-                          gstNo: e.target.value,
-                        }))
-                      }
-                      placeholder="GSTIN"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
-                    />
-                  </div>
-
-                  {/* Order Details check on orderID */}
-
-                  <div className="flex items-center space-x-2">
-                    <label
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                      htmlFor="adjustAmount"
-                    >
-                      Order No:
-                    </label>
-                    <input
-                      type="text"
-                      value={orderSearchId}
-                      onChange={(e) => SetOrderSearchId(e.target.value)}
-                      placeholder="Type Order No: then press enter"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleSearchOrder}
-                      className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
-                    >
-                      <IoIosSearch />
-                    </button>
-                  </div>
-
-                  {/* order details get after api got */}
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-1">
-                      <label
-                        className="block text-xs font-medium text-gray-700 mb-1"
-                        htmlFor="adjustAmount"
-                      >
-                        Deposit Material Amt
-                      </label>
-                      <input
-                        id="adjustAmount"
-                        type="text"
-                        readOnly
-                        value={orderDetails.AdjustAmount || "0"}
-                        onChange={(e) =>
-                          setOrderDetails((prev) => ({
-                            ...prev,
-                            AdjustAmount: e.target.value,
-                          }))
-                        }
-                        // placeholder="Enter Adjust Amount"
-                        className="w-full border items-center border-green-500 rounded-md p-4 text-xs focus:ring focus:ring-green-300 focus:outline-none"
-                      />
-                    </div>
-
-                    <div className="flex-1">
-                      <label
-                        className="block text-xs font-medium text-gray-700 mb-1"
-                        htmlFor="advanceAmount"
-                      >
-                        Advance Amt
-                      </label>
-                      <input
-                        id="advanceAmount"
-                        type="text"
-                        readOnly
-                        value={orderDetails.AdvanceAmount || "0"}
-                        onChange={(e) =>
-                          setOrderDetails((prev) => ({
-                            ...prev,
-                            AdvanceAmount: e.target.value,
-                          }))
-                        }
-                        // placeholder="Enter Advance Amount"
-                        className="w-full border items-center border-green-500 rounded-md p-4 text-xs focus:ring focus:ring-green-300 focus:outline-none"
-                      />
-                    </div>
-                    {orderDetails.depositeMaterial && (
-                      <div className="flex flex-col">
-                        <div className="block text-xs font-medium text-gray-700 mb-1">
-                          Deposit Material(g)
-                        </div>
-                        <div className="w-full border border-green-500 items-center rounded-md p-4 text-xs focus:ring focus:ring-green-300 focus:outline-none">
-                          {orderDetails?.depositeMaterial}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <input
+                    type="text"
+                    value={customerDetails.gstin}
+                    onChange={(e) =>
+                      setCustomerDetails((prev) => ({
+                        ...prev,
+                        gstin: e.target.value,
+                      }))
+                    }
+                    placeholder="GSTIN"
+                    className="w-full p-4 text-sm border border-green-500 rounded-md"
+                  />
 
                   {/* Buttons */}
                   <div className="flex justify-between">
                     <button
                       type="button"
                       onClick={closeCheckout}
-                      className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+                      className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
                     >
                       Cancel
                     </button>
-                    <button
+                    {/* <button
                       type="submit"
-                      className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+                      className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
                     >
                       Next
+                    </button> */}
+                    <button
+                      type="button"
+                      onClick={
+                        customerFound ? handleNextStep : handleCreateCustomer
+                      }
+                      className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
+                    >
+                      {customerFound ? "Next" : "Save Customer"}
                     </button>
                   </div>
                 </form>
@@ -2684,11 +2796,11 @@ export default function InvoicePage() {
           {modalStep === 2 && (
             <>
               <div className="p-4 bg-white rounded shadow">
-                <h2 className="text-xl font-bold mb-4">Bill Amount</h2>
-                <p className="text-green-500 text-2xl font-bold mb-4">₹{gto}</p>
-                <div className="bg-white  rounded-lg p-6">
+                <h2 className="mb-4 text-xl font-bold">Bill Amount</h2>
+                <p className="mb-4 text-2xl font-bold text-green-500">₹{gto}</p>
+                <div className="p-6 bg-white rounded-lg">
                   {/* Available Loyalty Points */}
-                  <div className="flex justify-between items-center border-b pb-3 mb-3 hidden">
+                  <div className="flex items-center justify-between hidden pb-3 mb-3 border-b">
                     <h1 className="text-lg font-semibold text-gray-700">
                       Available Loyalty Points:
                     </h1>
@@ -2701,7 +2813,7 @@ export default function InvoicePage() {
 
                   {/* Loyalty Discount Section */}
                   {/* {gto >= loyaltyData.min_invcValue_needed_toStartRedemp ? (
-                    <div className=" hidden flex justify-between items-center border-b pb-3 mb-3">
+                    <div className="flex items-center justify-between hidden pb-3 mb-3 border-b ">
                       <h1 className="text-lg font-semibold text-gray-700">
                         Loyalty Discount Applied:
                       </h1>
@@ -2710,16 +2822,16 @@ export default function InvoicePage() {
                       </p>
                     </div>
                   ) : (
-                    <p className="text-red-500 text-sm font-medium bg-red-100 p-2 rounded-md text-center">
+                    <p className="p-2 text-sm font-medium text-center text-red-500 bg-red-100 rounded-md">
                       Spend ₹
                       {loyaltyData.min_invcValue_needed_toStartRedemp - gto}{" "}
                       more to start redeeming points!
                     </p>
                   )} */}
 
-                  <div className="flex justify-between items-center mt-4"></div>
+                  <div className="flex items-center justify-between mt-4"></div>
                   {advanceMoney > 0 && (
-                    <div className="flex justify-between items-center mt-4">
+                    <div className="flex items-center justify-between mt-4">
                       <h1 className="text-lg font-semibold text-gray-700">
                         Advance Amount:
                       </h1>
@@ -2733,7 +2845,7 @@ export default function InvoicePage() {
                   )}
 
                   {adjustAmount > 0 && (
-                    <div className="flex justify-between items-center mt-4">
+                    <div className="flex items-center justify-between mt-4">
                       <h1 className="text-lg font-semibold text-gray-700">
                         Adjust Amount:
                       </h1>
@@ -2747,7 +2859,7 @@ export default function InvoicePage() {
                   )}
                 </div>
                 {/* Final Payable Amount */}
-                <div className="flex justify-between items-center mt-2 mb-4">
+                <div className="flex items-center justify-between mt-2 mb-4">
                   <h1 className="text-lg font-=bold text-black">
                     Final Payable Amount:
                   </h1>
@@ -2770,9 +2882,10 @@ export default function InvoicePage() {
                     </label>
                     <div className="flex space-x-2">
                       {["cash", "card", "upi", "advance", "others"].map(
-                        (method) => (
+                        (method, index) => (
                           <button
-                            key={method}
+                            // key={method}
+                            key={index}
                             className={`p-2 rounded ${
                               paymentMethod === method
                                 ? "bg-orange-500 text-white"
@@ -2796,7 +2909,7 @@ export default function InvoicePage() {
                         onWheel={(e) => e.target.blur()}
                         value={cashAmount}
                         onChange={(e) => setCashAmount(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -2814,7 +2927,7 @@ export default function InvoicePage() {
                             cardAmount: Number(e.target.value),
                           }))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                       <label>Card Service Charge</label>
                       <input
@@ -2827,7 +2940,7 @@ export default function InvoicePage() {
                             serviceCharge: Number(e.target.value),
                           }))
                         }
-                        className="w-full p-2 rounded border mt-2"
+                        className="w-full p-2 mt-2 border rounded"
                       />
                     </div>
                   )}
@@ -2840,7 +2953,7 @@ export default function InvoicePage() {
                         onWheel={(e) => e.target.blur()}
                         value={upiAmount}
                         onChange={(e) => setUpiAmount(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -2853,7 +2966,7 @@ export default function InvoicePage() {
                         onWheel={(e) => e.target.blur()}
                         value={payAdvance}
                         onChange={(e) => SetpayAdvance(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -2866,7 +2979,7 @@ export default function InvoicePage() {
                         onWheel={(e) => e.target.blur()}
                         value={otherAmount}
                         onChange={(e) => setOtherAmount(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -2880,16 +2993,16 @@ export default function InvoicePage() {
                         onChange={(e) =>
                           setAdvanceAmount(Number(e.target.value))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )} */}
 
                   <div>
-                    {/* <p className="text-red-500 font-bold">
+                    {/* <p className="font-bold text-red-500">
                       Remaining Amount: ₹{remainingAmount}
                     </p> */}
-                    <p className="text-red-500 font-bold">
+                    <p className="font-bold text-red-500">
                       Remaining Amount: ₹{Number(remainingAmount).toFixed(3)}
                     </p>
                   </div>
@@ -2905,17 +3018,17 @@ export default function InvoicePage() {
                     <p>Others: ₹{cashAmount}</p>
                   </div>
 
-                  <div className="flex space-x-4 mt-4">
+                  <div className="flex mt-4 space-x-4">
                     <button
                       onClick={() => {
                         setModalStep(1);
                       }}
-                      className="w-1/2 bg-gray-500 text-white p-2 rounded"
+                      className="w-1/2 p-2 text-white bg-gray-500 rounded"
                     >
                       Back
                     </button>
                     <button
-                      className="w-1/2 bg-green-500 text-white p-2 rounded"
+                      className="w-1/2 p-2 text-white bg-green-500 rounded"
                       onClick={handleCheckoutSubmit}
                     >
                       Checkout

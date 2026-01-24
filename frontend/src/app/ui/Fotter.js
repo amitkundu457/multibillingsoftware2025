@@ -1,7 +1,3 @@
-
-
-
-
 import Image from "next/image"; // components/Footer.js
 // import ReactWhatsapp from 'react-whatsapp';
 import Link from "next/link";
@@ -50,7 +46,7 @@ const WhatsAppButton = () => {
 export default function FooterSection({ scrollToTop }) {
   return (
     <footer className="text-sm" style={{ backgroundColor: "#343F51" }}>
-      <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid max-w-6xl grid-cols-1 gap-6 px-6 py-12 mx-auto sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div>
           <h3 className="font-semibold text-[22px] text-white mb-4">
             PRODUCTS
@@ -215,11 +211,19 @@ export default function FooterSection({ scrollToTop }) {
 
       {/* Facebook insta */}
 
-
-      <div className="flex justify-center gap-4 text-white  text-center">
-       
-      <Link href="https://www.facebook.com/share/19VNQFX4BH/" className=" text-4xl hover:text-green-300"><FaFacebookSquare  /></Link>
-      <Link href="https://www.instagram.com/brizindia2024?igsh=MTQ5djEydGJ5dTM5bQ==" className=" text-4xl hover:text-green-700"><FaInstagramSquare /></Link>
+      <div className="flex justify-center gap-4 text-center text-white">
+        <Link
+          href="https://www.facebook.com/share/19VNQFX4BH/"
+          className="text-4xl hover:text-green-300"
+        >
+          <FaFacebookSquare />
+        </Link>
+        <Link
+          href="https://www.instagram.com/brizindia2024?igsh=MTQ5djEydGJ5dTM5bQ=="
+          className="text-4xl hover:text-green-700"
+        >
+          <FaInstagramSquare />
+        </Link>
       </div>
 
       {/* Updated Powered by GOFRUGAL section with black background */}
@@ -231,20 +235,19 @@ export default function FooterSection({ scrollToTop }) {
           </a>
           .
         </p> */}
-        <p className="text-white-600 hover:underline font-bold">
-          Copyright © 2025 Viraman Network Pvt Ltd. All Rights Reserved.{" "}
+        <p className="font-bold text-white-600 hover:underline">
+          Copyright © 2025 Brizindia Powerd by Viraman Network Pvt Ltd. All
+          rights Reserved.{" "}
         </p>
       </div>
 
-     
-
-        {/* Tawk.to Chatbot */}
-        <div className="mb-5">
+      {/* Tawk.to Chatbot */}
+      <div className="mb-5">
         <Script
-        id="tawk-to"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+          id="tawk-to"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
             (function(){
               var s1=document.createElement("script"),
@@ -256,9 +259,9 @@ export default function FooterSection({ scrollToTop }) {
               s0.parentNode.insertBefore(s1,s0);
             })();
           `,
-        }}
-      />
-        </div>
+          }}
+        />
+      </div>
       {/* <ReactWhatsapp number="1-212-736-5000" message="Hello World!!!" /> */}
       <WhatsAppButton />
       {/* <button
@@ -280,8 +283,6 @@ export default function FooterSection({ scrollToTop }) {
           />
         </svg>
       </button> */}
-
-     
     </footer>
   );
 }

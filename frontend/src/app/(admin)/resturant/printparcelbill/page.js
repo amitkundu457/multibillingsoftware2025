@@ -97,6 +97,7 @@ const ParcelBill = () => {
 
       const data = await res.json();
       console.log("billpracel", data);
+
       setBillData(data);
       setbuyState(data?.customer?.state);
       // if (res.ok);
@@ -256,18 +257,18 @@ const ParcelBill = () => {
     iframe.contentDocument.close();
   };
 
-  if (loading) return <div className="text-center mt-4">Loading bill...</div>;
+  if (loading) return <div className="mt-4 text-center">Loading bill...</div>;
   if (!billData) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">No Bill Data</h2>
-          <p className="text-gray-700 mb-4">
+        <div className="p-6 text-center bg-white rounded-lg shadow-md">
+          <h2 className="mb-4 text-xl font-bold text-gray-800">No Bill Data</h2>
+          <p className="mb-4 text-gray-700">
             No bill found for ID {parcel_order_id}.
           </p>
           <button
             onClick={fetchBill}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
           >
             Retry
           </button>
@@ -279,14 +280,14 @@ const ParcelBill = () => {
   const { bill, customer, user, items } = billData || {};
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 mt-6 min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-4 mt-6 bg-gray-100">
       {/* Print Type Select */}
       <div className="print:hidden">
         <label className="mr-2 font-medium">Print Style:</label>
         <select
           value={printStyle}
           onChange={(e) => setPrintStyle(e.target.value)}
-          className="border border-gray-400 p-2 rounded"
+          className="p-2 border border-gray-400 rounded"
         >
           <option value="thermal">Thermal Printer (80mm)</option>
           <option value="pdf">A4 Paper</option>
@@ -322,30 +323,30 @@ const ParcelBill = () => {
           </div>
         )}
 
-        <div className="header text-center">
+        <div className="text-center header">
           {/* gst */}
 
           {/* Shop Owner Name */}
-          <h1 className="text-green-700 font-extrabold text-xl uppercase tracking-wide">
+          <h1 className="text-xl font-extrabold tracking-wide text-green-700 uppercase">
             {billData?.created_by?.name || "Unknown Creator"}
           </h1>
 
           {/* Address */}
-          <p className="text-gray-700 text-sm">
+          <p className="text-sm text-gray-700">
             {billData?.client_address?.address_1 ||
               billData?.client_address?.address_2 ||
               "Address Not Available"}
           </p>
 
           {/* Contact Info */}
-          <p className="text-gray-700 text-sm">
+          <p className="text-sm text-gray-700">
             {billData?.client_address?.mobile_number || "No Contact Number"}
           </p>
-          <p className="text-gray-700 text-sm">
+          <p className="text-sm text-gray-700">
             {billData?.client_address?.email || "No Email Provided"}
           </p>
           <div>
-            <h1 className="text-gray-700 font-extrabold   uppercase tracking-wide">
+            <h1 className="font-extrabold tracking-wide text-gray-700 uppercase">
               GST IN:{billData?.client_address?.gst || "GSt not provided"}
             </h1>
           </div>
@@ -373,19 +374,19 @@ const ParcelBill = () => {
 
         {/* Items Table */}
 
-        <table className="w-full border border-gray-300 text-sm">
+        <table className="w-full text-sm border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
-              <th className="text-center py-2 px-3 border-b border-gray-300">
+              <th className="px-3 py-2 text-center border-b border-gray-300">
                 ITEM
               </th>
-              <th className="text-center py-2 px-3 border-b border-gray-300">
+              <th className="px-3 py-2 text-center border-b border-gray-300">
                 QTY
               </th>
-              <th className="text-center py-2 px-3 border-b border-gray-300">
+              <th className="px-3 py-2 text-center border-b border-gray-300">
                 Tax(%)
               </th>
-              <th className="text-center py-2 px-3 border-b border-gray-300">
+              <th className="px-3 py-2 text-center border-b border-gray-300">
                 AMOUNT
               </th>
             </tr>
@@ -393,16 +394,16 @@ const ParcelBill = () => {
           <tbody>
             {items.map((item, idx) => (
               <tr key={idx} className="hover:bg-gray-50">
-                <td className="text-center py-2 px-3 border-b">
+                <td className="px-3 py-2 text-center border-b">
                   {item.product_name}
                 </td>
-                <td className="text-center py-2 px-3 border-b">
+                <td className="px-3 py-2 text-center border-b">
                   {item?.quantity}
                 </td>
-                <td className="text-center py-2 px-3 border-b">
+                <td className="px-3 py-2 text-center border-b">
                   {item?.tax_rate}
                 </td>
-                <td className="text-center py-2 px-3 border-b">
+                <td className="px-3 py-2 text-center border-b">
                   ₹{item.total.toFixed(2)}
                 </td>
               </tr>
@@ -432,16 +433,24 @@ const ParcelBill = () => {
               </div>
             )}
           </div>
+          {billData?.order?.new_loyalty_cashback > 0 && (
+            <div className="flex justify-between font-semibold text-red-700">
+              <span className="font-semibold text-red-700">Redeem Amount:</span>
+              <span>-₹{billData?.order?.new_loyalty_cashback || 0}</span>
+            </div>
+          )}
           <div className="flex justify-between total-row">
             <span>TOTAL:</span>
-            <span>₹{bill.grand_total}</span>
+            <span>
+              ₹{bill.grand_total - billData?.order?.new_loyalty_cashback}
+            </span>
           </div>
         </div>
 
         {/* Payment Summary */}
         {billData?.payments?.length > 0 && (
           <div className="mt-2 text-xs">
-            <div className="font-semibold text-center mb-1">Payment</div>
+            <div className="mb-1 font-semibold text-center">Payment</div>
             <table className="w-full">
               <tbody>
                 {billData.payments.map((p, i) => (
@@ -452,7 +461,7 @@ const ParcelBill = () => {
                     </td>
                   </tr>
                 ))}
-                <tr className="font-bold border-t border-dashed border-gray-400">
+                <tr className="font-bold border-t border-gray-400 border-dashed">
                   <td>Total</td>
                   <td className="text-right">
                     ₹
@@ -478,7 +487,7 @@ const ParcelBill = () => {
       <div className="print:hidden">
         <button
           onClick={handlePrint}
-          className="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 text-sm"
+          className="px-6 py-2 text-sm text-white bg-black rounded hover:bg-gray-800"
         >
           Print Bill
         </button>

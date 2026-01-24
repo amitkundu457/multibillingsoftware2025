@@ -11,7 +11,8 @@ import { BsFillAwardFill } from "react-icons/bs";
 import Customers from "../customer/index";
 import { FaHome } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
-import { BiChevronRight } from "react-icons/bi";
+
+import { FaCheckSquare } from "react-icons/fa";
 import {
   displayCoin,
   getcompany,
@@ -28,6 +29,8 @@ import { getphoneSearch, baseImageURL } from "@/app/components/config";
 import Printbill from "./printbill";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { CiSquareCheck } from "react-icons/ci";
 
 const notyf = new Notyf();
 
@@ -68,12 +71,17 @@ export default function InvoicePage() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [membDiscount, setMembDiscount] = useState("");
 
   const [billNo, setBillNo] = useState("");
 
   const [bill_inv, setbillinv] = useState("");
   const [salesman_id, setSalesmanId] = useState("");
   const [stylist_id, setStylistId] = useState("");
+  const [printStatus_id, setPrintStatus_id] = useState("");
+  const [printStatus, setPrintStatus] = useState([]);
+  const [rate, setRate] = useState(0);
+  const [searchItem, setSearchItem] = useState("");
 
   const [addedProducts, setAddedProducts] = useState([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -84,14 +92,16 @@ export default function InvoicePage() {
   const [category, setCategory] = useState([]);
   const [making, setMaking] = useState(null);
   const [isDiscModalOpen, setDiscModalOpen] = useState(false);
+  const [isRSModalOpen, setIsRSModalOpen] = useState(false);
   const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
   const [hallmarksCharge, setHallMarksCharge] = useState(null);
   const [makingInRsCharge, setMakingInRsCharge] = useState(null);
   const [wastageCharges, setWastagesCharges] = useState(null);
   const [redeemPoint, setRedeemPoint] = useState(0);
-
+  const [allProducts, setAllProducts] = useState([]);
   // const [dateid, setDateid] = useState("");
   const [grossTotal, setGrossTotal] = useState(null);
+  const [totaltax, setTotalTax] = useState(null);
   const [discountTotal, setDiscountTotal] = useState(null);
   const [makingtotal, setMakingTotal] = useState(null);
   const [modalStep, setModalStep] = useState(1); // 1 for customer details, 2 for checkout
@@ -101,17 +111,83 @@ export default function InvoicePage() {
   const [selectedCategory, setSelectedCategory] = useState(""); // Store selected category
   const [filteredItems, setFilteredItems] = useState(items); // Store filtered items
   const [finalGto, setFinalGto] = useState(null);
-
+  const [disTotalMamerAmount, setDisTotalMamerAmount] = useState(0);
+  const [dataFilter, setData] = useState([]);
+  const [overallDiscount, setOverallDiscount] = useState(0);
+  const [rupeeOverAllsDiscount, setRupeesOverAllDiscount] = useState(0);
   const [reward, setReward] = useState(null);
   const [netWt, setNtWt] = useState(null);
   const [pcss, setPcs] = useState(null);
+  const [barcode, setBarcode] = useState("");
+  const [gtoAfterMemshipDisc, setGtoAfterMemshipDisc] = useState(null);
+  const [filterType, setFilterType] = useState("All"); // All | Product | Service
+
+  //customer seting
+  const [customerFound, setCustomerFound] = useState(false);
+  //loylaty point here
+  // Customer loyalty total points
+  const [newRedeemPoints, setNewRedeemPoints] = useState(0);
+
+  // Loyalty stages list (stage_one, stage_two, stage_three)
+  const [newStages, setNewStages] = useState([]);
+
+  // Selected loyalty stage (only one allowed)
+  const [newSelectedStage, setNewSelectedStage] = useState(null);
+
+  // Cashback amount applied from loyalty stage
+  const [newLoyaltyDiscount, setNewLoyaltyDiscount] = useState(0);
+
+  const [rupyapoints, setRupyaPoints] = useState(0);
+
+  // const handleNewStageSelect = (stage) => {
+  //   setNewSelectedStage(stage);
+  //   setNewLoyaltyDiscount(stage.cashback);
+  // };
+
+  useEffect(() => {
+    if (phoneNumber.length === 10) {
+      fetchCustomerByPhone();
+    }
+  }, [phoneNumber]);
+
+  const handleNewStageSelect = (stage) => {
+    // Agar same stage dubara click hua → UNSELECT
+    if (newSelectedStage?.id === stage.id) {
+      setNewSelectedStage(null);
+      setNewLoyaltyDiscount(0);
+      setRupyaPoints(0);
+      return;
+    }
+    console.log("stage select", stage);
+    // Naya stage select
+    setNewSelectedStage(stage);
+    setNewLoyaltyDiscount(stage.cashback);
+    setRupyaPoints(stage?.set_loyalty_points);
+  };
+
+  // const [customerDetails, setCustomerDetails] = useState({
+  //   name: "",
+  //   address: "",
+  //   gstin: "",
+  // });
 
   const [customerDetails, setCustomerDetails] = useState({
     name: "",
     address: "",
     gstin: "",
+    email: "",
+    gender: "",
+    dob: "",
+    anniversary: "",
+    // city: "",
+    // state: "",
+    // country: "IN",
+    // pincode: "",
+    // remarke: "",
   });
-  const gto = grossTotal;
+
+  // const gto = grossTotal-disTotalMamerAmount;
+  let gto = Number(grossTotal) + Number(totaltax);
   console.log(gto);
   const [cashAmount, setCashAmount] = useState(null);
   //const [salesperson, setSalesperson] = useState([]);
@@ -129,27 +205,89 @@ export default function InvoicePage() {
   const [selectedAccount, setSelectedAccount] = useState("");
   const [customerid, setCustomerId] = useState(false);
   const [productWiseTotals, setProductWiseTotals] = useState([]);
+  const [checked, setChecked] = useState(false);
+  const [pakageChecked, setPakageChecked] = useState(false);
+  const [memberships, setMemberships] = useState([]);
+  const [pakageList, setPakageList] = useState([]);
+  const [showBarcodeNumber, setShowBarcodeNumber] = useState(false);
 
   const [remainingAmount, setRemainingAmount] = useState(gto);
+  const [memershipDiscunt, setMemberShipDiscount] = useState(null);
 
-  // if (remainingAmount <= 0) {
-  //   alert("Payment complete! Remaining amount is ₹0.");
-  // }
+  let overallDiscountAmount = 0;
 
-  // Dynamically calculate the total paid and remaining amount
+  if (overallDiscount == 0) {
+    overallDiscountAmount = Number(rupeeOverAllsDiscount);
 
-  // Calculate "using loyalty points" only when gto or loyaltyData changes
+    gto = gto - rupeeOverAllsDiscount;
+  } else {
+    overallDiscountAmount = (gto * overallDiscount) / 100;
+    gto = gto - overallDiscountAmount;
+  }
 
-  const usingLoyaltyPoints = useMemo(() => {
-    if (!redeemData || redeemData.length === 0) return 0; // Prevent undefined error
+  const getToken = () => {
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("access_token="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+  };
 
-    const availablePoints = redeemData[0]?.redeem_points || 0; // Ensure a safe fallback
-    const calculatedPoints = (gto * loyaltyData.max_redeem) / 100;
+  const notifyTokenMissing = () => {
+    if (typeof window !== "undefined" && window.notyf) {
+      window.notyf.error("Authentication token not found!");
+    } else {
+      console.error("Authentication token not found!");
+    }
+  };
+  useEffect(() => {
+    axios
+      .get("  https://apibrize.brizindia.com/api/redeem-setup")
+      .then((response) => {
+        if (response.data.length > 0) {
+          setLoyaltyData(response.data[0]); // Assuming you only need the first item
+        } else {
+          console.warn("No data received from API");
+        }
+      })
+      .catch((error) => {
+        // alert("Error fetching data. Check console for details.");
+        console.error("API Fetch Error:", error);
+      });
+  }, []);
 
-    return calculatedPoints >= availablePoints
-      ? availablePoints
-      : calculatedPoints;
-  }, [gto, loyaltyData, redeemData]);
+  //filter data of product and service
+  const fetchData = async (type) => {
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
+    try {
+      // setLoading(true);
+
+      // let url = ` https://apibrize.brizindia.com/api/product-service-saloon`;
+      let url = ` https://apibrize.brizindia.com/api/product-service-saloon`;
+
+      if (type !== "All") {
+        url += `?pro_ser_type=${type}`;
+      }
+
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setItems(response.data);
+      console.log("prodcut and serveice", response);
+      // setData(response.data);
+    } catch (error) {
+      console.error("Error fetching product/service data:", error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(filterType);
+  }, [filterType]);
 
   useEffect(() => {
     const totalPaid =
@@ -160,9 +298,33 @@ export default function InvoicePage() {
       adjustAmount +
       advanceAmount;
 
-    // Update remaining amount
-    const newRemainingAmount = gto - totalPaid - usingLoyaltyPoints;
+    let isMembershipValid = false;
 
+    if (memberships.length > 0) {
+      const today = new Date();
+
+      for (const membership of memberships) {
+        const saleDate = new Date(membership?.sale_date);
+        const expiryDate = new Date(saleDate);
+        expiryDate.setDate(
+          saleDate.getDate() + (membership?.plan?.validity || 0)
+        );
+
+        if (expiryDate >= today) {
+          isMembershipValid = true;
+          break; // Stop at first valid membership
+        }
+      }
+    }
+
+    // Determine the correct GTO value based on membership validity
+    const effectiveGto = isMembershipValid ? gtoAfterMemshipDisc : gto;
+
+    // Update remaining amount
+    // const newRemainingAmount = effectiveGto - totalPaid - usingLoyaltyPoints;
+
+    // const newRemainingAmount = effectiveGto - totalPaid-disTotalMamerAmount;
+    const newRemainingAmount = effectiveGto - totalPaid;
     setRemainingAmount(newRemainingAmount);
   }, [
     cashAmount,
@@ -172,17 +334,144 @@ export default function InvoicePage() {
     adjustAmount,
     advanceAmount,
     gto,
+    gtoAfterMemshipDisc,
+    memberships,
+    memershipDiscunt,
+    newLoyaltyDiscount,
+    // disTotalMamerAmount
+    // usingLoyaltyPoints,
   ]);
-  // const remainingAmount =
-  //   gto -
-  //   (Number(cashAmount) +
-  //     Number(cardDetails.cardAmount) +
-  //     Number(cardDetails.serviceCharge) +
-  //     Number(upiAmount) +
-  //     Number(adjustAmount) +
-  //     Number(advanceAmount));
 
-  // Handle payment method selection
+  const fetchMemberShipSaleById = async (id) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `  https://apibrize.brizindia.com/api/memberships/${id}`
+      );
+
+      console.log("memership  Response:", response.data);
+      console.log("memer");
+      // setMemberShipDiscount()
+      memeberShipDiscountfunction(Number(response?.data[0].plan?.discount));
+      setMemberships(response.data || []); // Ensure state is updated correctly
+    } catch (error) {
+      console.error("Error fetching membership sale:", error);
+      setMemberships([]); // Prevent undefined state
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //
+  const fetchPackageById = async (id) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        ` https://apibrize.brizindia.com/api/packagesassign/${id}`
+      );
+
+      console.log("fetchPackageById:", response.data);
+
+      // setMemberShipDiscount()
+      // memeberShipDiscountfunction(Number(response?.data[0].plan?.discount));
+      setPakageList(response?.data?.data || []); // Ensure state is updated correctly
+    } catch (error) {
+      console.error("Error fetching membership sale:", error);
+      setPakageList([]); // Prevent undefined state
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //functio for discoutn memer
+  function memeberShipDiscountfunction(num) {
+    const discount = (Number(gto) * num) / 100;
+    setDisTotalMamerAmount(discount);
+    console.log(disTotalMamerAmount);
+  }
+  // Checkbox change handler
+  const handleCheckboxChange = (e) => {
+    const isChecked = e.target.checked;
+    setChecked(isChecked);
+    console.log("check and on checked ");
+    if (isChecked) {
+      fetchMemberShipSaleById(customerDetails.id); // Pass the correct ID here
+    } else {
+      setMemberships([]); // Reset memberships list
+    }
+  };
+
+  //pakage function check box
+  // handleCheckboxChangePakage
+
+  const handleCheckboxChangePakage = (e) => {
+    const isChecked = e.target.checked;
+    setPakageChecked(isChecked);
+    console.log("check and on checked ", isChecked);
+    if (isChecked) {
+      fetchPackageById(customerDetails.id); // Pass the correct ID here
+    } else {
+      // setMemberships([]); // Reset memberships list
+    }
+  };
+
+  useEffect(() => {
+    if (memberships.length > 0) {
+      console.log("memberships list", memberships);
+
+      // Loop through each membership
+      for (const membership of memberships) {
+        const saleDate = new Date(membership.sale_date);
+        const expiryDate = new Date(saleDate);
+        expiryDate.setDate(
+          saleDate.getDate() + (membership.plan?.validity || 0)
+        );
+
+        const today = new Date();
+        const daysLeft = Math.ceil(
+          (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
+        if (daysLeft > 0) {
+          console.log("Valid membership found with days left:", daysLeft);
+          setMembDiscount(membership.plan?.discount || 0);
+          return; // Stop after the first valid membership
+        }
+      }
+
+      // If no valid memberships found
+      console.log("No valid memberships found");
+      setMembDiscount(0);
+    }
+  }, [memberships]);
+
+  // useEffect(() => {
+  //   if (memberships.length > 0 && membDiscount) {
+  //     console.log("membDiscount", membDiscount);
+  //     setGtoAfterMemshipDisc(gto - (gto * membDiscount) / 100);
+  //     console.log(
+  //       "gto - (gto * membDiscount) / 100",
+  //       gto - (gto * membDiscount) / 100
+  //     );
+  //   }
+  // }, [memberships, membDiscount]);
+
+  useEffect(() => {
+    let amount = gto;
+
+    // 1️⃣ Membership discount (%)
+    if (memberships.length > 0 && membDiscount > 0) {
+      amount = amount - (amount * membDiscount) / 100;
+    }
+
+    // 2️⃣ Loyalty cashback (₹)
+    if (newLoyaltyDiscount > 0) {
+      amount = amount - newLoyaltyDiscount;
+    }
+
+    // 3️⃣ Safety: negative na ho
+    setGtoAfterMemshipDisc(Math.max(0, amount));
+  }, [gto, memberships, membDiscount]);
 
   const handlePaymentMethodSelect = (method) => {
     setPaymentMethod(method);
@@ -223,22 +512,6 @@ export default function InvoicePage() {
     }
   };
 
-  // const handlePaymentMethodSelect = (method) => {
-  //   setPaymentMethod(method);
-  //   // Reset amounts for all other methods to 0
-  //   setCashAmount(method === "cash" ? gto : 0);
-  //   setCardDetails(
-  //     method === "card"
-  //       ? { cardAmount: gto, serviceCharge: 0 }
-  //       : { cardAmount: 0, serviceCharge: 0 }
-  //   );
-  //   setUpiAmount(method === "upi" ? gto : 0);
-  //   setAdjustAmount(method === "adjust" ? gto : 0);
-  //   setAdvanceAmount(method === "advance" ? gto : 0);
-  // };
-
-  //selectcategory
-
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -260,7 +533,7 @@ export default function InvoicePage() {
 
     try {
       const response = await axios.get(
-        "  https://apibrize.brizindia.com/api/type",
+        " https://apibrize.brizindia.com/api/product-service-groups",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -271,95 +544,196 @@ export default function InvoicePage() {
     }
   };
 
-  // const fetchItemscompany = async () => {
+  // const handleSearch = async () => {
   //   try {
-  //     const response = await getcompany();
-  //     setCompany(response.data);
+  //     const response = await getphoneSearch(phoneNumber);
+  //     console.log("phone search response", response);
+  //     const customer = response.data;
+  //     setCustomerDetails({
+  //       name: customer.name || "",
+  //       id: customer.id || "",
+  //       address: customer.address || "",
+  //       gstin: customer.gstin || "",
+  //     });
   //   } catch (error) {
-  //     console.error("Error fetching items:", error);
+  //     console.error("Error fetching customer details:", error);
+  //     alert("Customer not found");
   //   }
   // };
 
-  useEffect(() => {
-    if (redeemData && redeemData.length > 0 && loyaltyData) {
-      const updatedFinalGto = gto - (gto * loyaltyData.max_redeem) / 100;
-      setFinalGto(updatedFinalGto);
-    }
-  }, [gto, loyaltyData, redeemData]);
-  // Runs only when these dependencies change
-  //loyalty point rewards setup and redeem setup
+  // const handleSearch = async () => {
+  //   try {
+  //     const response = await getphoneSearch(phoneNumber);
+  //     const customer = response.data;
 
-  useEffect(() => {
-    axios
-      .get("  https://apibrize.brizindia.com/api/redeem-setup")
-      .then((response) => {
-        if (response.data.length > 0) {
-          setLoyaltyData(response.data[0]); // Assuming you only need the first item
-        } else {
-          console.warn("No data received from API");
-        }
-      })
-      .catch((error) => {
-        alert("Error fetching data. Check console for details.");
-        console.error("API Fetch Error:", error);
-      });
-  }, []);
+  // setCustomerDetails({
+  // name: customer.name || "",
+  // id: customer.id || "",
+  // address: customer.address || "",
+  // gstin: customer.gstNo || "",
+  // });
 
-  const handleSearch = async () => {
+  // setNewRedeemPoints(customer.loyalty?.[0]?.redeem_points || 0);
+  // setNewStages(customer.stage || []);
+  //   } catch (error) {
+  //     alert("Customer not found");
+  //   }
+  // };
+
+  const emptyCustomer = {
+    id: "",
+    name: "",
+    address: "",
+    gstin: "",
+    email: "",
+    gender: "",
+    dob: "",
+    anniversary: "",
+  };
+
+  const fetchCustomerByPhone = async () => {
     try {
-      const response = await getphoneSearch(phoneNumber);
-      const customer = response.data;
-      setCustomerDetails({
-        name: customer.name || "",
-        id: customer.id || "",
-        address: customer.address || "",
-        gstin: customer.gstin || "",
-      });
+      setLoading(true);
+      const token = getCookie("access_token");
+      const res = await getphoneSearch(phoneNumber);
+      // const res = await axios.get(
+      //   `https://apibrize.brizindia.com/api/customers?phone=${phoneNumber}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   }
+      // );
+      const customer = res.data;
+      setNewRedeemPoints(customer.loyalty?.[0]?.redeem_points || 0);
+      setNewStages(customer.stage || []);
+      console.log("custormer fetch", res.data);
+      if (res.data) {
+        setCustomerDetails({
+          name: res.data.name || "",
+          address: res.data.address || "",
+          gstin: res.data.gstNo || "",
+          email: res.data.email || "",
+          gender: res.data.gender || "",
+          dob: res.data.dob || "",
+          id: customer.id || "",
+          anniversary: res.data.anniversary || "",
+          // city: res.data.city || "",
+          // state: res.data.state || "",
+          // country: res.data.country || "IN",
+          // pincode: res.data.pincode || "",
+          // remarke: res.data.remarke || "",
+        });
+
+        setCustomerFound(true);
+      }
     } catch (error) {
-      console.error("Error fetching customer details:", error);
-      alert("Customer not found");
+      // ❌ customer nahi mila → manual entry
+      setCustomerFound(false);
+      setCustomerDetails(emptyCustomer);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleCreateCustomer = async () => {
+    const token = getCookie("access_token");
+
+    const payload = {
+      phone: phoneNumber,
+      name: customerDetails.name,
+      address: customerDetails.address,
+      gstNo: customerDetails.gstin,
+      email: customerDetails.email,
+      gender: customerDetails.gender,
+      dob: customerDetails.dob,
+      anniversary: customerDetails.anniversary,
+      city: customerDetails.city || "",
+      state: customerDetails.state || "",
+      country: "IN",
+      pincode: customerDetails.pincode || "",
+      remarke: customerDetails.remarke || "",
+
+      customerTypeData: "",
+      customerSubTypeData: "",
+      customerEnquiry: "customer",
+      visit_source: "",
+    };
+
+    const res = await axios.post(
+      "https://apibrize.brizindia.com/api/customers",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("create customer", res);
+    setCustomerDetails((prev) => ({
+      ...prev,
+      id: res.data.customer.user_id, // ✅ users.id (MOST IMPORTANT)
+      name: res.data.user.name || "",
+      address: res.data.customer.address || "",
+      gstin: res.data.customer.gstNo || "",
+    }));
+
+    // setCustomerDetails(res.data.customer);
+    console.log("create customer response", res);
+    setCustomerFound(true);
   };
 
   //get Redeem data
 
-  useEffect(() => {
-    if (customerDetails.id) {
-      axios
-        .get(
-          `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
-        )
-        .then((response) => {
-          if (response.data && Array.isArray(response.data)) {
-            setRedeemData(response.data);
-          } else {
-            setRedeemData([]); // Set to empty array if no data
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [customerDetails.id]);
+  // useEffect(() => {
+  //   if (customerDetails.id) {
+  //     axios
+  //       .get(
+  //         `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerDetails.id}`
+  //       )
+  //       .then((response) => {
+  //         if (response.data && Array.isArray(response.data)) {
+  //           setRedeemData(response.data);
+  //           console.log("redeem data", response.data);
+  //         } else {
+  //           setRedeemData([]); // Set to empty array if no data
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
+  // }, [customerDetails.id]);
 
-  //calculated Reward
-  useEffect(() => {
-    if (loyaltyData?.loyalty) {
-      const calculatedReward =
-        (grossTotal / loyaltyData.loyalty.loyalty_balance) *
-        loyaltyData.loyalty.set_loyalty_points;
-      setReward(calculatedReward);
-    }
-  }, [grossTotal, loyaltyData]);
+  const fetchBarCodeData = async () => {
+    try {
+      const token = getCookie("access_token");
 
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/barcodes",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setAllProducts(response.data);
+      return response.data; // Return the fetched data
+    } catch (error) {
+      console.error("Error fetching barcode data:", error);
+    }
+  };
+  console.log("items data", redeemData);
   useEffect(() => {
     fetchItems();
     fetchItemsCoin();
     fetchNextBillNo();
     // fetchItemscompany();
-
+    fetchBarCodeData();
     // fetchEmployees();
     fetchStylist();
+    fetchPrintStatus();
   }, []);
 
   //set selected categoey
@@ -372,12 +746,25 @@ export default function InvoicePage() {
     } else {
       setFilteredItems(items);
     }
-  }, [selectedCategory, items]);
+  }, [selectedCategory, items, barcode]);
 
   const fetchItems = async () => {
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
+
     try {
-      const response = await getProductService();
-      setItems(response.data);
+      // const response = await getProductService();
+      const response = await axios.get(
+        " https://apibrize.brizindia.com/api/product-and-service",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("invoice product list", response);
+      // setItems(response.data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -385,16 +772,41 @@ export default function InvoicePage() {
     }
   };
 
+  useEffect(() => {
+    const selectedSearchItem = items.filter((item) =>
+      item.name.toLowerCase().includes(searchItem.toLowerCase())
+    );
+    setFilteredItems(selectedSearchItem);
+  }, [searchItem]);
+
   // const fetchEmployees = async () => {
   //   const res = await axios.get("  https://apibrize.brizindia.com/api/employees");
   //   setSalesperson(res.data.employees);
   // };
 
   const fetchStylist = async () => {
+    const token = getToken();
+    if (!token) {
+      notifyTokenMissing();
+      return;
+    }
     const res = await axios.get(
-      "  https://apibrize.brizindia.com/api/stylists"
+      "  https://apibrize.brizindia.com/api/stylists",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     setStylist(res.data);
+  };
+
+  const fetchPrintStatus = async () => {
+    const res = await axios.get(
+      "  https://apibrize.brizindia.com/api/print-status"
+    );
+    console.log("API Response:", res.data); // Debugging
+    setPrintStatus(Array.isArray(res.data) ? res.data : []); // Ensure it's an array
+
+    //setPrintStatus(res.data);
   };
 
   const fetchItemsCoin = async () => {
@@ -420,8 +832,21 @@ export default function InvoicePage() {
     }
   };
   const openModal = (item) => {
-    setSelectedItem(item);
-    setIsOpen(true);
+    const matchingProduct = items.find((p) => p.id == item.id);
+    console.log("matching   prodcuts", matchingProduct);
+
+    if (
+      item.pro_ser_type === "Product" &&
+      matchingProduct?.current_stock <= 0
+    ) {
+      toast.error("Out of Stock: This product is currently unavailable");
+      return;
+    } else {
+      setSelectedItem(item);
+      setIsOpen(true);
+    }
+
+    console.log("items", item);
   };
 
   const closeModal = () => {
@@ -438,33 +863,24 @@ export default function InvoicePage() {
   };
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    setBarcode("");
     const formData = new FormData(event.target);
+    console.log("fromate data handele submit", formData);
     const productDetails = {
       code: selectedItem.code,
       type: selectedItem.type,
       name: selectedItem.name,
       rate: selectedItem.rate || 0,
       tax_rate: selectedItem.tax_rate,
-      hsn: selectedItem.hsn || "kamil",
-      grossWeight: Number(formData.get("grossWeight")) || 0,
-      netWeight: Number(formData.get("netWeight")) || 0,
-      pcs: Number(formData.get("pcs")) || 1,
-      // grm: formData.get("grm") ? Number(formData.get("grm")) : 0,
-      //  grm: grm,
-      // making: Number(formData.get("making")) || 0,
-      making: making,
+      hsn: selectedItem.hsn || "",
+      pcss: Number(formData.get("pcss")) || 1,
+      product_id: selectedItem.id,
+
       discountPercent: Number(formData.get("discountPercent")) || 0,
-      diamondWeight: Number(formData.get("diamondWeight")) || 0,
-      diamondValue: Number(formData.get("diamondValue")) || 0,
-      stoneWeight: Number(formData.get("stoneWeight")) || 0,
-      stoneValue: Number(formData.get("stoneValue")) || 0,
-      huid: formData.get("huid") || "",
-      hallmark: formData.get("hallmark") || "",
-      hallmarkCharge: formData.get("hallmarkCharge") || "",
-      wastageCharge: formData.get("wastageCharge") || "",
-      makingInRs: formData.get("makingInRs") || "",
       pro_total: 150,
     };
+    setPcs(null);
+    console.log("productdetails", productDetails);
 
     setAddedProducts((prev) => [...prev, productDetails]);
     closeModal();
@@ -480,49 +896,33 @@ export default function InvoicePage() {
   const calculateTotals = (products) => {
     let gross = 0;
     let discount = 0;
-    let makingTotal = 0;
+    let totalTax = 0;
     const productWiseTotals = [];
-
+    console.log("products for calculation", products);
     products.forEach((product) => {
-      const goldValue = product.rate * product.netWeight;
-      const makingChargePerGram = (product.rate * product.making) / 100; // Making charge per gram
-      const totalMakingCharge = makingChargePerGram * product.netWeight;
-      const hallmarkvalue = Number(product.hallmarkCharge) || 0;
-      const wastageValue = Number(product.wastageCharge) || 0;
-      const makingRsVAlue = Number(product.makingInRs) || 0;
+      console.log("product fro barcode", product);
+      const RateTotal = product.rate * product.pcss;
 
-      const RateTotal =
-        (product.rate * product.netWeight + totalMakingCharge) * product.pcs +
-        hallmarkvalue +
-        wastageValue +
-        makingRsVAlue;
-      const productDiscount = product.discountPercent / 100;
-      const AdjustedMaking = product.making - productDiscount;
-      const StoneTotal = product.stoneWeight * product.stoneValue;
-      const DiamondTotal = product.diamondWeight * product.diamondValue;
-
-      const productTotal = RateTotal + StoneTotal + DiamondTotal;
+      const productTotal = RateTotal;
+      const taxAmount = (product.tax_rate / 100) * productTotal;
+      totalTax += taxAmount;
+      console.log("taxAmount", taxAmount);
 
       productWiseTotals.push({
         code: product.code,
         name: product.name,
 
         rateTotal: RateTotal.toFixed(2),
-        adjustedMaking: AdjustedMaking.toFixed(2),
-        diamondTotal: DiamondTotal.toFixed(2),
-        stoneTotal: StoneTotal.toFixed(2),
         total: productTotal.toFixed(2),
       });
 
       gross += productTotal;
-      discount += productDiscount;
-      makingTotal += AdjustedMaking;
     });
 
     setGrossTotal(gross.toFixed(2));
+    setTotalTax(totalTax.toFixed(2));
     setDiscountTotal(discount.toFixed(2));
     setProductWiseTotals(productWiseTotals);
-    setMakingTotal(makingTotal.toFixed(2));
   };
 
   const openCheckout = () => {
@@ -551,16 +951,17 @@ export default function InvoicePage() {
       notyf.error("Authentication token not found!");
       return;
     }
-
-    if (!customerDetails?.id) {
-      notyf.error(
-        "Please ensure customer details are complete before proceeding."
-      );
-      return;
-    }
+    console.log("addedProducts", addedProducts);
+    // if (!customerDetails?.id) {
+    //   notyf.error(
+    //     "Please ensure customer details are complete before proceeding."
+    //   );
+    //   return;
+    // }
 
     if (addedProducts.length === 0) {
-      notyf.error("No products added to the order.");
+      toast.error("No products added to the order.");
+
       return;
     }
 
@@ -604,52 +1005,51 @@ export default function InvoicePage() {
         code: product.code,
         tax_rate: product.tax_rate,
         hsn: product.hsn,
-        grossWeight: product.grossWeight,
-        netWeight: product.netWeight,
-        making: product.making,
+        product_id: product.product_id,
         rate: product.rate,
-        stoneWeight: product.stoneWeight,
-        stoneValue: product.stoneValue,
-        huid: product.huid,
-        hallmark: product.hallmark,
-        hallmarkCharge: product.hallmarkCharge,
-        wastageCharge: product.wastageCharge,
-        makingInRs: product.makingInRs,
-        metal_value: metalValue,
-        making_dsc: makingDsc,
-        // grm: product.grm,
+        // qty: pcss,
+        qty: product.pcss,
         pro_total: productWiseTotals[i]?.total || 0,
       })),
       grossTotal,
-      discountTotal,
+      // discountTotal,
       paymentMethods,
       dateid,
-      bill_inv,
+      bill_inv: 1,
       salesman_id: null, // If undefined or null, set to null
-      stylist_id: stylist_id ?? null, // If undefined or null, set to null
+      membDiscount: membDiscount,
+      // usingLoyaltyPoints,
+      discountTotal: overallDiscount,
 
+      stylist_id: stylist_id ?? null, // If undefined or null, set to null
+      printStatus_id: printStatus_id ?? null,
+
+      stylist_id: 1, // If undefined or null, set to null
+      totalDiscount: Math.round(overallDiscountAmount),
       customer_id: customerDetails.id,
-      price: paymentMethods.reduce(
-        (total, payment) => total + payment.price,
-        0
-      ), // Total payment price
+      totaltax: totaltax,
+      // Total payment price
+      //loylate code
+
+      new_used_loyalty_stage: newSelectedStage?.category || null,
+      usingLoyaltyPoints: newSelectedStage?.loyalty_balance || 0,
+      new_loyalty_cashback: newLoyaltyDiscount,
+      rupyapoints: rupyapoints,
     };
     console.log(payload);
     try {
       const response = await axios.post(
-        "  https://apibrize.brizindia.com/api/order",
+        " https://apibrize.brizindia.com/api/saloon-order", // Removed the space
         payload,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response);
-      notyf.success(`Order placed successfully!`);
 
       // Store redeem points only if reward is greater than 0
-      if (reward > 0) {
-        await storeRedeemPoints(customerDetails.id, reward, token);
-      }
+      // if (reward > 0) {
+      //   await storeRedeemPoints(customerDetails.id, reward, token);
+      // }
 
       fetchItemsCoin();
 
@@ -657,8 +1057,11 @@ export default function InvoicePage() {
       setAddedProducts([]);
       setGrossTotal(0);
       setDiscountTotal(0);
+      setOverallDiscount(0);
+      setRupeesOverAllDiscount(0);
+      setTotalTax(0);
       closeCheckout();
-      updateRedeemPoint(customerDetails.id, usingLoyaltyPoints, token);
+      // updateRedeemPoint(customerDetails.id, usingLoyaltyPoints, token);
       // Show confirmation dialog for printing the bill
       // const printConfirmation = window.confirm("Do you want to print the bill?");
       const printConfirmation = window.confirm(
@@ -668,7 +1071,7 @@ export default function InvoicePage() {
         Printbill(response.data.order_id, response.data.bill_inv); // Call the direct print function
       }
     } catch (error) {
-      notyf.error("Failed to place order. Please try again.");
+      toast.error("Failed to place order. Please try again.");
     }
   };
 
@@ -682,7 +1085,7 @@ export default function InvoicePage() {
     console.log("Bill Invoice Flag:", billInv);
 
     // Determine the correct URL based on billInv value
-    const printUrl = ` /jwellery/printinvoice?id=${orderId}`;
+    const printUrl = ` /saloon/printinvoice?id=${orderId}`;
 
     console.log("Redirecting to URL:", printUrl);
 
@@ -697,7 +1100,7 @@ export default function InvoicePage() {
       notyf.error("Customer ID is missing.");
       return;
     }
-
+    console.log("customerId, points", customerId, points);
     if (points <= 0) {
       console.warn("No redeem points to add.");
       return; // Skip API call if points are zero or negative
@@ -708,6 +1111,7 @@ export default function InvoicePage() {
         `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
         { customer_id: customerId, redeem_points: points } // Ensure both values are sent
       );
+      console.log("customer_id", response);
     } catch (error) {
       console.error("Failed to store redeem points:", error);
       notyf.error("Failed to update reward points.");
@@ -715,88 +1119,111 @@ export default function InvoicePage() {
   };
   //store redeem point function
 
-  const storeRedeemPoints = async (customerId, points, token) => {
-    if (!customerId) {
-      console.error("Customer ID is required.");
-      notyf.error("Customer ID is missing.");
-      return;
-    }
+  // const storeRedeemPoints = async (customerId, points, token) => {
+  //   if (!customerId) {
+  //     console.error("Customer ID is required.");
+  //     notyf.error("Customer ID is missing.");
+  //     return;
+  //   }
 
-    if (points <= 0) {
-      console.warn("No reward points to add.");
-      return; // Skip API call if points are zero or negative
-    }
+  //   if (points <= 0) {
+  //     console.warn("No reward points to add.");
+  //     return; // Skip API call if points are zero or negative
+  //   }
 
-    try {
-      const response = await axios.post(
-        `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
-        { customer_id: customerId, redeem_points: points } // Ensure both values are sent
-      );
-    } catch (error) {
-      console.error("Failed to store redeem points:", error);
-      notyf.error("Failed to update reward points.");
-    }
-  };
+  //   try {
+  //     const response = await axios.post(
+  //       `  https://apibrize.brizindia.com/api/customer-redeem-point/${customerId}`,
+  //       { customer_id: customerId, redeem_points: points } // Ensure both values are sent
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to store redeem points:", error);
+  //     notyf.error("Failed to update reward points.");
+  //   }
+  // };
 
   //calculated total
-  const updateTotal = (
-    makingPercentage,
-    netWt,
-    pcs,
-    makingInRs,
-    hallmarkCharge,
-    wastageCharge
-  ) => {
-    const goldRate = selectedItem.rate; // Gold rate per gram
-    const goldValue = netWt * goldRate; // Total gold price
-
-    const makingChargePerGram = (goldRate * makingPercentage) / 100; // Making charge per gram
-    const totalMakingCharge = makingChargePerGram * netWt; // Total making charge for total net weight
-
-    const totalPrice =
-      (goldValue + totalMakingCharge) * pcs +
-      makingInRs +
-      hallmarkCharge +
-      wastageCharge; // Multiply by number of pieces
+  const updateTotal = (rate, pcss) => {
+    const totalPrice = rate * pcss;
 
     setTotals(totalPrice);
 
     setGrossTotal(totalPrice);
   };
 
+  const handleSearchBarCode = async () => {
+    if (!barcode.trim()) {
+      setError("Please enter a barcode or fill details manually.");
+      // setIsEditable(true);
+      return;
+    }
+
+    try {
+      console.log("alldata", allProducts);
+      const foundItem = allProducts.find((p) => p.barcode_no === barcode);
+      console.log("bracode2", foundItem);
+
+      const barcodeFilter = filteredItems.filter(
+        (p) => p.id === foundItem.item_id
+      );
+      setFilteredItems(barcodeFilter);
+
+      if (foundItem) {
+        console.log(foundItem.basic_rate);
+        // setSelectedItem(foundItem);
+        setPcs(Number(foundItem.pcs) || 1);
+
+        setIsOpen(true); // <-- open modal with new data
+      } else {
+        alert("Product with this barcode not found");
+      }
+      // setBarcode("");
+    } catch (error) {
+      console.error("Error searching barcode:", error);
+    }
+  };
+
   return (
-    <div className="flex flex-col h-full absolute top-0 overflow-auto  right-0 bottom-0 left-0 bg-white">
-      <div className="bg-green-700 text-center p-3 text-white">
+    <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col h-full overflow-auto bg-white">
+      <div className="p-3 text-center text-white bg-green-700">
         Invoice
-        {/* <button className="text-white text-lg">
+        {/* <button className="text-lg text-white">
           <span>&larr;</span>
         </button> */}
         {/* <span className="text-lg font-semibold">Invoice</span> */}
       </div>
-      <div className="bg-white-700 text-white p-2 flex justify-between items-center">
+      <div className="flex items-center justify-between p-2 text-white bg-white-700">
         {/* Left Section */}
         <div className="flex items-center space-x-2">
-          <button className="text-white text-lg">
+          <button className="text-lg text-white">
             <span>&larr;</span>
           </button>
           {/* <span className="text-lg font-semibold">Invoice</span> */}
         </div>
 
         {/* Middle Section */}
-        <div className="bg-white p-3 shadow flex space-x-4 items-center text-black rounded-md">
+        <div className="flex items-center p-3 space-x-4 text-black bg-white rounded-md shadow">
           <Link
-            href="/home"
+            href="/dashboard"
             className="flex flex-col items-center text-blue-600"
           >
             <FaHome size={20} />
             <span className="text-xs">Home</span>
           </Link>
           <button className="flex flex-col items-center text-blue-600">
-            <LuRefreshCcw size={20} />
+            <LuRefreshCcw shCcw size={20} />
             <span className="text-xs">Refresh</span>
           </button>
           <Link
-            href="/jewellery/partialorder"
+            href="/saloon/package/PackageUsageForm"
+            className="flex flex-col items-center text-blue-600"
+          >
+            <FaCheckSquare size={20} />
+            <span className="text-xs">Package</span>
+          </Link>
+
+          <Link
+            href="/saloon/reports/billreport/"
             className="flex flex-col items-center text-blue-600"
           >
             <VscReport size={20} />
@@ -806,7 +1233,7 @@ export default function InvoicePage() {
 
         {/* Right Section */}
         <div className="flex items-center space-x-2">
-          <div className="text-white text-sm">
+          <div className="text-sm text-white">
             {/* <div>
               Line: <span className="font-semibold">0</span>
             </div> */}
@@ -815,16 +1242,22 @@ export default function InvoicePage() {
             </div> */}
           </div>
           <button
-            className="bg-green-500 text-white px-2 py-1 rounded text-sm"
+            className="px-2 py-1 text-sm text-white bg-green-500 rounded"
             onClick={() => setDiscModalOpen(true)}
           >
             % Disc
           </button>
-          <button className="bg-orange-500 text-white px-4 py-1 rounded flex items-center space-x-1">
+          <button
+            className="px-2 py-1 text-sm text-white bg-green-500 rounded"
+            onClick={() => setIsRSModalOpen(true)}
+          >
+            ₹ Disc
+          </button>
+          {/* <button className="flex items-center px-4 py-1 space-x-1 text-white bg-orange-500 rounded">
             <span>Checkout</span>
             <BiChevronRight size={20} />
             <span>&#8377;0</span>
-          </button>
+          </button> */}
           <button
             className="text-white"
             onClick={() => setConfirmModalOpen(true)}
@@ -840,36 +1273,83 @@ export default function InvoicePage() {
             onClick={() => setDiscModalOpen(false)}
           >
             <div
-              className="bg-white p-4 rounded shadow-lg w-96 text-black"
+              className="p-4 text-black bg-white rounded shadow-lg w-96"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="bg-green-600 text-white p-2 text-center">
-                Additional Disc / Addon
+              <h2 className="p-2 text-center text-white bg-green-600">
+                Overall Discount %
               </h2>
               <div className="p-4">
                 <label>Disc%</label>
                 <input
                   type="text"
-                  className="w-full border p-2 rounded mb-2"
+                  value={overallDiscount}
+                  onChange={(e) => setOverallDiscount(e.target.value)}
+                  className="w-full p-2 mb-2 border rounded"
                   defaultValue="0"
                 />
-                <label>Disc (Rs)</label>
+                {/* <label>Disc (Rs)</label>
                 <input
                   type="text"
-                  className="w-full border p-2 rounded mb-2"
+                  className="w-full p-2 mb-2 border rounded"
                   defaultValue="0"
                 />
                 <label>Addition (Rs)</label>
                 <input
                   type="text"
-                  className="w-full border p-2 rounded mb-2"
+                  className="w-full p-2 mb-2 border rounded"
                   defaultValue="0"
                 />
                 <label>Addition Detail</label>
-                <textarea className="w-full border p-2 rounded mb-4"></textarea>
+                <textarea className="w-full p-2 mb-4 border rounded"></textarea> */}
                 <button
-                  className="bg-green-500 text-white px-4 py-2 rounded w-full"
+                  className="w-full px-4 py-2 text-white bg-green-500 rounded"
                   onClick={() => setDiscModalOpen(false)}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {isRSModalOpen && (
+          <div
+            className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50"
+            onClick={() => setDiscModalOpen(false)}
+          >
+            <div
+              className="p-4 text-black bg-white rounded shadow-lg w-96"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="p-2 text-center text-white bg-green-600">
+                Rupees Overall Discount
+              </h2>
+              <div className="p-4">
+                <label>₹ disc.</label>
+                <input
+                  type="text"
+                  value={rupeeOverAllsDiscount}
+                  onChange={(e) => setRupeesOverAllDiscount(e.target.value)}
+                  className="w-full p-2 mb-2 border rounded"
+                  defaultValue="0"
+                />
+                {/* <label>Disc (Rs)</label>
+                <input
+                  type="text"
+                  className="w-full p-2 mb-2 border rounded"
+                  defaultValue="0"
+                />
+                <label>Addition (Rs)</label>
+                <input
+                  type="text"
+                  className="w-full p-2 mb-2 border rounded"
+                  defaultValue="0"
+                />
+                <label>Addition Detail</label>
+                <textarea className="w-full p-2 mb-4 border rounded"></textarea> */}
+                <button
+                  className="w-full px-4 py-2 text-white bg-green-500 rounded"
+                  onClick={() => setIsRSModalOpen(false)}
                 >
                   Done
                 </button>
@@ -885,18 +1365,18 @@ export default function InvoicePage() {
             onClick={() => setConfirmModalOpen(false)}
           >
             <div
-              className="bg-white p-4 rounded shadow-lg w-80 text-center text-black"
+              className="p-4 text-center text-black bg-white rounded shadow-lg w-80"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-lg font-semibold mb-4">Are you sure?</h2>
+              <h2 className="mb-4 text-lg font-semibold">Are you sure?</h2>
               <div className="flex justify-center space-x-4">
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  className="px-4 py-2 text-white bg-red-500 rounded"
                   onClick={() => setConfirmModalOpen(false)}
                 >
                   Cancel
                 </button>
-                <button className="bg-green-500 text-white px-4 py-2 rounded">
+                <button className="px-4 py-2 text-white bg-green-500 rounded">
                   Confirm
                 </button>
               </div>
@@ -907,10 +1387,10 @@ export default function InvoicePage() {
 
       <main className="flex flex-1">
         <div className="">
-          <div className="flex flex-wrap items-center gap-4 bg-white p-4 border rounded">
+          <div className="flex flex-wrap items-center gap-4 p-4 bg-white border rounded">
             {/* <select
               name="salesman_id"
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
               onChange={(e) => setSalesmanId(e.target.value)}
             >
               <option>Select salesman</option>
@@ -924,7 +1404,7 @@ export default function InvoicePage() {
 
             <select
               name="bill_inv"
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
               onChange={(e) => setbillinv(e.target.value)}
             >
               <option value="0"> TAX INVOICE</option>
@@ -936,11 +1416,11 @@ export default function InvoicePage() {
               type="text"
               placeholder="Bill No"
               value={billNo}
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
             />
 
             {/* Date Picker */}
-            <div className="flex items-center border rounded px-4 py-2">
+            <div className="flex items-center px-4 py-2 border rounded">
               <input
                 type="date"
                 name="date"
@@ -970,13 +1450,32 @@ export default function InvoicePage() {
               ))}
             </select>
 
+            {/* print frrmat */}
+
+            <select
+              name="prstatus_id"
+              id="status_id"
+              className="border border-orange-500 bg-gray-100 text-gray-800 rounded-lg px-4 py-2 w-full  max-w-[200px] focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              onChange={(e) => setPrintStatus_id(e.target.value)}
+            >
+              <option value="" className="text-gray-500">
+                Select Billig format
+              </option>
+              {Array.isArray(printStatus) &&
+                printStatus.map((stlst) => (
+                  <option key={stlst.id} value={stlst.id}>
+                    {stlst.name}
+                  </option>
+                ))}
+            </select>
+
             {/* Category Dropdown */}
 
             <select
               name="category"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="border border-orange-500 bg-gray-100 text-gray-800 rounded-lg px-4 py-2 w-full max-w-[200px] focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              className="border px-10 border-orange-500 bg-gray-100 text-gray-800 rounded-lg  py-2 w-full max-w-[200px] focus:ring-2 focus:ring-orange-500 focus:outline-none"
             >
               <option value="" className="text-gray-500">
                 Select Category
@@ -992,7 +1491,7 @@ export default function InvoicePage() {
               name="caregory"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="border rounded px-4 py-2"
+              className="px-4 py-2 border rounded"
             >
               <option>Select Category</option>
               {company.map((categry) => (
@@ -1007,59 +1506,104 @@ export default function InvoicePage() {
               <label className="font-medium">Search Item</label>
               <input
                 type="text"
+                value={searchItem}
                 placeholder="Search Item"
-                className="border rounded px-4 py-2 ml-2"
+                onChange={(e) => {
+                  setSearchItem(e.target.value);
+                }}
+                className="px-4 py-2 ml-2 border rounded"
               />
             </div>
-            <div className="flex gap-4">
-              {/* Product Checkbox - Orange */}
-              <label className="flex items-center space-x-2">
+
+            {/* filter of data and product */}
+            <div>
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+                className="border border-orange-500 bg-gray-100 text-gray-800 rounded-lg px-4 py-2 w-full max-w-[200px] focus:ring-2 focus:ring-orange-500 focus:outline-none"
+              >
+                <option value="All">All</option>
+                <option value="Product">Product</option>
+                <option value="Service">Service</option>
+              </select>
+            </div>
+            {/* <div className="flex gap-4"> */}
+            {/* Product Checkbox - Orange */}
+            {/* <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   className="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
                 />
-                <span className="text-orange-600 font-medium">Product</span>
-              </label>
+                <span className="font-medium text-orange-600">Product</span>
+              </label> */}
 
-              {/* Membership Checkbox - Blue */}
-              <label className="flex items-center space-x-2">
+            {/* Membership Checkbox - Blue */}
+            {/* <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <span className="text-blue-600 font-medium">Membership</span>
-              </label>
+                <span className="font-medium text-blue-600">Membership</span>
+              </label> */}
 
-              {/* Package Checkbox - Green */}
-              <label className="flex items-center space-x-2">
+            {/* Package Checkbox - Green */}
+            {/* <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   className="w-5 h-5 text-green-500 border-gray-300 rounded focus:ring-green-500"
                 />
-                <span className="text-green-600 font-medium">Package</span>
-              </label>
-            </div>
+                <span className="font-medium text-green-600">Package</span>
+              </label> */}
+            {/* </div> */}
 
             {/* Barcode Toggle */}
             <div className="flex items-center space-x-2">
               <span className="text-sm font-medium">Barcode</span>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" />
+                <input
+                  type="checkbox"
+                  className="sr-only peer"
+                  onChange={() => {
+                    setShowBarcodeNumber(!showBarcodeNumber);
+                  }}
+                />
                 <div className="w-9 h-5 bg-gray-200 rounded-full peer-checked:bg-red-500 peer-checked:after:translate-x-4 peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-gray-500 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
               </label>
             </div>
-            <span>
-              <span className="text-blue-950 text-lg font-bold">
+
+            {showBarcodeNumber && (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={barcode}
+                  onChange={(e) => {
+                    setBarcode(e.target.value);
+                  }}
+                  placeholder="Enter Barcode number"
+                  className="w-full p-2 bg-red-100 border border-red-500 rounded outline-none focus:border-red-700"
+                />
+
+                <button
+                  type="button"
+                  onClick={handleSearchBarCode}
+                  className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                >
+                  Search
+                </button>
+              </div>
+            )}
+            {/* <span>
+              <span className="text-lg font-bold text-blue-950">
                 {" "}
                 Total Coin
               </span>
               :{" "}
-              <span className="text-orange-900 text-lg font-bold">{coin}</span>
-            </span>
+              <span className="text-lg font-bold text-orange-900">{coin}</span>
+            </span> */}
           </div>
 
           {/* //fetch product and  */}
-          <div className="flex-1 grid grid-cols-7 gap-4 p-4 overflow-y-auto">
+          <div className="grid flex-1 grid-cols-7 gap-4 p-4 overflow-y-auto">
             {filteredItems.length > 0 ? (
               filteredItems.map((item) => (
                 <div
@@ -1071,7 +1615,7 @@ export default function InvoicePage() {
                     {item.name || "No Type"}
                   </p>
 
-                  <div className="w-full h-32 flex items-center justify-center text-gray-500">
+                  <div className="flex items-center justify-center w-full h-32 text-gray-500">
                     {item.image ? (
                       <img
                         src={`${baseImageURL}/storage/${item.image}`}
@@ -1084,7 +1628,7 @@ export default function InvoicePage() {
                     )}
                   </div>
                   <p className="text-gray-600">₹{item.rate || 0}</p>
-                  <p className="text-gray-600">₹{item.tax_rate || 0}</p>
+                  <p className="text-gray-600">GST {item.tax_rate || 0}%</p>
                 </div>
               ))
             ) : (
@@ -1094,20 +1638,19 @@ export default function InvoicePage() {
         </div>
 
         {/* Right Sidebar */}
-        <aside className="w-1/4 bg-gray-100 p-4 relative h-full">
+        <aside className="relative w-1/4 h-full p-4 bg-gray-100">
           <div className="mb-16 overflow-y-auto h-[20rem]">
             {addedProducts.map((product, index) => (
-              <div key={index} className="border p-2 rounded mb-2">
+              <div key={index} className="p-2 mb-2 border rounded">
                 <p className="font-bold">{product.name}</p>
                 {/*<p>Code: {product.code}</p>*/}
                 {/*<p className="text-sm">Gross Wgt: {product.grossWeight}</p>*/}
                 <p className="text-[12px]">
-                  Net Wgt: {product.netWeight} || Rate Total: ₹
-                  {productWiseTotals[index]?.rateTotal}
+                  Rate Total: ₹{productWiseTotals[index]?.rateTotal}
                 </p>
                 {/*<p className="text-[12px]"></p>*/}
-                <p className="text-[12px]">
-                  Making :{/* (after Discount): ₹ */}
+                {/* <p className="text-[12px]">
+                  Making :(after Discount): ₹
                   {productWiseTotals[index]?.adjustedMaking}%
                 </p>
                 <p className="text-[12px]">
@@ -1117,7 +1660,7 @@ export default function InvoicePage() {
                 <p className="text-[12px]">
                   Diamond Total: ₹{productWiseTotals[index]?.diamondTotal} ||
                   Stone Total: ₹{productWiseTotals[index]?.stoneTotal}
-                </p>
+                </p> */}
                 <p className="text-[12px]"></p>
                 <p className="text-[12px]">
                   <strong>Total: ₹{productWiseTotals[index]?.total}</strong>
@@ -1133,29 +1676,33 @@ export default function InvoicePage() {
               <p>₹{grossTotal}</p>
             </div>
 
-            {grossTotal >=
+            {/* {grossTotal >=
             loyaltyData?.loyalty?.min_invoice_bill_to_get_point ? (
               <div className="flex justify-between">
                 <p className="text-green-400">Point Rewarded:</p>
                 <BsFillAwardFill />
                 <p className="text-green-400">{reward}</p>
               </div>
-            ) : null}
+            ) : null} */}
 
             <div className="flex justify-between">
               <p>Discount:</p>
-              <p>₹{discountTotal}</p>
+              <p>₹{overallDiscountAmount.toFixed(2)}</p>
+            </div>
+            <div className="flex justify-between">
+              <p>Total Tax :</p>
+              <p>₹{totaltax}</p>
             </div>
             <div className="flex justify-between font-bold">
               <p>Net Total:</p>
-              <p>₹{grossTotal - discountTotal}</p>
+              <p>₹{gto}</p>
             </div>
             {/*<div className="flex justify-between font-bold">*/}
             {/*    <p>Net Total:</p>*/}
             {/*    <p>₹{makingtotal}</p>*/}
             {/*</div>*/}
             <button
-              className="w-full bg-green-500 text-white p-4 rounded mt-4 text-xl font-semibold"
+              className="w-full p-4 mt-4 text-xl font-semibold text-white bg-green-500 rounded"
               onClick={openCheckout}
             >
               Checkout
@@ -1167,271 +1714,63 @@ export default function InvoicePage() {
       {/* Modal */}
       {selectedItem && (
         <Modal open={isOpen} onClose={() => closeModal()} center>
-          <form onSubmit={handleFormSubmit} className="space-y-4">
-            <h2 className="text-lg font-bold">{selectedItem.code}</h2>
+          <form onSubmit={handleFormSubmit} className="space-y-4 rounded-md">
+            <h2 className="text-lg font-bold">{selectedItem.name}</h2>
+            {/* <div className="flex gap-2">
+              <input
+                type="text"
+                value={barcode}
+                onChange={(e) => setBarcode(e.target.value)}
+                placeholder="Enter Barcode number"
+                className="w-full p-2 bg-red-100 border border-red-500 rounded outline-none focus:border-red-700"
+              />
 
+              <button
+                type="button"
+                onClick={handleSearchBarCode}
+                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+              >
+                Search
+              </button>
+            </div> */}
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label>Gross Wgt(grm)</label>
-                <input
-                  name="grossWeight"
-                  type="number"
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
-                <label>Net Wgt(grm)</label>
-                <input
-                  name="netWeight"
-                  type="number"
-                  className="w-full p-2 rounded border"
-                  onChange={(e) => {
-                    const newNetWeight = Number(e.target.value) || 0;
-                    setNtWt(newNetWeight);
-                    updateTotal(
-                      making,
-                      newNetWeight,
-                      pcss,
-                      makingInRsCharge,
-                      hallmarksCharge,
-                      wastageCharges
-                    );
-                  }}
-                />
-              </div>
               <div>
                 <label>Rate</label>
                 <input
                   name="rate"
                   value={selectedItem.rate}
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
               </div>
               <div>
-                <label>Pcs</label>
+                <label>Quantity</label>
                 <input
-                  name="pcs"
+                  name="pcss"
                   type="number"
-                  defaultValue={0}
-                  className="w-full p-2 rounded border"
+                  value={pcss}
+                  className="w-full p-2 border rounded"
                   onChange={(e) => {
                     const newPcs = Number(e.target.value) || 0;
                     setPcs(newPcs);
-                    updateTotal(
-                      making,
-                      netWt,
-                      newPcs,
-                      makingInRsCharge,
-                      hallmarksCharge,
-                      wastageCharges
-                    );
+                    updateTotal(rate, newPcs); // ✅ use rate from state
                   }}
                 />
               </div>
-              {/* <div>
-                <label>GRM</label>
-                <input
-                  name="grm"
-                  value={grm}
-                  type="number"
-                  onChange={(e) => {
-                    const newGrm = Number(e.target.value) || 0;
-                    setGrm(newGrm);
-                    updateTotal(newGrm, making,netWt,pcss);
-                  }}
-                  // defaultValue={}
-                  className="w-full p-2 rounded border"
-                />
-              </div> */}
 
-              {/* <div className="flex items-center gap-2">
-                <label className="w-32 font-bold">Total:</label>
-                <input
-                  name="total"
-                  type="number"
-                  value={total}
-                  readOnly
-                  className="border rounded p-2 w-full bg-gray-100 font-bold"
-                />
-              </div> */}
-              <div>
-                <label>Making in (%).</label>
-                <input
-                  name="making"
-                  type="number"
-                  value={making}
-                  className="w-full p-2 rounded border"
-                  onChange={(e) => {
-                    const newMaking = Number(e.target.value);
-                    setMaking(newMaking);
-                    updateTotal(
-                      newMaking,
-                      netWt,
-                      pcss,
-                      makingInRsCharge,
-                      hallmarksCharge,
-                      wastageCharges
-                    );
-                  }}
-                />
-                {/* <span>making : {makingtotal}</span> */}
-              </div>
-              <div>
-                <label>making in (Rs)-- per grm</label>
-                <input
-                  name="makingInRs"
-                  type="number"
-                  // value={makingInRs}
-                  onChange={(e) => {
-                    const newmakingInRs = Number(e.target.value) * netWt;
-                    setMakingInRsCharge(newmakingInRs);
-                    // setM;
-                    updateTotal(
-                      making,
-                      netWt,
-                      pcss,
-                      newmakingInRs,
-                      hallmarksCharge,
-                      wastageCharges
-                    );
-                  }}
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
+              {/* <div>
                 <label>Disc %</label>
                 <input
                   name="discountPercent"
                   type="number"
-                  className="w-full p-2 rounded border"
+                  className="w-full p-2 border rounded"
                 />
-              </div>
-              <div>
-                <label>Diamond (Wgt)</label>
-                <input
-                  name="diamondWeight"
-                  type="number"
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
-                <label>Diamond Value</label>
-                <input
-                  name="diamondValue"
-                  type="number"
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
-                <label>Stone Wgt</label>
-                <input
-                  name="stoneWeight"
-                  type="number"
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
-                <label>Stone Value</label>
-                <input
-                  name="stoneValue"
-                  type="number"
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
-                <label>HUID</label>
-                <input
-                  name="huid"
-                  type="text"
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
-                <label>Hallmark</label>
-                <input
-                  name="hallmark"
-                  type="text"
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
-                <label>Hallmark charge</label>
-                <input
-                  name="hallmarkCharge"
-                  type="number"
-                  onChange={(e) => {
-                    const newhallmarkCharge = Number(e.target.value);
-                    setHallMarksCharge(newhallmarkCharge);
-                    updateTotal(
-                      making,
-                      netWt,
-                      pcss,
-                      makingInRsCharge,
-                      newhallmarkCharge,
-                      wastageCharges
-                    );
-                  }}
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-              <div>
-                <label>wastage charge</label>
-                <input
-                  name="wastageCharge"
-                  type="number"
-                  onChange={(e) => {
-                    const newWastageCharge = Number(e.target.value);
-                    setWastagesCharges(newWastageCharge);
-                    updateTotal(
-                      making,
-                      netWt,
-                      pcss,
-                      makingInRsCharge,
-                      hallmarksCharge,
-                      newWastageCharge
-                    );
-                  }}
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-
-              <div>
-                <label>Other Charge</label>
-                <input
-                  name="wastageCharge"
-                  type="number"
-                  onChange={(e) => {
-                    const newWastageCharge = Number(e.target.value);
-                    setWastagesCharges(newWastageCharge);
-                    updateTotal(
-                      making,
-                      netWt,
-                      pcss,
-                      makingInRsCharge,
-                      hallmarksCharge,
-                      newWastageCharge
-                    );
-                  }}
-                  className="w-full p-2 rounded border"
-                />
-              </div>
-
-              {/* <div className="flex items-center gap-2">
-          <label className="w-32 font-bold">Total:</label>
-          <input
-          name="total"
-            type="number"
-            value={total}
-           
-            readOnly
-            className="border rounded p-2 w-full bg-gray-100 font-bold"
-          />
-        </div> */}
+              </div> */}
             </div>
             <button
               type="submit"
-              className="w-full bg-green-500 text-white p-2 rounded mt-4"
+              className="w-full p-2 mt-4 text-white bg-green-500 rounded"
+              onClick={() => setBarcode("")}
             >
               Add Product
             </button>
@@ -1453,41 +1792,71 @@ export default function InvoicePage() {
           {modalStep === 1 && (
             <>
               <h2 className="text-lg font-bold">Customer Details</h2>
-              <div className="flex flex-col justify-center items-center">
+              <div className="flex flex-col items-center justify-center">
+                <div className="flex gap-4 ">
+                  {/* Product Checkbox - Orange */}
+
+                  {/* Membership Checkbox - Blue */}
+                  <label className="flex items-center mr-12 space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={handleCheckboxChange}
+                      className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="font-medium text-blue-600">
+                      Membership
+                    </span>
+                  </label>
+
+                  {/* Package Checkbox - Green */}
+                  <label className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={pakageChecked}
+                      onChange={handleCheckboxChangePakage}
+                      className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span className="font-medium text-green-600">Package</span>
+                  </label>
+                </div>
+                {customerFound && (
+                  <span className="text-sm text-green-600">
+                    Existing Customer
+                  </span>
+                )}
+
                 <form
-                  className="w-full space-y-4 p-4 bg-white shadow-md rounded-md"
+                  className="w-full p-4 space-y-4 bg-white rounded-md shadow-md"
                   onSubmit={handleNextStep}
                 >
                   {/* Phone No Input */}
-                  <div className="flex items-center space-x-2">
+                  {/* <div className="flex items-center space-x-2">
+                    
+
                     <input
                       type="text"
                       value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      placeholder="Type phone then press enter"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      maxLength={10}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setPhoneNumber(value);
+                      }}
+                      placeholder="Type phone number"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md"
                     />
-                    <button
-                      type="button"
-                      onClick={handleSearch}
-                      className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
-                    >
-                      <IoIosSearch />
-                    </button>
-
-                    {/* //customer register model */}
+                    
                     <button
                       type="button"
                       onClick={handleOpenModal}
-                      className="bg-green-500 p-2 rounded-full text-white shadow-md hover:bg-green-600"
+                      className="p-2 text-white bg-green-500 rounded-full shadow-md hover:bg-green-600"
                     >
                       <FaPlus />
                     </button>
-                    {/* Conditionally Render the QuickCustomerRegister Component */}
-                  </div>
+                    
+                  </div> */}
 
-                  {/* Customer Name */}
-                  <div className="flex items-center space-x-2">
+                  {/* <div className="flex items-center space-x-2">
                     <input
                       type="text"
                       value={customerDetails.name}
@@ -1498,7 +1867,7 @@ export default function InvoicePage() {
                         }))
                       }
                       placeholder="Customer Name"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
                     />
 
                     <input
@@ -1511,8 +1880,182 @@ export default function InvoicePage() {
                         }))
                       }
                       placeholder="Customer Name"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
                     />
+                  </div>
+
+                 
+                  <textarea
+                    value={customerDetails.address}
+                    onChange={(e) =>
+                      setCustomerDetails((prev) => ({
+                        ...prev,
+                        address: e.target.value,
+                      }))
+                    }
+                    placeholder="Address"
+                    className="w-full p-2 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
+                    rows="2"
+                  ></textarea>
+
+                 
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      value={customerDetails.gstin}
+                      onChange={(e) =>
+                        setCustomerDetails((prev) => ({
+                          ...prev,
+                          gstin: e.target.value,
+                        }))
+                      }
+                      placeholder="GSTIN"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300 focus:outline-none"
+                    />
+                  </div> */}
+
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="text"
+                      value={phoneNumber}
+                      maxLength={10}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setPhoneNumber(value);
+                      }}
+                      placeholder="Phone Number"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={handleOpenModal}
+                      className="p-3 text-white bg-green-500 rounded-full hover:bg-green-600"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  {/* Customer Status */}
+                  {customerFound !== null && (
+                    <p
+                      className={`text-sm font-semibold ${
+                        customerFound ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {customerFound ? "Existing Customer" : "New Customer"}
+                    </p>
+                  )}
+
+                  {/* Name & ID */}
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={customerDetails.name}
+                      onChange={(e) =>
+                        setCustomerDetails((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
+                      placeholder="Customer Name"
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <input
+                    type="email"
+                    value={customerDetails.email}
+                    onChange={(e) =>
+                      setCustomerDetails((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }))
+                    }
+                    placeholder="Email"
+                    className="w-full p-4 text-sm border border-green-500 rounded-md"
+                  />
+
+                  {/* Gender */}
+                  <select
+                    value={customerDetails.gender}
+                    onChange={(e) =>
+                      setCustomerDetails((prev) => ({
+                        ...prev,
+                        gender: e.target.value,
+                      }))
+                    }
+                    className="w-full p-4 text-sm border border-green-500 rounded-md"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+
+                  {/* DOB & Anniversary */}
+                  {/* <div className="flex space-x-2">
+                    <input
+                      type="date"
+                      value={customerDetails.dob}
+                      onChange={(e) =>
+                        setCustomerDetails((prev) => ({
+                          ...prev,
+                          dob: e.target.value,
+                        }))
+                      }
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md"
+                    />
+
+                    <input
+                      type="date"
+                      value={customerDetails.anniversary}
+                      onChange={(e) =>
+                        setCustomerDetails((prev) => ({
+                          ...prev,
+                          anniversary: e.target.value,
+                        }))
+                      }
+                      className="flex-1 p-4 text-sm border border-green-500 rounded-md"
+                    />
+                  </div> */}
+                  <div className="flex space-x-4">
+                    {/* DOB */}
+                    <div className="flex-1">
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        Date of Birth
+                      </label>
+                      <input
+                        type="date"
+                        value={customerDetails.dob}
+                        onChange={(e) =>
+                          setCustomerDetails((prev) => ({
+                            ...prev,
+                            dob: e.target.value,
+                          }))
+                        }
+                        className="w-full p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300"
+                      />
+                    </div>
+
+                    {/* Anniversary */}
+                    <div className="flex-1">
+                      <label className="block mb-1 text-sm font-medium text-gray-700">
+                        Anniversary Date
+                      </label>
+                      <input
+                        type="date"
+                        value={customerDetails.anniversary}
+                        onChange={(e) =>
+                          setCustomerDetails((prev) => ({
+                            ...prev,
+                            anniversary: e.target.value,
+                          }))
+                        }
+                        className="w-full p-4 text-sm border border-green-500 rounded-md focus:ring focus:ring-green-300"
+                      />
+                    </div>
                   </div>
 
                   {/* Address */}
@@ -1525,40 +2068,221 @@ export default function InvoicePage() {
                       }))
                     }
                     placeholder="Address"
-                    className="w-full border border-green-500 rounded-md p-2 text-sm focus:ring focus:ring-green-300 focus:outline-none"
-                    rows="2"
-                  ></textarea>
+                    rows={2}
+                    className="w-full p-3 text-sm border border-green-500 rounded-md"
+                  />
 
                   {/* GSTIN */}
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="text"
-                      value={customerDetails.gstin}
-                      onChange={(e) =>
-                        setCustomerDetails((prev) => ({
-                          ...prev,
-                          gstin: e.target.value,
-                        }))
+                  <input
+                    type="text"
+                    value={customerDetails.gstin}
+                    onChange={(e) =>
+                      setCustomerDetails((prev) => ({
+                        ...prev,
+                        gstin: e.target.value,
+                      }))
+                    }
+                    placeholder="GSTIN"
+                    className="w-full p-4 text-sm border border-green-500 rounded-md"
+                  />
+
+                  {/* Action Buttons */}
+                  {/* <div className="flex justify-between pt-2">
+                    <button
+                      type="button"
+                      onClick={closeCheckout}
+                      className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={
+                        customerFound ? handleNextStep : handleCreateCustomer
                       }
-                      placeholder="GSTIN"
-                      className="flex-1 border border-green-500 rounded-md p-4 text-sm focus:ring focus:ring-green-300 focus:outline-none"
-                    />
-                  </div>
+                      className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600"
+                    >
+                      {customerFound ? "Next" : "Save Customer"}
+                    </button>
+                  </div> */}
+
+                  {loading && <p>Loading memberships...</p>}
+
+                  {memberships && memberships.length >= 0 ? (
+                    <ul className="p-4 mt-4 bg-gray-100 border rounded-lg shadow-md">
+                      {memberships.map((membership) => {
+                        const saleDate = new Date(membership.sale_date);
+                        const expiryDate = new Date(saleDate);
+                        expiryDate.setDate(
+                          saleDate.getDate() + membership.plan?.validity
+                        ); // Add validity to sale date
+
+                        const today = new Date();
+                        const daysLeft = Math.max(
+                          0,
+                          Math.ceil(
+                            (expiryDate - today) / (1000 * 60 * 60 * 24)
+                          )
+                        ); // Calculate remaining days
+
+                        return (
+                          <li
+                            key={membership.id}
+                            className="p-4 mb-3 bg-white border-b rounded-lg shadow-sm last:border-none"
+                          >
+                            <h3 className="mb-2 text-lg font-semibold text-green-600">
+                              {membership.plan?.name}
+                            </h3>
+                            <p className="text-gray-700">
+                              <strong className="text-gray-900">
+                                {" "}
+                                Plan Price:
+                              </strong>{" "}
+                              ₹{membership.plan?.fees}
+                            </p>
+                            <p className="text-gray-700">
+                              <strong className="text-gray-900">
+                                purchase date:
+                              </strong>{" "}
+                              {membership.sale_date}
+                            </p>
+                            <p
+                              className={`text-gray-700 ${
+                                daysLeft === 0 ? "text-red-500 font-bold" : ""
+                              }`}
+                            >
+                              <strong className="text-gray-900">
+                                Expires In:
+                              </strong>{" "}
+                              {daysLeft === 0 ? "Expired!" : `${daysLeft} days`}
+                            </p>
+
+                            <p className="text-gray-700">
+                              <strong className="text-gray-900">
+                                Discount:
+                              </strong>{" "}
+                              ₹{membership.plan?.discount}%
+                            </p>
+                            <p className="text-gray-700">
+                              <strong className="text-gray-900">
+                                Stylist:
+                              </strong>{" "}
+                              {membership.stylist?.name}
+                            </p>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <p className="mt-2 font-semibold text-center text-red-500">
+                      No memberships found.
+                    </p>
+                  )}
+
+                  {/* pakageList */}
+                  {loading && <p>Loading Package List...</p>}
+
+                  {pakageList && pakageList.length >= 0 ? (
+                    <ul className="p-4 mt-4 bg-gray-100 border rounded-lg shadow-md">
+                      {pakageList.map((membership) => {
+                        // const saleDate = new Date(membership.sale_date);
+                        // const expiryDate = new Date(saleDate);
+                        // expiryDate.setDate(
+                        //   saleDate.getDate() + membership.plan?.validity
+                        // ); // Add validity to sale date
+
+                        // const today = new Date();
+                        // const daysLeft = Math.max(
+                        //   0,
+                        //   Math.ceil(
+                        //     (expiryDate - today) / (1000 * 60 * 60 * 24)
+                        //   )
+                        // ); // Calculate remaining days
+
+                        return (
+                          <li
+                            key={membership.id}
+                            className="p-4 mb-3 bg-white border-b rounded-lg shadow-sm last:border-none"
+                          >
+                            <h3 className="mb-2 text-lg font-semibold text-green-600">
+                              {membership.package_name}
+                            </h3>
+                            <p className="text-gray-700">
+                              <strong className="text-gray-900">
+                                {" "}
+                                Package Booking:
+                              </strong>{" "}
+                              ₹{membership.package_booking}
+                            </p>
+                            <p className="text-gray-700">
+                              <strong className="text-gray-900">
+                                Package No:
+                              </strong>{" "}
+                              {membership?.package_no}
+                            </p>
+                            {/* <p
+            className={`text-gray-700 ${
+              daysLeft === 0 ? "text-red-500 font-bold" : ""
+            }`}
+          >
+            <strong className="text-gray-900">
+              Expires In:
+            </strong>{" "}
+            {daysLeft === 0 ? "Expired!" : `${daysLeft} days`}
+          </p> */}
+                            <p className="text-gray-700">
+                              <strong className="text-gray-900">
+                                Actual Amount:
+                              </strong>{" "}
+                              ₹{membership?.package_amount}
+                            </p>
+
+                            <p className="text-gray-700">
+                              <strong className="text-gray-900">
+                                Service Amount:
+                              </strong>{" "}
+                              ₹{membership?.service_amount}
+                            </p>
+                            {/* <p className="text-gray-700">
+            <strong className="text-gray-900">
+              Stylist:
+            </strong>{" "}
+            {membership.stylist?.name}
+          </p> */}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <p className="mt-2 font-semibold text-center text-red-500">
+                      No Package found.
+                    </p>
+                  )}
 
                   {/* Buttons */}
                   <div className="flex justify-between">
                     <button
                       type="button"
                       onClick={closeCheckout}
-                      className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+                      className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
                     >
                       Cancel
                     </button>
-                    <button
+                    {/* <button
                       type="submit"
-                      className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-green-600"
+                      className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
                     >
                       Next
+                    </button> */}
+                    <button
+                      type="button"
+                      onClick={
+                        customerFound ? handleNextStep : handleCreateCustomer
+                      }
+                      className="px-4 py-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600"
+                    >
+                      {customerFound ? "Next" : "Save Customer"}
                     </button>
                   </div>
                 </form>
@@ -1568,11 +2292,88 @@ export default function InvoicePage() {
           {modalStep === 2 && (
             <>
               <div className="p-4 bg-white rounded shadow">
-                <h2 className="text-xl font-bold mb-4">Bill Amount</h2>
-                <p className="text-green-500 text-2xl font-bold mb-4">₹{gto}</p>
-                <div className="bg-white shadow-md rounded-lg p-6">
-                  {/* Available Loyalty Points */}
-                  <div className="flex justify-between items-center border-b pb-3 mb-3">
+                <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md">
+                  <h2
+                    className={`text-xl font-bold mb-4 ${
+                      memberships.length > 0 && membDiscount > 0
+                        ? "text-blue-600"
+                        : "text-gray-800"
+                    }`}
+                  >
+                    {memberships.length > 0 && membDiscount > 0
+                      ? "Bill Amount (After Membership Discount)"
+                      : "Bill Amount"}
+                  </h2>
+
+                  {/* add news ui */}
+                  <div className="mt-4 space-y-3">
+                    <div className="p-4 mt-4 rounded bg-blue-50">
+                      <p className="font-semibold text-blue-700">
+                        Available Loyalty Points: {newRedeemPoints}
+                      </p>
+                    </div>
+
+                    <h3 className="text-lg font-bold">Redeem Loyalty</h3>
+
+                    {newStages.map((stage) => {
+                      const eligible = newRedeemPoints >= stage.loyalty_balance;
+
+                      return (
+                        <div
+                          key={stage.id}
+                          className={`flex justify-between items-center p-3 border rounded 
+        ${eligible ? "bg-green-50" : "bg-gray-100 opacity-60"}`}
+                        >
+                          <div>
+                            <p className="font-semibold capitalize">
+                              {stage.category.replace("_", " ")}
+                            </p>
+                            <p className="text-sm">
+                              Required Points: {stage.loyalty_balance}
+                            </p>
+                            <p className="text-sm text-green-700">
+                              Cashback: ₹{stage.cashback}
+                            </p>
+                          </div>
+
+                          <input
+                            type="checkbox"
+                            disabled={!eligible}
+                            checked={newSelectedStage?.id === stage.id}
+                            onChange={() => handleNewStageSelect(stage)}
+                            className="w-5 h-5"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {newSelectedStage && (
+                    <div className="p-3 mt-4 bg-green-100 rounded">
+                      <p className="font-semibold text-green-800">
+                        Loyalty Applied: {newSelectedStage.category}
+                      </p>
+                      <p>Cashback: ₹{newLoyaltyDiscount}</p>
+                    </div>
+                  )}
+
+                  <p
+                    className={`text-3xl font-extrabold ${
+                      memberships.length > 0 && membDiscount > 0
+                        ? "text-blue-500"
+                        : "text-green-600"
+                    }`}
+                  >
+                    ₹
+                    {memberships.length > 0 && membDiscount > 0
+                      ? gtoAfterMemshipDisc
+                      : gto}
+                  </p>
+                </div>
+
+                {/* <div className="p-6 bg-white rounded-lg shadow-md"> */}
+                {/* Available Loyalty Points */}
+                {/* <div className="flex items-center justify-between pb-3 mb-3 border-b">
                     <h1 className="text-lg font-semibold text-gray-700">
                       Available Loyalty Points:
                     </h1>
@@ -1581,28 +2382,29 @@ export default function InvoicePage() {
                         ? redeemData[0].redeem_points
                         : "Loading..."}
                     </p>
-                  </div>
+                  </div> */}
 
-                  {/* Loyalty Discount Section */}
-                  {gto >= loyaltyData.min_invcValue_needed_toStartRedemp ? (
-                    <div className="flex justify-between items-center border-b pb-3 mb-3">
-                      <h1 className="text-lg font-semibold text-gray-700">
-                        Loyalty Discount Applied:
-                      </h1>
-                      <p className="text-xl font-bold text-green-600">
-                        ₹{usingLoyaltyPoints}
-                      </p>
-                    </div>
-                  ) : (
-                    <p className="text-red-500 text-sm font-medium bg-red-100 p-2 rounded-md text-center">
-                      Spend ₹
-                      {loyaltyData.min_invcValue_needed_toStartRedemp - gto}{" "}
-                      more to start redeeming points!
+                {/* Loyalty Discount Section */}
+                {/* {gto >= loyaltyData.min_invcValue_needed_toStartRedemp ? ( */}
+                {/* {gto >= 0 ? (
+                  <div className="flex items-center justify-between pb-3 mb-3 border-b">
+                    <h1 className="text-lg font-semibold text-gray-700">
+                      Loyalty Discount Applied:
+                    </h1>
+                    <p className="text-xl font-bold text-green-600">
+                      ₹{usingLoyaltyPoints}
                     </p>
-                  )}
+                  </div>
+                ) : (
+                  <p className="p-2 text-sm font-medium text-center text-red-500 bg-red-100 rounded-md">
+                    Spend ₹
+                    {loyaltyData.min_invcValue_needed_toStartRedemp - gto} more
+                    to start redeeming points!
+                  </p>
+                )} */}
 
-                  {/* Final Payable Amount */}
-                  <div className="flex justify-between items-center mt-4">
+                {/* Final Payable Amount */}
+                {/* <div className="flex items-center justify-between mt-4">
                     <h1 className="text-lg font-semibold text-gray-700">
                       Final Payable Amount:
                     </h1>
@@ -1611,9 +2413,8 @@ export default function InvoicePage() {
                         ? finalGto
                         : "Loading..."}
                     </p>
-                  </div>
-                </div>
-
+                  </div> */}
+                {/* </div> */}
                 <div className="space-y-6">
                   <div>
                     <label className="block font-bold">
@@ -1644,7 +2445,7 @@ export default function InvoicePage() {
                         type="number"
                         value={cashAmount}
                         onChange={(e) => setCashAmount(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -1661,7 +2462,7 @@ export default function InvoicePage() {
                             cardAmount: Number(e.target.value),
                           }))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                       <label>Card Service Charge</label>
                       <input
@@ -1673,7 +2474,7 @@ export default function InvoicePage() {
                             serviceCharge: Number(e.target.value),
                           }))
                         }
-                        className="w-full p-2 rounded border mt-2"
+                        className="w-full p-2 mt-2 border rounded"
                       />
                     </div>
                   )}
@@ -1685,7 +2486,7 @@ export default function InvoicePage() {
                         type="number"
                         value={upiAmount}
                         onChange={(e) => setUpiAmount(Number(e.target.value))}
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )}
@@ -1699,7 +2500,7 @@ export default function InvoicePage() {
                         onChange={(e) =>
                           setAdjustAmount(Number(e.target.value))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )} */}
@@ -1713,14 +2514,14 @@ export default function InvoicePage() {
                         onChange={(e) =>
                           setAdvanceAmount(Number(e.target.value))
                         }
-                        className="w-full p-2 rounded border"
+                        className="w-full p-2 border rounded"
                       />
                     </div>
                   )} */}
 
                   <div>
-                    <p className="text-red-500 font-bold">
-                      Remaining Amount: ₹{remainingAmount}
+                    <p className="font-bold text-red-500">
+                      Remaining Amount: ₹{remainingAmount.toFixed(2)}
                     </p>
                   </div>
                   {/* Total Payment Breakdown */}
@@ -1734,12 +2535,12 @@ export default function InvoicePage() {
                     <p>UPI: ₹{upiAmount}</p>
                   </div>
 
-                  <div className="flex space-x-4 mt-4">
-                    <button className="w-1/2 bg-gray-500 text-white p-2 rounded">
+                  <div className="flex mt-4 space-x-4">
+                    <button className="w-1/2 p-2 text-white bg-gray-500 rounded">
                       Back
                     </button>
                     <button
-                      className="w-1/2 bg-green-500 text-white p-2 rounded"
+                      className="w-1/2 p-2 text-white bg-green-500 rounded"
                       onClick={handleCheckoutSubmit}
                     >
                       Checkout

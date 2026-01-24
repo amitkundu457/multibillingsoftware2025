@@ -27,26 +27,26 @@ export const ShowProduct = ({
   onRemove,
 }) => {
   return (
-    <div className="bg-white border border-gray-300 rounded-lg shadow-md p-4">
+    <div className="p-4 bg-white border border-gray-300 rounded-lg shadow-md">
       <p className="text-xl font-semibold">{name}</p>
       <p className="text-lg text-green-600">₹{price}</p>
       <p className="text-sm text-gray-500">Quantity: {quantity}</p>
-      <div className="flex items-center space-x-2 mt-2">
+      <div className="flex items-center mt-2 space-x-2">
         <button
           onClick={onDecrease}
-          className="text-blue-500 font-semibold text-lg"
+          className="text-lg font-semibold text-blue-500"
         ></button>
-        <span className="font-bold text-xl">{quantity}</span>
+        <span className="text-xl font-bold">{quantity}</span>
         <button
           onClick={onIncrease}
-          className="text-blue-500 font-semibold text-lg"
+          className="text-lg font-semibold text-blue-500"
         >
           +
         </button>
       </div>
       <button
         onClick={onRemove}
-        className="text-red-500 align-middle mr-5 text-2xl mt-2"
+        className="mt-2 mr-5 text-2xl text-red-500 align-middle"
       >
         <ImCross />
       </button>
@@ -84,6 +84,23 @@ const Page = () => {
   const [paymentInputs, setPaymentInputs] = useState([]);
   const paymentOptions = ["Cash", "UPI", "Card", "Others"];
 
+  //this for parcel billing as loylaty
+  const [parcelStages, setParcelStages] = useState([]);
+  const [selectedParcelStage, setSelectedParcelStage] = useState(null);
+  const [parcelAppliedCashback, setParcelAppliedCashback] = useState(0);
+  const [parcelPayableAmount, setParcelPayableAmount] = useState(0);
+
+  //for loylaty state
+  const [bookingData, setBookingData] = useState(null);
+  const [stages, setStages] = useState([]);
+  const [selectedStage, setSelectedStage] = useState(null);
+
+  const [appliedCashback, setAppliedCashback] = useState(0);
+
+  const payableAmountOfFamily = Math.max(
+    grandTotalOfFamily - appliedCashback,
+    0
+  );
   const updatePaymentInput = (index, field, value) => {
     const updated = [...paymentInputs];
     updated[index][field] = value;
@@ -119,6 +136,45 @@ const Page = () => {
     fetchItems();
   }, []);
 
+  // const handleParcelSearchOrder = async () => {
+  //   const token = getCookie("access_token");
+
+  //   if (!parcelOrderId) {
+  //     alert("Please enter the parcel order ID");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(
+  //       ` https://apibrize.brizindia.com/api/parcel-order/${parcelOrderId}/grand-total`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     const data = await response.json();
+  //     console.log("data parcel", data);
+  //     if (!response.ok) {
+  //       throw new Error(data.message || "Failed to fetch bill.");
+  //     }
+
+  //     setParcelOrderDetails(data.data);
+  //     setParcelStages(data.data.stage || []);
+
+  //     const grandTotal = Number(data.data.grand_total || 0);
+  //     setParcelPayableAmount(grandTotal);
+
+  //     setParcelOrderDetails(data); // Save API response in state
+  //   } catch (error) {
+  //     console.error("Error fetching parcel order bill:", error);
+  //     alert("Failed to fetch parcel order bill. Please check the Order ID.");
+  //   }
+  // };
+
   const handleParcelSearchOrder = async () => {
     const token = getCookie("access_token");
 
@@ -129,7 +185,7 @@ const Page = () => {
 
     try {
       const response = await fetch(
-        ` https://apibrize.brizindia.com/api/parcel-order/${parcelOrderId}/grand-total`,
+        `https://apibrize.brizindia.com/api/parcel-order/${parcelOrderId}/grand-total`,
         {
           method: "GET",
           headers: {
@@ -140,18 +196,117 @@ const Page = () => {
       );
 
       const data = await response.json();
+      console.log("parcel api response", data);
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch bill.");
       }
 
-      setParcelOrderDetails(data); // Save API response in state
+      // ✅ CORRECT STRUCTURE
+      setParcelOrderDetails(data); // full response
+      setParcelStages(data.stage || []); // loyalty stages
+
+      const grandTotal = Number(data.grand_total || 0);
+      setParcelPayableAmount(grandTotal);
+      setParcelAppliedCashback(0);
+      setSelectedParcelStage(null);
     } catch (error) {
       console.error("Error fetching parcel order bill:", error);
       alert("Failed to fetch parcel order bill. Please check the Order ID.");
     }
   };
 
+  const parcelRedeemPoints =
+    parcelOrderDetails?.order?.user?.redeem_points?.redeem_points || 0;
+
+  const accessibleParcelStages = parcelStages.filter(
+    (stage) => parcelRedeemPoints >= stage.loyalty_balance
+  );
+  // useEffect(() => {
+  //   if (!parcelOrderDetails) {
+  //     setParcelPayableAmount(0);
+  //     setRemainingAmount(0);
+  //   }
+  // }, [parcelOrderDetails]);
+
+  const handleParcelStageToggle = (stage) => {
+    if (selectedParcelStage?.id === stage.id) {
+      setSelectedParcelStage(null);
+      setParcelAppliedCashback(0);
+      setParcelPayableAmount(parcelOrderDetails.grand_total);
+    } else {
+      setSelectedParcelStage(stage);
+      setParcelAppliedCashback(stage.cashback);
+
+      const payable = Math.max(
+        parcelOrderDetails.grand_total - stage.cashback,
+        0
+      );
+      setParcelPayableAmount(payable);
+    }
+  };
+
+  // const submitParcelPayment = async () => {
+  //   const token = getCookie("access_token");
+
+  //   if (!parcelOrderId) {
+  //     alert("Parcel Order ID is missing.");
+  //     return;
+  //   }
+
+  //   // if (
+  //   //   !paymentInputs.length ||
+  //   //   paymentInputs.some((p) => !p.mode || !p.amount)
+  //   // ) {
+  //   //   alert("Please fill in all payment fields correctly.");
+  //   //   return;
+  //   // }
+
+  //   try {
+  //     const response = await fetch(
+  //       ` https://apibrize.brizindia.com/api/parcel-payments`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         body: JSON.stringify({
+  //           order_id: parcelOrderId,
+  //           payments: paymentInputs.map((payment) => ({
+  //             payment_mode: payment.mode,
+  //             amount: parseFloat(payment.amount),
+  //           })),
+  //         }),
+  //       }
+  //     );
+  //     console.log("response", response);
+  //     alert("✅ Payment submitted successfully!");
+
+  //     const result = await response.json();
+
+  //     if (response.status == 200) {
+  //       setParcelOrderId(""); // Clear parcel order ID
+  //       setPaymentInputs([]); // Clear payment inputs
+  //       setParcelOrderDetails(null); // Clear order details
+  //       GenerateParcelBillFunction();
+  //       setIsParcelBillModalOpen(false);
+  //       // Optionally reset state
+  //     } else if (response.status === 409) {
+  //       alert("⚠️ Payment is already completed for this order.");
+  //     } else if (response.status === 422) {
+  //       alert(
+  //         result.error ||
+  //           "⚠️ Payment validation failed. Please check amounts and methods."
+  //       );
+  //     } else {
+  //       alert(result.message || "❌ Payment submission failed.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Payment submission error:", error);
+  //     alert("❌ An error occurred while submitting the payment.");
+  //   }
+  // };
   const submitParcelPayment = async () => {
     const token = getCookie("access_token");
 
@@ -160,56 +315,75 @@ const Page = () => {
       return;
     }
 
-    if (
-      !paymentInputs.length ||
-      paymentInputs.some((p) => !p.mode || !p.amount)
-    ) {
-      alert("Please fill in all payment fields correctly.");
-      return;
-    }
+    // ✅ Loyalty selected or not
+    const isUsingLoyalty = !!selectedParcelStage;
 
     try {
+      const payload = {
+        order_id: parcelOrderId,
+
+        // 🔹 Payments (can be empty)
+        payments: paymentInputs.map((payment) => ({
+          payment_mode: payment.mode,
+          amount: Number(payment.amount || 0),
+        })),
+        customer_id:
+          parcelOrderDetails?.order?.user?.redeem_points?.customer_id ||
+          parcelOrderDetails?.order?.customer_id,
+
+        // 🔹 Loyalty fields (IMPORTANT CHANGE)
+        usingLoyaltyPoints: isUsingLoyalty
+          ? Number(selectedParcelStage?.loyalty_balance) // 👈 THIS
+          : 0,
+
+        new_used_loyalty_stage: isUsingLoyalty
+          ? selectedParcelStage?.category // or category if backend wants
+          : null,
+
+        new_loyalty_cashback: isUsingLoyalty
+          ? Number(parcelAppliedCashback || selectedParcelStage?.cashback || 0)
+          : 0,
+        parceltotalAmount: parcelPayableAmount || 0,
+        rupyaPoints: selectedParcelStage?.set_loyalty_points || 0,
+      };
+
+      console.log("📦 Parcel Payment Payload:", payload);
+
       const response = await fetch(
-        ` https://apibrize.brizindia.com/api/parcel-payments`,
+        "https://apibrize.brizindia.com/api/parcel-payments",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            order_id: parcelOrderId,
-            payments: paymentInputs.map((payment) => ({
-              payment_mode: payment.mode,
-              amount: parseFloat(payment.amount),
-            })),
-          }),
+          body: JSON.stringify(payload),
         }
       );
-      console.log("response", response);
-      alert("✅ Payment submitted successfully!");
 
       const result = await response.json();
 
-      if (response.status == 200) {
-        setParcelOrderId(""); // Clear parcel order ID
-        setPaymentInputs([]); // Clear payment inputs
-        setParcelOrderDetails(null); // Clear order details
-        GenerateParcelBillFunction();
+      if (response.status === 200) {
+        alert("✅ Payment submitted successfully!");
+
+        // 🔄 Reset
+        setParcelOrderId("");
+        setPaymentInputs([]);
+        setParcelOrderDetails(null);
+        setSelectedParcelStage(null);
+        setParcelAppliedCashback(0);
         setIsParcelBillModalOpen(false);
-        // Optionally reset state
+
+        GenerateParcelBillFunction();
       } else if (response.status === 409) {
         alert("⚠️ Payment is already completed for this order.");
       } else if (response.status === 422) {
-        alert(
-          result.error ||
-            "⚠️ Payment validation failed. Please check amounts and methods."
-        );
+        alert(result?.error || "⚠️ Validation failed.");
       } else {
-        alert(result.message || "❌ Payment submission failed.");
+        alert(result?.message || "❌ Payment submission failed.");
       }
     } catch (error) {
-      console.error("Payment submission error:", error);
+      console.error("❌ Payment submission error:", error);
       alert("❌ An error occurred while submitting the payment.");
     }
   };
@@ -221,7 +395,8 @@ const Page = () => {
   }, 0);
 
   // Get grand total from parcelOrderDetails
-  const grandTotal = parseFloat(parcelOrderDetails?.grand_total || 0);
+  // const grandTotal = parseFloat(parcelOrderDetails?.grand_total || 0);
+  const grandTotal = parseFloat(parcelPayableAmount || 0);
 
   // Remaining amount
   const remainingAmount = grandTotal - totalPaid;
@@ -229,16 +404,29 @@ const Page = () => {
   // from here start family bokoking
 
   useEffect(() => {
+    const token = getCookie("access_token");
     if (familyBookingId) {
       fetch(
-        ` https://apibrize.brizindia.com/api/family-booking-grand-total/${familyBookingId}`
+        ` https://apibrize.brizindia.com/api/family-booking-grand-total/${familyBookingId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       )
         .then((res) => res.json())
         .then((data) => {
           if (data.grand_total) {
             setGrandTotalOfFamily(data.grand_total);
+
+            setBookingData(data?.Booking);
+            setStages(data?.$stage || []);
           } else {
             setGrandTotalOfFamily(0);
+            setBookingData(null);
+            setStages([]);
           }
         })
         .catch(() => setGrandTotalOfFamily(0));
@@ -250,12 +438,29 @@ const Page = () => {
     updated[index][field] = value;
     setPaymentInputsOfFamily(updated);
   };
+  const redeemPoints = bookingData?.user?.redeem_points?.redeem_points || 0;
+  // const accessibleStages = stages.filter(
+  //   (s) => s.loyalty_balance >= redeemPoints
+  // );
+
+  const accessibleStages = stages.filter(
+    (stage) => redeemPoints > stage.loyalty_balance
+  );
+
+  console.log("accessibleStages", accessibleStages);
+  console.log("selectedStage", selectedStage);
+  console.log("redeemPoints", redeemPoints);
+  console.log("stages", stages);
 
   const totalPaidOfFamily = paymentInputsOfFamily.reduce(
     (sum, input) => sum + parseFloat(input.amount || 0),
     0
   );
-  const remainingOfFamily = Math.max(grandTotalOfFamily - totalPaidOfFamily, 0);
+  // const remainingOfFamily = Math.max(grandTotalOfFamily - totalPaidOfFamily, 0);
+  const remainingOfFamily = Math.max(
+    payableAmountOfFamily - totalPaidOfFamily,
+    0
+  );
 
   const submitFamilyBookingPayment = async () => {
     const token = getCookie("access_token");
@@ -267,8 +472,15 @@ const Page = () => {
           payment_method: input.mode, // Map mode to match backend validation
           amount: parseFloat(input.amount),
         })),
-      };
 
+        // loyalty redemption fields new add
+        usingLoyaltyPoints: selectedStage?.loyalty_balance || null,
+        new_used_loyalty_stage: selectedStage?.category || null,
+        new_loyalty_cashback: appliedCashback,
+        totalOfFamilyamount: grandTotalOfFamily || 0,
+        rupyaPoints: selectedStage?.set_loyalty_points || 0,
+      };
+      console.log("Family Booking Payment Payload:", payload);
       const response = await axios.post(
         " https://apibrize.brizindia.com/api/family-booking-payments", // Replace with your real API route
         payload,
@@ -477,6 +689,21 @@ const Page = () => {
   //   }
   // };
 
+  const handleStageToggle = (stage) => {
+    // agar wahi stage already selected hai → unselect
+    if (selectedStage?.id === stage.id) {
+      setSelectedStage(null);
+      setAppliedCashback(0);
+    } else {
+      // new stage select
+      setSelectedStage(stage);
+      setAppliedCashback(stage.cashback || 0);
+    }
+
+    // payment reset (IMPORTANT)
+    setPaymentInputsOfFamily([]);
+  };
+
   const orderProducts = async () => {
     const token = getCookie("access_token");
     console.log("product_id", selectedProduct);
@@ -622,90 +849,16 @@ const Page = () => {
   return (
     <div>
       {/* Header */}
-      <header className="flex justify-between items-center bg-green-600 w-full h-9">
-        {/* <button className="text-white align-middle ml-5 text-2xl">
-          <IoHome />
-        </button> */}
-        <div className="text-white mt-1 text-xl  items-center">KOT</div>
-        {/* <button onClick={handleLogoutClick} className="ml-10 text-3xl text-white"><LuLogOut /></button> */}
-        {/* <button className="text-white align-middle mr-5 text-2xl">
-          <ImCross />
-        </button> */}
+      <header className="flex items-center justify-between w-full bg-green-600 h-9">
+        <div className="items-center mt-1 text-xl text-white">KOT</div>
       </header>
-
-      {/* Navigation */}
-      {/* <nav className="flex justify-items-start w-full pl-10 border  shadow-2xl">
-        <div>
-          <button className="text-4xl">
-            <MdOutlineRefresh />
-          </button>
-          <p>refresh</p>
-        </div>
-        <div className="pl-10">
-          <button className="text-4xl">
-            <FiSave />
-          </button>
-          <p>save</p>
-        </div>
-        <div className="pl-10">
-          <button className="text-4xl">
-            <IoMdPrint />
-          </button>
-          <p>print</p>
-        </div>
-      </nav> */}
-
-      {/* Filters */}
-      {/* <div className="flex flex-wrap gap-4 p-4 bg-gray-100 rounded-lg shadow-md">
-        <input
-          type="date"
-          className="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        />
-      
-        <select
-          name="option1"
-          defaultValue=""
-          className="border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        >
-          <option value="" disabled>
-            Select Option 1
-          </option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-        </select>
-        <select
-          name="option2"
-          defaultValue=""
-          className="border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        >
-          <option value="" disabled>
-            Select Option 2
-          </option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-        </select>
-        <select
-          name="option3"
-          defaultValue=""
-          className="border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        >
-          <option value="" disabled>
-            Select Option 3
-          </option>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-          <option value="3">Option 3</option>
-        </select>
-      </div> */}
 
       {/* Category & Item Selection */}
       <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 rounded-lg shadow-md">
         <select
           name="category"
           id="category"
-          className="border border-gray-300 rounded-lg p-2 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="p-2 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
         >
           {itemsCategory.map((type) => (
             <option key={type.id} value={type.id}>
@@ -716,25 +869,25 @@ const Page = () => {
 
         {/* <MdOutlineRefresh
           size={24}
-          className="text-blue-500 cursor-pointer hover:rotate-90 transition-transform"
+          className="text-blue-500 transition-transform cursor-pointer hover:rotate-90"
           title="Refresh"
         /> */}
 
         <button
           onClick={() => setIsParcelBillModalOpen(true)}
-          className="bg-green-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow"
+          className="px-4 py-2 text-white bg-green-600 rounded-lg shadow hover:bg-blue-700"
         >
           parcel order Bill
         </button>
         <button
           onClick={() => setIsBillModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow"
+          className="px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700"
         >
           Generate Bill
         </button>
 
         {/* <button
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="px-4 py-2 text-white bg-blue-600 rounded"
         onClick={() => setShowModal(true)}
       >
         Book Table
@@ -742,19 +895,19 @@ const Page = () => {
         <div className="relative inline-block text-left">
           <button
             onClick={() => setOpenDropdown((prev) => !prev)}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
+            className="px-4 py-2 text-white bg-blue-600 rounded"
           >
             Take Order ▾
           </button>
 
           {openDropdown && (
-            <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md z-10">
+            <div className="absolute right-0 z-10 w-40 mt-2 bg-white border rounded shadow-md">
               <button
                 onClick={() => {
                   setShowModal(true);
                   setOpenDropdown(false);
                 }}
-                className="block w-full text-left px-4 py-2 hover:bg-blue-100"
+                className="block w-full px-4 py-2 text-left hover:bg-blue-100"
               >
                 Dine-in
               </button>
@@ -763,7 +916,7 @@ const Page = () => {
                   setShowParcelModal(true);
                   setOpenDropdown(false);
                 }}
-                className="block w-full text-left px-4 py-2 hover:bg-blue-100"
+                className="block w-full px-4 py-2 text-left hover:bg-blue-100"
               >
                 Parcel
               </button>
@@ -784,11 +937,11 @@ const Page = () => {
       {/* show table icon  */}
       <div className="p-6">
         <div>
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800 flex justify-end items-center">
+          <h2 className="flex items-center justify-end mb-4 text-2xl font-semibold text-gray-800">
             {/* Choose a Table */}
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md shadow transition mr-2"
+              className="px-4 py-2 mr-2 font-semibold text-white transition bg-blue-600 rounded-md shadow hover:bg-blue-700"
             >
               Add Table
             </button>
@@ -802,7 +955,7 @@ const Page = () => {
               <span className="text-xs">Refresh</span>
             </div>
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
             {tables.map((table) =>
               table && table.table_no ? (
                 <button
@@ -833,83 +986,33 @@ const Page = () => {
             )}
           </div>
         </div>
-
-        {/* // Show product selection when a table is selected */}
-        {/* <div className="flex"> */}
-        {/* Product Grid */}
-        {/* <div className="w-3/4 p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-[300px] overflow-y-auto">
-            {data.map((item) => (
-              <div
-                onClick={() => handleSelectProduct(item)}
-                key={item.id}
-                className="bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center cursor-pointer"
-              >
-                <p className="text-center font-semibold mb-2">{item.name}</p>
-                <img
-                  src={` https://apibrize.brizindia.com/${item.image}`}
-                  alt={item.name}
-                  className="w-full h-32 object-cover rounded-lg mb-2"
-                />
-                <p className="text-center text-xl font-bold text-green-600">
-                  ₹{item.rate}
-                </p>
-              </div> */}
-        {/* ))} */}
       </div>
-
-      {/* Selected Products */}
-      {/* <div className="w-1/4 p-4 bg-gray-100 border-l border-gray-300 rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-              Selected Products
-            </h2>
-            <div className="space-y-4 max-h-[400px] overflow-y-auto">
-              {selectedProduct.map((product, index) => (
-                <ShowProduct
-                  key={index}
-                  name={product.name}
-                  price={product.rate}
-                  quantity={product.quantity}
-                  onIncrease={() => handleIncreaseQuantity(product)}
-                  onDecrease={() => handleDecreaseQuantity(product)}
-                  onRemove={() => handleRemoveProduct(index)}
-                />
-              ))}
-            </div>
-            <button
-              onClick={orderProducts}
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 hover:bg-blue-600"
-            >
-              Order
-            </button>
-          </div> */}
-      {/* </div> */}
-      {/* </div> */}
 
       {isLogoutModel && <LogoutModel onClose={() => setIsLogoutModel(false)} />}
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-96 shadow-lg">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="p-6 bg-white shadow-lg rounded-xl w-96">
+            <h3 className="mb-4 text-xl font-semibold text-gray-800">
               Add New Table
             </h3>
             <input
               type="text"
               placeholder="Enter table number (e.g., T10)"
-              className="w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={newTableNo}
               onChange={(e) => setNewTableNo(e.target.value)}
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md"
+                className="px-4 py-2 text-gray-800 bg-gray-300 rounded-md hover:bg-gray-400"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAddTable}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                className="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
               >
                 Add
               </button>
@@ -919,9 +1022,83 @@ const Page = () => {
       )}
 
       {isBillModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white p-6 rounded-lg w-[90%] max-w-sm shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">
+            {/* 🔁 Loyalty Section */}
+            {bookingData && stages.length > 0 && (
+              <div className="p-3 mb-4 border border-green-300 rounded-md bg-green-50">
+                <h4 className="mb-2 text-sm font-semibold text-green-700">
+                  Redeem Loyalty Points
+                </h4>
+
+                {accessibleStages.length === 0 && (
+                  <p className="text-xs text-red-600">
+                    Not enough loyalty points for any stage
+                  </p>
+                )}
+
+                {/* {accessibleStages.map((stage) => (
+                  <label
+                    key={stage.id}
+                    className="flex items-center justify-between p-2 mb-2 bg-white border rounded cursor-pointer"
+                  >
+                    <div>
+                      <p className="text-sm font-medium capitalize">
+                        {stage.category.replace("_", " ")}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Required: {stage.loyalty_balance} pts
+                      </p>
+                      <p className="text-xs text-green-600">
+                        Cashback: ₹{stage.cashback}
+                      </p>
+                    </div>
+
+                    <input
+                      type="radio"
+                      name="loyalty_stage"
+                      checked={selectedStage?.id === stage.id}
+                      onChange={() => setSelectedStage(stage)}
+                    />
+                  </label>
+                ))} */}
+                {/* 🔁 Loyalty Cashback Section */}
+                {accessibleStages.length > 0 && (
+                  <div className="p-3 mb-4 border border-green-300 rounded bg-green-50">
+                    <h4 className="mb-2 text-sm font-semibold text-green-700">
+                      Apply Loyalty Cashback
+                    </h4>
+
+                    {accessibleStages.map((stage) => (
+                      <label
+                        key={stage.id}
+                        className="flex items-center justify-between p-2 mb-2 bg-white border rounded cursor-pointer"
+                      >
+                        <div>
+                          <p className="text-sm font-medium capitalize">
+                            {stage.category.replace("_", " ")}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            Required Points: {stage.loyalty_balance}
+                          </p>
+                          <p className="text-xs text-green-600">
+                            Cashback: ₹{stage.cashback}
+                          </p>
+                        </div>
+
+                        <input
+                          type="checkbox"
+                          checked={selectedStage?.id === stage.id}
+                          onChange={() => handleStageToggle(stage)}
+                        />
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            <h2 className="mb-4 text-lg font-semibold">
               Enter Family Booking No.
             </h2>
 
@@ -930,16 +1107,26 @@ const Page = () => {
               placeholder="Booking number"
               value={familyBookingId}
               onChange={(e) => setfamilyBookingId(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             {grandTotalOfFamily > 0 && (
               <>
-                <div className="text-center mb-2 font-medium">
-                  Bill Amount: ₹{grandTotalOfFamily.toFixed(2)}
+                <div className="mb-2 text-sm text-center">
+                  <p>Bill Amount: ₹{grandTotalOfFamily.toFixed(2)}</p>
+
+                  {appliedCashback > 0 && (
+                    <p className="text-green-700">
+                      Loyalty Cashback: -₹{appliedCashback}
+                    </p>
+                  )}
+
+                  <p className="font-semibold">
+                    Payable Amount: ₹{payableAmountOfFamily.toFixed(2)}
+                  </p>
                 </div>
 
-                <div className="text-center mb-4 text-sm text-gray-700">
+                <div className="mb-4 text-sm text-center text-gray-700">
                   Remaining: ₹{remainingOfFamily.toFixed(2)}
                 </div>
 
@@ -958,7 +1145,7 @@ const Page = () => {
                               { mode: method, amount: "" },
                             ])
                           }
-                          className="bg-gray-200 hover:bg-blue-500 hover:text-white text-sm py-1 px-3 rounded"
+                          className="px-3 py-1 text-sm bg-gray-200 rounded hover:bg-blue-500 hover:text-white"
                         >
                           {method}
                         </button>
@@ -974,7 +1161,9 @@ const Page = () => {
                     0
                   );
 
-                  const grandTotal = parseFloat(grandTotalOfFamily || 0);
+                  // const grandTotal = parseFloat(grandTotalOfFamily || 0);
+                  // const maxAllowed = Math.max(grandTotal - totalEntered, 0);
+                  const grandTotal = parseFloat(payableAmountOfFamily || 0);
                   const maxAllowed = Math.max(grandTotal - totalEntered, 0);
 
                   return (
@@ -992,7 +1181,7 @@ const Page = () => {
                             updatePaymentInputOfFamily(index, "amount", value);
                           }
                         }}
-                        className="w-1/2 border border-gray-300 rounded p-2 text-sm"
+                        className="w-1/2 p-2 text-sm border border-gray-300 rounded"
                       />
                     </div>
                   );
@@ -1008,7 +1197,7 @@ const Page = () => {
                   setGrandTotalOfFamily(0); // reset grand total
                   setPaymentInputsOfFamily([]); // reset payment inputs
                 }}
-                className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
+                className="px-4 py-2 text-black bg-gray-300 rounded hover:bg-gray-400"
               >
                 Cancel
               </button>
@@ -1030,8 +1219,52 @@ const Page = () => {
       )}
 
       {isaparcelBillModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-          <div className="bg-white p-6 rounded-xl w-[90%] max-w-md shadow-xl space-y-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          {/* <div className="bg-white p-6 rounded-xl w-[90%] max-w-md shadow-xl space-y-5"> */}
+          <div
+            className="bg-white p-6 rounded-xl w-[90%] max-w-md shadow-xl space-y-5
+                max-h-[85vh] overflow-y-auto"
+          >
+            {/* <h2 className="text-xl font-bold text-red-800">
+              Loylaty Not Found{" "}
+            </h2> */}
+
+            {parcelOrderDetails &&
+              accessibleParcelStages.length > 0 &&
+              selectedParcelStage === null && (
+                <div className="p-3 mb-4 border border-green-300 rounded bg-green-50">
+                  <h4 className="mb-2 text-sm font-semibold text-green-700">
+                    Redeem Loyalty Cashback
+                  </h4>
+
+                  {accessibleParcelStages.map((stage) => (
+                    <label
+                      key={stage.id}
+                      className="flex items-center justify-between p-2 mb-2 bg-white border rounded cursor-pointer"
+                    >
+                      <div>
+                        <p className="text-sm font-medium capitalize">
+                          {stage.category.replace("_", " ")}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Required Points: {stage.loyalty_balance}
+                        </p>
+                        <p className="text-xs text-green-600">
+                          Cashback: ₹{stage.cashback}
+                        </p>
+                      </div>
+
+                      <input
+                        type="checkbox"
+                        checked={selectedParcelStage?.id === stage.id}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={() => handleParcelStageToggle(stage)}
+                      />
+                    </label>
+                  ))}
+                </div>
+              )}
+
             <h2 className="text-xl font-bold text-gray-800">
               Enter Parcel Order No.
             </h2>
@@ -1041,7 +1274,7 @@ const Page = () => {
               placeholder="Parcel Order ID"
               value={parcelOrderId}
               onChange={(e) => setParcelOrderId(e.target.value)}
-              className="w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             <button
@@ -1051,14 +1284,30 @@ const Page = () => {
               Search
             </button>
 
-            {parcelOrderDetails && (
-              <div className="text-center text-green-700 font-semibold text-lg">
+            {/* {parcelOrderDetails && (
+              <div className="text-lg font-semibold text-center text-green-700">
                 Bill Amount: ₹{parcelOrderDetails.grand_total}
+              </div>
+            )} */}
+
+            {parcelOrderDetails && (
+              <div className="mb-2 text-sm text-center">
+                <p>Bill Amount: ₹{parcelOrderDetails.grand_total}</p>
+
+                {parcelAppliedCashback > 0 && (
+                  <p className="text-green-700">
+                    Loyalty Cashback: -₹{parcelAppliedCashback}
+                  </p>
+                )}
+
+                <p className="font-semibold">
+                  Payable Amount: ₹{parcelPayableAmount}
+                </p>
               </div>
             )}
 
             <div>
-              <h3 className="font-semibold text-gray-700 mb-2">
+              <h3 className="mb-2 font-semibold text-gray-700">
                 Select Payment Methods
               </h3>
 
@@ -1109,7 +1358,7 @@ const Page = () => {
                           updatePaymentInput(index, "amount", value);
                         }
                       }}
-                      className="w-1/2 border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                      className="w-1/2 p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400"
                     />
                   </div>
                 );
@@ -1117,14 +1366,14 @@ const Page = () => {
             </div>
 
             {/* Remaining Amount Display */}
-            <div className="text-right font-semibold mt-3 text-sm text-blue-600">
+            <div className="mt-3 text-sm font-semibold text-right text-blue-600">
               Remaining: ₹{remainingAmount.toFixed(2)}
             </div>
 
             <div className="flex justify-end gap-3 pt-2">
               <button
                 onClick={() => closeParcelModal()}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md"
+                className="px-4 py-2 text-gray-800 bg-gray-200 rounded-md hover:bg-gray-300"
               >
                 Cancel
               </button>
@@ -1142,7 +1391,7 @@ const Page = () => {
 
               {/* <button
                 onClick={GenerateParcelBillFunction}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700"
               >
                 Submit
               </button> */}

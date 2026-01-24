@@ -26,8 +26,9 @@ const Loyalty = () => {
   const fetchLoyalty = async () => {
     try {
       const response = await axios.get(
-        "https://apibrize.brizindia.com/api/loyalty/"
+        "https://apibrize.brizindia.com/api/loyalty"
       );
+      console.log("resposne", response);
       setLoyalty(response.data);
     } catch (error) {
       console.error("Error fetching loyalty:", error);
@@ -55,7 +56,7 @@ const Loyalty = () => {
         );
       } else {
         await axios.post(
-          "https://apibrize.brizindia.com/api/loyalty/",
+          "https://apibrize.brizindia.com/api/loyalty",
           modalData
         );
       }
@@ -100,19 +101,19 @@ const Loyalty = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Loyalty</h1>
+      <h1 className="mb-6 text-3xl font-bold">Loyalty</h1>
 
       {/* Buttons */}
       <div className="flex gap-4 mb-4">
         <button
           onClick={() => openLoyaltyModal()}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
           + Add Loyalty
         </button>
         <button
           onClick={() => setIsRedeemModalOpen(true)}
-          className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
+          className="px-4 py-2 text-white bg-orange-500 rounded hover:bg-orange-600"
         >
           + Redeem Setup
         </button>
@@ -140,13 +141,13 @@ const Loyalty = () => {
                 <td className="px-4 py-2">
                   <button
                     onClick={() => openLoyaltyModal(data)}
-                    className="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500"
+                    className="px-3 py-1 text-white bg-yellow-400 rounded hover:bg-yellow-500"
                   >
                     <FaEdit size={16} />
                   </button>
                   <button
                     onClick={() => handleDeleteLoyalty(data.id)}
-                    className="ml-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                    className="px-3 py-1 ml-2 text-white bg-red-500 rounded hover:bg-red-600"
                   >
                     <FaTrashAlt size={16} />
                   </button>
@@ -155,7 +156,7 @@ const Loyalty = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="text-center py-4">
+              <td colSpan="5" className="py-4 text-center">
                 No loyalty available
               </td>
             </tr>
@@ -165,9 +166,9 @@ const Loyalty = () => {
 
       {/* Loyalty Modal */}
       {isLoyaltyModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+          <div className="p-6 bg-white rounded-lg w-96">
+            <h2 className="mb-4 text-xl font-semibold">
               {isEditMode ? "Edit Loyalty" : "Add Loyalty"}
             </h2>
             <div className="mb-4">
@@ -229,13 +230,13 @@ const Loyalty = () => {
             <div className="flex justify-between mt-4">
               <button
                 onClick={handleSaveLoyalty}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
               >
                 Save Loyalty
               </button>
               <button
                 onClick={() => setIsLoyaltyModalOpen(false)}
-                className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                className="px-4 py-2 text-white bg-gray-400 rounded hover:bg-gray-500"
               >
                 Close
               </button>
@@ -246,11 +247,11 @@ const Loyalty = () => {
 
       {/* Redeem Modal */}
       {isRedeemModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">Redeem Setup</h2>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+          <div className="p-6 bg-white rounded-lg w-96">
+            <h2 className="mb-4 text-xl font-semibold">Redeem Setup</h2>
             <div className="flex items-center justify-between gap-2 mb-4">
-              <label className="font-medium text-gray-600 w-1/2">
+              <label className="w-1/2 font-medium text-gray-600">
                 Redemption Value
               </label>
               <input
@@ -258,26 +259,26 @@ const Loyalty = () => {
                 placeholder="point"
                 value={redeemPoints}
                 onChange={(e) => setRedeemPoints(e.target.value)}
-                className="border rounded-lg p-2 w-full"
+                className="w-full p-2 border rounded-lg"
               />
-              <span className="text-gray-500 mx-2">=</span>
+              <span className="mx-2 text-gray-500">=</span>
               <input
                 type="number"
                 placeholder="₹"
                 value={redeemValue}
                 onChange={(e) => setRedeemValue(e.target.value)}
-                className="border rounded-lg p-2 w-full"
+                className="w-full p-2 border rounded-lg"
               />
             </div>
             <button
               onClick={handleRedeemSubmit}
-              className="w-full bg-orange-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600"
+              className="w-full py-2 font-semibold text-white bg-orange-500 rounded-lg hover:bg-blue-600"
             >
               Save Redeem Setup
             </button>
             <button
               onClick={() => setIsRedeemModalOpen(false)}
-              className="mt-3 w-full bg-gray-400 text-white font-semibold py-2 rounded-lg hover:bg-gray-500"
+              className="w-full py-2 mt-3 font-semibold text-white bg-gray-400 rounded-lg hover:bg-gray-500"
             >
               Close
             </button>

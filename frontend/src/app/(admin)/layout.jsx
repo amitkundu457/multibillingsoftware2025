@@ -86,7 +86,7 @@ function AdminLayout({ children }) {
     });
     return res.data;
   });
-
+  console.log("user role", user);
   const roleToUrlMap = {
     admin: "admin",
     jwellery: "jwellery",
@@ -95,6 +95,15 @@ function AdminLayout({ children }) {
     saloon: "saloon",
   };
 
+  const hasVendors = (user) => {
+    return (
+      Array.isArray(user?.user_has_vendor) && user.user_has_vendor.length > 0
+    );
+  };
+
+  const Vendors = (user) => {
+    return Array.isArray(user?.is_vendor) && user.is_vendor.length > 0;
+  };
   const productUrl = roleToUrlMap[!isLoading && user?.roles?.[0]?.name] || "";
   console.log("pruddcturl", productUrl);
   function showMenuIn(roles) {
@@ -373,6 +382,65 @@ function AdminLayout({ children }) {
         //   },
         // ],
         // },
+      ],
+    },
+
+    {
+      show: showMenuIn(["resturant"]) && hasVendors(user), // 👈 main condition
+
+      title: "Vendors Management",
+      icon: FaUsersGear,
+      submenuItems: [
+        {
+          label: "Vendor List",
+          href: `/${productUrl}/vendor`,
+          icon: FaUsersGear,
+        },
+        {
+          label: "Create Product",
+          href: `/${productUrl}/restroproducts/product/create`,
+          icon: FaUsersGear,
+        },
+        {
+          label: "Product List",
+          href: `/${productUrl}/restroproducts/product`,
+          icon: FaUsersGear,
+        },
+
+        {
+          label: "My Inventory",
+          href: `/${productUrl}/restro/inventory`,
+          icon: FaUsersGear,
+        },
+        {
+          label: "Inventory Approval Requests",
+          href: `/${productUrl}/restro/requests/`,
+          icon: FaUsersGear,
+        },
+      ],
+    },
+
+    {
+      show: showMenuIn(["resturant"]) && Vendors(user), // 👈 main condition
+
+      title: "Vendors Inventory",
+      icon: FaUsersGear,
+      submenuItems: [
+        {
+          label: "Inventory Requests",
+          href: `/${productUrl}/vendor/inventory/request`,
+          icon: FaUsersGear,
+        },
+        {
+          label: "My Inventory",
+          href: `/${productUrl}/vendor/inventory`,
+          icon: FaUsersGear,
+        },
+        {
+          label: "Inventory Report",
+          href: `/${productUrl}/vendor/report`,
+          icon: FaUsersGear,
+        },
       ],
     },
 
@@ -930,14 +998,14 @@ function AdminLayout({ children }) {
         <title>Admin Panel</title>
         <meta name="description" content="Admin Section of the Application" />
       </Head>
-      <div className="fixed inset-0 flex w-full  h-screen text-black">
+      <div className="fixed inset-0 flex w-full h-screen text-black">
         <ProgressBar
           height="3px"
           color="#333333"
           options={{ showSpinner: false }}
           shallowRouting
         />
-        <aside className="w-28 h-full  flex flex-col bg-green-600 ">
+        <aside className="flex flex-col h-full bg-green-600 w-28 ">
           {/* <aside
           className={`w-28 h-full fixed top-0 left-0 bg-green-600 flex flex-col z-40 transform transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
@@ -948,7 +1016,7 @@ function AdminLayout({ children }) {
               <img
                 src={logoUrl}
                 alt="Current Logo"
-                className="w-20 h-auto rounded-lg mx-auto"
+                className="w-20 h-auto mx-auto rounded-lg"
               />
             ) : (
               <p className="text-gray-500">No logo available</p>
@@ -1275,27 +1343,27 @@ function AdminLayout({ children }) {
           </ul>
         </aside>
         <main className="flex flex-col flex-1">
-          <nav className="flex justify-between items-center w-full px-8 py-3 bg-white shadow-md">
+          <nav className="flex items-center justify-between w-full px-8 py-3 bg-white shadow-md">
             <div className="flex items-center">
-              <span className="font-medium text-xl text-gray-800">
+              <span className="text-xl font-medium text-gray-800">
                 {/* Dashboard */}
               </span>
             </div>
 
-            {/* <div className="flex justify-items-end  sm:items-center sm:gap-6">
+            {/* <div className="flex justify-items-end sm:items-center sm:gap-6">
             
 
               <div>
                 <button
                   onClick={handleLogoutClick}
-                  className="ml-10 text-3xl text-gray-600 hover:text-red-500 transition duration-300"
+                  className="ml-10 text-3xl text-gray-600 transition duration-300 hover:text-red-500"
                 >
                   <LuLogOut />
                 </button>
               </div>
               <div>
                 <button
-                  className="md:hidden p-3 text-white bg-green-600 fixed top-4 left-4 z-50 rounded"
+                  className="fixed z-50 p-3 text-white bg-green-600 rounded md:hidden top-4 left-4"
                   onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                 >
                   {isSidebarOpen ? (
@@ -1306,7 +1374,7 @@ function AdminLayout({ children }) {
                 </button>
               </div>
             </div> */}
-            <div className="flex justify-end items-center gap-4 w-full">
+            <div className="flex items-center justify-end w-full gap-4">
               {/* Hamburger Menu (for small screens only) */}
               <div className="md:hidden">
                 <button
@@ -1324,7 +1392,7 @@ function AdminLayout({ children }) {
               <div>
                 <button
                   onClick={handleLogoutClick}
-                  className="text-3xl text-gray-600 hover:text-red-500 transition duration-300"
+                  className="text-3xl text-gray-600 transition duration-300 hover:text-red-500"
                 >
                   <LuLogOut />
                 </button>

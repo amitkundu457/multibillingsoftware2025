@@ -221,7 +221,7 @@ export default function PrintFamilyBillPage() {
         <p>No bill found for booking #{booking_id}.</p>;
         <button
           onClick={window.location.reload}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
           Retry
         </button>
@@ -230,14 +230,14 @@ export default function PrintFamilyBillPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 mt-6 min-h-screen bg-gray-100 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen gap-4 p-4 mt-6 bg-gray-100">
       {/* Print Type Select */}
       <div className="print:hidden">
         <label className="mr-2 font-medium">Print Style:</label>
         <select
           value={printStyle}
           onChange={(e) => setPrintStyle(e.target.value)}
-          className="border border-gray-400 p-2 rounded"
+          className="p-2 border border-gray-400 rounded"
         >
           <option value="thermal">Thermal Printer (80mm)</option>
           <option value="pdf">A4 Paper</option>
@@ -273,7 +273,7 @@ export default function PrintFamilyBillPage() {
         )}
 
         {/* Header */}
-        <div className="text-center mb-2">
+        <div className="mb-2 text-center">
           <h1 className="text-lg font-bold">
             🌟 {bill?.created_by?.name || "Unknown Creator"} 🌟
           </h1>
@@ -285,15 +285,15 @@ export default function PrintFamilyBillPage() {
           </p>
           {/* <p>Phone: {bill?.client_address?.mobile_number ?? "N/A"}</p> */}
           <p>Phone: {companyName?.mobile_number ?? "-"}</p>
-          <p className="text-gray-700 text-sm">
+          <p className="text-sm text-gray-700">
             {/* {bill?.client_address?.email || "No Email Provided"} */}
             {companyName?.email || "No Email Provided"}
           </p>
           <div>
-            {/* <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
+            {/* <h1 className="font-extrabold tracking-wide text-gray-700 uppercase">
               GST IN: {bill?.client_address?.gst || {companyName?.gst}}
             </h1> */}
-            <h1 className="text-gray-700 font-extrabold uppercase tracking-wide">
+            <h1 className="font-extrabold tracking-wide text-gray-700 uppercase">
               GST NO: {companyName?.gst || "Not Provided"}
             </h1>
           </div>
@@ -302,7 +302,7 @@ export default function PrintFamilyBillPage() {
           <h2 className="text-base font-semibold"> Bill</h2>
           <p>Invoice No.: #{bill?.kot_bill_id}</p>
           <p>Booking Id: #{bill.family_booking_id}</p>
-          <p className="text-yellow-600 font-bold">
+          <p className="font-bold text-yellow-600">
             Customer Name: {bill.customer_name}
           </p>
         </div>
@@ -321,7 +321,7 @@ export default function PrintFamilyBillPage() {
             {bill.items.map((item, index) => (
               <tr
                 key={index}
-                className="border-b border-dotted border-gray-400"
+                className="border-b border-gray-400 border-dotted"
               >
                 <td className="text-left">{item.product_name}</td>
                 <td className="text-right">{item.quantity}</td>
@@ -333,23 +333,30 @@ export default function PrintFamilyBillPage() {
         </table>
 
         {/* Totals */}
-        <div className="text-right space-y-1 mt-2 border-t border-dotted border-black pt-2">
+        <div className="pt-2 mt-2 space-y-1 text-right border-t border-black border-dotted">
           {!isSameState && (
             <div>
               <p>CGST : ₹{(bill.gst / 2).toFixed(2)}</p>
               <p>SGST : ₹{(bill.gst / 2).toFixed(2)}</p>
             </div>
           )}
+
           {isSameState && <p>IGST : ₹{bill.gst.toFixed(2)}</p>}
-          <p className="font-bold text-base">
-            Grand Total: ₹{bill.grand_total}
+          {bill.bookingrow && (
+            <p className="text-base font-semibold text-red-600">
+              Redeem Amount:- ₹{bill.bookingrow.new_loyalty_cashback || 0}
+            </p>
+          )}
+          <p className="text-base font-bold">
+            Grand Total: ₹
+            {bill.grand_total - (bill.bookingrow?.new_loyalty_cashback || 0)}
           </p>
         </div>
 
         {/* Payments */}
         {bill?.payments?.length > 0 && (
-          <div className="mt-2 border-t border-dotted border-black pt-2 text-sm w-full">
-            <p className="text-center font-semibold underline mb-1">
+          <div className="w-full pt-2 mt-2 text-sm border-t border-black border-dotted">
+            <p className="mb-1 font-semibold text-center underline">
               Payment Details
             </p>
             <table className="w-full">
@@ -385,7 +392,7 @@ export default function PrintFamilyBillPage() {
         )}
 
         {/* Footer */}
-        <div className="text-center mt-4 text-xs">
+        <div className="mt-4 text-xs text-center">
           <p>----------------------------</p>
           <p>Thank you for dining with us!</p>
           <p>Visit Again 🙏</p>
@@ -394,10 +401,10 @@ export default function PrintFamilyBillPage() {
       </div>
 
       {/* Print Button */}
-      <div className="text-center mt-4 print:hidden">
+      <div className="mt-4 text-center print:hidden">
         <button
           onClick={handlePrint}
-          className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700"
+          className="px-4 py-2 text-white bg-blue-600 rounded shadow hover:bg-blue-700"
         >
           Print Bill
         </button>
